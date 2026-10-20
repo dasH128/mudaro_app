@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Capa 1: colores de marca (nunca se usan directamente en componentes) */
+:root {
+  --mudaro-naranja: #FF5B14;
+  --mudaro-tinta:   #1B1F3B;
+  --mudaro-carton:  #F3E9D8;
+  --mudaro-kraft:   #C8A27A;
+}
+
+/* Capa 2: tokens semánticos, tema claro */
+:root {
+  --background: var(--mudaro-carton);
+  --surface: #FFFFFF;
+  --foreground: var(--mudaro-tinta);
+  --muted: #4A4E68;
+  --primary: var(--mudaro-naranja);
+  --primary-foreground: var(--mudaro-tinta);
+  --accent: var(--mudaro-kraft);
+  --border: color-mix(in srgb, var(--mudaro-tinta) 15%, transparent);
+}
+
+
+/* Tema oscuro */
+[data-theme="dark"] {
+  --background: var(--mudaro-tinta);
+  --surface: #252A4E;
+  --foreground: var(--mudaro-carton);
+  --muted: #C9CCDD;
+  --primary: var(--mudaro-naranja);
+  --primary-foreground: var(--mudaro-tinta);
+  --accent: var(--mudaro-kraft);
+  --border: color-mix(in srgb, var(--mudaro-carton) 15%, transparent);
+}
+
+/* Variante dark: de Tailwind ligada al atributo, no al sistema */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Expone los tokens como utilidades: bg-primary, text-foreground, etc. */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-dm-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
