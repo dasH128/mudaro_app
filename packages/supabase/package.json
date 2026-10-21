@@ -1,0 +1,15 @@
+{
+  "name": "@mudaro/supabase",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:types": "echo 'db:types: sin proyecto Supabase conectado todavia. Configura el project ref antes de generar tipos.' && exit 1"
+  },
+  "devDependencies": {
+    "@mudaro/config": "workspace:*",
+    "typescript": "^5"
+  }
+}

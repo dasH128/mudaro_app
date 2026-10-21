@@ -1,0 +1,17 @@
+{
+  "name": "@mudaro/config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./tsconfig.nextjs.json": "./tsconfig.nextjs.json",
+    "./eslint/next": "./eslint/next.mjs"
+  },
+  "dependencies": {
+    "eslint-config-next": "16.4.2"
+  },
+  "peerDependencies": {
+    "eslint": "^9",
+    "typescript": "^5"
+  }
+}
