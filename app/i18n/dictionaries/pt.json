@@ -14,7 +14,8 @@
         "Escolhe o dia que te der jeito",
         "Nós carregamos, tu descansas"
       ],
-      "language": "Idioma"
+      "language": "Idioma",
+      "theme": { "label": "Tema", "light": "Claro", "dark": "Escuro", "system": "Sistema" }
     },
     "login": {
       "eyebrow": "A tua conta",

@@ -14,7 +14,8 @@
         "Pick the day that suits you",
         "We load up, you relax"
       ],
-      "language": "Language"
+      "language": "Language",
+      "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" }
     },
     "login": {
       "eyebrow": "Your account",

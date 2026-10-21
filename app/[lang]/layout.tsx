@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 
 import "../globals.css";
+import { ThemeProvider } from "@/app/components/theme-provider";
 import { LOCALES, hasLocale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 
@@ -36,9 +37,10 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   return (
     <html
       lang={locale}
+      suppressHydrationWarning
       className={`${bricolage.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col"><ThemeProvider>{children}</ThemeProvider></body>
     </html>
   );
 }

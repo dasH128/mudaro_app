@@ -14,7 +14,8 @@
         "Elige el día que te venga bien",
         "Nosotros cargamos, tú descansas"
       ],
-      "language": "Idioma"
+      "language": "Idioma",
+      "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Sistema" }
     },
     "login": {
       "eyebrow": "Tu cuenta",

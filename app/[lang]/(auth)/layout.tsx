@@ -3,6 +3,7 @@ import { lang } from "next/root-params";
 import { notFound } from "next/navigation";
 
 import { MudaroSymbol } from "@/app/components/brand/mudaro-symbol";
+import { ThemeToggle } from "@/app/components/theme-toggle";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
 import { LOCALES, hasLocale } from "@/app/i18n/config";
 import { getDictionary, loadDictionary } from "@/app/i18n/get-dictionary";
@@ -60,7 +61,10 @@ export default async function AuthLayout({ children }: LayoutProps<"/[lang]">) {
             <MudaroSymbol className="h-9 w-auto" />
             MUDARO
           </Link>
-          <LanguageSwitcher current={locale} label={layout.language} options={options} />
+          <div className="flex items-center gap-3">
+            <ThemeToggle labels={layout.theme} />
+            <LanguageSwitcher current={locale} label={layout.language} options={options} />
+          </div>
         </div>
         <div className="flex flex-1 items-center justify-center py-10">{children}</div>
       </main>
