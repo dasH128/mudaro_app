@@ -71,7 +71,3 @@ export const EMPRESAS_MOCK: readonly EmpresaResumen[] = [
     criadaEm: "2026-09-28",
   },
 ];
-
-export async function listEmpresas(): Promise<readonly EmpresaResumen[]> {
-  return EMPRESAS_MOCK;
-}

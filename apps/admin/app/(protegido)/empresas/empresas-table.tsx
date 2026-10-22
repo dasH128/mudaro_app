@@ -60,7 +60,8 @@ export function EmpresasTable({ rows }: { rows: EmpresaRow[] }) {
                     {row.nome}
                   </Link>
                   <div className="text-[13px] text-muted">
-                    NIF {row.nif} · {row.regiao}
+                    NIF {row.nif}
+                    {row.regiao && ` · ${row.regiao}`}
                   </div>
                 </td>
                 <td className={tdClass}>

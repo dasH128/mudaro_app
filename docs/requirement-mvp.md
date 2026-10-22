@@ -61,8 +61,10 @@ Estos umbrales son una propuesta inicial y se ajustan tras las entrevistas.
 | --- | --- | --- |
 | App de la empresa | Flutter (iOS, Android) | Administrador y operarios |
 | Web del cliente | React with Next.js | Inventario, propuesta y aceptación desde el enlace |
+| Panel interno | Web con Next.js (`apps/admin`, admin.mudaro.pt) | Equipo Mudaro: alta de empresas del piloto, catálogo global y soporte |
 | Backend | Supabase: Postgres, Auth, Storage, Edge Functions | Datos, autenticación, fotos, lógica del enlace del cliente |
 | Seguridad | RLS por `empresa_id` | Aislamiento total entre empresas |
+| Rol de plataforma | Tabla `usuarios_plataforma` (o claim equivalente), con MFA obligatorio | Separa al equipo Mudaro de los usuarios de empresa (`administrador`, `operario`). Lo privilegiado pasa por Edge Functions que validan el rol; el panel no usa la clave de servicio |
 | Mapas | Servicio de geocodificación y rutas (a decidir) | Coordenadas, km y tiempo de viaje |
 | PDF | Edge Function | Generar la propuesta y las actas |
 | Envío al cliente | Enlace compartido con la hoja nativa del móvil (WhatsApp, SMS, email) | Sin integración con la API de WhatsApp en el MVP |
@@ -80,7 +82,7 @@ Prioridad:
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-01 | Registro de empresa con email y contraseña | P0 | El primer usuario queda como administrador de la empresa creada |
+| RF-01 | Registro de empresa con email y contraseña | P2 | El primer usuario queda como administrador de la empresa creada. Durante el piloto las empresas no se registran solas: las da de alta el equipo Mudaro (RF-65) |
 | RF-02 | Perfil de empresa: nombre, NIF, logo, contacto | P0 | El logo y los datos aparecen en la propuesta PDF |
 | RF-03 | Invitar operarios por email o enlace | P0 | El invitado crea su cuenta y queda con rol operario en esa empresa |
 | RF-04 | Cambiar rol y desactivar usuarios | P1 | Un usuario desactivado no puede iniciar sesión |
@@ -199,6 +201,31 @@ Prioridad:
 | --- | --- | --- | --- |
 | RF-63 | Notificación push a la empresa cuando el cliente envía inventario o acepta | P0 | Llega en menos de 1 minuto |
 | RF-64 | Email al cliente con copia de la propuesta aceptada y de las actas | P1 | Se envía solo si el cliente dio su email |
+
+### M13 · Panel interno (equipo Mudaro)
+
+Durante el piloto las empresas no se registran solas: el equipo Mudaro las da de alta (ver `architecture-system.md`, sección "Alta de empresas del piloto").
+
+| ID | Requisito | Prioridad | Criterio de aceptación |
+| --- | --- | --- | --- |
+| RF-65 | Alta de empresa desde el panel interno, con invitación al administrador por email o enlace | P0 | La empresa queda en estado "Convite pendente", sin usuarios activos, y el administrador recibe el convite. Si el equipo desmarca "Enviar o convite por email agora", el convite se envía después copiando el enlace |
+
+**Reglas de validación del formulario de alta (RF-65).** Se aplican en servidor con zod; el cliente solo ayuda. Los mensajes se muestran en portugués de Portugal junto a cada campo.
+
+| Campo | Obligatorio | Regla |
+| --- | --- | --- |
+| Nome comercial | Sí | Texto no vacío (sin contar espacios al principio y al final) |
+| NIF | Sí | 9 dígitos con dígito de control correcto (módulo 11). No se restringe el primer dígito, para admitir empresarios en nombre individual |
+| Telefone, Telemóvel del administrador | No | Si se rellena: 9 dígitos, con prefijo `+351` opcional y espacios permitidos |
+| Email geral | No | Si se rellena: formato de email válido |
+| Email del administrador | Sí | Formato de email válido. Es la dirección a la que llega el convite |
+| Nome del administrador | Sí | Texto no vacío |
+| Morada da base | No | Puede quedar en blanco; el administrador la confirma en el asistente de configuración |
+| Fecha de verificación IMT y fecha de firma del contrato RGPD | Solo si su casilla está marcada | Formato `dd/mm/aaaa`, fecha real y no futura. Si se rellena sin marcar la casilla, también debe cumplir el formato |
+| Referencia IMT y versión del contrato | No | Texto libre |
+| Região, origem, notas internas | No | Região: una de las regiones del piloto (lista cerrada, aún por definir). Origem y notas: texto libre; las notas solo las ve el equipo Mudaro |
+
+Se puede crear la empresa sin la verificación IMT ni el contrato RGPD (RNF-04), pero no se puede activar hasta tenerlos.
 
 ---
 

@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { ROUTES } from "@/app/lib/routes";
 import { isEstado } from "./_data/estado";
-import { listEmpresas } from "./_data/mock";
 import { countByEstado, filterEmpresas, withEstado } from "./_data/query";
+import { listEmpresas } from "./_data/store";
 import { EmpresasTable } from "./empresas-table";
 import { EstadoFiltros } from "./estado-filtros";
 import { SearchBox } from "./search-box";
