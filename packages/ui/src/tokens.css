@@ -26,6 +26,16 @@
   --danger-surface: #FDECEC;
   --danger-border: #E4A1A1;
   --danger-foreground: #8A1C1C;
+  /* Líneas y pistas sobre superficies claras (tablas, barras de progreso) */
+  --line: #E2D2B8;
+  --line-soft: #EFE4D1;
+  /* Insignias de estado */
+  --status-config-surface: #E9DCC4;
+  --status-off-border: #D9C7A8;
+  /* Aviso (p. ej. documentación pendiente) */
+  --warn-surface: #FFF3E6;
+  --warn-border: #E8B27A;
+  --warn-foreground: #7A3A05;
 }
 
 /* Tema oscuro (lo activa el atributo data-theme en <html>) */
@@ -56,6 +66,13 @@
   --color-danger-surface: var(--danger-surface);
   --color-danger-border: var(--danger-border);
   --color-danger-foreground: var(--danger-foreground);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-status-config-surface: var(--status-config-surface);
+  --color-status-off-border: var(--status-off-border);
+  --color-warn-surface: var(--warn-surface);
+  --color-warn-border: var(--warn-border);
+  --color-warn-foreground: var(--warn-foreground);
 
   --font-display: var(--font-bricolage);
   --font-sans: var(--font-dm-sans);

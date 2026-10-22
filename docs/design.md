@@ -112,6 +112,13 @@ Tokens añadidos para el panel interno (`packages/ui/src/tokens.css`, tomados de
 | `danger-surface` | `#FDECEC` | Fondo de alerta de error |
 | `danger-border` | `#E4A1A1` | Borde de alerta de error |
 | `danger-foreground` | `#8A1C1C` | Texto de alerta de error |
+| `line` | `#E2D2B8` | Bordes de tarjetas y tablas sobre superficie clara |
+| `line-soft` | `#EFE4D1` | Separadores de filas y pista de barras de progreso; fondo de la insignia "desativada" |
+| `status-config-surface` | `#E9DCC4` | Fondo de la insignia "em configuração" (borde `accent`) |
+| `status-off-border` | `#D9C7A8` | Borde de la insignia "desativada" |
+| `warn-surface` | `#FFF3E6` | Fondo de aviso (documentación pendiente) |
+| `warn-border` | `#E8B27A` | Borde de aviso |
+| `warn-foreground` | `#7A3A05` | Texto de aviso |
 
 ### Contraste (WCAG 2.x, calculado)
 
