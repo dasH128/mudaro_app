@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { formatDate } from "@/app/lib/format";
+import { StatusPill } from "@/app/components/ui/status-pill";
 import { ROUTES } from "@/app/lib/routes";
 import type { EmpresaRow } from "./_data/query";
 import { EstadoBadge } from "./estado-badge";
@@ -14,11 +15,7 @@ function Documentacao({ row }: { row: EmpresaRow }) {
     return <span className="text-sm text-muted">IMT e RGPD em dia</span>;
   }
   const missing = !row.rgpdContrato ? "Falta contrato RGPD" : "Falta documentação IMT";
-  return (
-    <span className="inline-block rounded-full border border-warn-border bg-warn-surface px-2.5 py-1 text-[13px] font-bold text-warn-foreground">
-      {missing}
-    </span>
-  );
+  return <StatusPill tone="warn">{missing}</StatusPill>;
 }
 
 export function EmpresasTable({ rows }: { rows: EmpresaRow[] }) {

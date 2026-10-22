@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState, useEffect, useRef } from "react";
 
 import { CheckboxField, SelectField, TextAreaField, TextField } from "@/app/components/form/fields";
+import { Button, ButtonLink } from "@/app/components/ui/button";
+import { Card } from "@/app/components/ui/card";
 import { ROUTES } from "@/app/lib/routes";
 import { REGIOES_PILOTO } from "../_data/regioes";
 import { createEmpresaAction } from "./actions";
 import { DEFAULT_VALUES, FIELDS, FIELD_LABEL, type FieldName, type FormState } from "./_schema";
 
-const sectionClass = "flex flex-col gap-[18px] rounded-2xl border border-line bg-surface p-6";
 const gridClass = "grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4";
 const subCardClass = "flex flex-col gap-3.5 rounded-xl border border-line p-4";
 
@@ -54,8 +54,7 @@ export function NuevaEmpresaForm() {
         </div>
       )}
 
-      <section className={sectionClass}>
-        <h2 className="m-0 text-lg font-bold">Dados da empresa</h2>
+      <Card title="Dados da empresa">
         <div className={gridClass}>
           <TextField {...text("nome")} label="Nome comercial" required placeholder="Ex.: Mudanças Silva" />
           <TextField
@@ -75,10 +74,9 @@ export function NuevaEmpresaForm() {
           placeholder="Rua, número, código postal, localidade"
           hint="Pode ficar em branco. O administrador confirma-a no assistente."
         />
-      </section>
+      </Card>
 
-      <section className={sectionClass}>
-        <h2 className="m-0 text-lg font-bold">Administrador</h2>
+      <Card title="Administrador">
         <div className={gridClass}>
           <TextField {...text("adminNome")} label="Nome" required placeholder="Nome e apelido" />
           <TextField
@@ -97,13 +95,9 @@ export function NuevaEmpresaForm() {
           placeholder="nome@empresa.pt"
           hint="Recebe o convite e fica como primeiro administrador da empresa."
         />
-      </section>
+      </Card>
 
-      <section className={sectionClass}>
-        <div className="flex flex-col gap-1">
-          <h2 className="m-0 text-lg font-bold">Verificação e contrato</h2>
-          <p className="m-0 text-sm text-muted">Pode criar a empresa sem isto, mas não a pode ativar.</p>
-        </div>
+      <Card title="Verificação e contrato" description="Pode criar a empresa sem isto, mas não a pode ativar.">
 
         <div className={subCardClass}>
           <CheckboxField
@@ -130,10 +124,9 @@ export function NuevaEmpresaForm() {
             <TextField {...text("rgpdVersao")} label="Versão do contrato" placeholder="Ex.: v1" />
           </div>
         </div>
-      </section>
+      </Card>
 
-      <section className={sectionClass}>
-        <h2 className="m-0 text-lg font-bold">Piloto</h2>
+      <Card title="Piloto">
         <div className={gridClass}>
           <SelectField {...text("regiao")} label="Região" options={REGIOES_PILOTO} placeholder="Selecionar" />
           <TextField
@@ -143,24 +136,17 @@ export function NuevaEmpresaForm() {
           />
         </div>
         <TextAreaField {...text("notas")} label="Notas internas" placeholder="Só visíveis para a equipa Mudaro" />
-      </section>
+      </Card>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <CheckboxField name="enviarConvite" label="Enviar o convite por email agora" defaultChecked={values.enviarConvite} />
         <div className="flex gap-3">
-          <Link
-            href={ROUTES.empresas.list}
-            className="box-border inline-flex h-11 items-center justify-center rounded-[10px] border border-field-border bg-surface px-[18px] text-[15px] font-bold text-foreground no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-          >
+          <ButtonLink href={ROUTES.empresas.list} variant="secondary">
             Cancelar
-          </Link>
-          <button
-            type="submit"
-            disabled={isPending}
-            className="box-border inline-flex h-11 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-primary px-5 text-[15px] font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-wait disabled:opacity-70"
-          >
+          </ButtonLink>
+          <Button type="submit" disabled={isPending}>
             {isPending ? "A criar..." : "Criar empresa"}
-          </button>
+          </Button>
         </div>
       </div>
     </form>

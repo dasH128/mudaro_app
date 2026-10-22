@@ -28,12 +28,24 @@ type EstadoInput = {
   conviteAceite: boolean;
   passosConfig: number;
   desativadaEm: string | null;
+  rgpdContrato: boolean;
+  imtEmDia: boolean;
 };
 
-/** El estado no se guarda: se calcula a partir de los datos de la empresa. */
-export function deriveEstado({ conviteAceite, passosConfig, desativadaEm }: EstadoInput): EstadoEmpresa {
+/**
+ * El estado no se guarda: se calcula a partir de los datos de la empresa (RF-66).
+ * Una empresa solo está activa con los 4 pasos obligatorios y con la licencia IMT y el contrato RGPD
+ * registrados; sin ellos se queda en configuración, porque no se puede activar.
+ */
+export function deriveEstado({
+  conviteAceite,
+  passosConfig,
+  desativadaEm,
+  rgpdContrato,
+  imtEmDia,
+}: EstadoInput): EstadoEmpresa {
   if (desativadaEm) return "off";
   if (!conviteAceite) return "convite";
-  if (passosConfig < TOTAL_PASSOS) return "config";
+  if (passosConfig < TOTAL_PASSOS || !rgpdContrato || !imtEmDia) return "config";
   return "ativa";
 }

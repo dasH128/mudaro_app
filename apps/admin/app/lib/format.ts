@@ -29,3 +29,19 @@ export function parseDatePt(value: string): string | null {
 export function todayIso(): string {
   return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Lisbon" }).format(new Date());
 }
+
+const dateTimeFormatter = new Intl.DateTimeFormat("pt-PT", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+  timeZone: "Europe/Lisbon",
+});
+
+/** "2026-10-20T10:30:00Z" -> "20/10/2026 11:30" (hora de Portugal) */
+export function formatDateTime(iso: string): string {
+  const parts = Object.fromEntries(dateTimeFormatter.formatToParts(new Date(iso)).map((part) => [part.type, part.value]));
+  return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
+}

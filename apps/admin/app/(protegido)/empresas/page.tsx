@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
+import { PageTitle } from "@/app/components/page-title";
+import { ButtonLink } from "@/app/components/ui/button";
 import { ROUTES } from "@/app/lib/routes";
 import { isEstado } from "./_data/estado";
 import { countByEstado, filterEmpresas, withEstado } from "./_data/query";
@@ -30,15 +31,10 @@ export default async function EmpresasPage({ searchParams }: PageProps<"/empresa
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <h1 className="m-0 font-display text-[32px] leading-[1.15] font-extrabold tracking-[-0.02em]">
-            Empresas do piloto
-          </h1>
+          <PageTitle>Empresas do piloto</PageTitle>
           <p className="m-0 text-[15px] text-muted">O estado é calculado a partir dos dados de cada empresa.</p>
         </div>
-        <Link
-          href={ROUTES.empresas.new}
-          className="box-border inline-flex h-11 items-center justify-center gap-2 rounded-[10px] bg-primary px-5 text-[15px] font-bold text-primary-foreground no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-        >
+        <ButtonLink href={ROUTES.empresas.new}>
           <svg
             width="18"
             height="18"
@@ -54,7 +50,7 @@ export default async function EmpresasPage({ searchParams }: PageProps<"/empresa
             <path d="M5 12h14" />
           </svg>
           Nova empresa
-        </Link>
+        </ButtonLink>
       </div>
 
       <EstadoFiltros selected={estado} q={q} total={all.length} counts={countByEstado(all)} />

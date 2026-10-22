@@ -26,10 +26,10 @@ Durante el piloto las empresas no se registran solas. El equipo Mudaro las da de
 3. La función comprueba que quien llama tiene rol de plataforma, crea la empresa e invita al administrador con Supabase Auth (email con enlace).
 4. El administrador define su contraseña y completa el asistente de configuración en la app.
 
-Cambios respecto a `requisitos-mvp.md`, pendientes de pasar al documento:
-- RF nuevo (P0): alta de empresa desde el panel interno con invitación al administrador por email o enlace.
+Cambios respecto a `requisitos-mvp.md`, ya trasladados a `requirement-mvp.md` (22/10/2026):
+- RF-65 (P0): alta de empresa desde el panel interno con invitación al administrador por email o enlace. Se añaden RF-66 (lista), RF-67 (detalle) y RF-68 (desactivar y reactivar).
 - RF-01 (autorregistro) pasa a P2.
-- Sección 4: añadir el panel interno web y el rol de plataforma.
+- Sección 4: panel interno web y rol de plataforma.
 
 ## Roles
 

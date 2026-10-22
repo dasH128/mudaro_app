@@ -1,7 +1,9 @@
-import type { HTMLInputTypeAttribute, ReactNode } from "react";
+import type { ChangeEventHandler, HTMLInputTypeAttribute, ReactNode, Ref } from "react";
 
 export const controlClass =
-  "box-border w-full rounded-[10px] border bg-surface px-3 text-[15px] text-foreground placeholder:text-field-placeholder focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground";
+  "box-border w-full rounded-[10px] border bg-surface px-3 text-foreground placeholder:text-field-placeholder focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground";
+
+const DEFAULT_SIZE = "h-11 text-[15px]";
 
 const borderClass = (error?: string) => (error ? "border-danger-foreground" : "border-field-border");
 
@@ -10,6 +12,8 @@ type BaseProps = {
   name: string;
   label: string;
   required?: boolean;
+  /** Muestra el asterisco junto a la etiqueta. Por defecto, igual que `required`. */
+  requiredMark?: boolean;
   hint?: string;
   error?: string;
 };
@@ -19,12 +23,12 @@ function describedBy(name: string, hint?: string, error?: string) {
   return ids.length ? ids.join(" ") : undefined;
 }
 
-function FieldShell({ name, label, required, hint, error, children }: BaseProps & { children: ReactNode }) {
+function FieldShell({ name, label, required, requiredMark = required, hint, error, children }: BaseProps & { children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={name} className="text-sm font-bold">
         {label}
-        {required && (
+        {requiredMark && (
           <span aria-hidden="true" className="text-muted">
             {" "}
             *
@@ -49,27 +53,52 @@ function FieldShell({ name, label, required, hint, error, children }: BaseProps 
 type TextFieldProps = BaseProps & {
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
+  /** Campo no controlado. Si se pasa `value`, el campo es controlado y se ignora. */
   defaultValue?: string;
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  inputRef?: Ref<HTMLInputElement>;
   inputMode?: "numeric" | "tel" | "email" | "text";
   autoComplete?: string;
+  maxLength?: number;
+  pattern?: string;
+  /** Sustituye la altura y el tamaño de texto por defecto (h-11 text-[15px]). */
+  sizeClassName?: string;
 };
 
-export function TextField({ type = "text", placeholder, defaultValue, inputMode, autoComplete, ...base }: TextFieldProps) {
+export function TextField({
+  type = "text",
+  placeholder,
+  defaultValue,
+  value,
+  onChange,
+  inputRef,
+  inputMode,
+  autoComplete,
+  maxLength,
+  pattern,
+  sizeClassName = DEFAULT_SIZE,
+  ...base
+}: TextFieldProps) {
   const { name, required, hint, error } = base;
+  const valueProps = value === undefined ? { defaultValue } : { value, onChange };
   return (
     <FieldShell {...base}>
       <input
+        ref={inputRef}
         id={name}
         name={name}
         type={type}
         required={required}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        {...valueProps}
         inputMode={inputMode}
         autoComplete={autoComplete}
+        maxLength={maxLength}
+        pattern={pattern}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, hint, error)}
-        className={`${controlClass} h-11 ${borderClass(error)}`}
+        className={`${controlClass} ${sizeClassName} ${borderClass(error)}`}
       />
     </FieldShell>
   );
@@ -92,7 +121,7 @@ export function SelectField({ options, placeholder, defaultValue, ...base }: Sel
         defaultValue={defaultValue}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, hint, error)}
-        className={`${controlClass} h-11 ${borderClass(error)}`}
+        className={`${controlClass} ${DEFAULT_SIZE} ${borderClass(error)}`}
       >
         <option value="">{placeholder}</option>
         {options.map((option) => (
@@ -124,7 +153,7 @@ export function TextAreaField({ placeholder, defaultValue, rows = 3, ...base }: 
         defaultValue={defaultValue}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, hint, error)}
-        className={`${controlClass} resize-y py-2.5 ${borderClass(error)}`}
+        className={`${controlClass} resize-y py-2.5 text-[15px] ${borderClass(error)}`}
       />
     </FieldShell>
   );

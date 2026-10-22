@@ -3,14 +3,15 @@
 import { redirect } from "next/navigation";
 
 import { requirePlatformUser } from "@/app/lib/auth";
+import { parseDatePt } from "@/app/lib/format";
 import { ROUTES } from "@/app/lib/routes";
-import { todayIso } from "@/app/lib/format";import { createEmpresa } from "../_data/store";
+import { createEmpresa } from "../_data/store";
 import { nuevaEmpresaSchema, readValues, toFieldErrors, type FormState } from "./_schema";
 
 // RF-65: alta de empresa desde el panel interno.
 export async function createEmpresaAction(_previous: FormState, formData: FormData): Promise<FormState> {
   // La autorización no se delega en el proxy ni en el layout: se comprueba también aquí.
-  await requirePlatformUser();
+  const user = await requirePlatformUser();
 
   const values = readValues(formData);
   const parsed = nuevaEmpresaSchema.safeParse(values);
@@ -22,17 +23,27 @@ export async function createEmpresaAction(_previous: FormState, formData: FormDa
 
   // TODO(supabase): llamar a la Edge Function `crear-empresa`, que valida el rol de plataforma,
   // crea la empresa e invita al administrador (solo si data.enviarConvite). Por ahora se simula en memoria.
-  await createEmpresa({
+  const empresa = await createEmpresa({
     nome: data.nome,
     nif: data.nif,
     regiao: data.regiao,
+    telefone: data.telefone,
+    emailGeral: data.emailGeral,
+    morada: data.morada,
+    origem: data.origem,
+    notas: data.notas,
     adminNome: data.adminNome,
     adminEmail: data.adminEmail,
-    rgpdContrato: data.rgpdAssinado,
-    imtEmDia: data.imtVerificada,
-    criadaEm: todayIso(),
+    adminTelemovel: data.adminTelemovel,
+    imtVerificada: data.imtVerificada,
+    imtVerificadaEm: parseDatePt(data.imtData),
+    imtReferencia: data.imtReferencia,
+    rgpdAssinado: data.rgpdAssinado,
+    rgpdAssinadoEm: parseDatePt(data.rgpdData),
+    rgpdVersao: data.rgpdVersao,
+    enviarConvite: data.enviarConvite,
+    criadaPor: user.name,
   });
 
-  // TODO: redirigir a ROUTES.empresas.detail(id) cuando exista la vista de detalle (P3).
-  redirect(ROUTES.empresas.list);
+  redirect(ROUTES.empresas.detail(empresa.id, { created: true }));
 }

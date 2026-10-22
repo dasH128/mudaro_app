@@ -209,6 +209,9 @@ Durante el piloto las empresas no se registran solas: el equipo Mudaro las da de
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
 | RF-65 | Alta de empresa desde el panel interno, con invitación al administrador por email o enlace | P0 | La empresa queda en estado "Convite pendente", sin usuarios activos, y el administrador recibe el convite. Si el equipo desmarca "Enviar o convite por email agora", el convite se envía después copiando el enlace |
+| RF-66 | Lista de empresas del piloto con estado calculado (convite pendente, em configuração, ativa, desativada), contador por estado, filtro por estado y búsqueda por nombre, NIF o email | P0 | El estado no se guarda: se calcula con las reglas de "Estado de la empresa". Los filtros y la búsqueda se reflejan en la URL |
+| RF-67 | Detalle de empresa: convite del administrador (copiar enlace, reenviar email, generar enlace nuevo), utilizadores, progreso de configuración, verificación IMT y contrato RGPD, datos e histórico | P0 | El convite caduca a los 7 días (valor provisional). Reenviar actualiza la fecha de envío y la caducidad; generar un enlace crea uno nuevo. Ambas acciones quedan en el histórico (RNF-08) |
+| RF-68 | Desactivar y reactivar una empresa desde el panel interno | P1 | Desactivar exige un motivo, que queda en el histórico. Los usuarios de una empresa desactivada no pueden entrar en la app. Reactivar no pide motivo |
 
 **Reglas de validación del formulario de alta (RF-65).** Se aplican en servidor con zod; el cliente solo ayuda. Los mensajes se muestran en portugués de Portugal junto a cada campo.
 
@@ -226,6 +229,19 @@ Durante el piloto las empresas no se registran solas: el equipo Mudaro las da de
 | Região, origem, notas internas | No | Região: una de las regiones del piloto (lista cerrada, aún por definir). Origem y notas: texto libre; las notas solo las ve el equipo Mudaro |
 
 Se puede crear la empresa sin la verificación IMT ni el contrato RGPD (RNF-04), pero no se puede activar hasta tenerlos.
+
+**Estado de la empresa (RF-66).** Se calcula en este orden:
+
+| Estado | Condición |
+| --- | --- |
+| Desativada | Tiene fecha de desactivación (gana a todo lo demás) |
+| Convite pendente | No está desactivada y el administrador no ha aceptado el convite |
+| Em configuração | Convite aceptado y falta alguno de los 4 pasos obligatorios, la licencia IMT o el contrato RGPD |
+| Ativa | Convite aceptado, 4 pasos obligatorios completos, licencia IMT verificada y contrato RGPD registrado |
+
+Pasos obligatorios de configuración: cuenta del administrador, perfil de la empresa, vehículos y tarifa. "Serviços extra" es opcional y se muestra como hecho cuando los 4 anteriores están completos.
+
+**Pendiente en el detalle de empresa (RF-67), sin flujo diseñado todavía:** editar datos de la empresa, registrar la licencia IMT o el contrato RGPD después del alta, y desactivar o consultar un utilizador concreto. En la maqueta estos botones se muestran inertes. Reenviar el convite sí funciona, también para operarios con convite pendente.
 
 ---
 
@@ -315,3 +331,7 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Flutter Web o Angular para la web del cliente.
 - [ ] Requisitos legales que el IMT exige a las empresas del piloto según el tipo de vehículo (verificar antes de dar de alta empresas).
 - [ ] Precio de la suscripción y modelo de cobro tras el piloto.
+- [ ] Caducidad real del convite al administrador (hoy 7 días como valor provisional): depende de la configuración de Supabase Auth.
+- [ ] Regiones del piloto para el desplegable "Região" (hoy hay un valor de ejemplo).
+- [ ] Diseño de los flujos pendientes del panel: editar empresa, registrar IMT y contrato RGPD, desactivar o ver utilizadores, cerrar sesión.
+- [ ] Qué hacer si se da de alta una empresa con un NIF o un email de administrador que ya existen.

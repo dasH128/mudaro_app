@@ -2,21 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { TextField } from "@/app/components/form/fields";
+import { PageTitle } from "@/app/components/page-title";
+import { Button } from "@/app/components/ui/button";
+
 type Step = "credentials" | "code";
 
 type LoginFormProps = {
   /** Muestra el aviso de credenciales incorrectas. Lo activará la Server Action de login. */
   hasError?: boolean;
 };
-
-const fieldClass =
-  "box-border h-11 w-full rounded-[10px] border border-field-border bg-surface px-3 text-[15px] text-foreground placeholder:text-field-placeholder focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground";
-
-const primaryButtonClass =
-  "box-border inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-[10px] border-0 bg-primary px-5 text-[15px] font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
-
-const titleClass =
-  "m-0 font-display text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em]";
 
 export function LoginForm({ hasError = false }: LoginFormProps) {
   const [step, setStep] = useState<Step>("credentials");
@@ -67,46 +62,41 @@ export function LoginForm({ hasError = false }: LoginFormProps) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h1 className={titleClass}>Verificação em dois passos</h1>
+          <PageTitle>Verificação em dois passos</PageTitle>
           <p className="m-0 text-[15px] leading-[1.5] text-muted">
             Introduza o código de 6 dígitos da sua aplicação de autenticação.
           </p>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="otp" className="text-sm font-bold">
-            Código
-          </label>
-          <input
-            ref={codeRef}
-            id="otp"
-            name="otp"
-            type="text"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={6}
-            pattern="[0-9]{6}"
-            required
-            placeholder="000000"
-            value={code}
-            onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
-            className={`${fieldClass} !h-14 text-center text-2xl tracking-[0.4em]`}
-          />
-        </div>
+        <TextField
+          inputRef={codeRef}
+          name="otp"
+          label="Código"
+          required
+          requiredMark={false}
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          maxLength={6}
+          pattern="[0-9]{6}"
+          placeholder="000000"
+          sizeClassName="h-14 text-center text-2xl tracking-[0.4em]"
+          value={code}
+          onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+        />
 
-        <button type="submit" className={primaryButtonClass}>
+        <Button type="submit" size="lg" fullWidth>
           Entrar
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          variant="text"
+          className="self-center"
           onClick={() => {
             setCode("");
             setStep("credentials");
           }}
-          className="cursor-pointer self-center border-0 bg-transparent p-2 text-sm font-medium text-foreground underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground"
         >
           Voltar
-        </button>
+        </Button>
       </form>
     );
   }
@@ -122,7 +112,7 @@ export function LoginForm({ hasError = false }: LoginFormProps) {
       }}
     >
       <div className="flex flex-col gap-2">
-        <h1 className={titleClass}>Entrar</h1>
+        <PageTitle>Entrar</PageTitle>
         <p className="m-0 text-[15px] text-muted">Use a sua conta da equipa Mudaro.</p>
       </div>
 
@@ -135,44 +125,33 @@ export function LoginForm({ hasError = false }: LoginFormProps) {
         </div>
       )}
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="email" className="text-sm font-bold">
-          Email
-        </label>
-        <input
-          ref={emailRef}
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="username"
-          required
-          placeholder="nome@mudaro.pt"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className={fieldClass}
-        />
-      </div>
+      <TextField
+        inputRef={emailRef}
+        name="email"
+        label="Email"
+        type="email"
+        required
+        requiredMark={false}
+        autoComplete="username"
+        placeholder="nome@mudaro.pt"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
+      <TextField
+        name="password"
+        label="Palavra-passe"
+        type="password"
+        required
+        requiredMark={false}
+        autoComplete="current-password"
+        placeholder="A sua palavra-passe"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="pw" className="text-sm font-bold">
-          Palavra-passe
-        </label>
-        <input
-          id="pw"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          placeholder="A sua palavra-passe"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className={fieldClass}
-        />
-      </div>
-
-      <button type="submit" className={primaryButtonClass}>
+      <Button type="submit" size="lg" fullWidth>
         Continuar
-      </button>
+      </Button>
     </form>
   );
 }

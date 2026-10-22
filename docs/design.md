@@ -183,6 +183,19 @@ Foco visible siempre: `focus-visible:outline-2 focus-visible:outline-offset-2 fo
 
 `bg-surface border border-border rounded-xl px-4 py-3`, foco con `outline-primary`. La etiqueta siempre visible encima del campo, nunca solo placeholder.
 
+### Panel interno (`apps/admin`)
+
+El panel usa su propia variante de botones, definida en `apps/admin/app/components/ui/button.tsx`. El secundario del panel es blanco con borde (`field-border`), no el `bg-foreground` de la tabla de arriba.
+
+| Pieza | Clases clave | Uso |
+|---|---|---|
+| Botón primario | `bg-primary text-primary-foreground font-bold`, 44 px (48 px en el login) | Una sola acción principal por vista |
+| Botón secundario | `bg-surface border border-field-border text-foreground font-bold` | Resto de acciones |
+| Botón de texto | Subrayado, sin fondo | Acciones terciarias ("Voltar") |
+| Botón pequeño | 36 px, 13 px de texto, sin salto de línea | Acciones dentro de tablas |
+| `StatusPill` | Tonos `outline`, `config`, `solid`, `muted`, `warn` | Estado de empresa, estado de utilizador, avisos |
+| `Card` | `bg-surface border border-line rounded-2xl p-6` con título `h2` | Secciones de formularios y de detalle |
+
 ## 7. Elementos gráficos de marca
 
 - **Cinta gráfica:** banda naranja con "MUDARO ›" repetido en tinta, extremo izquierdo dentado (cinta cortada) y extremo derecho en punta de flecha. Uso: separadores de sección en marketing, cabeceras de email, rotulación de furgoneta y cajas. Máximo una por pantalla. No usar dentro de la app transaccional (formularios, panel).
