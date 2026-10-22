@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Painel Mudaro · Nova empresa</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1B1F3B}a:hover{color:#1B1F3B;text-decoration-thickness:2px}
+input::placeholder,textarea::placeholder{color:#6E6A80}
+input:focus,textarea:focus,select:focus{outline:2px solid #1B1F3B;outline-offset:1px}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 900px; box-sizing: border-box; background: #F3E9D8; font-family: 'DM Sans', system-ui, sans-serif; color: #1B1F3B; display: flex; flex-wrap: wrap; position: relative">
+<nav aria-label="Painel interno" style="flex: 1 1 240px; max-width: 100%; box-sizing: border-box; background: #1B1F3B; color: #F3E9D8; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+<svg width="30" height="36" viewBox="30 4 140 170" aria-hidden="true">
+<polygon points="100,30 40,62 100,94 160,62" fill="#E2D2B8"></polygon>
+<polygon points="40,62 100,94 100,170 40,138" fill="#F3E9D8"></polygon>
+<polygon points="100,94 160,62 160,138 100,170" fill="#C8A27A"></polygon>
+<path d="M40 62 L100 94 L160 62" fill="none" stroke="#1B1F3B" stroke-width="3" stroke-linejoin="round"></path>
+<polygon points="50.8,136.2 50.8,86.8 70,119.8 89.2,107.2 89.2,156.6 79.6,151.5 79.6,124.9 70,132.7 60.4,114.7 60.4,141.3" fill="#1B1F3B"></polygon>
+<polygon points="64,49.2 76,42.8 136,74.8 124,81.2" fill="#FF5B14"></polygon>
+<polygon points="124,81.2 136,74.8 136,118 133,121.5 130,118.6 127,122.6 124,124.4" fill="#FF5B14"></polygon>
+<polygon points="124,81.2 136,74.8 136,118 133,121.5 130,118.6 127,122.6 124,124.4" fill="#000" opacity="0.18"></polygon>
+<g fill="#FF5B14"><circle cx="61" cy="31" r="20"></circle><circle cx="63" cy="30" r="20"></circle><circle cx="65" cy="29" r="20"></circle></g>
+<g fill="#000" opacity="0.22"><circle cx="61" cy="31" r="20"></circle><circle cx="63" cy="30" r="20"></circle><circle cx="65" cy="29" r="20"></circle></g>
+<circle cx="67" cy="28" r="20" fill="#FF5B14"></circle>
+<circle cx="67" cy="28" r="9" fill="#F3E9D8"></circle>
+<circle cx="67" cy="28" r="5" fill="#1B1F3B"></circle>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; line-height: 1">MUDARO</span>
+<span style="font-size: 12px; font-weight: 500; color: #E2D2B8">Painel interno</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="PainelEmpresas.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; background: #F3E9D8; color: #1B1F3B;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>Empresas</a>
+<a href="#catalogo" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; color: #F3E9D8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>Catálogo de objetos</a>
+<a href="#suporte" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; color: #F3E9D8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2.5 2-2.5 3.5"></path><path d="M12 17h.01"></path></svg>Suporte</a>
+</div>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px; font-size: 14px">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #FF5B14; color: #1B1F3B; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px">M</span>
+<span>Equipa Mudaro</span>
+</div>
+</nav>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 40px 48px 56px"><div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<a href="PainelEmpresas.dc.html" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; padding: 6px 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>Empresas</a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.02em; line-height: 1.15">Nova empresa</h1>
+<p style="margin: 0; font-size: 15px; color: #4A4E68">Registe a empresa que o contactou. O administrador recebe um convite para criar a conta.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Dados da empresa</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="empresa" style="font-size: 14px; font-weight: 700">Nome comercial <span aria-hidden="true" style="color: #4A4E68">*</span></label>
+<input id="empresa" type="text" required="" placeholder="Ex.: Mudanças Silva" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="nif" style="font-size: 14px; font-weight: 700">NIF <span aria-hidden="true" style="color: #4A4E68">*</span></label>
+<input id="nif" type="text" required="" aria-describedby="nif-ajuda" placeholder="9 dígitos" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+<span id="nif-ajuda" style="font-size: 13px; line-height: 1.4; color: #4A4E68">Validamos o dígito de controlo.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="tel" style="font-size: 14px; font-weight: 700">Telefone</label>
+<input id="tel" type="tel" placeholder="9XX XXX XXX" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mail" style="font-size: 14px; font-weight: 700">Email geral</label>
+<input id="mail" type="email" placeholder="geral@..." style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="morada" style="font-size: 14px; font-weight: 700">Morada da base</label>
+<input id="morada" type="text" aria-describedby="morada-ajuda" placeholder="Rua, número, código postal, localidade" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+<span id="morada-ajuda" style="font-size: 13px; line-height: 1.4; color: #4A4E68">Pode ficar em branco. O administrador confirma-a no assistente.</span>
+</div>
+
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Administrador</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="anome" style="font-size: 14px; font-weight: 700">Nome <span aria-hidden="true" style="color: #4A4E68">*</span></label>
+<input id="anome" type="text" required="" placeholder="Nome e apelido" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="atel" style="font-size: 14px; font-weight: 700">Telemóvel</label>
+<input id="atel" type="tel" placeholder="9XX XXX XXX" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="amail" style="font-size: 14px; font-weight: 700">Email <span aria-hidden="true" style="color: #4A4E68">*</span></label>
+<input id="amail" type="email" required="" aria-describedby="amail-ajuda" placeholder="nome@empresa.pt" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+<span id="amail-ajuda" style="font-size: 13px; line-height: 1.4; color: #4A4E68">Recebe o convite e fica como primeiro administrador da empresa.</span>
+</div>
+
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Verificação e contrato</h2>
+<p style="margin: 0; font-size: 14px; color: #4A4E68">Pode criar a empresa sem isto, mas não a pode ativar.</p>
+</div>
+<div style="border: 1px solid #E2D2B8; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer">
+<input id="imt" type="checkbox" style="width: 20px; height: 20px; margin: 2px 0 0; flex-shrink: 0; accent-color: #1B1F3B">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Licença IMT verificada</span><span style="font-size: 13px; line-height: 1.45; color: #4A4E68">Requisitos legais do IMT para o tipo de veículo da empresa.</span></span>
+</label>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="imt-data" style="font-size: 14px; font-weight: 700">Verificada em</label>
+<input id="imt-data" type="text" placeholder="dd/mm/aaaa" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="imt-ref" style="font-size: 14px; font-weight: 700">Referência</label>
+<input id="imt-ref" type="text" placeholder="N.º de alvará ou licença" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</div>
+</div>
+
+<div style="border: 1px solid #E2D2B8; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer">
+<input id="rgpd" type="checkbox" style="width: 20px; height: 20px; margin: 2px 0 0; flex-shrink: 0; accent-color: #1B1F3B">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Contrato de tratamento de dados assinado</span><span style="font-size: 13px; line-height: 1.45; color: #4A4E68">Contrato de subcontratação RGPD entre a empresa e a Mudaro (RNF-04).</span></span>
+</label>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="rgpd-data" style="font-size: 14px; font-weight: 700">Assinado em</label>
+<input id="rgpd-data" type="text" placeholder="dd/mm/aaaa" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="rgpd-ver" style="font-size: 14px; font-weight: 700">Versão do contrato</label>
+<input id="rgpd-ver" type="text" placeholder="Ex.: v1" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</div>
+</div>
+
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Piloto</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="regiao" style="font-size: 14px; font-weight: 700">Região</label>
+<select id="regiao" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B"><option>Selecionar</option><option>[Região do piloto]</option></select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="origem" style="font-size: 14px; font-weight: 700">Como chegou até nós</label>
+<input id="origem" type="text" placeholder="Ex.: landing, indicação, contacto direto" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="notas" style="font-size: 14px; font-weight: 700">Notas internas</label>
+<textarea id="notas" rows="3" placeholder="Só visíveis para a equipa Mudaro" style="box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 10px 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B; resize: vertical"></textarea>
+</div>
+</section>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<label style="display: flex; gap: 10px; align-items: center; font-size: 15px; cursor: pointer">
+<input type="checkbox" checked="" style="width: 20px; height: 20px; margin: 0; accent-color: #1B1F3B">
+Enviar o convite por email agora
+</label>
+<div style="display: flex; gap: 12px">
+<a href="PainelEmpresas.dc.html" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Cancelar</a>
+<a href="EmpresaCriada.dc.html" style="height: 44px; padding: 0 20px; border-radius: 10px; background: #FF5B14; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 0; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Criar empresa</a>
+</div>
+</div>
+</div>
+<aside style="flex: 1 1 280px; min-width: 0; position: sticky; top: 24px; background: #E9DCC4; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">O que acontece a seguir</h2>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px"><li style="display: flex; gap: 12px">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: #1B1F3B; color: #F3E9D8; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0">1</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Criamos a empresa</span><span style="font-size: 14px; line-height: 1.45; color: #4A4E68">Fica em "Convite pendente", sem utilizadores ativos.</span></span>
+</li><li style="display: flex; gap: 12px">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: #1B1F3B; color: #F3E9D8; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0">2</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">O administrador recebe o convite</span><span style="font-size: 14px; line-height: 1.45; color: #4A4E68">Email com link para definir a palavra-passe. Também pode copiar o link e enviá-lo por WhatsApp.</span></span>
+</li><li style="display: flex; gap: 12px">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: #1B1F3B; color: #F3E9D8; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0">3</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Ele completa a configuração</span><span style="font-size: 14px; line-height: 1.45; color: #4A4E68">Perfil, veículos e tarifa no assistente da app. A empresa passa a "Ativa" quando tiver o mínimo e o contrato assinado.</span></span>
+</li></ol>
+</aside>
+</div>
+</div></main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

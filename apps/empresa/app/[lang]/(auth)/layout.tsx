@@ -2,7 +2,7 @@ import Link from "next/link";
 import { lang } from "next/root-params";
 import { notFound } from "next/navigation";
 
-import { MudaroSymbol } from "@/app/components/brand/mudaro-symbol";
+import { MudaroSymbol } from "@mudaro/ui";
 import { ThemeToggle } from "@/app/components/theme-toggle";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
 import { LOCALES, hasLocale } from "@/app/i18n/config";

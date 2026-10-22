@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Painel Mudaro · Detalhe da empresa</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1B1F3B}a:hover{color:#1B1F3B;text-decoration-thickness:2px}
+input::placeholder,textarea::placeholder{color:#6E6A80}
+input:focus,textarea:focus,select:focus{outline:2px solid #1B1F3B;outline-offset:1px}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 900px; box-sizing: border-box; background: #F3E9D8; font-family: 'DM Sans', system-ui, sans-serif; color: #1B1F3B; display: flex; flex-wrap: wrap; position: relative">
+<nav aria-label="Painel interno" style="flex: 1 1 240px; max-width: 100%; box-sizing: border-box; background: #1B1F3B; color: #F3E9D8; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+<svg width="30" height="36" viewBox="30 4 140 170" aria-hidden="true">
+<polygon points="100,30 40,62 100,94 160,62" fill="#E2D2B8"></polygon>
+<polygon points="40,62 100,94 100,170 40,138" fill="#F3E9D8"></polygon>
+<polygon points="100,94 160,62 160,138 100,170" fill="#C8A27A"></polygon>
+<path d="M40 62 L100 94 L160 62" fill="none" stroke="#1B1F3B" stroke-width="3" stroke-linejoin="round"></path>
+<polygon points="50.8,136.2 50.8,86.8 70,119.8 89.2,107.2 89.2,156.6 79.6,151.5 79.6,124.9 70,132.7 60.4,114.7 60.4,141.3" fill="#1B1F3B"></polygon>
+<polygon points="64,49.2 76,42.8 136,74.8 124,81.2" fill="#FF5B14"></polygon>
+<polygon points="124,81.2 136,74.8 136,118 133,121.5 130,118.6 127,122.6 124,124.4" fill="#FF5B14"></polygon>
+<polygon points="124,81.2 136,74.8 136,118 133,121.5 130,118.6 127,122.6 124,124.4" fill="#000" opacity="0.18"></polygon>
+<g fill="#FF5B14"><circle cx="61" cy="31" r="20"></circle><circle cx="63" cy="30" r="20"></circle><circle cx="65" cy="29" r="20"></circle></g>
+<g fill="#000" opacity="0.22"><circle cx="61" cy="31" r="20"></circle><circle cx="63" cy="30" r="20"></circle><circle cx="65" cy="29" r="20"></circle></g>
+<circle cx="67" cy="28" r="20" fill="#FF5B14"></circle>
+<circle cx="67" cy="28" r="9" fill="#F3E9D8"></circle>
+<circle cx="67" cy="28" r="5" fill="#1B1F3B"></circle>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; line-height: 1">MUDARO</span>
+<span style="font-size: 12px; font-weight: 500; color: #E2D2B8">Painel interno</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="PainelEmpresas.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; background: #F3E9D8; color: #1B1F3B;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>Empresas</a>
+<a href="#catalogo" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; color: #F3E9D8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>Catálogo de objetos</a>
+<a href="#suporte" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 500; color: #F3E9D8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2.5 2-2.5 3.5"></path><path d="M12 17h.01"></path></svg>Suporte</a>
+</div>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px; font-size: 14px">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #FF5B14; color: #1B1F3B; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px">M</span>
+<span>Equipa Mudaro</span>
+</div>
+</nav>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 40px 48px 56px"><div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+<sc-if value="{{mostrarCriada}}" hint-placeholder-val="{{ true }}">
+<div role="status" style="display: flex; gap: 12px; align-items: center; background: #1B1F3B; color: #F3E9D8; border-radius: 14px; padding: 14px 18px; font-size: 15px">
+<span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 14px; background: #FF5B14; color: #1B1F3B; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span>
+<span>Empresa criada. Enviámos o convite para <strong>[email do administrador]</strong>.</span>
+</div>
+</sc-if>
+<sc-if value="{{mostrarDesativada}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; gap: 12px; align-items: center; background: #EFE4D1; border: 1px solid #D9C7A8; border-radius: 14px; padding: 14px 18px; font-size: 15px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg><span>Empresa desativada. Os utilizadores desta empresa não conseguem entrar na app até a reativar.</span>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<a href="PainelEmpresas.dc.html" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; padding: 6px 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>Empresas</a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.02em; line-height: 1.15">[Nome da empresa]</h1>
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+<span style="{{badgeStyle}}">{{badgeLabel}}</span>
+<span style="font-size: 14px; color: #4A4E68">NIF [NIF] · [Região do piloto]</span>
+</div>
+</div>
+<div style="display: flex; gap: 12px; flex-wrap: wrap">
+<button type="button" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Editar dados</button>
+<button type="button" onClick="{{abrirModal}}" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">{{acaoEstado}}</button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+<sc-if value="{{mostrarConvite}}" hint-placeholder-val="{{ true }}">
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Convite do administrador</h2>
+<dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px"><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Enviado em</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[data e hora]</dd></div><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Válido até</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[data de expiração]</dd></div></dl>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="link" style="font-size: 14px; font-weight: 700">Link do convite</label>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<input id="link" type="text" readonly="" value="[link do convite]" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B; flex: 1 1 260px; width: auto; background: #EFE4D1; color: #4A4E68; border-color: #D9C7A8">
+<button type="button" onClick="{{copiar}}" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 012-2h10"></path></svg>{{copiarLabel}}</button>
+</div>
+</div>
+<div style="display: flex; gap: 12px; flex-wrap: wrap">
+<button type="button" style="height: 44px; padding: 0 20px; border-radius: 10px; background: #FF5B14; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 0; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>Reenviar email</button>
+<button type="button" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Gerar novo link</button>
+</div>
+</section>
+</sc-if>
+
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Utilizadores da empresa</h2>
+<span style="font-size: 14px; color: #4A4E68">Os operários são convidados pelo administrador na app</span>
+</div>
+<div style="overflow-x: auto; margin: 0 -24px">
+<table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 15px">
+<thead><tr style="text-align: left; color: #4A4E68; font-size: 13px">
+<th scope="col" style="padding: 10px 24px; font-weight: 700; border-bottom: 1px solid #E2D2B8">Nome</th>
+<th scope="col" style="padding: 10px 12px; font-weight: 700; border-bottom: 1px solid #E2D2B8">Perfil</th>
+<th scope="col" style="padding: 10px 12px; font-weight: 700; border-bottom: 1px solid #E2D2B8">Estado</th>
+<th scope="col" style="padding: 10px 12px; font-weight: 700; border-bottom: 1px solid #E2D2B8">Último acesso</th>
+<th scope="col" style="padding: 10px 24px; font-weight: 700; border-bottom: 1px solid #E2D2B8; text-align: right"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Ações</span></th>
+</tr></thead>
+<tbody>
+<sc-for list="{{utilizadores}}" as="u" hint-placeholder-count="3">
+<tr>
+<td style="padding: 12px 24px; border-bottom: 1px solid #EFE4D1"><span style="font-weight: 700">{{u.nome}}</span><div style="font-size: 13px; color: #4A4E68">{{u.email}}</div></td>
+<td style="padding: 12px; border-bottom: 1px solid #EFE4D1">{{u.perfil}}</td>
+<td style="padding: 12px; border-bottom: 1px solid #EFE4D1"><span style="{{u.badge}}">{{u.estado}}</span></td>
+<td style="padding: 12px; border-bottom: 1px solid #EFE4D1; color: #4A4E68">{{u.acesso}}</td>
+<td style="padding: 12px 24px; border-bottom: 1px solid #EFE4D1; text-align: right"><button type="button" aria-label="{{u.aria}}" style="height: 36px; padding: 0 12px; border-radius: 8px; background: #FFFFFF; color: #1B1F3B; font: 700 13px 'DM Sans', sans-serif; border: 1px solid #7E7A8F; cursor: pointer; white-space: nowrap">{{u.acao}}</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Configuração</h2>
+<span style="font-size: 14px; color: #4A4E68">{{progresso}}</span>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{passos}}" as="p" hint-placeholder-count="5">
+<li style="{{p.row}}">
+<span aria-hidden="true" style="{{p.icon}}"><sc-if value="{{p.feito}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{p.t}}</span><span style="font-size: 13px; color: #4A4E68">{{p.d}}</span></span>
+<span style="font-size: 13px; font-weight: 700; color: #4A4E68">{{p.estado}}</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</div>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Verificação e contrato</h2>
+<sc-for list="{{docs}}" as="d" hint-placeholder-count="2">
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<span aria-hidden="true" style="{{d.icon}}"><sc-if value="{{d.ok}}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></sc-if></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{d.t}}</span><span style="font-size: 13px; color: #4A4E68">{{d.d}}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{faltaDoc}}" hint-placeholder-val="{{ false }}">
+<button type="button" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Registar contrato</button>
+</sc-if>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Dados</h2>
+<dl style="margin: 0; display: flex; flex-direction: column; gap: 14px"><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Telefone</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[telefone]</dd></div><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Email geral</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[email]</dd></div><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Morada da base</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[morada]</dd></div><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Origem do contacto</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[origem]</dd></div><div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 13px; color: #4A4E68">Notas internas</dt><dd style="margin: 0; font-size: 15px; font-weight: 500">[notas]</dd></div></dl>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E2D2B8; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700">Histórico</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px">
+<sc-for list="{{historico}}" as="h" hint-placeholder-count="3">
+<li style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700">{{h.t}}</span><span style="color: #4A4E68">[utilizador] · [data e hora]</span></li>
+</sc-for>
+</ul>
+</section>
+</div>
+</div>
+
+<sc-if value="{{modal}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(27, 31, 59, 0.55); display: flex; align-items: flex-start; justify-content: center; padding: 160px 24px; box-sizing: border-box; z-index: 5">
+<div role="dialog" aria-modal="true" aria-labelledby="modal-t" style="width: 100%; max-width: 460px; background: #FFFFFF; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 50px rgba(27, 31, 59, 0.3)">
+<h2 id="modal-t" style="margin: 0; font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; font-size: 24px; line-height: 1.2">{{modalTitulo}}</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4A4E68">{{modalTexto}}</p>
+<sc-if value="{{pedeMotivo}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="motivo" style="font-size: 14px; font-weight: 700">Motivo <span aria-hidden="true" style="color: #4A4E68">*</span></label>
+<input id="motivo" type="text" required="" placeholder="Fica registado no histórico" style="height: 44px; box-sizing: border-box; width: 100%; border: 1px solid #7E7A8F; border-radius: 10px; padding: 0 12px; font: 400 15px 'DM Sans', sans-serif; background: #FFFFFF; color: #1B1F3B">
+</div>
+
+</sc-if>
+<div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap">
+<button type="button" onClick="{{fecharModal}}" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #FFFFFF; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid #7E7A8F; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">Cancelar</button>
+<button type="button" onClick="{{confirmar}}" style="height: 44px; padding: 0 20px; border-radius: 10px; background: #FF5B14; color: #1B1F3B; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 0; cursor: pointer; font-family: 'DM Sans', sans-serif; box-sizing: border-box">{{modalBotao}}</button>
+</div>
+</div>
+</div>
+</sc-if>
+</div></main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["convite","configuracao","ativa","desativada"],"default":"convite"},"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const estado = st.estado || this.props.estado || 'convite';
+    const pill = (bg, bd, fg) => 'display: inline-block; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid ' + bd + '; background: ' + bg + '; color: ' + fg;
+    const badges = {
+      convite: ['Convite pendente', pill('#FFFFFF', '#7E7A8F', '#1B1F3B')],
+      configuracao: ['Em configuração', pill('#E9DCC4', '#C8A27A', '#1B1F3B')],
+      ativa: ['Ativa', pill('#1B1F3B', '#1B1F3B', '#F3E9D8')],
+      desativada: ['Desativada', pill('#EFE4D1', '#D9C7A8', '#4A4E68')]
+    };
+    const uBadge = { Ativo: pill('#1B1F3B', '#1B1F3B', '#F3E9D8'), 'Convite pendente': pill('#FFFFFF', '#7E7A8F', '#1B1F3B'), Bloqueado: pill('#EFE4D1', '#D9C7A8', '#4A4E68') };
+    const off = estado === 'desativada';
+    const admin = { nome: '[Nome do administrador]', email: '[email do administrador]', perfil: 'Administrador' };
+    let us;
+    if (estado === 'convite') us = [{ ...admin, estado: 'Convite pendente', acesso: 'Nunca', acao: 'Reenviar convite' }];
+    else if (estado === 'configuracao') us = [{ ...admin, estado: 'Ativo', acesso: '[data]', acao: 'Desativar' }];
+    else us = [
+      { ...admin, estado: off ? 'Bloqueado' : 'Ativo', acesso: '[data]', acao: off ? 'Ver' : 'Desativar' },
+      { nome: '[Operário 1]', email: '[email]', perfil: 'Operário', estado: off ? 'Bloqueado' : 'Ativo', acesso: '[data]', acao: off ? 'Ver' : 'Desativar' },
+      { nome: '[Operário 2]', email: '[email]', perfil: 'Operário', estado: off ? 'Bloqueado' : 'Convite pendente', acesso: 'Nunca', acao: off ? 'Ver' : 'Reenviar convite' }
+    ];
+    const feitos = { convite: 0, configuracao: 2, ativa: 4, desativada: 4 }[estado];
+    const lista = [
+      ['Conta do administrador', 'Palavra-passe definida'],
+      ['Perfil da empresa', 'Logótipo, NIF e morada da base'],
+      ['Veículos', 'Pelo menos 1 ativo'],
+      ['Tarifa', 'Versão 1 guardada']
+    ];
+    const passos = lista.map(([t, d], i) => ({ t: t, d: d, feito: i < feitos }));
+    passos.push({ t: 'Serviços extra', d: 'Opcional', feito: estado === 'ativa' || off, opcional: true });
+    const icon = (ok) => 'width: 24px; height: 24px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; ' + (ok ? 'background: #1B1F3B; color: #F3E9D8;' : 'border: 1.5px dashed #7E7A8F; box-sizing: border-box;');
+    const docOk = estado !== 'convite';
+    const hist = {
+      convite: ['Convite enviado', 'Empresa criada'],
+      configuracao: ['Administrador entrou pela primeira vez', 'Contrato RGPD registado', 'Convite enviado', 'Empresa criada'],
+      ativa: ['Empresa ativada', 'Tarifa v1 guardada', 'Administrador entrou pela primeira vez', 'Empresa criada'],
+      desativada: ['Empresa desativada', 'Empresa ativada', 'Empresa criada']
+    }[estado];
+    const reativar = off;
+    return {
+      badgeLabel: badges[estado][0],
+      badgeStyle: badges[estado][1],
+      mostrarCriada: estado === 'convite',
+      mostrarDesativada: off,
+      mostrarConvite: estado === 'convite',
+      acaoEstado: reativar ? 'Reativar empresa' : 'Desativar empresa',
+      utilizadores: us.map((u) => ({ ...u, badge: uBadge[u.estado], aria: u.acao + ': ' + u.nome })),
+      progresso: feitos + ' de 4 passos obrigatórios',
+      passos: passos.map((p, i) => ({ ...p, icon: icon(p.feito), estado: p.feito ? 'Feito' : (p.opcional ? 'Opcional' : 'Pendente'), row: 'display: flex; align-items: center; gap: 12px; padding: 12px 0;' + (i ? ' border-top: 1px solid #EFE4D1;' : '') })),
+      docs: [
+        { t: 'Licença IMT', d: docOk ? 'Verificada em [data] · [referência]' : 'Por verificar', ok: docOk, icon: icon(docOk) },
+        { t: 'Contrato RGPD', d: docOk ? 'Assinado em [data] · [versão]' : 'Sem contrato. A empresa não pode ser ativada.', ok: docOk, icon: icon(docOk) }
+      ],
+      faltaDoc: !docOk,
+      historico: hist.map((t) => ({ t: t })),
+      copiarLabel: st.copiado ? 'Copiado' : 'Copiar',
+      copiar: () => this.setState({ copiado: true }),
+      modal: !!st.modal,
+      pedeMotivo: !reativar,
+      modalTitulo: reativar ? 'Reativar empresa?' : 'Desativar empresa?',
+      modalTexto: reativar ? 'Os utilizadores voltam a poder entrar na app com as suas contas.' : 'Todos os utilizadores desta empresa deixam de conseguir entrar na app. Os dados mantêm-se e pode reativá-la depois.',
+      modalBotao: reativar ? 'Reativar' : 'Desativar',
+      abrirModal: () => this.setState({ modal: true }),
+      fecharModal: () => this.setState({ modal: false }),
+      confirmar: () => this.setState({ modal: false, estado: reativar ? 'ativa' : 'desativada' })
+    };
+  }
+}
+</script>
+</body>
+</html>

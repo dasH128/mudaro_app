@@ -1,0 +1,1 @@
+export { MudaroSymbol } from "./mudaro-symbol";

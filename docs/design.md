@@ -102,6 +102,17 @@ Son los únicos colores que deben aparecer en el código de la UI, siempre vía 
 
 Estados (pendientes de validar con el diseño): `success #1F8A5B`, `warning #E0A100`, `danger #C62828`. Cualquier nuevo color se añade primero aquí y en `globals.css`.
 
+Tokens añadidos para el panel interno (`packages/ui/src/tokens.css`, tomados del diseño P0 · Entrar):
+
+| Token | Valor | Para qué |
+|---|---|---|
+| `field-border` | `#7E7A8F` | Borde de inputs (más fuerte que `border`, por contraste) |
+| `field-placeholder` | `#6E6A80` | Placeholder de inputs |
+| `on-ink` | `#E2D2B8` | Texto secundario sobre fondo tinta |
+| `danger-surface` | `#FDECEC` | Fondo de alerta de error |
+| `danger-border` | `#E4A1A1` | Borde de alerta de error |
+| `danger-foreground` | `#8A1C1C` | Texto de alerta de error |
+
 ### Contraste (WCAG 2.x, calculado)
 
 | Combinación | Ratio | Regla |

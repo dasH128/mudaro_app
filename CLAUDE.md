@@ -6,6 +6,10 @@ Fuentes de verdad (léelas antes de decidir algo de producto o de datos):
 - `docs/requirement-mvp.md`: requisitos funcionales (RF-xx) y no funcionales (RNF-xx). Cita el ID cuando implementes uno.
 - `docs/architecture-system.md`: decisiones técnicas ya tomadas. No las cambies sin preguntar.
 - `docs/design.md`: colores, tipografías y logo.
+- `docs/design/admin/<vista>`: prototipos de cada pantalla. Lee los readme de cada`docs/disenos/README.md` antes de implementar una vista.
+- `docs/design/cliente/<vista>`: prototipos de cada pantalla. Lee su `README.md` antes de implementar una vista.
+- `docs/design/empresa/<vista>`: prototipos de cada pantalla. Lee su `README.md` antes de implementar una vista.
+- `docs/design/landing/<vista>`: prototipos de cada pantalla. Lee su `README.md` antes de implementar una vista.
 
 @docs/architecture-system.md
 
