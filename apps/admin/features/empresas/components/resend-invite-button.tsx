@@ -3,8 +3,8 @@
 import { useActionState } from "react";
 
 import { Button } from "@/app/components/ui/button";
-import { resendInviteAction } from "./actions";
-import { IDLE } from "./_state";
+import { resendInviteAction } from "@/features/empresas/actions/convite";
+import { IDLE } from "@/features/empresas/actions/state";
 
 type ResendInviteButtonProps = {
   empresaId: string;

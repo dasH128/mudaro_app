@@ -1,4 +1,4 @@
-import { TOTAL_PASSOS } from "./_data/estado";
+import { TOTAL_PASSOS } from "@/features/empresas/domain/estado";
 
 export function ProgressBar({ done }: { done: number }) {
   const complete = done >= TOTAL_PASSOS;

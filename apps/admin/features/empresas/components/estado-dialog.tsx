@@ -4,8 +4,8 @@ import { useActionState, useEffect, useRef, useState } from "react";
 
 import { TextField } from "@/app/components/form/fields";
 import { Button } from "@/app/components/ui/button";
-import { changeEstadoAction } from "./actions";
-import { IDLE } from "./_state";
+import { changeEstadoAction } from "@/features/empresas/actions/cambiar-estado";
+import { IDLE } from "@/features/empresas/actions/state";
 
 type EstadoDialogProps = {
   empresaId: string;

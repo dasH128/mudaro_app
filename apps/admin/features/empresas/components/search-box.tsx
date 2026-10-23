@@ -1,5 +1,5 @@
 import { ROUTES } from "@/app/lib/routes";
-import type { EstadoEmpresa } from "./_data/estado";
+import type { EstadoEmpresa } from "@/features/empresas/domain/estado";
 
 type SearchBoxProps = {
   q: string;

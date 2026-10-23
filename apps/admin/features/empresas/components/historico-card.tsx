@@ -1,6 +1,6 @@
 import { Card } from "@/app/components/ui/card";
 import { formatDateTime } from "@/app/lib/format";
-import type { EventoHistorial } from "../_data/mock";
+import type { EventoHistorial } from "@/features/empresas/domain/types";
 
 export function HistoricoCard({ historial }: { historial: EventoHistorial[] }) {
   return (

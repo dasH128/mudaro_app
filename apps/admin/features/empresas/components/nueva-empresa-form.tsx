@@ -6,9 +6,9 @@ import { CheckboxField, SelectField, TextAreaField, TextField } from "@/app/comp
 import { Button, ButtonLink } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { ROUTES } from "@/app/lib/routes";
-import { REGIOES_PILOTO } from "../_data/regioes";
-import { createEmpresaAction } from "./actions";
-import { DEFAULT_VALUES, FIELDS, FIELD_LABEL, type FieldName, type FormState } from "./_schema";
+import { REGIOES_PILOTO } from "@/features/empresas/domain/regioes";
+import { createEmpresaAction } from "@/features/empresas/actions/crear-empresa";
+import { DEFAULT_VALUES, FIELDS, FIELD_LABEL, type FieldName, type FormState } from "@/features/empresas/schemas/nueva-empresa";
 
 const gridClass = "grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4";
 const subCardClass = "flex flex-col gap-3.5 rounded-xl border border-line p-4";

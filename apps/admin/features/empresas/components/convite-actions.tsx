@@ -4,8 +4,8 @@ import { useActionState, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/app/components/ui/button";
 import { controlClass } from "@/app/components/form/fields";
-import { regenerateLinkAction, resendInviteAction } from "./actions";
-import { IDLE, type ActionState } from "./_state";
+import { regenerateLinkAction, resendInviteAction } from "@/features/empresas/actions/convite";
+import { IDLE, type ActionState } from "@/features/empresas/actions/state";
 
 type ConviteActionsProps = {
   empresaId: string;

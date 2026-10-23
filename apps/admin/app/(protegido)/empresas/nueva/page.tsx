@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { BackLink } from "@/app/components/back-link";
 import { PageTitle } from "@/app/components/page-title";
 import { ROUTES } from "@/app/lib/routes";
-import { NextSteps } from "./next-steps";
-import { NuevaEmpresaForm } from "./nueva-empresa-form";
+import { NextSteps } from "@/features/empresas/components/next-steps";
+import { NuevaEmpresaForm } from "@/features/empresas/components/nueva-empresa-form";
 
 export const metadata: Metadata = {
   title: "Painel Mudaro · Nova empresa",

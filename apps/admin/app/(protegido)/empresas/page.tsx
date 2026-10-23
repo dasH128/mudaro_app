@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import { PageTitle } from "@/app/components/page-title";
 import { ButtonLink } from "@/app/components/ui/button";
 import { ROUTES } from "@/app/lib/routes";
-import { isEstado } from "./_data/estado";
-import { countByEstado, filterEmpresas, withEstado } from "./_data/query";
-import { listEmpresas } from "./_data/store";
-import { EmpresasTable } from "./empresas-table";
-import { EstadoFiltros } from "./estado-filtros";
-import { SearchBox } from "./search-box";
+import { isEstado } from "@/features/empresas/domain/estado";
+import { countByEstado, filterEmpresas, withEstado } from "@/features/empresas/domain/filtros";
+import { listEmpresas } from "@/features/empresas/data/empresas.repo";
+import { EmpresasTable } from "@/features/empresas/components/empresas-table";
+import { EstadoFiltros } from "@/features/empresas/components/estado-filtros";
+import { SearchBox } from "@/features/empresas/components/search-box";
 
 export const metadata: Metadata = {
   title: "Painel Mudaro · Empresas",

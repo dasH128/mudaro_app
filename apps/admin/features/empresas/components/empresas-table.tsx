@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatDate } from "@/app/lib/format";
 import { StatusPill } from "@/app/components/ui/status-pill";
 import { ROUTES } from "@/app/lib/routes";
-import type { EmpresaRow } from "./_data/query";
+import type { EmpresaRow } from "@/features/empresas/domain/filtros";
 import { EstadoBadge } from "./estado-badge";
 import { ProgressBar } from "./progress-bar";
 

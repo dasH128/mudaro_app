@@ -1,6 +1,6 @@
 import { Card } from "@/app/components/ui/card";
 import { DescriptionItem } from "@/app/components/ui/description-item";
-import type { EmpresaDetalhe } from "../_data/mock";
+import type { EmpresaDetalhe } from "@/features/empresas/domain/types";
 
 const orDash = (value: string) => value || "—";
 

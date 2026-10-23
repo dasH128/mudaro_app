@@ -2,7 +2,7 @@ import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { StatusPill, type PillTone } from "@/app/components/ui/status-pill";
 import { formatDate } from "@/app/lib/format";
-import type { Utilizador } from "../_data/mock";
+import type { Utilizador } from "@/features/empresas/domain/types";
 import { ResendInviteButton } from "./resend-invite-button";
 
 const thClass = "whitespace-nowrap border-b border-line py-2.5 font-bold";

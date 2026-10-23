@@ -2,7 +2,7 @@ import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { StepIcon } from "@/app/components/ui/step-icon";
 import { formatDate } from "@/app/lib/format";
-import type { EmpresaDetalhe } from "../_data/mock";
+import type { EmpresaDetalhe } from "@/features/empresas/domain/types";
 
 const join = (parts: (string | null | undefined)[]) => parts.filter(Boolean).join(" · ");
 

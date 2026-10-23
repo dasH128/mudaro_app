@@ -1,6 +1,6 @@
 import { Card } from "@/app/components/ui/card";
 import { StepIcon } from "@/app/components/ui/step-icon";
-import { TOTAL_PASSOS } from "../_data/estado";
+import { TOTAL_PASSOS } from "@/features/empresas/domain/estado";
 
 const PASSOS = [
   { titulo: "Conta do administrador", detalhe: "Palavra-passe definida" },

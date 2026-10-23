@@ -1,7 +1,8 @@
 import "server-only";
 
 import { todayIso } from "@/app/lib/format";
-import { EMPRESAS_MOCK, type EmpresaDetalhe, type EmpresaResumen, type EventoHistorial } from "./mock";
+import type { EmpresaDetalhe, EmpresaResumen, EventoHistorial } from "../domain/types";
+import { EMPRESAS_MOCK } from "./mock";
 
 // TODO(supabase): almacén en memoria que simula la base de datos. Se pierde al reiniciar
 // el servidor. Sustituir por consultas a Supabase y por las Edge Functions (`crear-empresa`, etc.).

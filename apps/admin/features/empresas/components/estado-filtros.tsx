@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { ESTADOS, FILTER_LABEL, type EstadoEmpresa } from "./_data/estado";
-import { empresasHref } from "./_data/query";
+import { ESTADOS, FILTER_LABEL, type EstadoEmpresa } from "@/features/empresas/domain/estado";
+import { empresasHref } from "./empresas-href";
 
 type EstadoFiltrosProps = {
   selected: EstadoEmpresa | undefined;

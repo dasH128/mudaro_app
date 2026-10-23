@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { isValidNif } from "@/app/lib/nif";
+import { isValidNif } from "@/features/empresas/domain/nif";
 import { parseDatePt, todayIso } from "@/app/lib/format";
-import { REGIOES_PILOTO } from "../_data/regioes";
+import { REGIOES_PILOTO } from "@/features/empresas/domain/regioes";
 
 // Reglas de validación: docs/requirement-mvp.md, RF-65.
 

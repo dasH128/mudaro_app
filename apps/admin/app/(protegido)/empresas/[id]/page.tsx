@@ -5,16 +5,16 @@ import { BackLink } from "@/app/components/back-link";
 import { PageTitle } from "@/app/components/page-title";
 import { Button } from "@/app/components/ui/button";
 import { CREATED_PARAM, ROUTES } from "@/app/lib/routes";
-import { deriveEstado } from "../_data/estado";
-import { getEmpresa } from "../_data/store";
-import { EstadoBadge } from "../estado-badge";
-import { ConfiguracaoCard } from "./configuracao-card";
-import { ConviteCard } from "./convite-card";
-import { DadosCard } from "./dados-card";
-import { DocumentosCard } from "./documentos-card";
-import { EstadoDialog } from "./estado-dialog";
-import { HistoricoCard } from "./historico-card";
-import { UtilizadoresCard } from "./utilizadores-card";
+import { deriveEstado } from "@/features/empresas/domain/estado";
+import { getEmpresa } from "@/features/empresas/data/empresas.repo";
+import { EstadoBadge } from "@/features/empresas/components/estado-badge";
+import { ConfiguracaoCard } from "@/features/empresas/components/configuracao-card";
+import { ConviteCard } from "@/features/empresas/components/convite-card";
+import { DadosCard } from "@/features/empresas/components/dados-card";
+import { DocumentosCard } from "@/features/empresas/components/documentos-card";
+import { EstadoDialog } from "@/features/empresas/components/estado-dialog";
+import { HistoricoCard } from "@/features/empresas/components/historico-card";
+import { UtilizadoresCard } from "@/features/empresas/components/utilizadores-card";
 
 export const metadata: Metadata = {
   title: "Painel Mudaro · Detalhe da empresa",

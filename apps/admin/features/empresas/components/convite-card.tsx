@@ -1,7 +1,7 @@
 import { Card } from "@/app/components/ui/card";
 import { DescriptionItem } from "@/app/components/ui/description-item";
 import { formatDateTime } from "@/app/lib/format";
-import type { Convite } from "../_data/mock";
+import type { Convite } from "@/features/empresas/domain/types";
 import { ConviteActions } from "./convite-actions";
 
 export function ConviteCard({ empresaId, convite }: { empresaId: string; convite: Convite }) {

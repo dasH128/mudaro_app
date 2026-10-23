@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { requirePlatformUser } from "@/app/lib/auth";
 import { parseDatePt } from "@/app/lib/format";
 import { ROUTES } from "@/app/lib/routes";
-import { createEmpresa } from "../_data/store";
-import { nuevaEmpresaSchema, readValues, toFieldErrors, type FormState } from "./_schema";
+import { createEmpresa } from "@/features/empresas/data/empresas.repo";
+import { nuevaEmpresaSchema, readValues, toFieldErrors, type FormState } from "@/features/empresas/schemas/nueva-empresa";
 
 // RF-65: alta de empresa desde el panel interno.
 export async function createEmpresaAction(_previous: FormState, formData: FormData): Promise<FormState> {
