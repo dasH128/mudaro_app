@@ -44,5 +44,5 @@ export async function confirmEnrollmentAction(_previous: AuthActionState, formDa
     return { status: "error", message: CODE_INVALID_ERROR };
   }
 
-  redirect(ROUTES.empresas.list);
+  redirect(ROUTES.companies.list);
 }

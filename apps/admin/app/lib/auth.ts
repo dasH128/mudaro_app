@@ -14,7 +14,7 @@ export type PlatformUser = {
 export function routeForAuthStep(step: AuthStep): string {
   switch (step) {
     case "ready":
-      return ROUTES.empresas.list;
+      return ROUTES.companies.list;
     case "code":
       return ROUTES.loginCode;
     case "enroll":

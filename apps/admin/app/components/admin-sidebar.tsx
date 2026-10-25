@@ -27,8 +27,8 @@ type AdminSidebarProps = {
 
 export function AdminSidebar({ userName }: AdminSidebarProps) {
   const pathname = usePathname();
-  const inCompanies = pathname === ROUTES.empresas.list || pathname.startsWith(`${ROUTES.empresas.list}/`);
-  const current = pathname === ROUTES.empresas.list ? "page" : inCompanies ? "true" : undefined;
+  const inCompanies = pathname === ROUTES.companies.list || pathname.startsWith(`${ROUTES.companies.list}/`);
+  const current = pathname === ROUTES.companies.list ? "page" : inCompanies ? "true" : undefined;
 
   return (
     <nav
@@ -47,7 +47,7 @@ export function AdminSidebar({ userName }: AdminSidebarProps) {
 
       <div className="flex flex-col gap-1">
         <Link
-          href={ROUTES.empresas.list}
+          href={ROUTES.companies.list}
           aria-current={current}
           className={`${itemClass} ${inCompanies ? "bg-background text-foreground" : "text-background"}`}
         >

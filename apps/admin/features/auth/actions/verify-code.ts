@@ -19,5 +19,5 @@ export async function verifyCodeAction(_previous: AuthActionState, formData: For
   if (result === "no-factor") redirect(routeForAuthStep(await getAuthStep()));
   if (result === "invalid") return { status: "error", message: CODE_INVALID_ERROR };
 
-  redirect(ROUTES.empresas.list);
+  redirect(ROUTES.companies.list);
 }
