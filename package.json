@@ -7,7 +7,8 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "db:types": "pnpm --filter @mudaro/supabase db:types"
+    "db:types": "pnpm --filter @mudaro/supabase db:types",
+    "db:check": "pnpm --filter @mudaro/supabase db:check"
   },
   "devDependencies": {
     "turbo": "^2.11.10"
