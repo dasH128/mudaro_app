@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import type { Database } from "./database.types";
 import { readPublicEnv } from "./env";
 
+export type SupabaseServerClient = Awaited<ReturnType<typeof createSupabaseServerClient>>;
+
 export async function createSupabaseServerClient() {
   const { url, publishableKey } = readPublicEnv();
   const cookieStore = await cookies();
