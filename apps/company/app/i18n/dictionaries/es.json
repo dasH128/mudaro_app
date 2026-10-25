@@ -1,0 +1,35 @@
+{
+  "languageName": "Español",
+  "metadata": {
+    "title": "Mudaro",
+    "description": "Tu mudanza, en buenas manos",
+    "loginTitle": "Entrar · Mudaro"
+  },
+  "auth": {
+    "layout": {
+      "eyebrow": "Tu mudanza",
+      "headline": "En buenas manos.",
+      "steps": [
+        "Cuéntanos qué hay que mover",
+        "Elige el día que te venga bien",
+        "Nosotros cargamos, tú descansas"
+      ],
+      "language": "Idioma",
+      "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Sistema" }
+    },
+    "login": {
+      "eyebrow": "Tu cuenta",
+      "title": "Hola de nuevo",
+      "subtitle": "Entra para ver el estado de tu mudanza.",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@correo.com",
+      "password": "Contraseña",
+      "forgotPassword": "¿La olvidaste?",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "submit": "Entrar",
+      "noAccount": "¿Primera vez por aquí?",
+      "createAccount": "Crea tu cuenta"
+    }
+  }
+}

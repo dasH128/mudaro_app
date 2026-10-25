@@ -1,0 +1,35 @@
+{
+  "languageName": "English",
+  "metadata": {
+    "title": "Mudaro",
+    "description": "Your move, in good hands",
+    "loginTitle": "Sign in · Mudaro"
+  },
+  "auth": {
+    "layout": {
+      "eyebrow": "Your move",
+      "headline": "In good hands.",
+      "steps": [
+        "Tell us what needs moving",
+        "Pick the day that suits you",
+        "We load up, you relax"
+      ],
+      "language": "Language",
+      "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" }
+    },
+    "login": {
+      "eyebrow": "Your account",
+      "title": "Welcome back",
+      "subtitle": "Sign in to check on your move.",
+      "email": "Email",
+      "emailPlaceholder": "you@email.com",
+      "password": "Password",
+      "forgotPassword": "Forgot it?",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Sign in",
+      "noAccount": "First time here?",
+      "createAccount": "Create your account"
+    }
+  }
+}
