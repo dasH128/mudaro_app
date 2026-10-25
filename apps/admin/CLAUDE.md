@@ -6,7 +6,9 @@ Solo lo usa el equipo Mudaro. Sirve para dar de alta las empresas del piloto, ma
 
 | Ruta | Pantalla | Requisito | Notas |
 | --- | --- | --- | --- |
-| `/login` | Entrar | | Email y contraseña de Supabase Auth, con MFA |
+| `/login` | Entrar | | Email y contraseña de Supabase Auth. Según la sesión sigue a `/login/codigo`, `/login/mfa` o `/empresas` |
+| `/login/codigo` | Verificação em dois passos | | Código TOTP de quien ya tiene MFA activado |
+| `/login/mfa` | Ativar verificação | | Primer acceso: QR y primer código. Solo si no hay ningún factor verificado |
 | `/empresas` | Lista de empresas | RF-66 | Búsqueda y filtro por estado (en la URL): convite pendente, em configuração, ativa, desativada |
 | `/empresas/nueva` | Nova empresa | RF-65 | Datos de empresa, administrador y piloto. Llamará a la Edge Function `crear-empresa` |
 | `/empresas/[id]` | Detalhe da empresa | RF-67, RF-68 | Convite (copiar, reenviar, enlace nuevo), utilizadores, configuración, IMT y RGPD, datos, histórico. Desactivar y reactivar con diálogo |
@@ -22,7 +24,13 @@ apps/admin/
   app/                      # routing: page.tsx, layout.tsx, login. Los page.tsx componen, no contienen lógica de negocio
     components/             # UI genérica de la app (ui/, form/, back-link, page-title...)
     lib/                    # transversal: auth, routes, format
+  proxy.ts                  # refresca la sesión y redirige a /login si no hay ninguna (no decide permisos)
   features/
+    auth/
+      data/                 # auth.repo.ts: único acceso a Supabase Auth y a platform_users
+      schemas/              # zod de login, código y alta del MFA
+      actions/              # Server Actions: sign-in, verify-code, enroll (+ state.ts)
+      components/           # login-form, code-form, enroll-form, otp-field
     empresas/
       domain/               # TypeScript puro: estado.ts, nif.ts, regioes.ts, types.ts, filtros.ts
       data/                 # único acceso a datos: empresas.repo.ts (puerta de entrada), store.ts y mock.ts (simulación)
@@ -58,15 +66,15 @@ Reglas de dependencias (en un solo sentido):
 
 ## Estado actual y pendientes (22/10/2026)
 
-Las 4 pantallas están hechas, pero **sin Supabase**: todo es simulación. Antes de usar datos reales hay que resolver lo siguiente.
+Las 4 pantallas de empresas están hechas, pero **sin Supabase**: todo es simulación. El login sí es real (25/10/2026): Supabase Auth con MFA TOTP, `requirePlatformUser()` comprueba sesión, aal2 y fila activa en `platform_users`, y `proxy.ts` redirige a `/login` sin sesión. Antes de usar datos reales de empresas hay que resolver lo siguiente.
 
 Provisional o simulado:
-- `app/lib/auth.ts`: `requirePlatformUser()` no comprueba nada y devuelve un usuario ficticio. Sustituir por sesión + rol `plataforma` + MFA.
 - `features/empresas/data/store.ts`: almacén en memoria (se pierde al reiniciar el servidor), detrás de `empresas.repo.ts`. Sustituir por consultas a Supabase y por Edge Functions (`crear-empresa`, reenviar convite, desactivar...), con registro de auditoría (RNF-08).
 - `features/empresas/data/mock.ts`: empresas de ejemplo con textos entre corchetes. Los links de convite son simulados (`https://app.mudaro.pt/convite/simulado-...`).
 - Validez del convite: 7 días (`CONVITE_VALIDADE_DIAS` en `features/empresas/data/store.ts`). Confirmar con Supabase Auth.
 - `features/empresas/domain/regioes.ts`: una región de ejemplo.
-- `/login`: el botón "Entrar" del paso del código no hace nada y la alerta de error nunca se muestra (falta la Server Action con MFA). "Esqueceu-se da palavra-passe?" está omitido: no hay pantalla.
+- `/login`: "Esqueceu-se da palavra-passe?" está omitido: no hay pantalla.
+- MFA sin códigos de recuperación: si alguien pierde el móvil, hay que borrar su factor desde el dashboard de Supabase.
 
 Sin diseño de flujo (botones inertes, con "em breve"):
 - "Editar dados", "Registar contrato", "Desativar" y "Ver" de un utilizador, "Catálogo de objetos" y "Suporte".
@@ -74,7 +82,6 @@ Sin diseño de flujo (botones inertes, con "em breve"):
 
 Otros:
 - No hay control de NIF o email de administrador duplicados.
-- Sin CSP. Hay `X-Frame-Options: DENY` y `noindex`; la CSP necesita nonce vía `proxy.ts`.
+- Sin CSP. Hay `X-Frame-Options: DENY` y `noindex`; la CSP necesita nonce vía `proxy.ts` y debe permitir `img-src data:` (el QR del MFA es un data URI).
 - La validación de formularios es solo en servidor (con `noValidate`); no hay validación zod en el cliente.
-- Sin `proxy.ts` (arquitectura: redirigir a `/login` si no hay sesión).
 - Sin tests automáticos: no hay runner en el repo.

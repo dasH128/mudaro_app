@@ -43,3 +43,6 @@ next-env.d.ts
 
 # turborepo
 .turbo
+
+# Estado local de la CLI de Supabase
+**/supabase/.temp/

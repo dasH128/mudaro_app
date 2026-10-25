@@ -172,6 +172,9 @@ importers:
 
   apps/admin:
     dependencies:
+      '@mudaro/supabase':
+        specifier: workspace:*
+        version: link:../../packages/supabase
       '@mudaro/ui':
         specifier: workspace:*
         version: link:../../packages/ui

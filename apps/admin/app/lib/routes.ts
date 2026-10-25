@@ -9,6 +9,10 @@ export const CREATED_PARAM = "criada";
 export const ROUTES = {
   home: "/",
   login: "/login",
+  /** Segundo paso del login: código de la app de autenticación. */
+  loginCode: "/login/codigo",
+  /** Primer acceso: activar la app de autenticación (MFA). */
+  loginMfa: "/login/mfa",
   empresas: {
     list: "/empresas",
     new: "/empresas/nueva",
