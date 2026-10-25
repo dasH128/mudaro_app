@@ -55,14 +55,14 @@ Si alguno de estos scripts todavía no existe, créalo en el `package.json` raí
 1. La `SUPABASE_SERVICE_ROLE_KEY` nunca va en una app de Next.js. Solo existe en las Edge Functions de `supabase/functions/`.
 2. Los helpers que solo deben correr en servidor llevan `import "server-only"`.
 3. La autorización no se hace solo en `proxy.ts`. El proxy puede redirigir a quien no tiene sesión, pero cada Server Action, Route Handler y página protegida vuelve a comprobar sesión y rol en el servidor, y RLS lo comprueba otra vez en la base de datos.
-4. Todas las tablas con datos de empresa tienen RLS por `empresa_id` (RNF-01). Los usuarios del equipo Mudaro tienen un rol de plataforma aparte, con políticas propias.
+4. Todas las tablas con datos de empresa tienen RLS por `company_id` (RNF-01). Los usuarios del equipo Mudaro tienen un rol de plataforma aparte, con políticas propias.
 5. Solo las variables que empiezan por `NEXT_PUBLIC_` llegan al navegador. Revisa que ninguna secreta tenga ese prefijo.
 6. Nunca subas `.env*` al repositorio. Mantén un `.env.example` por app.
 
 ## Convenciones
 
 - Interfaz en portugués de Portugal (RNF-10): euros, fechas `dd/mm/aaaa`, coma decimal.
-- Tablas y columnas con los nombres del esquema SQL (en español). Código, variables y funciones en inglés.
+- Todo en inglés (código, nombres de ficheros y carpetas, rutas, tablas, columnas, funciones, enums y políticas). Solo los comentarios van en español, igual que los ficheros `.md`.
 - Tipos de base de datos siempre desde `packages/supabase`, nunca escritos a mano.
 - Si un componente se usa en dos apps, muévelo a `packages/ui`.
 - Validación de formularios en servidor con zod, aunque también se valide en cliente.

@@ -63,8 +63,8 @@ Estos umbrales son una propuesta inicial y se ajustan tras las entrevistas.
 | Web del cliente | React with Next.js | Inventario, propuesta y aceptación desde el enlace |
 | Panel interno | Web con Next.js (`apps/admin`, admin.mudaro.pt) | Equipo Mudaro: alta de empresas del piloto, catálogo global y soporte |
 | Backend | Supabase: Postgres, Auth, Storage, Edge Functions | Datos, autenticación, fotos, lógica del enlace del cliente |
-| Seguridad | RLS por `empresa_id` | Aislamiento total entre empresas |
-| Rol de plataforma | Tabla `usuarios_plataforma` (o claim equivalente), con MFA obligatorio | Separa al equipo Mudaro de los usuarios de empresa (`administrador`, `operario`). Lo privilegiado pasa por Edge Functions que validan el rol; el panel no usa la clave de servicio |
+| Seguridad | RLS por `company_id` | Aislamiento total entre empresas |
+| Rol de plataforma | Tabla `platform_users` (o claim equivalente), con MFA obligatorio | Separa al equipo Mudaro de los usuarios de empresa (`administrador`, `operario`). Lo privilegiado pasa por Edge Functions que validan el rol; el panel no usa la clave de servicio |
 | Mapas | Servicio de geocodificación y rutas (a decidir) | Coordenadas, km y tiempo de viaje |
 | PDF | Edge Function | Generar la propuesta y las actas |
 | Envío al cliente | Enlace compartido con la hoja nativa del móvil (WhatsApp, SMS, email) | Sin integración con la API de WhatsApp en el MVP |
@@ -249,7 +249,7 @@ Pasos obligatorios de configuración: cuenta del administrador, perfil de la emp
 
 | ID | Área | Requisito |
 | --- | --- | --- |
-| RNF-01 | Aislamiento | Todas las tablas con datos de empresa tienen RLS por `empresa_id`. Ninguna consulta desde la app puede devolver datos de otra empresa |
+| RNF-01 | Aislamiento | Todas las tablas con datos de empresa tienen RLS por `company_id`. Ninguna consulta desde la app puede devolver datos de otra empresa |
 | RNF-02 | Acceso del cliente | El enlace usa un token aleatorio de al menos 32 bytes, con caducidad. Solo las Edge Functions acceden a los datos con clave de servicio, tras validar el token |
 | RNF-03 | Privacidad de precios | Tarifas, costes y márgenes nunca se envían al cliente ni al rol operario |
 | RNF-04 | RGPD | Contrato de encargo de tratamiento con cada empresa, política de privacidad para el cliente final y plazo de conservación de fotos y firmas configurable |

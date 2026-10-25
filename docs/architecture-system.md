@@ -10,8 +10,8 @@ Un solo repositorio (pnpm workspaces y Turborepo) con una app de Next.js por pú
 | --- | --- | --- | --- |
 | `apps/landing` | mudaro.pt | Cualquiera | Existe |
 | `apps/admin` | admin.mudaro.pt | Equipo Mudaro | En desarrollo |
-| `apps/cliente` | por decidir | Cliente final con enlace | Futuro |
-| `apps/empresa` | app.mudaro.pt | Administradores de transportistas | Futuro |
+| `apps/client` | por decidir | Cliente final con enlace | Futuro |
+| `apps/company` | app.mudaro.pt | Administradores de transportistas | Futuro |
 
 Motivo: cada app se despliega por separado, con sus propias variables de entorno y su dominio. La landing pública no comparte proceso, cookies ni secretos con el panel interno. Lo común vive en `packages/`.
 
@@ -22,7 +22,7 @@ La app móvil (Flutter) para administrador y operario vive fuera de este repo.
 Durante el piloto las empresas no se registran solas. El equipo Mudaro las da de alta desde `apps/admin`:
 
 1. El equipo rellena empresa y administrador en el panel.
-2. El panel llama a la Edge Function `crear-empresa`.
+2. El panel llama a la Edge Function `create-company`.
 3. La función comprueba que quien llama tiene rol de plataforma, crea la empresa e invita al administrador con Supabase Auth (email con enlace).
 4. El administrador define su contraseña y completa el asistente de configuración en la app.
 
@@ -33,8 +33,8 @@ Cambios respecto a `requisitos-mvp.md`, ya trasladados a `requirement-mvp.md` (2
 
 ## Roles
 
-- `plataforma`: equipo Mudaro. Tabla `usuarios_plataforma` (o claim equivalente), separada de los usuarios de empresa. MFA obligatorio.
-- `administrador` y `operario`: usuarios de una empresa, con `empresa_id`.
+- `plataforma`: equipo Mudaro. Tabla `platform_users` (o claim equivalente), separada de los usuarios de empresa. MFA obligatorio.
+- `administrador` y `operario`: usuarios de una empresa, con `company_id`.
 
 ## Seguridad del panel interno
 
@@ -45,5 +45,5 @@ Cambios respecto a `requisitos-mvp.md`, ya trasladados a `requirement-mvp.md` (2
 
 ## Pendiente de decidir
 
-- Dominio definitivo de `apps/cliente`.
+- Dominio definitivo de `apps/client`.
 - Hosting (Vercel por defecto).

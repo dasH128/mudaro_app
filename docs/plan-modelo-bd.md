@@ -11,7 +11,7 @@ El esquema completo (22 tablas) está en el documento "Modelo de negocio y domin
 | --- | --- | --- | --- |
 | 1 | Base: equipo Mudaro, empresas, usuarios, convites, auditoría | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | En curso |
 | 2 | Configuración: vehículos, tarifas versionadas, servicios extra, perfil | RF-02, RF-05 a RF-07 | Pendiente |
-| 3 | Catálogo global de objetos (sin `empresa_id`) | RF-10, RF-11 | Pendiente |
+| 3 | Catálogo global de objetos (sin `company_id`) | RF-10, RF-11 | Pendiente |
 | 4 | Solicitudes, clientes, inventario, enlaces con token | RF-13 a RF-27, RNF-02 | Pendiente |
 | 5 | Presupuestos, propuestas, aceptación | RF-30 a RF-46 | Pendiente |
 | 6 | Agenda, trabajos, actas, incidencias, cierre | RF-47 a RF-62 | Pendiente |
@@ -39,7 +39,7 @@ Tablas, columnas, funciones, enums y políticas en inglés. Los comentarios SQL,
 ## Paso 1 · Migraciones
 
 1. `20261025100000_platform.sql`: `platform_users`, `is_platform_user()`, `set_updated_at()`.
-2. `20261025100100_companies.sql`: `is_valid_nif()`, `companies`, `company_internal`.
+2. `20261025100100_companies.sql`: `is_valid_tax_id()`, `companies`, `company_internal`.
 3. `20261025100200_company_users_invitations.sql`: enum `company_role` (`administrator`, `operator`), `company_users`, `invitations`, `current_company_id()`, y la política de `companies` para miembros.
 4. `20261025100300_audit_log.sql`: `audit_log` con inmutabilidad.
 
