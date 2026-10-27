@@ -3,26 +3,39 @@ import type { SupabaseClient } from "npm:@supabase/supabase-js@2.118.0";
 /**
  * Genera el enlace de invitación con Auth, sin enviar ningún email. Si el usuario no existe lo crea
  * (sin confirmar); si ya existe y no ha aceptado, devuelve un enlace nuevo.
- * Devuelve null si Auth falla: el detalle queda en el log y no sale hacia fuera.
+ *
+ * El enlace apunta a la app de empresa (`/auth/confirm?token_hash=...`), que valida el token en
+ * servidor cuando la persona pulsa el botón. Así un previsualizador de correo que abra el enlace
+ * no consume la invitación.
+ * Devuelve null si Auth falla o si falta COMPANY_APP_URL: el detalle queda en el log y no sale hacia fuera.
  */
 export async function generateInviteLink(
   supabase: SupabaseClient,
   email: string,
   name: string,
 ): Promise<string | null> {
+  const appUrl = Deno.env.get("COMPANY_APP_URL");
+  if (!appUrl) {
+    console.error("[invitation] COMPANY_APP_URL is not set");
+    return null;
+  }
+
   const { data, error } = await supabase.auth.admin.generateLink({
     type: "invite",
     email,
-    // Sin INVITE_REDIRECT_URL, Auth usa el Site URL del proyecto.
-    options: { data: { name }, redirectTo: Deno.env.get("INVITE_REDIRECT_URL") || undefined },
+    options: { data: { name } },
   });
 
-  const link = data?.properties?.action_link;
-  if (error || !link) {
+  const tokenHash = data?.properties?.hashed_token;
+  if (error || !tokenHash) {
     console.error("[invitation] generateLink failed:", error);
     return null;
   }
-  return link;
+
+  const url = new URL("/auth/confirm", appUrl);
+  url.searchParams.set("token_hash", tokenHash);
+  url.searchParams.set("type", "invite");
+  return url.toString();
 }
 
 function escapeHtml(value: string): string {

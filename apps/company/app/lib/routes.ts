@@ -10,6 +10,8 @@ export const ROUTES = {
     login: "/login",
     register: "/registro",
     forgotPassword: "/recuperar-contrasena",
+    confirm: "/auth/confirm",
+    setPassword: "/auth/set-password",
   },
 } as const;
 

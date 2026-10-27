@@ -3,7 +3,9 @@
   "metadata": {
     "title": "Mudaro",
     "description": "A tua mudança, em boas mãos",
-    "loginTitle": "Entrar · Mudaro"
+    "loginTitle": "Entrar · Mudaro",
+    "confirmTitle": "Convite · Mudaro",
+    "setPasswordTitle": "Define a tua palavra-passe · Mudaro"
   },
   "auth": {
     "layout": {
@@ -30,6 +32,34 @@
       "submit": "Entrar",
       "noAccount": "Primeira vez por cá?",
       "createAccount": "Cria a tua conta"
+    },
+    "confirm": {
+      "eyebrow": "Convite",
+      "title": "Foste convidado para a Mudaro",
+      "subtitle": "A equipa da Mudaro criou uma conta para ti. Aceita o convite para definires a tua palavra-passe e começares a configurar a tua empresa.",
+      "accept": "Aceitar convite",
+      "accepting": "A aceitar…",
+      "invalidTitle": "Este convite já não é válido",
+      "invalidSubtitle": "O link expirou ou já foi usado. Pede um novo à equipa da Mudaro.",
+      "errors": {
+        "invalid": "Este convite já não é válido. Pede um novo à equipa da Mudaro.",
+        "failed": "Não foi possível aceitar o convite. Tenta novamente."
+      }
+    },
+    "setPassword": {
+      "eyebrow": "A tua conta",
+      "title": "Define a tua palavra-passe",
+      "subtitle": "Escolhe a palavra-passe com que vais entrar.",
+      "password": "Palavra-passe",
+      "confirmPassword": "Repete a palavra-passe",
+      "hint": "Pelo menos 8 caracteres.",
+      "submit": "Guardar palavra-passe",
+      "saving": "A guardar…",
+      "errors": {
+        "weak": "A palavra-passe deve ter pelo menos 8 caracteres.",
+        "mismatch": "As palavras-passe não coincidem.",
+        "failed": "Não foi possível guardar a palavra-passe. Tenta novamente."
+      }
     }
   }
 }

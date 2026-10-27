@@ -3,7 +3,9 @@
   "metadata": {
     "title": "Mudaro",
     "description": "Your move, in good hands",
-    "loginTitle": "Sign in · Mudaro"
+    "loginTitle": "Sign in · Mudaro",
+    "confirmTitle": "Invitation · Mudaro",
+    "setPasswordTitle": "Set your password · Mudaro"
   },
   "auth": {
     "layout": {
@@ -30,6 +32,34 @@
       "submit": "Sign in",
       "noAccount": "First time here?",
       "createAccount": "Create your account"
+    },
+    "confirm": {
+      "eyebrow": "Invitation",
+      "title": "You have been invited to Mudaro",
+      "subtitle": "The Mudaro team has created an account for you. Accept the invitation to set your password and start setting up your company.",
+      "accept": "Accept invitation",
+      "accepting": "Accepting…",
+      "invalidTitle": "This invitation is no longer valid",
+      "invalidSubtitle": "The link has expired or has already been used. Ask the Mudaro team for a new one.",
+      "errors": {
+        "invalid": "This invitation is no longer valid. Ask the Mudaro team for a new one.",
+        "failed": "We could not accept the invitation. Please try again."
+      }
+    },
+    "setPassword": {
+      "eyebrow": "Your account",
+      "title": "Set your password",
+      "subtitle": "Choose the password you will use to sign in.",
+      "password": "Password",
+      "confirmPassword": "Repeat the password",
+      "hint": "At least 8 characters.",
+      "submit": "Save password",
+      "saving": "Saving…",
+      "errors": {
+        "weak": "The password must have at least 8 characters.",
+        "mismatch": "The passwords do not match.",
+        "failed": "We could not save the password. Please try again."
+      }
     }
   }
 }

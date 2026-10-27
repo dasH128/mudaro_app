@@ -3,7 +3,9 @@
   "metadata": {
     "title": "Mudaro",
     "description": "Tu mudanza, en buenas manos",
-    "loginTitle": "Entrar · Mudaro"
+    "loginTitle": "Entrar · Mudaro",
+    "confirmTitle": "Invitación · Mudaro",
+    "setPasswordTitle": "Define tu contraseña · Mudaro"
   },
   "auth": {
     "layout": {
@@ -30,6 +32,34 @@
       "submit": "Entrar",
       "noAccount": "¿Primera vez por aquí?",
       "createAccount": "Crea tu cuenta"
+    },
+    "confirm": {
+      "eyebrow": "Invitación",
+      "title": "Te han invitado a Mudaro",
+      "subtitle": "El equipo de Mudaro ha creado una cuenta para ti. Acepta la invitación para definir tu contraseña y empezar a configurar tu empresa.",
+      "accept": "Aceptar invitación",
+      "accepting": "Aceptando…",
+      "invalidTitle": "Esta invitación ya no es válida",
+      "invalidSubtitle": "El enlace ha caducado o ya se ha usado. Pide uno nuevo al equipo de Mudaro.",
+      "errors": {
+        "invalid": "Esta invitación ya no es válida. Pide una nueva al equipo de Mudaro.",
+        "failed": "No hemos podido aceptar la invitación. Inténtalo de nuevo."
+      }
+    },
+    "setPassword": {
+      "eyebrow": "Tu cuenta",
+      "title": "Define tu contraseña",
+      "subtitle": "Elige la contraseña con la que vas a entrar.",
+      "password": "Contraseña",
+      "confirmPassword": "Repite la contraseña",
+      "hint": "Mínimo 8 caracteres.",
+      "submit": "Guardar contraseña",
+      "saving": "Guardando…",
+      "errors": {
+        "weak": "La contraseña debe tener al menos 8 caracteres.",
+        "mismatch": "Las contraseñas no coinciden.",
+        "failed": "No hemos podido guardar la contraseña. Inténtalo de nuevo."
+      }
     }
   }
 }
