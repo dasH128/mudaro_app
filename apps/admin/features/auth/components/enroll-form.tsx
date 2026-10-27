@@ -4,11 +4,11 @@ import { useActionState } from "react";
 
 import { PageTitle } from "@/app/components/page-title";
 import { Button, ButtonLink } from "@/app/components/ui/button";
+import { ErrorAlert } from "@/app/components/ui/error-alert";
 import { ROUTES } from "@/app/lib/routes";
 import { confirmEnrollmentAction, startEnrollmentAction } from "@/features/auth/actions/enroll";
 import { IDLE, IDLE_ENROLL } from "@/features/auth/actions/state";
 
-import { ErrorAlert } from "./error-alert";
 import { OtpField } from "./otp-field";
 
 // Primer acceso: el usuario activa su app de autenticación. Hasta confirmar el primer código

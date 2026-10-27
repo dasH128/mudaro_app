@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Convite para a Mudaro</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#F3E9D8;">
+    <!-- Texto de pré-visualização (aparece junto ao assunto na caixa de entrada) -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#F3E9D8;">
+      Define a tua palavra-passe e começa a configurar a tua empresa.
+    </div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F3E9D8;">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;">
+            <!-- Cinta de marca (solo en cabecera de email, ver docs/design.md §7) -->
+            <tr>
+              <td style="background-color:#FF5B14;padding:12px 24px;border-radius:16px 16px 0 0;font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:14px;letter-spacing:2px;color:#1B1F3B;">
+                MUDARO &rsaquo; MUDARO &rsaquo; MUDARO &rsaquo;
+              </td>
+            </tr>
+
+            <!-- Tarjeta -->
+            <tr>
+              <td style="background-color:#FFFFFF;padding:40px 32px;border:1px solid #E2D2B8;border-top:0;border-radius:0 0 16px 16px;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;color:#1B1F3B;">
+                <h1 style="margin:0 0 16px 0;font-family:'Bricolage Grotesque','Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:28px;line-height:1.15;letter-spacing:-0.5px;color:#1B1F3B;">
+                  {{ if .Data.name }}Olá, {{ .Data.name }}.{{ else }}Olá.{{ end }}
+                </h1>
+
+                <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#1B1F3B;">
+                  A equipa da Mudaro criou uma conta para ti. Com ela vais gerir os orçamentos e as mudanças da tua empresa num só sítio.
+                </p>
+
+                <p style="margin:0 0 28px 0;font-size:16px;line-height:1.6;color:#1B1F3B;">
+                  Para começar, define a tua palavra-passe e completa a configuração inicial.
+                </p>
+
+                <!-- Botón primario: fondo naranja, texto tinta -->
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;">
+                  <tr>
+                    <td align="center" style="background-color:#FF5B14;border-radius:12px;">
+                      <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 28px;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;color:#1B1F3B;text-decoration:none;">
+                        Aceitar convite
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:0 0 8px 0;font-size:14px;line-height:1.6;color:#4A4E68;">
+                  Se o botão não abrir, copia este endereço para o navegador:
+                </p>
+                <p style="margin:0 0 28px 0;font-size:13px;line-height:1.5;word-break:break-all;">
+                  <a href="{{ .ConfirmationURL }}" style="color:#1B1F3B;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+                </p>
+
+                <hr style="border:0;border-top:1px solid #EFE4D1;margin:0 0 20px 0;" />
+
+                <p style="margin:0;font-size:13px;line-height:1.6;color:#4A4E68;">
+                  O convite é pessoal e tem validade limitada. Se não estavas à espera deste email, podes ignorá-lo. Ninguém terá acesso à conta sem a tua palavra-passe.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Pie -->
+            <tr>
+              <td align="center" style="padding:20px 16px 0 16px;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:1.6;color:#4A4E68;">
+                Mudaro &middot; O teu serviço de mudanças, em boas mãos<br />
+                <a href="https://mudaro.pt" style="color:#4A4E68;text-decoration:underline;">mudaro.pt</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

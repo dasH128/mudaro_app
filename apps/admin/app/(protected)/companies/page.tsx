@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { PageTitle } from "@/app/components/page-title";
 import { ButtonLink } from "@/app/components/ui/button";
+import { requirePlatformUser } from "@/app/lib/auth";
 import { ROUTES } from "@/app/lib/routes";
 import { isStatus } from "@/features/companies/domain/status";
 import { countByStatus, filterCompanies, withStatus } from "@/features/companies/domain/filters";
@@ -19,6 +20,9 @@ function first(value: string | string[] | undefined): string | undefined {
 }
 
 export default async function CompaniesPage({ searchParams }: PageProps<"/companies">) {
+  // El layout no basta: los layouts no se vuelven a renderizar en cada navegación. RLS lo comprueba otra vez en la base de datos.
+  await requirePlatformUser();
+
   const params = await searchParams;
   const statusParam = first(params.status);
   const status = isStatus(statusParam) ? statusParam : undefined;

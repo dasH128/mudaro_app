@@ -5,10 +5,9 @@ import { useActionState } from "react";
 import { TextField } from "@/app/components/form/fields";
 import { PageTitle } from "@/app/components/page-title";
 import { Button } from "@/app/components/ui/button";
+import { ErrorAlert } from "@/app/components/ui/error-alert";
 import { signInAction } from "@/features/auth/actions/sign-in";
 import { IDLE } from "@/features/auth/actions/state";
-
-import { ErrorAlert } from "./error-alert";
 
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(signInAction, IDLE);

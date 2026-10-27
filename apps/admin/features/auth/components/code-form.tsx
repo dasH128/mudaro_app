@@ -4,11 +4,11 @@ import { useActionState } from "react";
 
 import { PageTitle } from "@/app/components/page-title";
 import { Button, ButtonLink } from "@/app/components/ui/button";
+import { ErrorAlert } from "@/app/components/ui/error-alert";
 import { ROUTES } from "@/app/lib/routes";
 import { IDLE } from "@/features/auth/actions/state";
 import { verifyCodeAction } from "@/features/auth/actions/verify-code";
 
-import { ErrorAlert } from "./error-alert";
 import { OtpField } from "./otp-field";
 
 export function CodeForm() {

@@ -13,7 +13,7 @@ type StatusDialogProps = {
   deactivate: boolean;
 };
 
-const TITLE_ID = "estado-dialog-titulo";
+const TITLE_ID = "status-dialog-title";
 
 export function StatusDialog({ companyId, deactivate }: StatusDialogProps) {
   const [open, setOpen] = useState(false);
@@ -69,7 +69,7 @@ function StatusForm({ companyId, deactivate, onCancel, onDone }: StatusFormProps
     if (state.status === "ok") onDone();
   }, [state, onDone]);
 
-  const motivoError = state.status === "error" ? state.fieldErrors?.motivo : undefined;
+  const reasonError = state.status === "error" ? state.fieldErrors?.reason : undefined;
   const generalError = state.status === "error" && !state.fieldErrors ? state.message : undefined;
 
   return (
@@ -84,7 +84,7 @@ function StatusForm({ companyId, deactivate, onCancel, onDone }: StatusFormProps
       </p>
 
       {deactivate && (
-        <TextField name="motivo" label="Motivo" required placeholder="Fica registado no histórico" error={motivoError} />
+        <TextField name="reason" label="Motivo" required placeholder="Fica registado no histórico" error={reasonError} />
       )}
       {generalError && (
         <p role="alert" className="m-0 text-sm font-medium text-danger-foreground">

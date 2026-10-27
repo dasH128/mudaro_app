@@ -2,7 +2,7 @@ import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { StatusPill, type PillTone } from "@/app/components/ui/status-pill";
 import { formatDate } from "@/app/lib/format";
-import type { User } from "@/features/companies/domain/types";
+import { PROFILE_LABEL, type User } from "@/features/companies/domain/types";
 import { ResendInviteButton } from "./resend-invite-button";
 
 const thClass = "whitespace-nowrap border-b border-line py-2.5 font-bold";
@@ -51,7 +51,7 @@ export function UsersCard({ companyId, users, companyDeactivated }: UsersCardPro
                     <span className="font-bold">{user.name}</span>
                     <div className="text-[13px] text-muted">{user.email}</div>
                   </td>
-                  <td className={`${tdClass} px-3`}>{user.profile}</td>
+                  <td className={`${tdClass} px-3`}>{PROFILE_LABEL[user.profile]}</td>
                   <td className={`${tdClass} px-3`}>
                     <StatusPill tone={status.tone}>{status.label}</StatusPill>
                   </td>

@@ -21,9 +21,8 @@ export async function createCompanyAction(_previous: FormState, formData: FormDa
 
   const { data } = parsed;
 
-  // TODO(supabase): llamar a la Edge Function `crear-empresa`, que valida el rol de plataforma,
-  // crea la empresa e invita al administrador (solo si data.enviarConvite). Por ahora se simula en memoria.
-  const company = await createCompany({
+  // La Edge Function `create-company` valida el rol, crea la empresa y envía el convite si se pidió.
+  const result = await createCompany({
     name: data.name,
     taxId: data.taxId,
     region: data.region,
@@ -45,5 +44,15 @@ export async function createCompanyAction(_previous: FormState, formData: FormDa
     createdBy: user.name,
   });
 
-  redirect(ROUTES.companies.detail(company.id, { created: true }));
+  if (!result.ok) {
+    if (result.code === "tax_id_taken") {
+      return { status: "error", fieldErrors: { taxId: "Já existe uma empresa com este NIF." }, values };
+    }
+    if (result.code === "unauthorized") redirect(ROUTES.login);
+    // Error inesperado: lo recoge error.tsx de la carpeta companies.
+    throw new Error(`create-company failed: ${result.code}`);
+  }
+
+  // Si el convite falló, la ficha lo muestra como pendiente y se puede reenviar desde ahí.
+  redirect(ROUTES.companies.detail(result.companyId, { created: true }));
 }

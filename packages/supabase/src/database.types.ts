@@ -189,10 +189,11 @@ export type Database = {
           expires_at: string
           id: string
           name: string
+          phone: string | null
           revoked_at: string | null
           role: Database["public"]["Enums"]["company_role"]
           sent_at: string | null
-          token_hash: string
+          token_hash: string | null
           updated_at: string
         }
         Insert: {
@@ -203,10 +204,11 @@ export type Database = {
           expires_at?: string
           id?: string
           name: string
+          phone?: string | null
           revoked_at?: string | null
           role: Database["public"]["Enums"]["company_role"]
           sent_at?: string | null
-          token_hash: string
+          token_hash?: string | null
           updated_at?: string
         }
         Update: {
@@ -217,10 +219,11 @@ export type Database = {
           expires_at?: string
           id?: string
           name?: string
+          phone?: string | null
           revoked_at?: string | null
           role?: Database["public"]["Enums"]["company_role"]
           sent_at?: string | null
-          token_hash?: string
+          token_hash?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -262,9 +265,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_company_with_invitation: {
+        Args: { p_actor_id: string; p_admin: Json; p_company: Json }
+        Returns: Json
+      }
       current_company_id: { Args: never; Returns: string }
       is_platform_user: { Args: never; Returns: boolean }
-      is_valid_nif: { Args: { nif: string }; Returns: boolean }
+      is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
     }
     Enums: {
       company_role: "administrator" | "operator"

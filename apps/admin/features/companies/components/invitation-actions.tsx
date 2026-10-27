@@ -4,17 +4,19 @@ import { useActionState, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/app/components/ui/button";
 import { controlClass } from "@/app/components/form/fields";
-import { regenerateLinkAction, resendInviteAction } from "@/features/companies/actions/invitation";
-import { IDLE, type ActionState } from "@/features/companies/actions/state";
+import { generateLinkAction, resendInviteAction } from "@/features/companies/actions/invitation";
+import { IDLE, IDLE_LINK, type ActionState } from "@/features/companies/actions/state";
 
 type InvitationActionsProps = {
   companyId: string;
-  link: string;
 };
 
-export function InvitationActions({ companyId, link }: InvitationActionsProps) {
+export function InvitationActions({ companyId }: InvitationActionsProps) {
   const [resendState, resendAction, resending] = useActionState(resendInviteAction.bind(null, companyId, null), IDLE);
-  const [linkState, linkAction, generating] = useActionState(regenerateLinkAction.bind(null, companyId), IDLE);
+  const [linkState, linkAction, generating] = useActionState(
+    generateLinkAction.bind(null, companyId),
+    IDLE_LINK,
+  );
 
   const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +24,11 @@ export function InvitationActions({ companyId, link }: InvitationActionsProps) {
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
+  // El enlace solo existe mientras esté en este estado: al salir de la página se pierde.
+  const link = linkState.status === "ok" ? linkState.link : null;
+
   async function copy() {
+    if (!link) return;
     try {
       await navigator.clipboard.writeText(link);
       setCopied(true);
@@ -34,47 +40,50 @@ export function InvitationActions({ companyId, link }: InvitationActionsProps) {
     }
   }
 
-  const messages = [resendState, linkState].filter(
+  const messages = [resendState].filter(
     (state): state is Exclude<ActionState, { status: "idle" }> => state.status !== "idle",
   );
 
   return (
     <>
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="link" className="text-sm font-bold">
-          Link do convite
-        </label>
-        <div className="flex flex-wrap gap-2">
-          <input
-            ref={inputRef}
-            id="link"
-            type="text"
-            readOnly
-            value={link}
-            className={`${controlClass} h-11 min-w-0 flex-[1_1_260px] border-status-off-border bg-line-soft text-[15px] text-muted`}
-          />
-          <Button variant="secondary" onClick={copy}>
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="9" y="9" width="12" height="12" rx="2" />
-              <path d="M5 15V5a2 2 0 012-2h10" />
-            </svg>
-            {copied ? "Copiado" : "Copiar"}
-          </Button>
-          <span role="status" className="sr-only">
-            {copied ? "Link copiado." : ""}
-          </span>
+      {link && (
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="link" className="text-sm font-bold">
+            Link do convite
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <input
+              ref={inputRef}
+              id="link"
+              type="text"
+              readOnly
+              value={link}
+              className={`${controlClass} h-11 min-w-0 flex-[1_1_260px] border-status-off-border bg-line-soft text-[15px] text-muted`}
+            />
+            <Button variant="secondary" onClick={copy}>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="9" y="9" width="12" height="12" rx="2" />
+                <path d="M5 15V5a2 2 0 012-2h10" />
+              </svg>
+              {copied ? "Copiado" : "Copiar"}
+            </Button>
+            <span role="status" className="sr-only">
+              {copied ? "Link copiado." : ""}
+            </span>
+          </div>
+          <p className="m-0 text-[13px] text-muted">Por segurança, este link só fica visível aqui. Copie-o antes de sair da página.</p>
         </div>
-      </div>
+      )}
 
       <div className="flex flex-wrap gap-3">
         <form action={resendAction}>
@@ -112,6 +121,9 @@ export function InvitationActions({ companyId, link }: InvitationActionsProps) {
             {state.message}
           </p>
         ))}
+        {linkState.status === "error" && (
+          <p className="m-0 text-sm font-medium text-danger-foreground">{linkState.message}</p>
+        )}
       </div>
     </>
   );

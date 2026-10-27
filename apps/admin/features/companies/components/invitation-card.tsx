@@ -13,7 +13,7 @@ export function InvitationCard({ companyId, invitation }: { companyId: string; i
         </DescriptionItem>
         <DescriptionItem term="Válido até">{formatDateTime(invitation.validUntil)}</DescriptionItem>
       </dl>
-      <InvitationActions companyId={companyId} link={invitation.link} />
+      <InvitationActions companyId={companyId} />
     </Card>
   );
 }

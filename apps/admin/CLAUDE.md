@@ -31,9 +31,9 @@ apps/admin/
       schemas/              # zod de login, código y alta del MFA
       actions/              # Server Actions: sign-in, verify-code, enroll (+ state.ts)
       components/           # login-form, code-form, enroll-form, otp-field
-    empresas/
-      domain/               # TypeScript puro: estado.ts, nif.ts, regioes.ts, types.ts, filtros.ts
-      data/                 # único acceso a datos: companies.repo.ts (puerta de entrada), store.ts y mock.ts (simulación)
+    companies/
+      domain/               # TypeScript puro: status.ts, tax-id.ts, regions.ts, types.ts, filters.ts, setup-steps.ts
+      data/                 # único acceso a datos: companies.repo.ts (puerta de entrada). Listado real: companies.queries.ts (consulta a Supabase) y companies.mapper.ts (fila → CompanySummary). Resto, simulado: store.ts y mock.ts
       schemas/              # zod de los formularios (new-company.ts)
       actions/              # Server Actions: create-company, change-status, invitation (+ state.ts, revalidate-company.ts)
       components/           # UI de la feature: tabla, tarjetas, diálogos, formulario
@@ -49,6 +49,8 @@ Reglas de dependencias (en un solo sentido):
 - Los componentes no importan `@supabase/*`, `store.ts` ni `mock.ts`. Piden datos desde la página (vía `companies.repo.ts`) o llaman a una Server Action.
 - Páginas y acciones acceden a los datos solo con `@/features/companies/data/companies.repo`. No importan `store.ts` ni `mock.ts` directamente. Al conectar Supabase se sustituye la implementación del repo y se mantienen las firmas.
 - Los tipos de la base de datos (`packages/supabase`) solo se usan en `data/`, para convertirlos a los tipos de `domain/types.ts`. El resto de la app usa tipos de dominio.
+- El dominio y los datos solo guardan códigos en inglés (`administrator`, `deactivated`, `company_created`). El texto en portugués vive en la interfaz, con mapas de etiquetas (`STATUS_LABEL`, `PROFILE_LABEL`, `ACTION_TEXT` en `history-card.tsx`).
+- `error.tsx` recibe `retry` (en Next 16 se llama así, antes era `reset`).
 - Una Server Action hace siempre: `requirePlatformUser()`, validar con zod y llamar al repo o a una Edge Function. Los archivos con `"use server"` solo exportan funciones async; los helpers van en archivos aparte (`revalidate-company.ts`, `state.ts`).
 - Los imports entre capas de la feature usan el alias `@/features/...`. Dentro de una misma carpeta se usan imports relativos.
 - Una feature nueva (catálogo de objetos, soporte...) sigue la misma estructura en `features/<nombre>/`. Lo que necesite otra app sube a `packages/` solo cuando exista esa segunda app.
@@ -66,9 +68,10 @@ Reglas de dependencias (en un solo sentido):
 
 ## Estado actual y pendientes (22/10/2026)
 
-Las 4 pantallas de empresas están hechas, pero **sin Supabase**: todo es simulación. El login sí es real (25/10/2026): Supabase Auth con MFA TOTP, `requirePlatformUser()` comprueba sesión, aal2 y fila activa en `platform_users`, y `proxy.ts` redirige a `/login` sin sesión. Antes de usar datos reales de empresas hay que resolver lo siguiente.
+El login es real (25/10/2026): Supabase Auth con MFA TOTP, `requirePlatformUser()` comprueba sesión, aal2 y fila activa en `platform_users`, y `proxy.ts` redirige a `/login` sin sesión. La lista `/companies` también lee de Supabase (RLS por rol de plataforma). El detalle, el alta y los cambios de estado siguen **simulados**: con empresas reales, los enlaces de la lista dan 404 hasta conectar `getCompany`.
 
 Provisional o simulado:
+- `features/companies/data/companies.mapper.ts`: los pasos 3 y 4 de configuración (vehículos y tarifa) valen `false` hasta que existan esas tablas (paso 2 del plan de BD). Hasta entonces ninguna empresa real llega a "Ativa". El perfil completo se define en `domain/setup-steps.ts` (dirección y teléfono o email): criterio provisional.
 - `features/companies/data/store.ts`: almacén en memoria (se pierde al reiniciar el servidor), detrás de `companies.repo.ts`. Sustituir por consultas a Supabase y por Edge Functions (`create-company`, reenviar convite, desactivar...), con registro de auditoría (RNF-08).
 - `features/companies/data/mock.ts`: empresas de ejemplo con textos entre corchetes. Los links de convite son simulados (`https://app.mudaro.pt/convite/simulado-...`).
 - Validez del convite: 7 días (`INVITATION_VALIDITY_DAYS` en `features/companies/data/store.ts`). Confirmar con Supabase Auth.

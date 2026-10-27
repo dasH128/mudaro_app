@@ -30,8 +30,9 @@ export default async function CompanyDetailPage({ params, searchParams }: PagePr
 
   const status = deriveStatus(company);
   const deactivated = status === "deactivated";
-  const invitationSent = company.invitation.sentAt !== null;
-  const showInvitation = !company.invitationAccepted && !deactivated;
+  const invitation = company.invitation;
+  const invitationSent = Boolean(invitation?.sentAt);
+  const showInvitation = invitation !== null && !company.invitationAccepted && !deactivated;
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
@@ -62,7 +63,7 @@ export default async function CompanyDetailPage({ params, searchParams }: PagePr
               Empresa criada. Enviámos o convite para <strong>{company.adminEmail}</strong>.
             </span>
           ) : (
-            <span>Empresa criada. O convite ainda não foi enviado: copie o link abaixo ou reenvie o email.</span>
+            <span>Empresa criada. O convite ainda não foi enviado. Pode reenviá-lo abaixo.</span>
           )}
         </div>
       )}
@@ -113,7 +114,7 @@ export default async function CompanyDetailPage({ params, searchParams }: PagePr
 
       <div className="flex flex-wrap items-start gap-6">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
-          {showInvitation && <InvitationCard companyId={company.id} invitation={company.invitation} />}
+          {showInvitation && <InvitationCard companyId={company.id} invitation={invitation} />}
           <UsersCard
             companyId={company.id}
             users={company.users}

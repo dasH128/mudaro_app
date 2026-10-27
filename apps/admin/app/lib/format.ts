@@ -25,9 +25,16 @@ export function parseDatePt(value: string): string | null {
   return isReal ? `${yyyy}-${mm}-${dd}` : null;
 }
 
+const lisbonDateFormatter = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Lisbon" });
+
+/** "2026-10-20T23:30:00Z" -> "2026-10-21" (el día en Portugal, no en UTC). */
+export function toLisbonDate(iso: string): string {
+  return lisbonDateFormatter.format(new Date(iso));
+}
+
 /** Fecha de hoy en Portugal como "aaaa-mm-dd". */
 export function todayIso(): string {
-  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Lisbon" }).format(new Date());
+  return lisbonDateFormatter.format(new Date());
 }
 
 const dateTimeFormatter = new Intl.DateTimeFormat("pt-PT", {

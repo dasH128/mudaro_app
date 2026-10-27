@@ -10,7 +10,7 @@ import { ProgressBar } from "./progress-bar";
 const thClass = "border-b border-line px-5 py-3.5 font-bold";
 const tdClass = "border-b border-line-soft px-5 py-3.5";
 
-function Documentacao({ row }: { row: CompanyRow }) {
+function Documentation({ row }: { row: CompanyRow }) {
   if (row.gdprContract && row.imtUpToDate) {
     return <span className="text-sm text-muted">IMT e RGPD em dia</span>;
   }
@@ -72,7 +72,7 @@ export function CompaniesTable({ rows }: { rows: CompanyRow[] }) {
                   <ProgressBar done={row.setupSteps} />
                 </td>
                 <td className={tdClass}>
-                  <Documentacao row={row} />
+                  <Documentation row={row} />
                 </td>
                 <td className={`${tdClass} text-muted`}>{formatDate(row.createdAt)}</td>
               </tr>

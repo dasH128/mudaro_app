@@ -19,7 +19,7 @@ type BaseProps = {
 };
 
 function describedBy(name: string, hint?: string, error?: string) {
-  const ids = [hint ? `${name}-ajuda` : null, error ? `${name}-erro` : null].filter(Boolean);
+  const ids = [hint ? `${name}-hint` : null, error ? `${name}-error` : null].filter(Boolean);
   return ids.length ? ids.join(" ") : undefined;
 }
 
@@ -37,12 +37,12 @@ function FieldShell({ name, label, required, requiredMark = required, hint, erro
       </label>
       {children}
       {hint && (
-        <span id={`${name}-ajuda`} className="text-[13px] leading-[1.4] text-muted">
+        <span id={`${name}-hint`} className="text-[13px] leading-[1.4] text-muted">
           {hint}
         </span>
       )}
       {error && (
-        <span id={`${name}-erro`} className="text-[13px] leading-[1.4] font-medium text-danger-foreground">
+        <span id={`${name}-error`} className="text-[13px] leading-[1.4] font-medium text-danger-foreground">
           {error}
         </span>
       )}

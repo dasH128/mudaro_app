@@ -11,7 +11,7 @@ import type { ActionState } from "./state";
 // TODO(supabase): sustituir las llamadas al almacén en memoria por Edge Functions que validen el rol
 // y registren la auditoría (RNF-08).
 
-const motivoSchema = z.string().trim().min(1, "Indique o motivo.").max(200, "Máximo de 200 caracteres.");
+const reasonSchema = z.string().trim().min(1, "Indique o motivo.").max(200, "Máximo de 200 caracteres.");
 
 /** Desactiva (con motivo obligatorio) o reactiva la empresa. */
 export async function changeStatusAction(
@@ -22,17 +22,17 @@ export async function changeStatusAction(
 ): Promise<ActionState> {
   const user = await requirePlatformUser();
 
-  let motivo = "";
+  let reason = "";
   if (deactivate) {
-    const parsed = motivoSchema.safeParse(formData.get("motivo") ?? "");
+    const parsed = reasonSchema.safeParse(formData.get("reason") ?? "");
     if (!parsed.success) {
       const message = parsed.error.issues[0]?.message ?? "Motivo inválido.";
-      return { status: "error", message, fieldErrors: { motivo: message } };
+      return { status: "error", message, fieldErrors: { reason: message } };
     }
-    motivo = parsed.data;
+    reason = parsed.data;
   }
 
-  const result = await changeStatus(companyId, deactivate, motivo, user.name);
+  const result = await changeStatus(companyId, deactivate, reason, user.name);
   if (!result.ok) return { status: "error", message: result.error };
 
   revalidateCompany(companyId);
