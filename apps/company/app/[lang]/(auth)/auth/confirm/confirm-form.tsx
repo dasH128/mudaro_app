@@ -4,8 +4,8 @@ import { useActionState } from "react";
 
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
-import { confirmInvitationAction } from "@/features/auth/actions/confirm-invitation";
-import { IDLE, type ConfirmInvitationState } from "@/features/auth/actions/state";
+import { confirmInvitationAction } from "@/features/auth/application/actions/confirm-invitation";
+import { IDLE, type ConfirmInvitationState } from "@/features/auth/application/actions/state";
 
 type ConfirmFormProps = {
   lang: Locale;

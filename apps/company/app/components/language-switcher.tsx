@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { LOCALE_COOKIE, type Locale } from "@/app/i18n/config";
+import { ROUTES, localePath } from "@/app/lib/routes";
 
 type LanguageSwitcherProps = {
   current: Locale;
@@ -24,7 +25,7 @@ export function LanguageSwitcher({ current, label, options }: LanguageSwitcherPr
         return (
           <Link
             key={locale}
-            href={`/${locale}${rest}`}
+            href={localePath(locale, rest || ROUTES.home)}
             hrefLang={locale}
             lang={locale}
             aria-current={active ? "true" : undefined}

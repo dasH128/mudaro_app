@@ -4,8 +4,8 @@ import { useActionState } from "react";
 
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
-import { setPasswordAction } from "@/features/auth/actions/set-password";
-import { IDLE, type SetPasswordState } from "@/features/auth/actions/state";
+import { setPasswordAction } from "@/features/auth/application/actions/set-password";
+import { IDLE, type SetPasswordState } from "@/features/auth/application/actions/state";
 
 const inputClass =
   "w-full rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-muted/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";

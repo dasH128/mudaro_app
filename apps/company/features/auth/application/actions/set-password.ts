@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { setPasswordSchema } from "@/features/auth/schemas/invitation";
-import { createSupabaseServerClient } from "@mudaro/supabase/server";
+import { setPasswordSchema } from "@/features/auth/application/schemas/invitation";
+import { setInvitedUserPassword } from "@/features/auth/infrastructure/auth.repo";
 
 import type { SetPasswordState } from "./state";
 
@@ -20,12 +20,9 @@ export async function setPasswordAction(_previous: SetPasswordState, formData: F
     return { status: "error", code: mismatch ? "mismatch" : "weak" };
   }
 
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
-  if (!data.user) redirect(localePath(parsed.data.lang, ROUTES.auth.login));
-
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
-  if (error) return { status: "error", code: "failed" };
+  const result = await setInvitedUserPassword(parsed.data.password);
+  if (result === "unauthenticated") redirect(localePath(parsed.data.lang, ROUTES.auth.login));
+  if (result === "failed") return { status: "error", code: "failed" };
 
   // Provisional: hasta que exista el asistente de configuración, vuelve al inicio.
   redirect(localePath(parsed.data.lang, ROUTES.home));

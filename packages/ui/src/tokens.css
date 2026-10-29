@@ -36,6 +36,17 @@
   --warn-surface: #FFF3E6;
   --warn-border: #E8B27A;
   --warn-foreground: #7A3A05;
+  /* Éxito (trabajo concluido, propuesta ganada) */
+  --success-surface: #E3F1EA;
+  --success-border: #A9D3BE;
+  --success-foreground: #1F6B47;
+  --success-dot: #1F8A5B;
+  --danger-dot: #C62828;
+  /* Superficies suaves: cabeceras de tabla, filas con hover, tarjetas neutras */
+  --surface-soft: #FBF6EE;
+  --surface-head: #F8F1E5;
+  /* Menú lateral de la app de empresa */
+  --sidebar: var(--mudaro-tinta);
 }
 
 /* Tema oscuro (lo activa el atributo data-theme en <html>) */
@@ -45,6 +56,9 @@
   --foreground: var(--mudaro-carton);
   --muted: #C9CCDD;
   --border: color-mix(in srgb, var(--mudaro-carton) 15%, transparent);
+  --surface-soft: #2E3460;
+  --surface-head: #2E3460;
+  --sidebar: #13162B;
 }
 
 /* Variante dark de Tailwind ligada al atributo, no al sistema */
@@ -73,6 +87,14 @@
   --color-warn-surface: var(--warn-surface);
   --color-warn-border: var(--warn-border);
   --color-warn-foreground: var(--warn-foreground);
+  --color-success-surface: var(--success-surface);
+  --color-success-border: var(--success-border);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-dot: var(--success-dot);
+  --color-danger-dot: var(--danger-dot);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-head: var(--surface-head);
+  --color-sidebar: var(--sidebar);
 
   --font-display: var(--font-bricolage);
   --font-sans: var(--font-dm-sans);
