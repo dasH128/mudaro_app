@@ -66,8 +66,14 @@
     }
   },
   "app": {
+    "account": {
+      "menu": "Account menu",
+      "signOut": "Sign out"
+    },
     "sidebar": {
       "mainMenu": "Main menu",
+      "collapse": "Collapse menu",
+      "expand": "Expand menu",
       "company": "Company",
       "greeting": "Hi, {name}",
       "role": "Administrator",

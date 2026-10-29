@@ -48,12 +48,13 @@ export function AppNav({ lang, label, labels }: Props) {
             key={item.key}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`${itemBase} shrink-0 ${active ? "bg-primary font-bold text-primary-foreground" : itemIdle}`}
+            title={labels[item.key]}
+            className={`${itemBase} relative shrink-0 lg:group-data-[collapsed=true]/shell:justify-center lg:group-data-[collapsed=true]/shell:px-0 ${active ? "bg-primary font-bold text-primary-foreground" : itemIdle}`}
           >
             <Icon name={item.icon} />
-            <span className="lg:flex-1">{labels[item.key]}</span>
+            <span className="lg:flex-1 lg:group-data-[collapsed=true]/shell:sr-only">{labels[item.key]}</span>
             {item.badge ? (
-              <span className="rounded-full bg-white/[0.14] px-2 py-0.5 text-xs font-bold text-white">
+              <span className="rounded-full bg-white/[0.14] px-2 py-0.5 text-xs font-bold text-white lg:group-data-[collapsed=true]/shell:absolute lg:group-data-[collapsed=true]/shell:top-1.5 lg:group-data-[collapsed=true]/shell:right-2 lg:group-data-[collapsed=true]/shell:size-2.5 lg:group-data-[collapsed=true]/shell:bg-accent lg:group-data-[collapsed=true]/shell:p-0 lg:group-data-[collapsed=true]/shell:text-[0px]">
                 {item.badge}
               </span>
             ) : null}

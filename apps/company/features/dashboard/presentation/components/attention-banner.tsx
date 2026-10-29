@@ -23,7 +23,7 @@ export function AttentionBanner({ lang }: { lang: Locale }) {
       </div>
       <Link
         href={localePath(lang, ROUTES.incidents.detail("IC-004"))}
-        className="flex h-11 items-center gap-2 rounded-xl border border-field-border bg-white px-4.5 text-sm font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="flex h-11 items-center gap-2 rounded-xl border border-field-border bg-surface px-4.5 text-sm font-bold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         Rever incidência
         <Icon name="arrowRight" size={16} />

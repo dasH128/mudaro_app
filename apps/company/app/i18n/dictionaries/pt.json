@@ -66,8 +66,14 @@
     }
   },
   "app": {
+    "account": {
+      "menu": "Menu da conta",
+      "signOut": "Terminar sessão"
+    },
     "sidebar": {
       "mainMenu": "Menu principal",
+      "collapse": "Recolher menu",
+      "expand": "Expandir menu",
       "company": "Empresa",
       "greeting": "Olá, {name}",
       "role": "Administradora",

@@ -22,3 +22,9 @@ export async function setInvitedUserPassword(password: string): Promise<SetPassw
   const { error } = await supabase.auth.updateUser({ password });
   return error ? "failed" : "ok";
 }
+
+/** Cierra la sesión actual (borra las cookies de Supabase Auth). */
+export async function signOutCurrentUser(): Promise<void> {
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.signOut();
+}

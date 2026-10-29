@@ -9,7 +9,7 @@ const PILL_BASE =
   "inline-flex h-7 items-center whitespace-nowrap rounded-full border px-3 text-[13px] font-bold";
 const PILL: Record<JobStatus, string> = {
   "in-progress": "border-warn-border bg-warn-surface text-warn-foreground",
-  scheduled: "border-primary-foreground bg-white text-primary-foreground",
+  scheduled: "border-foreground bg-surface text-foreground",
   done: "border-success-border bg-success-surface text-success-foreground",
   unassigned: "border-status-off-border bg-line-soft text-muted",
 };

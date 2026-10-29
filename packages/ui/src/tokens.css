@@ -59,6 +59,30 @@
   --surface-soft: #2E3460;
   --surface-head: #2E3460;
   --sidebar: #13162B;
+
+  /* Campos de formulario */
+  --field-border: #8E92B3;
+  --field-placeholder: #A5A9C6;
+  /* Líneas y pistas */
+  --line: #3A4070;
+  --line-soft: #2F3563;
+  /* Insignias de estado */
+  --status-config-surface: #343A6A;
+  --status-off-border: #4A5185;
+  /* Alertas de error */
+  --danger-surface: #4A1F2B;
+  --danger-border: #8A3B4A;
+  --danger-foreground: #FFB4B4;
+  --danger-dot: #FF6B6B;
+  /* Aviso */
+  --warn-surface: #4A3320;
+  --warn-border: #8A5A2B;
+  --warn-foreground: #FFC999;
+  /* Éxito */
+  --success-surface: #1E3D33;
+  --success-border: #2F6B52;
+  --success-foreground: #8FDDB5;
+  --success-dot: #3DD598;
 }
 
 /* Variante dark de Tailwind ligada al atributo, no al sistema */

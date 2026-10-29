@@ -46,16 +46,6 @@ export function DashboardHeader({ lang }: { lang: Locale }) {
             <Icon name="bell" />
             <span className="absolute top-[9px] right-2.5 size-[9px] rounded-full border-2 border-surface bg-primary" />
           </button>
-          <button
-            type="button"
-            aria-label="Menu da conta"
-            className="flex h-11 items-center gap-2 rounded-xl pr-2 pl-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            <span className="grid size-10 place-items-center rounded-full bg-foreground text-sm font-bold text-background">
-              GH
-            </span>
-            <Icon name="chevronDown" size={16} />
-          </button>
         </div>
         <Link
           href={localePath(lang, ROUTES.orders.new)}
