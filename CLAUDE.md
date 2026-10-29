@@ -20,12 +20,13 @@ mudaro/                      ← un repo (pnpm workspaces + Turborepo)
   apps/
     landing/    → mudaro.pt          público, captación del piloto
     admin/      → admin.mudaro.pt    panel interno (solo tú y el equipo)
-    cliente/    → enlace del cliente (más adelante)
-    empresa/    → app.mudaro.pt      panel web del transportista (futuro)
+    client/     → enlace del cliente (más adelante)
+    company/    → app.mudaro.pt      panel web del transportista
   packages/
     ui/         → componentes y tokens de la identidad (colores, fuentes, logo)
     supabase/   → cliente, tipos generados del esquema, helpers de auth
     config/     → tsconfig, eslint, tailwind compartidos
+    validation/ → reglas de datos de Portugal usadas por varias apps: NIF, teléfono, fechas dd/mm/aaaa (TypeScript puro)
 ```
 
 Cada carpeta de `apps/` tiene su propio `CLAUDE.md` con las reglas de esa app. Léelo cuando trabajes dentro.
@@ -65,6 +66,7 @@ Si alguno de estos scripts todavía no existe, créalo en el `package.json` raí
 - Todo en inglés (código, nombres de ficheros y carpetas, rutas, tablas, columnas, funciones, enums y políticas). Solo los comentarios van en español, igual que los ficheros `.md`.
 - Tipos de base de datos siempre desde `packages/supabase`, nunca escritos a mano.
 - Si un componente se usa en dos apps, muévelo a `packages/ui`.
+- Si una regla de datos (validar o interpretar un NIF, un teléfono, una fecha) se usa en dos apps, va a `packages/validation`. No la copies.
 - Validación de formularios en servidor con zod, aunque también se valide en cliente.
 
 ## Cómo trabajar conmigo

@@ -6,15 +6,12 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { interpolate } from "@/app/i18n/interpolate";
+import { MOCK_COMPANY_NAME, MOCK_USER } from "@/app/lib/mock-session";
 import { ROUTES, localePath } from "@/app/lib/routes";
 
 const itemBase =
   "flex items-center gap-3 rounded-xl px-3.5 py-3 text-[15px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const itemIdle = "text-on-ink hover:bg-white/[0.08] hover:text-white";
-
-// Datos de ejemplo: la empresa y el usuario saldrán de la sesión
-const COMPANY_NAME = "Mudanças Atlântico, Lda.";
-const USER = { name: "Gema", initials: "GH" };
 
 export async function AppSidebar({ lang }: { lang: Locale }) {
   const { sidebar } = (await getDictionary()).app;
@@ -35,7 +32,7 @@ export async function AppSidebar({ lang }: { lang: Locale }) {
         <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
           {sidebar.company}
         </span>
-        <span className="text-[15px] font-bold text-white">{COMPANY_NAME}</span>
+        <span className="text-[15px] font-bold text-white">{MOCK_COMPANY_NAME}</span>
       </div>
 
       <AppNav lang={lang} label={sidebar.mainMenu} labels={sidebar.nav} />
@@ -47,11 +44,11 @@ export async function AppSidebar({ lang }: { lang: Locale }) {
         </Link>
         <div className="flex items-center gap-3 border-t border-white/15 px-3 pt-3.5">
           <span className="grid size-10 place-items-center rounded-full bg-on-ink text-sm font-bold text-primary-foreground">
-            {USER.initials}
+            {MOCK_USER.initials}
           </span>
           <span className="flex flex-col">
             <span className="text-sm font-bold text-white">
-              {interpolate(sidebar.greeting, { name: USER.name })}
+              {interpolate(sidebar.greeting, { name: MOCK_USER.name })}
             </span>
             <span className="text-[13px] text-on-ink">{sidebar.role}</span>
           </span>

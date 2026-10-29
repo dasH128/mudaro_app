@@ -6,7 +6,9 @@
     "loginTitle": "Sign in · Mudaro",
     "confirmTitle": "Invitation · Mudaro",
     "setPasswordTitle": "Set your password · Mudaro",
-    "proposalsTitle": "Proposals · Mudaro"
+    "proposalsTitle": "Proposals · Mudaro",
+    "newOrderTitle": "New order · Mudaro",
+    "orderCreatedTitle": "Order created · Mudaro"
   },
   "auth": {
     "layout": {
@@ -186,6 +188,192 @@
         "expiredOn": "On {date}",
         "superseded": "Superseded",
         "supersededNote": "Replaced by a newer version"
+      }
+    },
+    "orders": {
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "orders": "Orders"
+      },
+      "message": {
+        "body": [
+          "Hi {name}! This is {sender} from {company}.",
+          "To prepare the quote for your move, tell us what you'll take and what the access is like. You don't need to create an account and you can do it bit by bit:",
+          "{link}",
+          "The link is active for {days} days."
+        ],
+        "namePlaceholder": "[NAME]",
+        "linkPlaceholder": "[ORDER LINK]"
+      },
+      "new": {
+        "title": "New order",
+        "subtitle": "Just the essentials to get started. The customer fills in the rest through the link: what they're taking, photos and access.",
+        "errorSummary": "Check the highlighted fields.",
+        "client": {
+          "title": "Customer",
+          "phone": "Mobile",
+          "phonePlaceholder": "9XX XXX XXX",
+          "phoneHint": "Start with the phone number: if the customer already exists, we suggest their details.",
+          "name": "Name",
+          "namePlaceholder": "First and last name, or company name",
+          "type": "Customer type",
+          "types": {
+            "private": "Private",
+            "company": "Company"
+          },
+          "email": "Email",
+          "optional": "(optional)",
+          "emailPlaceholder": "name@example.com",
+          "emailHint": "With an email, the customer gets a copy of the accepted proposal and the handover reports.",
+          "addTaxId": "Add tax ID",
+          "taxId": "Tax ID (NIF)",
+          "taxIdHint": "9 digits.",
+          "removeTaxId": "Remove tax ID",
+          "linked": "Linked to an existing customer record",
+          "suggestion": {
+            "title": "This number is already a customer: {name}",
+            "summary": {
+              "one": "{type} · {count} previous order ({id}, completed on {date})",
+              "other": "{type} · {count} previous orders (the latest, {id}, completed on {date})"
+            },
+            "noOrders": "{type} · No previous orders",
+            "dismiss": "It's someone else",
+            "use": "Use this customer"
+          }
+        },
+        "move": {
+          "title": "Move",
+          "origin": "Pick-up address",
+          "destination": "Delivery address",
+          "addressPlaceholder": "Street, number and town",
+          "addStop": "Add stop",
+          "stop": "Stop {n}",
+          "removeStop": "Remove stop {n}",
+          "date": "Approximate date",
+          "datePlaceholder": "dd/mm/yyyy",
+          "flexibility": "Flexibility",
+          "flexibilities": {
+            "exact": "Exact day",
+            "two-days": "± 2 days",
+            "one-week": "± 1 week",
+            "month": "Month only"
+          },
+          "source": "How the contact arrived",
+          "sources": {
+            "phone": "Phone",
+            "whatsapp": "WhatsApp",
+            "referral": "Referral",
+            "website": "Website",
+            "other": "Other"
+          }
+        },
+        "inventory": {
+          "title": "Who fills in the inventory?",
+          "modes": {
+            "link": {
+              "title": "The customer, via the link",
+              "text": "They list what they're taking, with photos and access, without creating an account. You get a notice when they send it.",
+              "recommended": "Recommended"
+            },
+            "self": {
+              "title": "Me, now or during a visit",
+              "text": "By phone or at the customer's home. It's recorded as filled in by the company."
+            }
+          },
+          "validity": "The link stays active for",
+          "validityDays": {
+            "one": "{count} day",
+            "other": "{count} days"
+          },
+          "validityNote": "After that, the customer sees a notice and can no longer edit."
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "createLink": "Create order and get link",
+          "createSelf": "Create order and open inventory",
+          "creating": "Creating…"
+        },
+        "side": {
+          "messageTitle": "Message for the customer",
+          "editTemplate": "Edit template",
+          "messageFooter": "Sent by WhatsApp, SMS or email in the next step.",
+          "afterTitle": "After creating",
+          "afterLink": [
+            {
+              "title": "You share the link",
+              "text": "Copy it or send it by WhatsApp, SMS or email."
+            },
+            {
+              "title": "The customer fills it in",
+              "text": "They can do it bit by bit; the draft is saved."
+            },
+            {
+              "title": "You get a notice",
+              "text": "With the inventory received, you prepare the proposal."
+            }
+          ],
+          "afterSelf": [
+            {
+              "title": "You open the inventory",
+              "text": "Room by room, with the object catalog."
+            },
+            {
+              "title": "You enter the access details",
+              "text": "Floor, lift, stairs and parking."
+            },
+            {
+              "title": "You prepare the proposal",
+              "text": "The calculation uses the inventory you filled in."
+            }
+          ]
+        },
+        "errors": {
+          "phoneRequired": "Enter the customer's mobile number.",
+          "phoneInvalid": "Enter a 9-digit number (e.g. 912 345 678).",
+          "nameRequired": "Enter the customer's name.",
+          "emailInvalid": "Enter a valid email.",
+          "taxIdInvalid": "Invalid tax ID. Check the 9 digits and the check digit.",
+          "originRequired": "Enter the pick-up address.",
+          "destinationRequired": "Enter the delivery address.",
+          "dateRequired": "Enter the approximate date (dd/mm/yyyy).",
+          "dateInvalid": "Invalid date. Use the dd/mm/yyyy format.",
+          "datePast": "The date can't be before today.",
+          "tooLong": "Maximum 200 characters.",
+          "invalid": "Invalid value. Check this option."
+        }
+      },
+      "created": {
+        "title": "Order {id} created",
+        "routeTo": "to",
+        "shareTitle": "Now send the link to {name}",
+        "shareText": "This is where {name} lists what they're taking. Later, they'll see the proposal on the same link.",
+        "linkLabel": "Order link",
+        "copy": "Copy link",
+        "validUntil": "Active until {date} · gives access to this order only",
+        "pending": "Link generation is not available yet in this version.",
+        "messageLabel": "Message",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email",
+        "notice": {
+          "before": "When you copy or send the link, the order moves to ",
+          "status": "Awaiting inventory",
+          "after": ". We'll let you know when {name} sends the inventory."
+        },
+        "statusTitle": "Order status",
+        "now": "Now",
+        "steps": {
+          "new": "New",
+          "awaiting-inventory": "Awaiting inventory",
+          "inventory-received": "Inventory received",
+          "quoted": "Quoted",
+          "won": "Won"
+        },
+        "links": {
+          "fillInventory": "Fill in the inventory myself",
+          "createAnother": "Create another order",
+          "view": "View order"
+        }
       }
     }
   }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@mudaro/supabase": "workspace:*",
     "@mudaro/ui": "workspace:*",
+    "@mudaro/validation": "workspace:*",
     "next": "16.4.2",
     "next-themes": "^0.4.6",
     "react": "19.3.0",

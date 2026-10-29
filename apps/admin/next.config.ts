@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Se compila el código fuente de @mudaro/ui y @mudaro/supabase (exportan .ts/.tsx sin build previo)
-  transpilePackages: ["@mudaro/ui", "@mudaro/supabase"],
+  // Se compila el código fuente de @mudaro/ui, @mudaro/supabase y @mudaro/validation (exportan .ts/.tsx sin build previo)
+  transpilePackages: ["@mudaro/ui", "@mudaro/supabase", "@mudaro/validation"],
   turbopack: {
     rules: {
       "*.css": {

@@ -52,6 +52,11 @@ export function formatDate(value: string): string {
   return date.format(new Date(value.length === 10 ? `${value}T12:00:00Z` : value));
 }
 
+/** "dd/mm" (sin año) de una fecha ISO. */
+export function formatDayMonth(value: string): string {
+  return formatDate(value).slice(0, 5);
+}
+
 /** Hora hh:mm de Lisboa. */
 export function formatTime(iso: string): string {
   return time.format(new Date(iso));

@@ -13,7 +13,9 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
 | Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
 | Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL |
-| Pedidos, Agenda, Clientes, Frota, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, Editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Novo pedido | `/[lang]/orders/new` | Hecha con datos de ejemplo (RF-13, RF-14, RF-19). Crea el pedido en un almacén en memoria |
+| Pedido criado | `/[lang]/orders/[id]/created` | Hecha solo el diseño: el enlace con token **no se genera** (RF-15, RF-16, RNF-02) |
+| Pedidos, Agenda, Clientes, Frota, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, Lista de pedidos, detalle e inventario de un pedido, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -33,11 +35,13 @@ app/
     app-sidebar.tsx         ← menú lateral (en móvil pasa a barra superior)
     app-icon.tsx            ← <Icon name="…" />, iconos de trazo decorativos (no se llama icon.tsx: Next lo reserva para el icono de la app)
     app-nav.tsx             ← enlaces del menú (cliente: lee la ruta para marcar el activo)
+    form/                   ← campos compartidos: field.tsx (etiqueta, ayuda, error) y choice-group.tsx (radios en chips o segmentos)
     theme-toggle.tsx, language-switcher.tsx, theme-provider.tsx
   i18n/                     ← config, get-dictionary, interpolate (textos con {valores} y plurales) y dictionaries/{en,es,pt}.json
   lib/
     routes.ts               ← ROUTES y localePath()
     format.ts               ← euros, fechas, números y hora de Lisboa (RNF-10)
+    mock-session.ts         ← empresa y usuario de ejemplo (saldrán de la sesión)
 features/
   auth/
     application/
@@ -54,6 +58,19 @@ features/
     presentation/
       components/           ← dashboard-header, stat-cards, attention-banner,
                               jobs-table, pipeline, side-panels
+  orders/
+    domain/
+      types.ts              ← NewOrder, Order, ClientSuggestion y las listas de opciones (flexibilidad, origen, modo de inventario)
+      client-name.ts        ← primer nombre e iniciales
+    application/
+      actions/              ← create-order, lookup-client (+ state.ts)
+      schemas/new-order.ts  ← zod en servidor; los errores son códigos que traduce el formulario
+    infrastructure/
+      orders.repo.ts        ← puerta de entrada: createOrder, getOrder, findClientByPhone
+      store.ts, mock-data.ts ← almacén en memoria y clientes de ejemplo
+    presentation/
+      components/           ← new-order-form (único cliente grande), client/move/inventory-section, order-side-panels,
+                              share-link-card, order-status-timeline, order-breadcrumb
   proposals/
     domain/
       types.ts              ← Proposal, ReadyRequest, ProposalMetrics (importes en céntimos, fechas ISO)
@@ -101,6 +118,8 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - El logo sale siempre de `MudaroSymbol` (`@mudaro/ui`). Sobre fondo tinta usa `variant="light"`.
 - Toda ruta se declara en `app/lib/routes.ts` y se usa siempre con `localePath(lang, ROUTES.x)`: en `href`, `redirect`, selector de idioma, etc. Nada de strings sueltos ni `href="#"`. Las rutas con parámetro son funciones (`ROUTES.jobs.detail(id)`). Las rutas nuevas van en inglés. Las rutas de `(app)` se añaden ahí y se protegen en servidor (sesión y rol en cada página y acción, además de RLS).
 - Interfaz en portugués de Portugal (RNF-10). Todos los textos van a `i18n/dictionaries/` en los tres idiomas (`en.json` es la base de tipos; `es` y `pt` caen al inglés si falta una clave). Los códigos del dominio (`sent`, `expiring`) se traducen en `presentation/`; los textos con valores usan `interpolate()` y los singulares/plurales `pluralize()`. Los datos de la empresa (nombres, rutas, motivos) no se traducen.
+- Reglas de datos de Portugal (NIF, teléfono, fecha `dd/mm/aaaa`) de `@mudaro/validation`, el paquete compartido con `apps/admin`. No las copies aquí: si falta una, se añade al paquete.
+- Formularios con estado (como Novo pedido): validación **siempre en servidor** con zod. Los mensajes de error son **códigos** (`phoneInvalid`) y el formulario los traduce con el diccionario. Los campos son controlados, el envío es una Server Action con `useActionState`, y cada campo lleva `aria-invalid` y `aria-describedby` hacia su error.
 - Euros, fechas `dd/mm/aaaa`, coma decimal y hora de Lisboa siempre con `app/lib/format.ts`, sea cual sea el idioma de la interfaz. El dominio guarda céntimos y fechas ISO, nunca texto formateado.
 - `cacheComponents` está activo: lo que dependa de la hora actual (`new Date()`) va después de `await connection()` (o de otro acceso dinámico) y las páginas dinámicas llevan `loading.tsx`.
 - Filtros, búsqueda y orden de las listas viajan en la URL (formulario GET con `next/form` y enlaces), no en estado de cliente. El cliente solo se usa para lo mínimo (p. ej. enviar el formulario al cambiar un `<select>`).
@@ -118,4 +137,6 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - Pendiente: revisar el tema oscuro de las vistas.
 - El menú lateral ya está traducido y marca el enlace activo según la ruta. La empresa y el usuario siguen siendo de ejemplo.
 - Propostas · Lista (29/10/2026): datos de `features/proposals/infrastructure/mock-data.ts`. "Nova proposta", "Criar proposta" (`/proposals/new?request=<id>`) y el enlace de cada fila (`/proposals/<id>`) dan 404 hasta crear el editor y el detalle. Los filtros del diseño P1 se resolvieron en servidor. Las versiones de una propuesta comparten número, y el enlace de una versión sustituida lleva a la misma ruta de detalle (pendiente decidir cómo elegir versión). El margen se muestra siempre (`CAN_SEE_MARGIN = true` en `proposals/page.tsx`) hasta que exista el rol; después solo administradores. Los umbrales de "a punto de caducar" (3 días, `EXPIRING_SOON_DAYS`) y la ordenación por defecto son provisionales.
+- **Pendiente (decidido el 29/10/2026): generar el enlace del pedido.** Hoy "Copiar link", WhatsApp, SMS y Email están desactivados y el enlace muestra `[LINK DO PEDIDO]`. Falta la Edge Function que cree la solicitud y el token de al menos 32 bytes con caducidad, guardando solo su hash (RF-15, RNF-02: la clave de servicio solo vive en las Edge Functions), las tablas de solicitudes y clientes (paso 4 del plan de BD) y el envío por cada canal (RF-16). El pedido pasa a "À espera de inventário" al copiar o enviar el enlace; hoy se queda en "Nova".
+- Novo pedido (29/10/2026): los pedidos se guardan en `features/orders/infrastructure/store.ts`, en memoria (se pierden al reiniciar). El teléfono `912 345 821` sugiere a Ana Ribeiro y `916 667 777` a Rui Fonseca (RF-14). El máximo de paradas (3) y la validez del enlace (7, 14 o 30 días) son provisionales. "Editar modelo" del mensaje está desactivado: no tiene diseño de flujo. `lookupClientAction` y `createOrderAction` aún no comprueban sesión ni rol (son endpoints públicos): hay que añadirlo con el login de empresa, y limitar la frecuencia de la búsqueda por teléfono. Si el inventario lo rellena la empresa, se redirige a `/orders/<id>/inventory`, que da 404 hasta crear esa pantalla. El mensaje al cliente se redacta en el idioma de la interfaz de la empresa, no en el del cliente.
 - Pendiente: botones sin acción (Novo pedido, Rever incidência, notificações, menú de cuenta) y búsqueda sin conectar.

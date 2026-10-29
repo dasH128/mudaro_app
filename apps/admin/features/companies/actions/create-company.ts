@@ -2,8 +2,9 @@
 
 import { redirect } from "next/navigation";
 
+import { parseDatePt } from "@mudaro/validation";
+
 import { requirePlatformUser } from "@/app/lib/auth";
-import { parseDatePt } from "@/app/lib/format";
 import { ROUTES } from "@/app/lib/routes";
 import { createCompany } from "@/features/companies/data/companies.repo";
 import { newCompanySchema, readValues, toFieldErrors, type FormState } from "@/features/companies/schemas/new-company";

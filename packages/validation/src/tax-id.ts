@@ -1,6 +1,7 @@
 /**
  * NIF portugués: 9 dígitos, el último es el dígito de control (módulo 11).
  * No restringe el primer dígito, para admitir también empresarios en nombre individual.
+ * Debe coincidir con `is_valid_tax_id` de la base de datos (supabase/migrations).
  */
 export function isValidTaxId(value: string): boolean {
   if (!/^\d{9}$/.test(value)) return false;

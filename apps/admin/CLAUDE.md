@@ -32,7 +32,7 @@ apps/admin/
       actions/              # Server Actions: sign-in, verify-code, enroll (+ state.ts)
       components/           # login-form, code-form, enroll-form, otp-field
     companies/
-      domain/               # TypeScript puro: status.ts, tax-id.ts, regions.ts, types.ts, filters.ts, setup-steps.ts
+      domain/               # TypeScript puro: status.ts, regions.ts, types.ts, filters.ts, setup-steps.ts
       data/                 # único acceso a datos: companies.repo.ts (puerta de entrada). Listado real: companies.queries.ts (consulta a Supabase) y companies.mapper.ts (fila → CompanySummary). Resto, simulado: store.ts y mock.ts
       schemas/              # zod de los formularios (new-company.ts)
       actions/              # Server Actions: create-company, change-status, invitation (+ state.ts, revalidate-company.ts)
@@ -59,7 +59,7 @@ Reglas de dependencias (en un solo sentido):
 
 - Todo layout bajo `app/(protected)/` comprueba en servidor que hay sesión y que el usuario tiene rol `plataforma`. Si no, `redirect('/login')`.
 - Las mutaciones son Server Actions que llaman a Edge Functions. Ninguna escribe directamente en tablas de empresa. Cada acción vuelve a comprobar el rol.
-- Formularios validados con zod en servidor. NIF portugués: 9 dígitos con dígito de control (`features/companies/domain/tax-id.ts`).
+- Formularios validados con zod en servidor. NIF portugués: 9 dígitos con dígito de control (`isValidTaxId` de `@mudaro/validation`, junto con `isValidPtPhone` y `parseDatePt`: reglas compartidas con `apps/company`, no se copian).
 - Interfaz en portugués de Portugal.
 - `noindex` en el layout raíz.
 - Rutas siempre con `ROUTES` (`app/lib/routes.ts`), nunca strings sueltos.

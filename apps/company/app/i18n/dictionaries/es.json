@@ -6,7 +6,9 @@
     "loginTitle": "Entrar · Mudaro",
     "confirmTitle": "Invitación · Mudaro",
     "setPasswordTitle": "Define tu contraseña · Mudaro",
-    "proposalsTitle": "Propuestas · Mudaro"
+    "proposalsTitle": "Propuestas · Mudaro",
+    "newOrderTitle": "Nuevo pedido · Mudaro",
+    "orderCreatedTitle": "Pedido creado · Mudaro"
   },
   "auth": {
     "layout": {
@@ -186,6 +188,192 @@
         "expiredOn": "El {date}",
         "superseded": "Sustituida",
         "supersededNote": "Reemplazada por una versión más reciente"
+      }
+    },
+    "orders": {
+      "breadcrumb": {
+        "label": "Ruta de navegación",
+        "orders": "Pedidos"
+      },
+      "message": {
+        "body": [
+          "¡Hola {name}! Soy {sender}, de {company}.",
+          "Para preparar el presupuesto de tu mudanza, indica aquí qué te vas a llevar y cómo son los accesos. No necesitas crear una cuenta y puedes hacerlo poco a poco:",
+          "{link}",
+          "El enlace está activo durante {days} días."
+        ],
+        "namePlaceholder": "[NOMBRE]",
+        "linkPlaceholder": "[ENLACE DEL PEDIDO]"
+      },
+      "new": {
+        "title": "Nuevo pedido",
+        "subtitle": "Solo lo esencial para empezar. El cliente completa el resto por el enlace: qué se lleva, fotos y accesos.",
+        "errorSummary": "Revisa los campos marcados.",
+        "client": {
+          "title": "Cliente",
+          "phone": "Móvil",
+          "phonePlaceholder": "9XX XXX XXX",
+          "phoneHint": "Empieza por el teléfono: si el cliente ya existe, te sugerimos sus datos.",
+          "name": "Nombre",
+          "namePlaceholder": "Nombre y apellido, o nombre de la empresa",
+          "type": "Tipo de cliente",
+          "types": {
+            "private": "Particular",
+            "company": "Empresa"
+          },
+          "email": "Email",
+          "optional": "(opcional)",
+          "emailPlaceholder": "nombre@ejemplo.pt",
+          "emailHint": "Con email, el cliente recibe copia de la propuesta aceptada y de las actas.",
+          "addTaxId": "Añadir NIF",
+          "taxId": "NIF",
+          "taxIdHint": "9 dígitos.",
+          "removeTaxId": "Quitar NIF",
+          "linked": "Vinculado a la ficha de un cliente existente",
+          "suggestion": {
+            "title": "Este número ya es cliente: {name}",
+            "summary": {
+              "one": "{type} · {count} pedido anterior ({id}, concluido el {date})",
+              "other": "{type} · {count} pedidos anteriores (el último, {id}, concluido el {date})"
+            },
+            "noOrders": "{type} · Sin pedidos anteriores",
+            "dismiss": "Es otra persona",
+            "use": "Usar este cliente"
+          }
+        },
+        "move": {
+          "title": "Mudanza",
+          "origin": "Dirección de origen",
+          "destination": "Dirección de destino",
+          "addressPlaceholder": "Calle, número y localidad",
+          "addStop": "Añadir parada",
+          "stop": "Parada {n}",
+          "removeStop": "Quitar la parada {n}",
+          "date": "Fecha aproximada",
+          "datePlaceholder": "dd/mm/aaaa",
+          "flexibility": "Flexibilidad",
+          "flexibilities": {
+            "exact": "Día exacto",
+            "two-days": "± 2 días",
+            "one-week": "± 1 semana",
+            "month": "Solo el mes"
+          },
+          "source": "Cómo llegó el contacto",
+          "sources": {
+            "phone": "Teléfono",
+            "whatsapp": "WhatsApp",
+            "referral": "Recomendación",
+            "website": "Web",
+            "other": "Otro"
+          }
+        },
+        "inventory": {
+          "title": "¿Quién rellena el inventario?",
+          "modes": {
+            "link": {
+              "title": "El cliente, por el enlace",
+              "text": "Indica qué se lleva, con fotos y accesos, sin crear cuenta. Recibes un aviso cuando lo envíe.",
+              "recommended": "Recomendado"
+            },
+            "self": {
+              "title": "Yo, ahora o en una visita",
+              "text": "Por teléfono o en casa del cliente. Queda registrado como rellenado por la empresa."
+            }
+          },
+          "validity": "El enlace queda activo durante",
+          "validityDays": {
+            "one": "{count} día",
+            "other": "{count} días"
+          },
+          "validityNote": "Después, el cliente ve un aviso y ya no puede editar."
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "createLink": "Crear pedido y obtener enlace",
+          "createSelf": "Crear pedido y abrir inventario",
+          "creating": "Creando…"
+        },
+        "side": {
+          "messageTitle": "Mensaje para el cliente",
+          "editTemplate": "Editar plantilla",
+          "messageFooter": "Se envía por WhatsApp, SMS o email en el paso siguiente.",
+          "afterTitle": "Después de crear",
+          "afterLink": [
+            {
+              "title": "Compartes el enlace",
+              "text": "Lo copias o lo envías por WhatsApp, SMS o email."
+            },
+            {
+              "title": "El cliente rellena",
+              "text": "Puede hacerlo poco a poco; el borrador queda guardado."
+            },
+            {
+              "title": "Recibes un aviso",
+              "text": "Con el inventario recibido, preparas la propuesta."
+            }
+          ],
+          "afterSelf": [
+            {
+              "title": "Abres el inventario",
+              "text": "Habitación a habitación, con el catálogo de objetos."
+            },
+            {
+              "title": "Indicas los accesos",
+              "text": "Piso, ascensor, escaleras y aparcamiento."
+            },
+            {
+              "title": "Preparas la propuesta",
+              "text": "El cálculo usa el inventario que has rellenado."
+            }
+          ]
+        },
+        "errors": {
+          "phoneRequired": "Indica el móvil del cliente.",
+          "phoneInvalid": "Indica un número de 9 dígitos (p. ej.: 912 345 678).",
+          "nameRequired": "Indica el nombre del cliente.",
+          "emailInvalid": "Indica un email válido.",
+          "taxIdInvalid": "NIF no válido. Comprueba los 9 dígitos y el dígito de control.",
+          "originRequired": "Indica la dirección de origen.",
+          "destinationRequired": "Indica la dirección de destino.",
+          "dateRequired": "Indica la fecha aproximada (dd/mm/aaaa).",
+          "dateInvalid": "Fecha no válida. Usa el formato dd/mm/aaaa.",
+          "datePast": "La fecha no puede ser anterior a hoy.",
+          "tooLong": "Máximo 200 caracteres.",
+          "invalid": "Valor no válido. Revisa esta opción."
+        }
+      },
+      "created": {
+        "title": "Pedido {id} creado",
+        "routeTo": "a",
+        "shareTitle": "Ahora envía el enlace a {name}",
+        "shareText": "Por aquí indica {name} qué se va a llevar. Más adelante verá la propuesta en el mismo enlace.",
+        "linkLabel": "Enlace del pedido",
+        "copy": "Copiar enlace",
+        "validUntil": "Activo hasta el {date} · da acceso solo a este pedido",
+        "pending": "La generación del enlace aún no está disponible en esta versión.",
+        "messageLabel": "Mensaje",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email",
+        "notice": {
+          "before": "Cuando copies o envíes el enlace, el pedido pasa a ",
+          "status": "A la espera de inventario",
+          "after": ". Te avisamos cuando {name} envíe el inventario."
+        },
+        "statusTitle": "Estado del pedido",
+        "now": "Ahora",
+        "steps": {
+          "new": "Nuevo",
+          "awaiting-inventory": "A la espera de inventario",
+          "inventory-received": "Inventario recibido",
+          "quoted": "Presupuestado",
+          "won": "Ganado"
+        },
+        "links": {
+          "fillInventory": "Rellenar yo el inventario",
+          "createAnother": "Crear otro pedido",
+          "view": "Ver pedido"
+        }
       }
     }
   }

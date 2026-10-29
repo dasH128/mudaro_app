@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-import { isValidTaxId } from "@/features/companies/domain/tax-id";
-import { parseDatePt, todayIso } from "@/app/lib/format";
+import { isValidPtPhone, isValidTaxId, parseDatePt } from "@mudaro/validation";
+
+import { todayIso } from "@/app/lib/format";
 import { REGIONS_PILOT } from "@/features/companies/domain/regions";
 
 // Reglas de validación: docs/requirement-mvp.md, RF-65.
@@ -91,7 +92,7 @@ const optionalText = z.string().trim().max(200, "Máximo de 200 caracteres.");
 const optionalPhone = z
   .string()
   .trim()
-  .refine((v) => v === "" || /^(\+351)?\d{9}$/.test(stripSpaces(v)), "Indique um número com 9 dígitos (ex.: 912 345 678).");
+  .refine((v) => v === "" || isValidPtPhone(v), "Indique um número com 9 dígitos (ex.: 912 345 678).");
 
 const emailFormat = (v: string) => z.email().safeParse(v).success;
 
