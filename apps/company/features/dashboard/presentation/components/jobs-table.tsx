@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Icon } from "@/app/components/icon";
+import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import type { Job, JobStatus } from "@/features/dashboard/domain/types";

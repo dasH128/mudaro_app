@@ -5,7 +5,8 @@
     "description": "Tu mudanza, en buenas manos",
     "loginTitle": "Entrar · Mudaro",
     "confirmTitle": "Invitación · Mudaro",
-    "setPasswordTitle": "Define tu contraseña · Mudaro"
+    "setPasswordTitle": "Define tu contraseña · Mudaro",
+    "proposalsTitle": "Propuestas · Mudaro"
   },
   "auth": {
     "layout": {
@@ -59,6 +60,132 @@
         "weak": "La contraseña debe tener al menos 8 caracteres.",
         "mismatch": "Las contraseñas no coinciden.",
         "failed": "No hemos podido guardar la contraseña. Inténtalo de nuevo."
+      }
+    }
+  },
+  "app": {
+    "sidebar": {
+      "mainMenu": "Menú principal",
+      "company": "Empresa",
+      "greeting": "Hola, {name}",
+      "role": "Administradora",
+      "settings": "Configuración",
+      "nav": {
+        "home": "Inicio",
+        "orders": "Pedidos",
+        "proposals": "Propuestas",
+        "schedule": "Agenda",
+        "clients": "Clientes",
+        "fleet": "Flota",
+        "team": "Equipo",
+        "pricing": "Tarifas",
+        "reports": "Informes"
+      }
+    },
+    "proposals": {
+      "eyebrow": "Operación",
+      "title": "Propuestas",
+      "subtitle": "Calcula, ajusta y envía presupuestos a partir del inventario del cliente.",
+      "new": "Nueva propuesta",
+      "loading": "Cargando propuestas…",
+      "stats": {
+        "toSend": {
+          "label": "Por enviar",
+          "hint": "Borradores en preparación"
+        },
+        "awaiting": {
+          "label": "A la espera del cliente",
+          "hint": "{amount} en propuestas enviadas"
+        },
+        "acceptance": {
+          "label": "Tasa de aceptación",
+          "hint": "Últimos 30 días"
+        },
+        "timeToProposal": {
+          "label": "Tiempo hasta propuesta",
+          "value": "{days} días",
+          "hint": "Media desde la creación del pedido"
+        }
+      },
+      "ready": {
+        "title": "Listos para presupuestar",
+        "subtitle": "Pedidos con inventario recibido y sin propuesta",
+        "create": "Crear propuesta",
+        "received": "recibido {time}",
+        "missingMeasures": {
+          "one": "{count} objeto sin medidas",
+          "other": "{count} objetos sin medidas"
+        }
+      },
+      "list": {
+        "title": "Lista de propuestas",
+        "filterLabel": "Filtrar por estado",
+        "tabs": {
+          "all": "Todas",
+          "draft": "Borradores",
+          "sent": "Enviadas",
+          "accepted": "Aceptadas",
+          "rejected": "Rechazadas",
+          "expired": "Caducadas",
+          "superseded": "Sustituidas"
+        },
+        "searchLabel": "Buscar propuestas",
+        "searchPlaceholder": "Cliente, n.º de propuesta o pedido",
+        "sortLabel": "Ordenar",
+        "sort": {
+          "expiry": "Validez más próxima",
+          "newest": "Más recientes",
+          "value": "Mayor importe"
+        },
+        "empty": "Ninguna propuesta coincide con esta búsqueda.",
+        "showing": {
+          "one": "Mostrando {shown} de {count} propuesta",
+          "other": "Mostrando {shown} de {count} propuestas"
+        },
+        "marginNote": "El margen solo es visible para administradores",
+        "open": "Abrir propuesta {id}",
+        "routeTo": "a"
+      },
+      "columns": {
+        "proposal": "Propuesta",
+        "clientRoute": "Cliente y ruta",
+        "volume": "Volumen",
+        "total": "Total con IVA",
+        "margin": "Margen",
+        "validity": "Validez",
+        "status": "Estado",
+        "open": "Abrir"
+      },
+      "status": {
+        "draft": "Borrador",
+        "sent": "Enviada",
+        "accepted": "Aceptada",
+        "rejected": "Rechazada",
+        "expired": "Caducada",
+        "superseded": "Sustituida"
+      },
+      "validity": {
+        "notSent": "No enviada",
+        "createdToday": "Creada hoy, {time}",
+        "createdOn": "Creada el {date}",
+        "expiresToday": "Caduca hoy",
+        "expiresIn": {
+          "one": "Caduca en {count} día",
+          "other": "Caduca en {count} días"
+        },
+        "valid": "Vigente",
+        "until": "Hasta el {date}",
+        "accepted": "Aceptada",
+        "acceptedToday": "Aceptada hoy",
+        "signedAt": "Firmada a las {time}",
+        "signedOn": "Firmada el {date}",
+        "rejected": "Rechazada",
+        "reason": "Motivo: {reason}",
+        "noReason": "Sin motivo indicado",
+        "expired": "Caducó",
+        "expiredOn": "El {date}",
+        "superseded": "Sustituida",
+        "supersededNote": "Reemplazada por una versión más reciente"
       }
     }
   }

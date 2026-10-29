@@ -1,4 +1,4 @@
-import { Icon, type IconName } from "@/app/components/icon";
+import { Icon, type IconName } from "@/app/components/app-icon";
 import type { Stat, StatKind } from "@/features/dashboard/domain/types";
 
 const ICONS: Record<StatKind, IconName> = {

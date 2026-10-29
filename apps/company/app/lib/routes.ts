@@ -15,7 +15,11 @@ export const ROUTES = {
     setPassword: "/auth/set-password",
   },
   orders: { list: "/orders", new: "/orders/new" },
-  proposals: { list: "/proposals", new: "/proposals/new" },
+  proposals: {
+    list: "/proposals",
+    new: "/proposals/new",
+    detail: (id: string) => `/proposals/${encodeURIComponent(id)}`,
+  },
   schedule: "/schedule",
   clients: "/clients",
   fleet: "/fleet",

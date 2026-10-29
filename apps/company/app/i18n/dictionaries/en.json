@@ -5,7 +5,8 @@
     "description": "Your move, in good hands",
     "loginTitle": "Sign in · Mudaro",
     "confirmTitle": "Invitation · Mudaro",
-    "setPasswordTitle": "Set your password · Mudaro"
+    "setPasswordTitle": "Set your password · Mudaro",
+    "proposalsTitle": "Proposals · Mudaro"
   },
   "auth": {
     "layout": {
@@ -59,6 +60,132 @@
         "weak": "The password must have at least 8 characters.",
         "mismatch": "The passwords do not match.",
         "failed": "We could not save the password. Please try again."
+      }
+    }
+  },
+  "app": {
+    "sidebar": {
+      "mainMenu": "Main menu",
+      "company": "Company",
+      "greeting": "Hi, {name}",
+      "role": "Administrator",
+      "settings": "Settings",
+      "nav": {
+        "home": "Home",
+        "orders": "Orders",
+        "proposals": "Proposals",
+        "schedule": "Schedule",
+        "clients": "Clients",
+        "fleet": "Fleet",
+        "team": "Team",
+        "pricing": "Rates",
+        "reports": "Reports"
+      }
+    },
+    "proposals": {
+      "eyebrow": "Operations",
+      "title": "Proposals",
+      "subtitle": "Calculate, adjust and send quotes from the customer's inventory.",
+      "new": "New proposal",
+      "loading": "Loading proposals…",
+      "stats": {
+        "toSend": {
+          "label": "To send",
+          "hint": "Drafts being prepared"
+        },
+        "awaiting": {
+          "label": "Awaiting customer",
+          "hint": "{amount} in sent proposals"
+        },
+        "acceptance": {
+          "label": "Acceptance rate",
+          "hint": "Last 30 days"
+        },
+        "timeToProposal": {
+          "label": "Time to proposal",
+          "value": "{days} days",
+          "hint": "Average since the request was created"
+        }
+      },
+      "ready": {
+        "title": "Ready to quote",
+        "subtitle": "Requests with inventory received and no proposal",
+        "create": "Create proposal",
+        "received": "received {time}",
+        "missingMeasures": {
+          "one": "{count} item without measurements",
+          "other": "{count} items without measurements"
+        }
+      },
+      "list": {
+        "title": "Proposals list",
+        "filterLabel": "Filter by status",
+        "tabs": {
+          "all": "All",
+          "draft": "Drafts",
+          "sent": "Sent",
+          "accepted": "Accepted",
+          "rejected": "Rejected",
+          "expired": "Expired",
+          "superseded": "Superseded"
+        },
+        "searchLabel": "Search proposals",
+        "searchPlaceholder": "Customer, proposal no. or request",
+        "sortLabel": "Sort",
+        "sort": {
+          "expiry": "Nearest expiry",
+          "newest": "Most recent",
+          "value": "Highest value"
+        },
+        "empty": "No proposals match this search.",
+        "showing": {
+          "one": "Showing {shown} of {count} proposal",
+          "other": "Showing {shown} of {count} proposals"
+        },
+        "marginNote": "Margin is only visible to administrators",
+        "open": "Open proposal {id}",
+        "routeTo": "to"
+      },
+      "columns": {
+        "proposal": "Proposal",
+        "clientRoute": "Customer and route",
+        "volume": "Volume",
+        "total": "Total incl. VAT",
+        "margin": "Margin",
+        "validity": "Validity",
+        "status": "Status",
+        "open": "Open"
+      },
+      "status": {
+        "draft": "Draft",
+        "sent": "Sent",
+        "accepted": "Accepted",
+        "rejected": "Rejected",
+        "expired": "Expired",
+        "superseded": "Superseded"
+      },
+      "validity": {
+        "notSent": "Not sent",
+        "createdToday": "Created today, {time}",
+        "createdOn": "Created on {date}",
+        "expiresToday": "Expires today",
+        "expiresIn": {
+          "one": "Expires in {count} day",
+          "other": "Expires in {count} days"
+        },
+        "valid": "Valid",
+        "until": "Until {date}",
+        "accepted": "Accepted",
+        "acceptedToday": "Accepted today",
+        "signedAt": "Signed at {time}",
+        "signedOn": "Signed on {date}",
+        "rejected": "Rejected",
+        "reason": "Reason: {reason}",
+        "noReason": "No reason given",
+        "expired": "Expired",
+        "expiredOn": "On {date}",
+        "superseded": "Superseded",
+        "supersededNote": "Replaced by a newer version"
       }
     }
   }
