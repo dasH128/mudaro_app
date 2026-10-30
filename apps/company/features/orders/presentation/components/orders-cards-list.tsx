@@ -8,6 +8,7 @@ import type { OrderListItem } from "../../domain/types";
 import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton, OrderMoreButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
+import { OrderIdLink } from "./order-id-link";
 import { OrderStagePill } from "./order-stage-pill";
 import { OrderSteps } from "./order-steps";
 
@@ -37,12 +38,12 @@ export function OrdersCardsList({ lang, t, title, rows, today, empty, footer }: 
           const action = nextAction(item.note);
           const when = describeWhen(item, t, lang, today);
           return (
-            <li key={item.id} className="flex flex-wrap items-center gap-x-4.5 gap-y-3 rounded-[14px] px-4 py-3.5 hover:bg-surface-soft">
+            <li key={item.id} className="relative flex flex-wrap items-center gap-x-4.5 gap-y-3 rounded-[14px] px-4 py-3.5 hover:bg-surface-soft">
               <OrderAvatar name={item.client} index={index + 2} size="sm" />
               <span className="flex min-w-0 flex-[1_1_170px] flex-col">
                 <span className="font-bold">{item.client}</span>
                 <span className="text-[13px] text-muted">
-                  {item.id} · {item.from} <span aria-hidden="true">→</span>
+                  <OrderIdLink lang={lang} id={item.id} /> · {item.from} <span aria-hidden="true">→</span>
                   <span className="sr-only">{t.common.routeTo}</span> {item.to}
                 </span>
               </span>
@@ -57,7 +58,7 @@ export function OrdersCardsList({ lang, t, title, rows, today, empty, footer }: 
                 <strong className="text-sm text-foreground">{when.date}</strong>
                 {when.countdown}
               </span>
-              <span className="ml-auto inline-flex items-center gap-1">
+              <span className="relative ml-auto inline-flex items-center gap-1">
                 {action ? <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="row" /> : null}
                 <OrderMoreButton t={t} id={item.id} />
               </span>

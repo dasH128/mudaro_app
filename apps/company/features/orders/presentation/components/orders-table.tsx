@@ -8,6 +8,7 @@ import type { OrderListItem } from "../../domain/types";
 import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton, OrderMoreButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
+import { OrderIdLink } from "./order-id-link";
 import { OrderStagePill } from "./order-stage-pill";
 import { OrderSteps } from "./order-steps";
 
@@ -83,7 +84,7 @@ export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, 
               const action = nextAction(item.note);
               const when = describeWhen(item, t, lang, today);
               return (
-                <tr key={item.id} className="hover:bg-surface-soft">
+                <tr key={item.id} className="relative hover:bg-surface-soft">
                   <td className={td}>
                     <span className="flex items-center gap-3">
                       <span className="relative inline-flex">
@@ -94,7 +95,7 @@ export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, 
                       </span>
                       <span className="flex flex-col">
                         <span className="font-bold">{item.client}</span>
-                        <span className="text-[13px] text-muted">{item.id}</span>
+                        <OrderIdLink lang={lang} id={item.id} />
                       </span>
                     </span>
                   </td>
@@ -119,7 +120,7 @@ export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, 
                     </span>
                   </td>
                   <td className={`${td} whitespace-nowrap text-right`}>
-                    <span className="inline-flex items-center gap-1">
+                    <span className="relative inline-flex items-center gap-1">
                       {action ? <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="row" /> : null}
                       <OrderMoreButton t={t} id={item.id} />
                     </span>

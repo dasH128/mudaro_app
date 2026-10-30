@@ -9,7 +9,9 @@
     "proposalsTitle": "Proposals · Mudaro",
     "ordersTitle": "Orders · Mudaro",
     "newOrderTitle": "New order · Mudaro",
-    "orderCreatedTitle": "Order created · Mudaro"
+    "orderCreatedTitle": "Order created · Mudaro",
+    "orderInventoryTitle": "Order inventory · Mudaro",
+    "orderDetailTitle": "Order detail · Mudaro"
   },
   "auth": {
     "layout": {
@@ -21,7 +23,12 @@
         "We load up, you relax"
       ],
       "language": "Language",
-      "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" }
+      "theme": {
+        "label": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     },
     "login": {
       "eyebrow": "Your account",
@@ -607,6 +614,293 @@
           "fillInventory": "Fill in the inventory myself",
           "createAnother": "Create another order",
           "view": "View order"
+        }
+      },
+      "inventory": {
+        "breadcrumb": "Inventory",
+        "title": "{name}'s inventory",
+        "filledBy": "Filled in by the company",
+        "linkLocked": "the client can no longer edit through the link",
+        "saveAndExit": "Save and exit",
+        "stepsLabel": "Inventory steps",
+        "itemsCount": {
+          "one": "{count} item",
+          "other": "{count} items"
+        },
+        "roomsCount": {
+          "one": "{count} room",
+          "other": "{count} rooms"
+        },
+        "steps": {
+          "items": {
+            "label": "Items",
+            "hint": "{items} in {rooms}"
+          },
+          "access": {
+            "label": "Access",
+            "hint": "Origin and destination"
+          },
+          "extras": {
+            "label": "Extra services",
+            "hint": {
+              "one": "{count} chosen",
+              "other": "{count} chosen"
+            }
+          }
+        },
+        "rooms": {
+          "label": "Rooms",
+          "add": "Add room",
+          "names": {
+            "living-room": "Living room",
+            "bedroom": "Bedroom",
+            "kitchen": "Kitchen",
+            "bathroom": "Bathroom",
+            "boxes": "Boxes"
+          }
+        },
+        "catalog": {
+          "searchLabel": "Search the catalog",
+          "searchPlaceholder": "Search: sofa, couch…",
+          "noResults": "Nothing in the catalog matches your search.",
+          "perUnit": "{volume} per unit",
+          "add": "Add",
+          "more": "More",
+          "removeOne": "Remove {name}",
+          "addOne": "Add {name}",
+          "flags": {
+            "fragile": "Fragile",
+            "dismantle": "Dismantle"
+          },
+          "custom": {
+            "title": "Not on the list?",
+            "text": "Free object with description and approximate measures"
+          }
+        },
+        "summary": {
+          "title": "Goes on the truck",
+          "items": "items",
+          "fragile": "fragile",
+          "dismantle": "to dismantle",
+          "declared": "Declared volume, before the stowage factor.",
+          "thisRoom": "In this room",
+          "roomEmpty": "No items yet. Use the + in the catalog.",
+          "addPhotos": "Attach photos of this room"
+        },
+        "access": {
+          "kinds": {
+            "origin": "Origin",
+            "destination": "Destination"
+          },
+          "floor": "Floor",
+          "parking": "Parking at",
+          "meters": "meters",
+          "lift": "Elevator",
+          "liftLabel": "Elevator at {place}",
+          "lifts": {
+            "none": "None",
+            "small": "Small",
+            "normal": "Normal"
+          },
+          "narrowStairs": "Narrow stairs",
+          "parkingPermit": "Needs a parking permit",
+          "notes": "Notes for the crew",
+          "notesPlaceholder": "E.g. narrow gate, building hours"
+        },
+        "extras": {
+          "title": "Extra services",
+          "subtitle": "Only extras that are active in Pricing and extras appear.",
+          "empty": "There are no active extras.",
+          "pricing": {
+            "unit": "{price} per unit",
+            "hour": "{price} per hour",
+            "m3-month": "{price} per m³ and month",
+            "fixed": "{price} fixed price"
+          },
+          "quantity": "Quantity: {quantity}",
+          "units": {
+            "boxes": {
+              "one": "{count} box",
+              "other": "{count} boxes"
+            },
+            "hours": {
+              "one": "{count} h",
+              "other": "{count} h"
+            }
+          }
+        },
+        "footer": {
+          "hint": "you can go back to any step",
+          "hintLast": "when you finish, the order becomes Inventory received",
+          "back": "Back",
+          "toAccess": "Continue to access",
+          "toExtras": "Continue to extras",
+          "finish": "Finish inventory"
+        }
+      },
+      "detail": {
+        "titleLine": "{name}'s move",
+        "meta": {
+          "createdOn": "created on {date}",
+          "source": "contact by {source}"
+        },
+        "actions": {
+          "more": "More actions",
+          "createProposal": "Create proposal",
+          "shareLink": "Share link"
+        },
+        "journey": {
+          "label": "Order journey",
+          "todo": "To do",
+          "steps": {
+            "created": "Order created",
+            "link-shared": "Link shared",
+            "inventory-submitted": "Inventory received",
+            "proposal-sent": "Proposal sent",
+            "won": "Won"
+          }
+        },
+        "alert": {
+          "title": {
+            "one": "{count} measurement missing before quoting",
+            "other": "{count} measurements missing before quoting"
+          },
+          "textOne": "{name} added \"{item}\" without measurements. You can ask for them or estimate them yourself.",
+          "textMany": "Some items in {name}'s inventory have no measurements. You can ask for them or estimate them yourself.",
+          "estimate": "Estimate myself",
+          "ask": "Ask the client"
+        },
+        "tabs": {
+          "label": "Order detail",
+          "summary": "Summary",
+          "inventory": "Inventory",
+          "addresses": "Addresses",
+          "proposals": "Proposals",
+          "history": "History"
+        },
+        "summary": {
+          "moveTitle": "The move",
+          "edit": "Edit",
+          "date": "Move date",
+          "volume": "Declared volume",
+          "items": {
+            "one": "{count} item",
+            "other": "{count} items"
+          },
+          "rooms": {
+            "one": "{count} room",
+            "other": "{count} rooms"
+          },
+          "noInventory": "No inventory yet",
+          "distance": "Distance between addresses",
+          "distanceSub": "Calculated in the proposal",
+          "distanceUnknown": "To be calculated",
+          "origin": "Origin",
+          "destination": "Destination",
+          "attentionTitle": "What needs attention in the inventory",
+          "viewInventory": "View full inventory",
+          "missing": "without measurements",
+          "fragile": "fragile",
+          "dismantle": "to dismantle",
+          "photos": "client photos",
+          "extras": "Extra services requested:",
+          "noAttention": "The inventory has not been sent yet. Once it arrives, what needs attention shows up here.",
+          "itemsInRooms": "{items} in {rooms}"
+        },
+        "inventory": {
+          "title": "Inventory v{version}",
+          "byClient": "Filled in by the client",
+          "byCompany": "Filled in by the company",
+          "meta": "{filledBy} · sent on {when} · {items} · {volume}",
+          "edit": "Edit inventory",
+          "roomSummary": "{items} · {volume}",
+          "roomMissing": " + {count} without measurements",
+          "noMeasures": "No measurements. It does not count towards the volume until estimated.",
+          "free": "Free-form item",
+          "photo": "Client photo",
+          "emptyTitle": "No inventory yet",
+          "emptyText": "Once the client sends the inventory through the link, or you fill it in, it shows up here.",
+          "fill": "Fill in inventory"
+        },
+        "addresses": {
+          "floor": "Floor",
+          "groundFloor": "Ground floor",
+          "floorValue": "Floor {n}",
+          "lift": "Lift",
+          "narrowStairs": "Narrow stairs",
+          "parking": "Parking",
+          "permit": "Parking permit",
+          "yes": "Yes",
+          "no": "No",
+          "parkingAt": "{meters} m away",
+          "needsPermit": "Needed",
+          "noPermit": "Not needed",
+          "clientNote": "Client note:",
+          "unknown": "Access details show up here once the inventory is sent.",
+          "chips": {
+            "noLift": "{floor}, no lift",
+            "smallLift": "{floor}, small lift",
+            "lift": "{floor}, with lift",
+            "floorOnly": "{floor}",
+            "narrowStairs": "Narrow stairs",
+            "parking": "Parking {meters} m away",
+            "permit": "Needs a permit"
+          }
+        },
+        "proposals": {
+          "emptyTitle": "No proposals yet",
+          "emptyReady": "The inventory is ready. Once you create the proposal, its versions and status show up here.",
+          "emptyWaiting": "Once the inventory is ready you can create the proposal. Its versions and status show up here.",
+          "count": {
+            "one": "This order has {count} proposal.",
+            "other": "This order has {count} proposals."
+          },
+          "view": "View proposals"
+        },
+        "history": {
+          "title": "History",
+          "created": "Order created",
+          "createdMeta": "{when} · {actor}",
+          "noteAdded": "Internal note added",
+          "linkShared": "Link shared",
+          "validFor": {
+            "one": "valid for {count} day",
+            "other": "valid for {count} days"
+          },
+          "inventorySubmitted": "The client sent the inventory (v{version})",
+          "inventoryMeta": "{when} · team notified",
+          "proposalSent": "Proposal sent (v{version})",
+          "won": "Proposal accepted",
+          "lost": "Order lost",
+          "meta": "{when} · {actor}"
+        },
+        "side": {
+          "client": "Client",
+          "viewFile": "View profile",
+          "call": "Call",
+          "whatsapp": "WhatsApp",
+          "noContact": "No contact details on file",
+          "link": "Client link",
+          "linkStatus": {
+            "active": "Active",
+            "expired": "Expired",
+            "closed": "Closed"
+          },
+          "validUntil": "Valid until",
+          "usedOf": "{used} of {total} days used",
+          "daysLeft": {
+            "one": "{count} day left.",
+            "other": "{count} days left."
+          },
+          "canEdit": "{name} can change the inventory until a proposal is accepted.",
+          "expiredText": "The link has expired: {name} can no longer change the inventory.",
+          "closedText": "The order is closed: the link no longer gives access.",
+          "copy": "Copy link",
+          "viewAsClient": "View as client",
+          "notes": "Internal notes",
+          "noteLabel": "Internal note",
+          "notePlaceholder": "Only your team sees this. E.g. prefers mornings, has a cat.",
+          "noteMeta": "{author} · {when}"
         }
       }
     }

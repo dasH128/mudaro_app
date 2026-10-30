@@ -5,6 +5,7 @@ import type { OrderListItem } from "../../domain/types";
 import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
+import { OrderIdLink } from "./order-id-link";
 import { OrderStagePill } from "./order-stage-pill";
 
 type Props = { lang: Locale; t: OrdersListText; items: readonly OrderListItem[]; today: string };
@@ -31,13 +32,13 @@ export function UrgentOrders({ lang, t, items, today }: Props) {
           return (
             <article
               key={item.id}
-              className="flex flex-col gap-3.5 rounded-[20px] border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:shadow-lg"
+              className="relative flex flex-col gap-3.5 rounded-[20px] border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               <div className="flex items-center gap-3">
                 <OrderAvatar name={item.client} index={index} />
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="font-bold">{item.client}</span>
-                  <span className="text-[13px] text-muted">{item.id}</span>
+                  <OrderIdLink lang={lang} id={item.id} />
                 </div>
                 <OrderStagePill stage={item.stage} label={t.status[item.stage]} />
               </div>
@@ -66,7 +67,11 @@ export function UrgentOrders({ lang, t, items, today }: Props) {
                     <strong className="text-foreground">{when.date}</strong> · {when.countdown}
                   </span>
                 </span>
-                {action ? <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="card" /> : null}
+                {action ? (
+                  <span className="relative">
+                    <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="card" />
+                  </span>
+                ) : null}
               </div>
             </article>
           );

@@ -1,5 +1,6 @@
 import type { Locale } from "@/app/i18n/config";
 import { ROUTES, localePath } from "@/app/lib/routes";
+import { DEFAULT_TAB, type DetailTab } from "../domain/detail";
 import { DEFAULT_VIEW, PAGE_SIZE, type OrderAction, type OrdersFilter, type OrdersView } from "../domain/list";
 
 type Filters = { stage?: OrdersFilter; q?: string; view?: OrdersView; limit?: number; page?: number };
@@ -37,4 +38,10 @@ export function actionHref(lang: Locale, action: OrderAction, id: string): strin
     case "view-job":
       return null;
   }
+}
+
+/** Enlace al detalle de un pedido con su pestaña en la URL. La pestaña por defecto no se escribe. */
+export function orderDetailHref(lang: Locale, id: string, tab: DetailTab = DEFAULT_TAB): string {
+  const path = localePath(lang, ROUTES.orders.detail(id));
+  return tab === DEFAULT_TAB ? path : `${path}?${new URLSearchParams({ tab })}`;
 }

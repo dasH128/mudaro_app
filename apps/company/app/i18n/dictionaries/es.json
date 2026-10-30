@@ -9,7 +9,9 @@
     "proposalsTitle": "Propuestas · Mudaro",
     "ordersTitle": "Pedidos · Mudaro",
     "newOrderTitle": "Nuevo pedido · Mudaro",
-    "orderCreatedTitle": "Pedido creado · Mudaro"
+    "orderCreatedTitle": "Pedido creado · Mudaro",
+    "orderInventoryTitle": "Inventario del pedido · Mudaro",
+    "orderDetailTitle": "Detalle del pedido · Mudaro"
   },
   "auth": {
     "layout": {
@@ -21,7 +23,12 @@
         "Nosotros cargamos, tú descansas"
       ],
       "language": "Idioma",
-      "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Sistema" }
+      "theme": {
+        "label": "Tema",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "system": "Sistema"
+      }
     },
     "login": {
       "eyebrow": "Tu cuenta",
@@ -607,6 +614,293 @@
           "fillInventory": "Rellenar yo el inventario",
           "createAnother": "Crear otro pedido",
           "view": "Ver pedido"
+        }
+      },
+      "inventory": {
+        "breadcrumb": "Inventario",
+        "title": "Inventario de {name}",
+        "filledBy": "Rellenado por la empresa",
+        "linkLocked": "el cliente deja de poder editar por el enlace",
+        "saveAndExit": "Guardar y salir",
+        "stepsLabel": "Pasos del inventario",
+        "itemsCount": {
+          "one": "{count} objeto",
+          "other": "{count} objetos"
+        },
+        "roomsCount": {
+          "one": "{count} estancia",
+          "other": "{count} estancias"
+        },
+        "steps": {
+          "items": {
+            "label": "Objetos",
+            "hint": "{items} en {rooms}"
+          },
+          "access": {
+            "label": "Accesos",
+            "hint": "Origen y destino"
+          },
+          "extras": {
+            "label": "Servicios extra",
+            "hint": {
+              "one": "{count} elegido",
+              "other": "{count} elegidos"
+            }
+          }
+        },
+        "rooms": {
+          "label": "Estancias",
+          "add": "Añadir estancia",
+          "names": {
+            "living-room": "Salón",
+            "bedroom": "Dormitorio",
+            "kitchen": "Cocina",
+            "bathroom": "Baño",
+            "boxes": "Cajas"
+          }
+        },
+        "catalog": {
+          "searchLabel": "Buscar en el catálogo",
+          "searchPlaceholder": "Buscar: sofá, sofa, couch…",
+          "noResults": "Ningún objeto del catálogo coincide con la búsqueda.",
+          "perUnit": "{volume} por unidad",
+          "add": "Añadir",
+          "more": "Más",
+          "removeOne": "Quitar {name}",
+          "addOne": "Añadir {name}",
+          "flags": {
+            "fragile": "Frágil",
+            "dismantle": "Desmontar"
+          },
+          "custom": {
+            "title": "¿No está en la lista?",
+            "text": "Objeto libre con descripción y medidas aproximadas"
+          }
+        },
+        "summary": {
+          "title": "Va al camión",
+          "items": "objetos",
+          "fragile": "frágiles",
+          "dismantle": "desmontar",
+          "declared": "Volumen declarado, antes del factor de estiba.",
+          "thisRoom": "En esta estancia",
+          "roomEmpty": "Aún sin objetos. Usa el + del catálogo.",
+          "addPhotos": "Adjuntar fotos de esta estancia"
+        },
+        "access": {
+          "kinds": {
+            "origin": "Origen",
+            "destination": "Destino"
+          },
+          "floor": "Planta",
+          "parking": "Aparcamiento a",
+          "meters": "metros",
+          "lift": "Ascensor",
+          "liftLabel": "Ascensor en {place}",
+          "lifts": {
+            "none": "No tiene",
+            "small": "Pequeño",
+            "normal": "Normal"
+          },
+          "narrowStairs": "Escaleras estrechas",
+          "parkingPermit": "Necesita licencia de aparcamiento",
+          "notes": "Notas para el equipo",
+          "notesPlaceholder": "Ej.: portón estrecho, horario de la comunidad"
+        },
+        "extras": {
+          "title": "Servicios extra",
+          "subtitle": "Solo aparecen los extras activos en Tarifas y extras.",
+          "empty": "No hay extras activos.",
+          "pricing": {
+            "unit": "{price} por unidad",
+            "hour": "{price} por hora",
+            "m3-month": "{price} por m³ y mes",
+            "fixed": "{price} precio fijo"
+          },
+          "quantity": "Cantidad: {quantity}",
+          "units": {
+            "boxes": {
+              "one": "{count} caja",
+              "other": "{count} cajas"
+            },
+            "hours": {
+              "one": "{count} h",
+              "other": "{count} h"
+            }
+          }
+        },
+        "footer": {
+          "hint": "puedes volver a cualquier paso",
+          "hintLast": "al terminar, el pedido pasa a Inventario recibido",
+          "back": "Volver",
+          "toAccess": "Continuar a accesos",
+          "toExtras": "Continuar a extras",
+          "finish": "Concluir inventario"
+        }
+      },
+      "detail": {
+        "titleLine": "Mudanza de {name}",
+        "meta": {
+          "createdOn": "creado el {date}",
+          "source": "contacto por {source}"
+        },
+        "actions": {
+          "more": "Más acciones",
+          "createProposal": "Crear propuesta",
+          "shareLink": "Compartir enlace"
+        },
+        "journey": {
+          "label": "Recorrido del pedido",
+          "todo": "Por hacer",
+          "steps": {
+            "created": "Pedido creado",
+            "link-shared": "Enlace compartido",
+            "inventory-submitted": "Inventario recibido",
+            "proposal-sent": "Propuesta enviada",
+            "won": "Ganado"
+          }
+        },
+        "alert": {
+          "title": {
+            "one": "Falta {count} medida antes de presupuestar",
+            "other": "Faltan {count} medidas antes de presupuestar"
+          },
+          "textOne": "{name} añadió «{item}» sin medidas. Puedes pedírselas o estimarlas tú.",
+          "textMany": "Hay objetos sin medidas en el inventario de {name}. Puedes pedírselas o estimarlas tú.",
+          "estimate": "Estimar yo",
+          "ask": "Pedir al cliente"
+        },
+        "tabs": {
+          "label": "Detalle del pedido",
+          "summary": "Resumen",
+          "inventory": "Inventario",
+          "addresses": "Direcciones",
+          "proposals": "Propuestas",
+          "history": "Historial"
+        },
+        "summary": {
+          "moveTitle": "La mudanza",
+          "edit": "Editar",
+          "date": "Fecha de la mudanza",
+          "volume": "Volumen declarado",
+          "items": {
+            "one": "{count} objeto",
+            "other": "{count} objetos"
+          },
+          "rooms": {
+            "one": "{count} estancia",
+            "other": "{count} estancias"
+          },
+          "noInventory": "Aún sin inventario",
+          "distance": "Distancia entre direcciones",
+          "distanceSub": "Se calcula en la propuesta",
+          "distanceUnknown": "Por calcular",
+          "origin": "Origen",
+          "destination": "Destino",
+          "attentionTitle": "Qué requiere atención en el inventario",
+          "viewInventory": "Ver inventario completo",
+          "missing": "sin medidas",
+          "fragile": "frágiles",
+          "dismantle": "por desmontar",
+          "photos": "fotos del cliente",
+          "extras": "Servicios extra pedidos:",
+          "noAttention": "Aún no se ha enviado el inventario. Cuando llegue, aquí verás qué requiere atención.",
+          "itemsInRooms": "{items} en {rooms}"
+        },
+        "inventory": {
+          "title": "Inventario v{version}",
+          "byClient": "Rellenado por el cliente",
+          "byCompany": "Rellenado por la empresa",
+          "meta": "{filledBy} · enviado el {when} · {items} · {volume}",
+          "edit": "Editar inventario",
+          "roomSummary": "{items} · {volume}",
+          "roomMissing": " + {count} sin medidas",
+          "noMeasures": "Sin medidas. No cuenta en el volumen hasta estimarlo.",
+          "free": "Objeto libre",
+          "photo": "Foto del cliente",
+          "emptyTitle": "Aún no hay inventario",
+          "emptyText": "Cuando el cliente envíe el inventario por el enlace, o lo rellenes tú, aparecerá aquí.",
+          "fill": "Rellenar inventario"
+        },
+        "addresses": {
+          "floor": "Planta",
+          "groundFloor": "Planta baja",
+          "floorValue": "Planta {n}",
+          "lift": "Ascensor",
+          "narrowStairs": "Escaleras estrechas",
+          "parking": "Aparcamiento",
+          "permit": "Licencia de aparcamiento",
+          "yes": "Sí",
+          "no": "No",
+          "parkingAt": "A {meters} m",
+          "needsPermit": "Necesaria",
+          "noPermit": "No hace falta",
+          "clientNote": "Nota del cliente:",
+          "unknown": "Los accesos aparecen aquí cuando se envíe el inventario.",
+          "chips": {
+            "noLift": "{floor} sin ascensor",
+            "smallLift": "{floor} con ascensor pequeño",
+            "lift": "{floor} con ascensor",
+            "floorOnly": "{floor}",
+            "narrowStairs": "Escaleras estrechas",
+            "parking": "Aparcamiento a {meters} m",
+            "permit": "Necesita licencia"
+          }
+        },
+        "proposals": {
+          "emptyTitle": "Aún no hay propuestas",
+          "emptyReady": "El inventario está listo. Cuando crees la propuesta, sus versiones y su estado aparecerán aquí.",
+          "emptyWaiting": "Cuando el inventario esté listo podrás crear la propuesta. Sus versiones y su estado aparecerán aquí.",
+          "count": {
+            "one": "Este pedido tiene {count} propuesta.",
+            "other": "Este pedido tiene {count} propuestas."
+          },
+          "view": "Ver propuestas"
+        },
+        "history": {
+          "title": "Historial",
+          "created": "Pedido creado",
+          "createdMeta": "{when} · {actor}",
+          "noteAdded": "Nota interna añadida",
+          "linkShared": "Enlace compartido",
+          "validFor": {
+            "one": "válido {count} día",
+            "other": "válido {count} días"
+          },
+          "inventorySubmitted": "El cliente envió el inventario (v{version})",
+          "inventoryMeta": "{when} · aviso enviado al equipo",
+          "proposalSent": "Propuesta enviada (v{version})",
+          "won": "Propuesta aceptada",
+          "lost": "Pedido perdido",
+          "meta": "{when} · {actor}"
+        },
+        "side": {
+          "client": "Cliente",
+          "viewFile": "Ver ficha",
+          "call": "Llamar",
+          "whatsapp": "WhatsApp",
+          "noContact": "Sin contacto registrado",
+          "link": "Enlace del cliente",
+          "linkStatus": {
+            "active": "Activo",
+            "expired": "Caducado",
+            "closed": "Cerrado"
+          },
+          "validUntil": "Válido hasta",
+          "usedOf": "{used} de {total} días usados",
+          "daysLeft": {
+            "one": "Queda {count} día.",
+            "other": "Quedan {count} días."
+          },
+          "canEdit": "{name} puede cambiar el inventario hasta aceptar una propuesta.",
+          "expiredText": "El enlace caducó: {name} ya no puede cambiar el inventario.",
+          "closedText": "El pedido está cerrado: el enlace ya no da acceso.",
+          "copy": "Copiar enlace",
+          "viewAsClient": "Ver como cliente",
+          "notes": "Notas internas",
+          "noteLabel": "Nota interna",
+          "notePlaceholder": "Solo lo ve tu equipo. Ej.: prefiere por la mañana, tiene un gato.",
+          "noteMeta": "{author} · {when}"
         }
       }
     }

@@ -62,6 +62,22 @@ export function formatTime(iso: string): string {
   return time.format(new Date(iso));
 }
 
+/** "dd/mm/aaaa, hh:mm" (hora de Lisboa) de un instante ISO. */
+export function formatDateTime(iso: string): string {
+  return `${formatDate(iso)}, ${formatTime(iso)}`;
+}
+
+/** "dd/mm · hh:mm" (hora de Lisboa) de un instante ISO. */
+export function formatDayMonthTime(iso: string): string {
+  return `${formatDayMonth(iso)} · ${formatTime(iso)}`;
+}
+
+/** "+351913334455" → "913 334 455". Un texto que no tenga ese formato se devuelve tal cual. */
+export function formatPhone(normalized: string): string {
+  const match = /^\+351(\d{3})(\d{3})(\d{3})$/.exec(normalized);
+  return match ? `${match[1]} ${match[2]} ${match[3]}` : normalized;
+}
+
 /** Día de hoy en Lisboa, aaaa-mm-dd. */
 export function todayLisbon(now: Date = new Date()): string {
   return day.format(now);
@@ -110,6 +126,11 @@ export function formatLongDate(locale: Locale, now: Date = new Date()): string {
   return upperFirst(
     new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", timeZone: TIME_ZONE }).format(now),
   );
+}
+
+/** Día de la semana en el idioma de la interfaz: "2026-11-20" → "Sexta-feira". */
+export function formatWeekday(locale: Locale, value: string): string {
+  return upperFirst(new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: TIME_ZONE }).format(toDate(value)));
 }
 
 /** Hora (0-23) de Lisboa, para el saludo. */

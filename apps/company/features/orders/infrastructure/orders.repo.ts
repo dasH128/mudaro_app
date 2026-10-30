@@ -1,6 +1,8 @@
 import "server-only";
 
+import type { OrderDetail } from "../domain/detail";
 import type { ClientSuggestion, NewOrder, Order, OrderListItem, OrdersOverview } from "../domain/types";
+import { detailFromCreatedOrder, mockOrderDetail } from "./detail-mock-data";
 import { mockClients, mockOrders, mockOrdersMetrics } from "./mock-data";
 import { findOrder, listOrders, saveOrder } from "./store";
 
@@ -50,4 +52,14 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
   }));
 
   return { orders: [...created, ...mockOrders(now)], metrics: mockOrdersMetrics(now) };
+}
+
+/** Detalle completo de un pedido de la empresa de la sesión, o undefined si no existe o no es suyo (RLS). */
+export async function getOrderDetail(id: string): Promise<OrderDetail | undefined> {
+  const now = new Date();
+  const created = findOrder(id);
+  if (created) return detailFromCreatedOrder(created, now);
+
+  const item = mockOrders(now).find((candidate) => candidate.id === id);
+  return item ? mockOrderDetail(item, now) : undefined;
 }

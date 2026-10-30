@@ -9,6 +9,7 @@ export type OrdersText = Dictionary["app"]["orders"];
 export type NewOrderText = OrdersText["new"];
 export type CreatedText = OrdersText["created"];
 export type OrdersListText = OrdersText["list"];
+export type OrderDetailText = OrdersText["detail"];
 
 type MessageValues = { name: string; sender: string; company: string; link: string; days: number };
 
@@ -61,7 +62,7 @@ export function describeNote(note: OrderNote, t: OrdersListText, locale: Locale,
 }
 
 /** Fecha de la mudança y cuánto falta. Con margen amplio (mes o semana) se dice el margen en vez de la cuenta atrás. */
-export function describeWhen(item: OrderListItem, t: OrdersListText, locale: Locale, today: string) {
+export function describeWhen(item: Pick<OrderListItem, "date" | "flexibility" | "stage">, t: OrdersListText, locale: Locale, today: string) {
   const w = t.when;
   const date = item.flexibility === "month" ? formatMonthName(locale, item.date) : formatDate(item.date);
 
