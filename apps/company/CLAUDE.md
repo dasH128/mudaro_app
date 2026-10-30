@@ -15,7 +15,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL |
 | Novo pedido | `/[lang]/orders/new` | Hecha con datos de ejemplo (RF-13, RF-14, RF-19). Crea el pedido en un almacén en memoria |
 | Pedido criado | `/[lang]/orders/[id]/created` | Hecha solo el diseño: el enlace con token **no se genera** (RF-15, RF-16, RNF-02) |
-| Pedidos, Agenda, Clientes, Frota, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, Lista de pedidos, detalle e inventario de un pedido, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Pedidos · Lista | `/[lang]/orders` | Hecha solo el diseño, con datos de ejemplo (RF-17). Etapa, vista, búsqueda y paginación en la URL |
+| Agenda, Clientes, Frota, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, detalle e inventario de un pedido, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -62,6 +63,7 @@ features/
     domain/
       types.ts              ← NewOrder, Order, ClientSuggestion y las listas de opciones (flexibilidad, origen, modo de inventario)
       client-name.ts        ← primer nombre e iniciales
+      list.ts               ← lista: filtros, orden, contadores, "Precisam de ti" (needsAttention), siguiente paso y paginación
     application/
       actions/              ← create-order, lookup-client (+ state.ts)
       schemas/new-order.ts  ← zod en servidor; los errores son códigos que traduce el formulario
@@ -69,8 +71,12 @@ features/
       orders.repo.ts        ← puerta de entrada: createOrder, getOrder, findClientByPhone
       store.ts, mock-data.ts ← almacén en memoria y clientes de ejemplo
     presentation/
+      orders-text.ts        ← textos de la lista (describeNote, describeWhen) y mensaje al cliente
+      orders-href.ts        ← enlaces de la lista con filtros en la URL y destino de cada siguiente paso
       components/           ← new-order-form (único cliente grande), client/move/inventory-section, order-side-panels,
-                              share-link-card, order-status-timeline, order-breadcrumb
+                              share-link-card, order-status-timeline, order-breadcrumb; lista: orders-list-header,
+                              orders-welcome, orders-pipeline, orders-view-bar, urgent-orders, orders-cards-list,
+                              orders-table, orders-side-panels (+ order-action, order-avatar, order-stage-pill, order-steps)
   proposals/
     domain/
       types.ts              ← Proposal, ReadyRequest, ProposalMetrics (importes en céntimos, fechas ISO)
@@ -140,3 +146,5 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - **Pendiente (decidido el 29/10/2026): generar el enlace del pedido.** Hoy "Copiar link", WhatsApp, SMS y Email están desactivados y el enlace muestra `[LINK DO PEDIDO]`. Falta la Edge Function que cree la solicitud y el token de al menos 32 bytes con caducidad, guardando solo su hash (RF-15, RNF-02: la clave de servicio solo vive en las Edge Functions), las tablas de solicitudes y clientes (paso 4 del plan de BD) y el envío por cada canal (RF-16). El pedido pasa a "À espera de inventário" al copiar o enviar el enlace; hoy se queda en "Nova".
 - Novo pedido (29/10/2026): los pedidos se guardan en `features/orders/infrastructure/store.ts`, en memoria (se pierden al reiniciar). El teléfono `912 345 821` sugiere a Ana Ribeiro y `916 667 777` a Rui Fonseca (RF-14). El máximo de paradas (3) y la validez del enlace (7, 14 o 30 días) son provisionales. "Editar modelo" del mensaje está desactivado: no tiene diseño de flujo. `lookupClientAction` y `createOrderAction` aún no comprueban sesión ni rol (son endpoints públicos): hay que añadirlo con el login de empresa, y limitar la frecuencia de la búsqueda por teléfono. Si el inventario lo rellena la empresa, se redirige a `/orders/<id>/inventory`, que da 404 hasta crear esa pantalla. El mensaje al cliente se redacta en el idioma de la interfaz de la empresa, no en el del cliente.
 - Pendiente: botones sin acción (Novo pedido, Rever incidência, notificações, menú de cuenta) y búsqueda sin conectar.
+- Pedidos · Lista (29/10/2026, solo diseño): datos de `features/orders/infrastructure/mock-data.ts` (24 pedidos, 1 · 5 · 3 · 3 · 10 · 2 por etapa) más los creados en `store.ts`. Filtros por URL: `?stage=` (una etapa o `action`), `?view=cards|list`, `?q=`, `?limit=` ("Ver mais" en cartões) y `?page=` (tabla). El prototipo muestra fechas como "18 nov"; aquí van `dd/mm/aaaa` (RNF-10). La búsqueda solo cubre nombre y nº de pedido (el prototipo decía también teléfono, que la lista no tiene). "Reenviar link", "Copiar link", "Ver trabalho" y el menú "Mais ações" salen desactivados; "Partilhar link" lleva a `/orders/<id>/created`, que solo existe para pedidos del almacén en memoria. La etiqueta "Pedidos 5" del menú sigue fija.
+- **Pendiente de revisar: el estado "Perdido".** El diseño lo tiene como etapa, pero `ORDER_STATUSES` no. Provisionalmente `ORDER_STAGES = [...ORDER_STATUSES, "lost"]` en `orders/domain/types.ts`. Hay que decidir si pasa a ser un estado real del pedido (afecta a `order-status-timeline.tsx`, al modelo de datos y al motivo de pérdida).

@@ -7,6 +7,7 @@
     "confirmTitle": "Invitation · Mudaro",
     "setPasswordTitle": "Set your password · Mudaro",
     "proposalsTitle": "Proposals · Mudaro",
+    "ordersTitle": "Orders · Mudaro",
     "newOrderTitle": "New order · Mudaro",
     "orderCreatedTitle": "Order created · Mudaro"
   },
@@ -197,6 +198,233 @@
       }
     },
     "orders": {
+      "list": {
+        "loading": "Loading orders…",
+        "eyebrow": "Operations",
+        "title": "Orders",
+        "new": "New order",
+        "searchLabel": "Search orders",
+        "searchPlaceholder": "Search by name or number",
+        "welcome": {
+          "greeting": {
+            "morning": "Good morning",
+            "afternoon": "Good afternoon",
+            "evening": "Good evening"
+          },
+          "title": {
+            "one": "{greeting}, {name}. {count} order is waiting for you.",
+            "other": "{greeting}, {name}. {count} orders are waiting for you."
+          },
+          "titleNone": "{greeting}, {name}. You're all caught up.",
+          "bodyNone": "Nothing is waiting for you. A good moment to create a new order.",
+          "ready": {
+            "one": "{count} client has sent their inventory and is waiting for a proposal.",
+            "other": "{count} clients have sent their inventory and are waiting for a proposal."
+          },
+          "nudge": {
+            "one": "{count} needs a little nudge to finish.",
+            "other": "{count} need a little nudge to finish."
+          },
+          "nudgeAlso": {
+            "one": "Another {count} needs a little nudge to finish.",
+            "other": "Another {count} need a little nudge to finish."
+          },
+          "cta": "Start with the urgent ones"
+        },
+        "pipeline": {
+          "title": "The path of your orders",
+          "all": "View all · {count}",
+          "filterLabel": "Filter by stage",
+          "stages": {
+            "new": "New",
+            "awaiting-inventory": "Awaiting inventory",
+            "inventory-received": "Inventory received",
+            "quoted": "Quoted",
+            "won": "Won",
+            "lost": "Lost"
+          }
+        },
+        "status": {
+          "new": "New",
+          "awaiting-inventory": "Awaiting inventory",
+          "inventory-received": "Inventory received",
+          "quoted": "Quoted",
+          "won": "Won",
+          "lost": "Lost"
+        },
+        "view": {
+          "label": "View mode",
+          "cards": "Cards",
+          "list": "List"
+        },
+        "summary": {
+          "all": {
+            "one": "{count} order in total",
+            "other": "{count} orders in total"
+          },
+          "action": {
+            "one": "{count} order needs you",
+            "other": "{count} orders need you"
+          },
+          "stage": {
+            "new": {
+              "one": "{count} new order",
+              "other": "{count} new orders"
+            },
+            "awaiting-inventory": {
+              "one": "{count} order awaiting inventory",
+              "other": "{count} orders awaiting inventory"
+            },
+            "inventory-received": {
+              "one": "{count} order with inventory received",
+              "other": "{count} orders with inventory received"
+            },
+            "quoted": {
+              "one": "{count} quoted order",
+              "other": "{count} quoted orders"
+            },
+            "won": {
+              "one": "{count} won order",
+              "other": "{count} won orders"
+            },
+            "lost": {
+              "one": "{count} lost order",
+              "other": "{count} lost orders"
+            }
+          }
+        },
+        "urgent": {
+          "title": "Need you"
+        },
+        "rows": {
+          "sorted": "Sorted by latest activity",
+          "titleAll": "The remaining orders",
+          "titleAction": "Nothing else urgent for now",
+          "stageTitles": {
+            "new": "New",
+            "awaiting-inventory": "Awaiting inventory",
+            "inventory-received": "Inventory received",
+            "quoted": "Quoted",
+            "won": "Won",
+            "lost": "Lost"
+          },
+          "moreShown": "See more",
+          "actionFooter": "Go back to “View all” for the rest of the orders.",
+          "stageFooter": {
+            "one": "{count} order at this stage",
+            "other": "{count} orders at this stage"
+          },
+          "emptyTitle": "All tidy here.",
+          "emptyStage": "There are no orders at this stage.",
+          "emptySearch": "No order matches this search."
+        },
+        "table": {
+          "allTitle": "All orders",
+          "legend": "Needs you",
+          "showing": {
+            "one": "Showing {shown} of {count} order",
+            "other": "Showing {shown} of {count} orders"
+          },
+          "previous": "Previous page",
+          "next": "Next page",
+          "columns": {
+            "client": "Client",
+            "move": "Move",
+            "status": "Status",
+            "note": "What's going on",
+            "next": "Next step"
+          }
+        },
+        "common": {
+          "step": "Stage {step} of 5",
+          "moreActions": "More actions for {id}",
+          "routeTo": "to",
+          "needsYou": "Needs you"
+        },
+        "when": {
+          "notProceeded": "did not go ahead",
+          "monthOnly": "month only",
+          "twoDays": "± 2 days",
+          "oneWeek": "± 1 week",
+          "today": "today",
+          "inDays": {
+            "one": "in {count} day",
+            "other": "in {count} days"
+          },
+          "daysAgo": {
+            "one": "{count} day ago",
+            "other": "{count} days ago"
+          }
+        },
+        "actions": {
+          "create-proposal": "Create proposal",
+          "continue-proposal": "Continue",
+          "resend-link": "Resend link",
+          "share-link": "Share link",
+          "copy-link": "Copy link",
+          "fill-inventory": "Fill in inventory",
+          "view-proposal": "View proposal",
+          "view-job": "View job"
+        },
+        "soon": "Coming soon",
+        "notes": {
+          "inventoryReady": "The inventory arrived {time}: {items} items, {volume}. Ready to quote.",
+          "missingMeasures": {
+            "one": "Sent the inventory {time}. We still need the measurements of {count} object before pricing.",
+            "other": "Sent the inventory {time}. We still need the measurements of {count} objects before pricing."
+          },
+          "draftProposal": "You started the proposal. It was saved as a draft {time}.",
+          "linkExpiresToday": "The link expires today and the inventory hasn't arrived. Worth a reminder.",
+          "linkExpiresIn": {
+            "one": "The link expires in {count} day and the inventory hasn't arrived. Worth a reminder.",
+            "other": "The link expires in {count} days and the inventory hasn't arrived. Worth a reminder."
+          },
+          "linkExpired": "The link has expired and the inventory never arrived. Send a new one.",
+          "noNews": {
+            "one": "No news for {count} day. They may prefer to do the inventory by phone.",
+            "other": "No news for {count} days. They may prefer to do the inventory by phone."
+          },
+          "justCreated": "Just created. The link still needs to be shared.",
+          "justCreatedSelf": "Just created. The inventory still needs to be filled in.",
+          "filling": "Filling it in at their own pace. Link active until {date}.",
+          "proposalSentToday": "Proposal v{version} sent. Expires today.",
+          "proposalSent": {
+            "one": "Proposal v{version} sent. Expires in {count} day.",
+            "other": "Proposal v{version} sent. Expires in {count} days."
+          },
+          "proposalExpired": "Proposal v{version} sent. It has expired.",
+          "wonToday": "Accepted and signed today at {time}.",
+          "wonOn": "Accepted and signed on {date}.",
+          "lostReason": "Turned down the proposal. Reason: {reason}.",
+          "lostNoReason": "Lost, no reason given."
+        },
+        "side": {
+          "upcoming": {
+            "title": "Upcoming moves",
+            "agenda": "Open schedule",
+            "empty": "No moves scheduled yet."
+          },
+          "month": {
+            "title": "This month",
+            "new": {
+              "one": "new order",
+              "other": "new orders"
+            },
+            "won": {
+              "one": "won",
+              "other": "won"
+            },
+            "chart": "Orders created per week",
+            "chartLabel": "Orders per week: {values}",
+            "week": "W{week}"
+          },
+          "tip": {
+            "eyebrow": "Tip",
+            "title": "Send the link on the day of the first contact.",
+            "body": "With the move still fresh, it's easier for the client to remember everything they're taking."
+          }
+        }
+      },
       "breadcrumb": {
         "label": "Breadcrumb",
         "orders": "Orders"

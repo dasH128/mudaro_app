@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { lang } from "next/root-params";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
 
@@ -18,6 +19,8 @@ export default async function DashboardPage() {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
 
+  // La cabecera muestra la fecha de hoy: se calcula en cada petición, nunca en el prerender
+  await connection();
   const dashboard = await getDashboard();
 
   return (

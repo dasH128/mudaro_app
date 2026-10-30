@@ -1,8 +1,8 @@
 import "server-only";
 
-import type { ClientSuggestion, NewOrder, Order } from "../domain/types";
-import { mockClients } from "./mock-data";
-import { findOrder, saveOrder } from "./store";
+import type { ClientSuggestion, NewOrder, Order, OrderListItem, OrdersOverview } from "../domain/types";
+import { mockClients, mockOrders, mockOrdersMetrics } from "./mock-data";
+import { findOrder, listOrders, saveOrder } from "./store";
 
 // Única puerta de entrada a los datos de pedidos: páginas y acciones importan de aquí.
 // TODO(supabase): sustituir los datos de ejemplo por consultas y por la Edge Function que crea la solicitud
@@ -31,4 +31,23 @@ export async function findClientByPhone(phone: string, { today }: { today: strin
     orderCount: client.orderCount,
     lastOrder: client.lastOrder,
   };
+}
+
+/** Pedidos de la empresa de la sesión (los de ejemplo y los creados en esta sesión) y las cifras del mes. */
+export async function getOrdersOverview(): Promise<OrdersOverview> {
+  const now = new Date();
+  // El almacén en memoria no guarda cuándo se creó cada pedido: los de esta sesión cuentan como "ahora"
+  const created = listOrders().map((order): OrderListItem => ({
+    id: order.id,
+    client: order.clientName,
+    from: order.origin,
+    to: order.destination,
+    date: order.date,
+    flexibility: order.flexibility,
+    stage: order.status,
+    note: { kind: order.inventoryMode === "link" ? "just-created" : "just-created-self" },
+    lastActivityAt: now.toISOString(),
+  }));
+
+  return { orders: [...created, ...mockOrders(now)], metrics: mockOrdersMetrics(now) };
 }

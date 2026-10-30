@@ -75,3 +75,53 @@ export type ClientSuggestion = {
   orderCount: number;
   lastOrder: { id: string; completedOn: string } | null;
 };
+
+/**
+ * Etapas de la lista de pedidos: el ciclo de vida más "Perdido".
+ * TODO(revisar): `lost` vive aquí y no en `ORDER_STATUSES` hasta decidir si "Perdido" es un estado real del pedido
+ * (afecta a la línea de tiempo de "Pedido criado" y al modelo de datos).
+ */
+export const ORDER_STAGES = [...ORDER_STATUSES, "lost"] as const;
+export type OrderStage = (typeof ORDER_STAGES)[number];
+
+/** Lo que se cuenta de un pedido en la lista. Son códigos con sus datos: el texto lo pone la interfaz. */
+export type OrderNote =
+  | { kind: "inventory-ready"; receivedAt: string; items: number; volumeM3: number }
+  | { kind: "inventory-missing-measures"; receivedAt: string; missing: number }
+  | { kind: "draft-proposal"; savedAt: string }
+  | { kind: "link-expiring"; validUntil: string }
+  | { kind: "no-news"; days: number }
+  | { kind: "just-created" }
+  | { kind: "just-created-self" }
+  | { kind: "filling"; validUntil: string }
+  | { kind: "proposal-sent"; version: number; validUntil: string }
+  | { kind: "won"; signedAt: string }
+  | { kind: "lost"; reason: string | null };
+
+/** Fila de la lista de pedidos. */
+export type OrderListItem = {
+  id: string;
+  client: string;
+  from: string;
+  to: string;
+  /** Fecha aproximada de la mudanza, aaaa-mm-dd. */
+  date: string;
+  flexibility: Flexibility;
+  stage: OrderStage;
+  note: OrderNote;
+  /** Última actividad, ISO. */
+  lastActivityAt: string;
+};
+
+/** Cifras del mes que no salen de la lista visible. */
+export type OrdersMetrics = {
+  newThisMonth: number;
+  wonThisMonth: number;
+  /** Pedidos creados por semana ISO, de la más antigua a la actual. */
+  weekly: readonly { week: number; count: number }[];
+};
+
+export type OrdersOverview = {
+  orders: readonly OrderListItem[];
+  metrics: OrdersMetrics;
+};

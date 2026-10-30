@@ -7,6 +7,7 @@
     "confirmTitle": "Convite · Mudaro",
     "setPasswordTitle": "Define a tua palavra-passe · Mudaro",
     "proposalsTitle": "Propostas · Mudaro",
+    "ordersTitle": "Pedidos · Mudaro",
     "newOrderTitle": "Novo pedido · Mudaro",
     "orderCreatedTitle": "Pedido criado · Mudaro"
   },
@@ -197,6 +198,233 @@
       }
     },
     "orders": {
+      "list": {
+        "loading": "A carregar pedidos…",
+        "eyebrow": "Operação",
+        "title": "Pedidos",
+        "new": "Novo pedido",
+        "searchLabel": "Pesquisar pedidos",
+        "searchPlaceholder": "Procurar por nome ou nº",
+        "welcome": {
+          "greeting": {
+            "morning": "Bom dia",
+            "afternoon": "Boa tarde",
+            "evening": "Boa noite"
+          },
+          "title": {
+            "one": "{greeting}, {name}. Há {count} pedido à tua espera.",
+            "other": "{greeting}, {name}. Há {count} pedidos à tua espera."
+          },
+          "titleNone": "{greeting}, {name}. Está tudo em dia.",
+          "bodyNone": "Não há pedidos à espera de ti. Aproveita para criar um novo.",
+          "ready": {
+            "one": "{count} cliente já enviou o inventário e espera pela proposta.",
+            "other": "{count} clientes já enviaram o inventário e esperam pela proposta."
+          },
+          "nudge": {
+            "one": "{count} precisa de um empurrãozinho para terminar.",
+            "other": "{count} precisam de um empurrãozinho para terminar."
+          },
+          "nudgeAlso": {
+            "one": "Outro {count} precisa de um empurrãozinho para terminar.",
+            "other": "Outros {count} precisam de um empurrãozinho para terminar."
+          },
+          "cta": "Começar pelos urgentes"
+        },
+        "pipeline": {
+          "title": "O caminho dos teus pedidos",
+          "all": "Ver todos · {count}",
+          "filterLabel": "Filtrar por etapa",
+          "stages": {
+            "new": "Novos",
+            "awaiting-inventory": "À espera de inventário",
+            "inventory-received": "Inventário recebido",
+            "quoted": "Orçamentados",
+            "won": "Ganhos",
+            "lost": "Perdidos"
+          }
+        },
+        "status": {
+          "new": "Novo",
+          "awaiting-inventory": "À espera de inventário",
+          "inventory-received": "Inventário recebido",
+          "quoted": "Orçamentado",
+          "won": "Ganho",
+          "lost": "Perdido"
+        },
+        "view": {
+          "label": "Modo de visualização",
+          "cards": "Cartões",
+          "list": "Lista"
+        },
+        "summary": {
+          "all": {
+            "one": "{count} pedido no total",
+            "other": "{count} pedidos no total"
+          },
+          "action": {
+            "one": "{count} pedido precisa de ti",
+            "other": "{count} pedidos precisam de ti"
+          },
+          "stage": {
+            "new": {
+              "one": "{count} pedido novo",
+              "other": "{count} pedidos novos"
+            },
+            "awaiting-inventory": {
+              "one": "{count} pedido à espera de inventário",
+              "other": "{count} pedidos à espera de inventário"
+            },
+            "inventory-received": {
+              "one": "{count} pedido com inventário recebido",
+              "other": "{count} pedidos com inventário recebido"
+            },
+            "quoted": {
+              "one": "{count} pedido orçamentado",
+              "other": "{count} pedidos orçamentados"
+            },
+            "won": {
+              "one": "{count} pedido ganho",
+              "other": "{count} pedidos ganhos"
+            },
+            "lost": {
+              "one": "{count} pedido perdido",
+              "other": "{count} pedidos perdidos"
+            }
+          }
+        },
+        "urgent": {
+          "title": "Precisam de ti"
+        },
+        "rows": {
+          "sorted": "Ordenados por última atividade",
+          "titleAll": "Os restantes pedidos",
+          "titleAction": "Mais nada urgente por agora",
+          "stageTitles": {
+            "new": "Novos",
+            "awaiting-inventory": "À espera de inventário",
+            "inventory-received": "Inventário recebido",
+            "quoted": "Orçamentados",
+            "won": "Ganhos",
+            "lost": "Perdidos"
+          },
+          "moreShown": "Ver mais",
+          "actionFooter": "Volta a «Ver todos» para o resto dos pedidos.",
+          "stageFooter": {
+            "one": "{count} pedido nesta etapa",
+            "other": "{count} pedidos nesta etapa"
+          },
+          "emptyTitle": "Tudo arrumado por aqui.",
+          "emptyStage": "Não há pedidos nesta etapa.",
+          "emptySearch": "Nenhum pedido corresponde a esta pesquisa."
+        },
+        "table": {
+          "allTitle": "Todos os pedidos",
+          "legend": "Precisa de ti",
+          "showing": {
+            "one": "A mostrar {shown} de {count} pedido",
+            "other": "A mostrar {shown} de {count} pedidos"
+          },
+          "previous": "Página anterior",
+          "next": "Página seguinte",
+          "columns": {
+            "client": "Cliente",
+            "move": "Mudança",
+            "status": "Estado",
+            "note": "O que se passa",
+            "next": "Próximo passo"
+          }
+        },
+        "common": {
+          "step": "Etapa {step} de 5",
+          "moreActions": "Mais ações para {id}",
+          "routeTo": "para",
+          "needsYou": "Precisa de ti"
+        },
+        "when": {
+          "notProceeded": "não avançou",
+          "monthOnly": "só o mês",
+          "twoDays": "± 2 dias",
+          "oneWeek": "± 1 semana",
+          "today": "hoje",
+          "inDays": {
+            "one": "daqui a {count} dia",
+            "other": "daqui a {count} dias"
+          },
+          "daysAgo": {
+            "one": "há {count} dia",
+            "other": "há {count} dias"
+          }
+        },
+        "actions": {
+          "create-proposal": "Criar proposta",
+          "continue-proposal": "Continuar",
+          "resend-link": "Reenviar link",
+          "share-link": "Partilhar link",
+          "copy-link": "Copiar link",
+          "fill-inventory": "Preencher inventário",
+          "view-proposal": "Ver proposta",
+          "view-job": "Ver trabalho"
+        },
+        "soon": "Disponível em breve",
+        "notes": {
+          "inventoryReady": "O inventário chegou {time}: {items} itens, {volume}. Está tudo pronto para orçamentar.",
+          "missingMeasures": {
+            "one": "Enviou o inventário {time}. Falta saber as medidas de {count} objeto antes de fechar o preço.",
+            "other": "Enviou o inventário {time}. Falta saber as medidas de {count} objetos antes de fechar o preço."
+          },
+          "draftProposal": "Já começaste a proposta. Está guardada em rascunho {time}.",
+          "linkExpiresToday": "O link expira hoje e o inventário ainda não chegou. Vale a pena um lembrete.",
+          "linkExpiresIn": {
+            "one": "O link expira em {count} dia e o inventário ainda não chegou. Vale a pena um lembrete.",
+            "other": "O link expira em {count} dias e o inventário ainda não chegou. Vale a pena um lembrete."
+          },
+          "linkExpired": "O link já expirou e o inventário não chegou. Reenvia um novo.",
+          "noNews": {
+            "one": "Sem notícias há {count} dia. Talvez prefira fazer o inventário por telefone.",
+            "other": "Sem notícias há {count} dias. Talvez prefira fazer o inventário por telefone."
+          },
+          "justCreated": "Criado agora. Falta partilhar o link.",
+          "justCreatedSelf": "Criado agora. Falta preencher o inventário.",
+          "filling": "A preencher com calma. Link ativo até {date}.",
+          "proposalSentToday": "Proposta v{version} enviada. Expira hoje.",
+          "proposalSent": {
+            "one": "Proposta v{version} enviada. Expira em {count} dia.",
+            "other": "Proposta v{version} enviada. Expira em {count} dias."
+          },
+          "proposalExpired": "Proposta v{version} enviada. Já caducou.",
+          "wonToday": "Aceitou e assinou hoje às {time}.",
+          "wonOn": "Aceitou e assinou em {date}.",
+          "lostReason": "Recusou a proposta. Motivo: {reason}.",
+          "lostNoReason": "Perdido sem motivo indicado."
+        },
+        "side": {
+          "upcoming": {
+            "title": "Próximas mudanças",
+            "agenda": "Abrir agenda",
+            "empty": "Ainda não há mudanças marcadas."
+          },
+          "month": {
+            "title": "Este mês",
+            "new": {
+              "one": "pedido novo",
+              "other": "pedidos novos"
+            },
+            "won": {
+              "one": "ganho",
+              "other": "ganhos"
+            },
+            "chart": "Pedidos criados por semana",
+            "chartLabel": "Pedidos por semana: {values}",
+            "week": "S{week}"
+          },
+          "tip": {
+            "eyebrow": "Dica",
+            "title": "Envia o link no próprio dia do contacto.",
+            "body": "Com a mudança ainda fresca, é mais fácil o cliente lembrar-se de tudo o que vai levar."
+          }
+        }
+      },
       "breadcrumb": {
         "label": "Caminho",
         "orders": "Pedidos"

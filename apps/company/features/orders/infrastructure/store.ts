@@ -41,3 +41,8 @@ export function saveOrder(input: NewOrder, today: string): Order {
 export function findOrder(id: string): Order | undefined {
   return state().orders.get(id);
 }
+
+/** Pedidos creados en esta sesión, el más reciente primero. */
+export function listOrders(): Order[] {
+  return [...state().orders.values()].reverse();
+}

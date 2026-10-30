@@ -81,3 +81,38 @@ export function formatRelativeTime(locale: Locale, iso: string, now: Date = new 
   if (hours < 24) return rtf.format(-hours, "hour");
   return rtf.format(-Math.round(hours / 24), "day");
 }
+
+/** Fecha ISO con hora o solo día (aaaa-mm-dd) → Date. El día suelto se lee a mediodía UTC para no cambiar de día. */
+function toDate(value: string): Date {
+  return new Date(value.length === 10 ? `${value}T12:00:00Z` : value);
+}
+
+function upperFirst(text: string): string {
+  return text.charAt(0).toLocaleUpperCase() + text.slice(1);
+}
+
+/** Nombre del mes en el idioma de la interfaz: "2026-12-01" → "Dezembro". */
+export function formatMonthName(locale: Locale, value: string): string {
+  return upperFirst(new Intl.DateTimeFormat(locale, { month: "long", timeZone: TIME_ZONE }).format(toDate(value)));
+}
+
+/** Día y mes corto para las fichas de agenda: "2026-11-05" → { day: "05", month: "nov" }. */
+export function formatDayMonthShort(locale: Locale, value: string): { day: string; month: string } {
+  const when = toDate(value);
+  return {
+    day: new Intl.DateTimeFormat(NUMBER_LOCALE, { day: "2-digit", timeZone: TIME_ZONE }).format(when),
+    month: new Intl.DateTimeFormat(locale, { month: "short", timeZone: TIME_ZONE }).format(when).replace(/\.$/, ""),
+  };
+}
+
+/** "Quinta-feira, 29 de outubro": día de la semana, día y mes largos en el idioma de la interfaz. */
+export function formatLongDate(locale: Locale, now: Date = new Date()): string {
+  return upperFirst(
+    new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", timeZone: TIME_ZONE }).format(now),
+  );
+}
+
+/** Hora (0-23) de Lisboa, para el saludo. */
+export function hourLisbon(now: Date = new Date()): number {
+  return Number(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", hourCycle: "h23", timeZone: TIME_ZONE }).format(now));
+}

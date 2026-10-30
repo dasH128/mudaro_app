@@ -45,6 +45,8 @@
   /* Superficies suaves: cabeceras de tabla, filas con hover, tarjetas neutras */
   --surface-soft: #FBF6EE;
   --surface-head: #F8F1E5;
+  /* Información neutra (p. ej. pedido a la espera del cliente) */
+  --info-surface: #E8EAF4;
   /* Menú lateral de la app de empresa */
   --sidebar: var(--mudaro-tinta);
 }
@@ -58,6 +60,7 @@
   --border: color-mix(in srgb, var(--mudaro-carton) 15%, transparent);
   --surface-soft: #2E3460;
   --surface-head: #2E3460;
+  --info-surface: #343A6A;
   --sidebar: #13162B;
 
   /* Campos de formulario */
@@ -118,6 +121,7 @@
   --color-danger-dot: var(--danger-dot);
   --color-surface-soft: var(--surface-soft);
   --color-surface-head: var(--surface-head);
+  --color-info-surface: var(--info-surface);
   --color-sidebar: var(--sidebar);
 
   --font-display: var(--font-bricolage);
