@@ -45,6 +45,14 @@ const ICONS = {
       <circle cx="17" cy="18" r="2" />
     </>
   ),
+  van: (
+    <>
+      <path d="M3 7h12l4 4h2v6H3z" />
+      <path d="M15 7v4h4" />
+      <circle cx="7" cy="17" r="2" />
+      <circle cx="17" cy="17" r="2" />
+    </>
+  ),
   team: (
     <>
       <circle cx="12" cy="7" r="4" />

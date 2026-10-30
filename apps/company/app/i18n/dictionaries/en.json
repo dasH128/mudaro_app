@@ -11,7 +11,8 @@
     "newOrderTitle": "New order · Mudaro",
     "orderCreatedTitle": "Order created · Mudaro",
     "orderInventoryTitle": "Order inventory · Mudaro",
-    "orderDetailTitle": "Order detail · Mudaro"
+    "orderDetailTitle": "Order detail · Mudaro",
+    "fleetTitle": "Fleet · Mudaro"
   },
   "auth": {
     "layout": {
@@ -901,6 +902,211 @@
           "noteLabel": "Internal note",
           "notePlaceholder": "Only your team sees this. E.g. prefers mornings, has a cat.",
           "noteMeta": "{author} · {when}"
+        }
+      }
+    },
+    "fleet": {
+      "eyebrow": "Setup",
+      "title": "Fleet",
+      "loading": "Loading fleet…",
+      "soon": "Coming soon",
+      "add": "Add vehicle",
+      "resultsCount": {
+        "one": "{count} vehicle",
+        "other": "{count} vehicles"
+      },
+      "proposalsWord": {
+        "one": "proposal",
+        "other": "proposals"
+      },
+      "acceptedWord": {
+        "one": "{count} accepted",
+        "other": "{count} accepted"
+      },
+      "since": "since {date} · {by}",
+      "inactiveNote": "Not used in proposals or the schedule",
+      "inactiveReasons": {
+        "workshop": "In the workshop",
+        "other": "Inactive"
+      },
+      "status": {
+        "busy": "On the road",
+        "free": "Free",
+        "inactive": "Inactive"
+      },
+      "live": {
+        "busyUntil": "until {time} · {orderId}",
+        "returned": "back at base at {time}",
+        "noJobsToday": "no jobs today"
+      },
+      "lastUse": {
+        "today": "Today",
+        "inUse": "in use now",
+        "until": "until {time}",
+        "daysAgo": {
+          "one": "{count} day ago",
+          "other": "{count} days ago"
+        }
+      },
+      "nextUse": {
+        "none": "No date",
+        "nothing": "nothing scheduled"
+      },
+      "capacity": {
+        "suffix": "available for proposals",
+        "help": {
+          "label": "How the fleet is used in proposals",
+          "title": "How the fleet is used in proposals",
+          "text": "The calculation picks the smallest combination of active vehicles that carries the adjusted volume. If nothing fits, it proposes extra trips. An inactive vehicle does not appear in proposals or in the schedule.",
+          "exampleVolume": "38,4 m³",
+          "exampleResult": "Large truck + Van V-02"
+        }
+      },
+      "summary": {
+        "busy": "on the road",
+        "free": "free now",
+        "inactive": {
+          "one": "inactive",
+          "other": "inactive"
+        }
+      },
+      "alerts": {
+        "label": "Fleet alerts",
+        "capacity": {
+          "title": {
+            "one": "Capacity fell short in {count} proposal",
+            "other": "Capacity fell short in {count} proposals"
+          },
+          "text": "This month they needed an extra trip. A larger vehicle could lower the price.",
+          "action": "See proposals"
+        },
+        "idle": {
+          "title": {
+            "one": "{name} idle for {count} day",
+            "other": "{name} idle for {count} days"
+          },
+          "text": {
+            "one": "Used in only {count} proposal this month. Check it is still needed.",
+            "other": "Used in only {count} proposals this month. Check it is still needed."
+          },
+          "action": "See vehicle"
+        },
+        "cost": {
+          "title": {
+            "one": "{count} vehicle without cost per km",
+            "other": "{count} vehicles without cost per km"
+          },
+          "text": "Without it, the cost and margin of proposals are wrong.",
+          "action": "Complete details"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filter",
+        "filters": {
+          "all": "All",
+          "free": "Free now",
+          "busy": "On the road",
+          "idle": "Idle for 14+ days"
+        },
+        "searchLabel": "Search vehicle",
+        "searchPlaceholder": "Name or plate",
+        "sortLabel": "Sort",
+        "sort": {
+          "capacity": "Capacity",
+          "lastUse": "Last use",
+          "nextUse": "Next use",
+          "proposals": "In proposals"
+        },
+        "view": {
+          "label": "View mode",
+          "list": "List",
+          "cards": "Cards"
+        }
+      },
+      "table": {
+        "title": "Fleet vehicles",
+        "vehicle": "Vehicle",
+        "status": "Status",
+        "capacity": "Capacity",
+        "lastUse": "Last use",
+        "nextUse": "Next use",
+        "proposals": "In proposals · 30 d",
+        "actions": "Actions",
+        "viewDetail": "See details of {name}",
+        "open": "Open {name}",
+        "costMissing": "Cost per km missing",
+        "notIncluded": "Not used",
+        "inactiveTitle": "Inactive · {count}",
+        "inactiveHint": "not used in proposals or the schedule",
+        "footnote": "\"In proposals\": proposals from the last 30 days where the calculation picked the vehicle, and how many were accepted.",
+        "openSchedule": "Open schedule",
+        "emptySearch": "No vehicle matches the search.",
+        "emptyFilter": "No vehicle in this filter."
+      },
+      "cards": {
+        "lastUse": "Last use",
+        "next": "Next",
+        "in": "In"
+      },
+      "panel": {
+        "previous": "Previous vehicle",
+        "next": "Next vehicle",
+        "position": "Vehicle {position} of {total}",
+        "escHint": "Esc to close",
+        "close": "Close panel",
+        "on": "Active",
+        "off": "Inactive",
+        "deactivate": "Deactivate {name}",
+        "activate": "Activate {name}",
+        "pendingJobs": {
+          "one": "It has {count} job scheduled on {date} ({orderId}). Reassign it before deactivating or it will be left without a vehicle.",
+          "other": "It has {count} jobs scheduled, the next on {date} ({orderId}). Reassign them before deactivating or they will be left without a vehicle."
+        },
+        "week": {
+          "title": "This week",
+          "allFree": "Free all week",
+          "summary": {
+            "one": "{count} day busy · {hours} h",
+            "other": "{count} days busy · {hours} h"
+          },
+          "aria": "Occupancy this week: {days}",
+          "dayAria": "{day} {hours} hours",
+          "free": "free",
+          "hours": "{hours} h"
+        },
+        "jobs": {
+          "title": "Upcoming jobs",
+          "viewSchedule": "See in schedule",
+          "none": "No jobs scheduled."
+        },
+        "proposals": {
+          "title": "In proposals · last 30 days",
+          "accepted": "accepted",
+          "rate": "acceptance"
+        },
+        "data": {
+          "title": "Vehicle details",
+          "readOnly": "Editing coming soon",
+          "capacity": "Capacity",
+          "maxLoad": "Maximum load",
+          "costPerKm": "Cost per km",
+          "type": "Type",
+          "costMissing": "Without a cost per km, the cost and margin of proposals are wrong.",
+          "privacy": "Cost per km is only visible to administrators. Changes do not affect proposals already sent."
+        },
+        "usage": {
+          "title": "Use in {month}",
+          "jobs": "jobs",
+          "hours": "hours",
+          "lowUse": "Little used this month. Worth checking it is still needed."
+        },
+        "history": {
+          "title": "History",
+          "added": "Vehicle added",
+          "addedNoCost": "Vehicle added without cost per km",
+          "costChanged": "Cost per km: {from} → {to}",
+          "maxLoadChanged": "Maximum load: {from} → {to} kg",
+          "deactivated": "Deactivated: {reason}"
         }
       }
     }

@@ -8,7 +8,7 @@ import { SORTS, type ProposalSort } from "@/features/proposals/domain/filters";
 import { PROPOSAL_STATUSES, type ProposalStatus } from "@/features/proposals/domain/types";
 import { proposalsHref } from "../proposals-href";
 import type { ProposalsText } from "../proposals-text";
-import { SortSelect } from "./sort-select";
+import { SortSelect } from "@/app/components/form/sort-select";
 
 type Props = {
   lang: Locale;

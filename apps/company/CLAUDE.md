@@ -18,7 +18,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Pedidos · Lista | `/[lang]/orders` | Hecha solo el diseño, con datos de ejemplo (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Hecha solo el diseño (RF-19): el borrador vive en el navegador y no se guarda |
 | Detalhe do pedido | `/[lang]/orders/[id]` | Hecha solo el diseño, con datos de ejemplo. Pestaña en la URL (`?tab=`) |
-| Agenda, Clientes, Frota, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Frota | `/[lang]/fleet` | Hecha solo el diseño, con datos de ejemplo (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL |
+| Agenda, Clientes, Equipa, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -84,6 +85,18 @@ features/
                               detalle: order-detail-header, order-journey, order-measure-alert, order-detail-tabs,
                               order-summary-tab, order-inventory-tab, order-addresses-tab, order-proposals-tab,
                               order-history-tab, order-detail-side (cliente, enlace y notas), order-detail-parts
+  fleet/
+    domain/
+      types.ts              ← Vehicle, VehicleJob, VehicleEvent, LiveStatus (importes en céntimos, fechas aaaa-mm-dd)
+      fleet.ts              ← filtros, orden, "parado" (IDLE_DAYS), próximo trabajo, resumen y avisos de la frota
+    infrastructure/
+      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ today, includeCost })
+      mock-data.ts          ← 6 vehículos de ejemplo con fechas relativas a hoy
+    presentation/
+      fleet-href.ts         ← enlaces con filtro, orden, vista y vehículo en la URL
+      fleet-text.ts         ← estado, último/próximo uso y histórico → textos del diccionario
+      components/           ← fleet-header (+ capacity-pill, único cliente con la ayuda), fleet-alerts, fleet-toolbar,
+                              fleet-table, fleet-cards, vehicle-panel (+ panel-escape, cliente), fleet-parts
   inventory/
     domain/
       types.ts              ← CatalogItem, AccessPoint, ExtraService, pasos y divisiones; summarize() (totales) y normalizeSearch()
@@ -104,7 +117,7 @@ features/
     presentation/
       proposals-text.ts     ← pasa los códigos del dominio a los textos del diccionario
       proposals-href.ts     ← enlaces con filtros en la URL
-      components/           ← header, stats, ready-requests, toolbar (+ sort-select, único cliente),
+      components/           ← header, stats, ready-requests, toolbar (usa `app/components/form/sort-select.tsx`),
                               table, status-pill
 ```
 
@@ -177,3 +190,4 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
   - Fallo inesperado: un único `error.tsx` en `(app)` con "Tentar novamente".
   - No son error: sin sesión redirige a `/login`, y un pedido sin inventario es un estado vacío dentro de la pantalla (ya lo hace la pestaña Inventário).
 - **Pendiente: una sola fuente de datos para los pedidos.** `/orders/[id]/inventory` y `/orders/[id]/created` usan `getOrder` (solo los pedidos creados en esta sesión), mientras que la lista y el detalle también leen los 24 de ejemplo. Por eso "Preencher inventário" desde el detalle de un pedido de ejemplo (p. ej. MD-0828) da 404, y los pedidos creados traen menos datos que los de ejemplo. Se resuelve al pasar a Supabase (una sola tabla) o, antes, haciendo que esas dos páginas lean igual que el detalle.
+- Frota (30/10/2026, solo diseño): `/fleet` con datos de `features/fleet/infrastructure/mock-data.ts` (5 activos y 1 inactivo, fechas relativas a hoy). Todo viaja en la URL: `?filter=` (all, free, busy, idle), `?q=`, `?sort=`, `?view=list|cards` y `?vehicle=<id>` (panel lateral, con anterior/siguiente y Esc para cerrar). Con el panel abierto la tabla oculta "Último uso" y "Próximo uso"; un vehículo que el filtro excluye sigue abriéndose y se añade al final de la navegación. Desactivados por falta de flujo o de datos: "Adicionar veículo", el interruptor Ativo/Inativo, los campos de "Dados do veículo" (solo lectura, sin guardar ni zod), "Ver na agenda" y "Abrir agenda" (la agenda no existe). El coste por km solo sale del repo con `includeCost` (RNF-03): `CAN_SEE_COST = true` en `fleet/page.tsx` hasta que exista el rol, y sin él se oculta el campo, el aviso de "sem custo" y el histórico de cambios de coste. "Parado" (14 días, `IDLE_DAYS`) es provisional. El estado "Na estrada / Livre" y los trabajos de hoy son datos fijos de ejemplo, no se calculan. Los trabajos del panel muestran cliente y nº de pedido como texto: los pedidos de ejemplo de la lista no coinciden con esos números. Movido `sort-select.tsx` de proposals a `app/components/form/` para compartirlo.

@@ -11,7 +11,8 @@
     "newOrderTitle": "Novo pedido · Mudaro",
     "orderCreatedTitle": "Pedido criado · Mudaro",
     "orderInventoryTitle": "Inventário do pedido · Mudaro",
-    "orderDetailTitle": "Detalhe do pedido · Mudaro"
+    "orderDetailTitle": "Detalhe do pedido · Mudaro",
+    "fleetTitle": "Frota · Mudaro"
   },
   "auth": {
     "layout": {
@@ -901,6 +902,211 @@
           "noteLabel": "Nota interna",
           "notePlaceholder": "Só a tua equipa vê isto. Ex.: prefere de manhã, tem um gato.",
           "noteMeta": "{author} · {when}"
+        }
+      }
+    },
+    "fleet": {
+      "eyebrow": "Configuração",
+      "title": "Frota",
+      "loading": "A carregar a frota…",
+      "soon": "Disponível em breve",
+      "add": "Adicionar veículo",
+      "resultsCount": {
+        "one": "{count} veículo",
+        "other": "{count} veículos"
+      },
+      "proposalsWord": {
+        "one": "proposta",
+        "other": "propostas"
+      },
+      "acceptedWord": {
+        "one": "{count} aceite",
+        "other": "{count} aceites"
+      },
+      "since": "desde {date} · {by}",
+      "inactiveNote": "Não entra nas propostas nem na agenda",
+      "inactiveReasons": {
+        "workshop": "Na oficina",
+        "other": "Inativo"
+      },
+      "status": {
+        "busy": "Na estrada",
+        "free": "Livre",
+        "inactive": "Inativo"
+      },
+      "live": {
+        "busyUntil": "até {time} · {orderId}",
+        "returned": "voltou à base às {time}",
+        "noJobsToday": "sem trabalhos hoje"
+      },
+      "lastUse": {
+        "today": "Hoje",
+        "inUse": "em uso agora",
+        "until": "até às {time}",
+        "daysAgo": {
+          "one": "há {count} dia",
+          "other": "há {count} dias"
+        }
+      },
+      "nextUse": {
+        "none": "Sem data",
+        "nothing": "nada marcado"
+      },
+      "capacity": {
+        "suffix": "disponíveis para propostas",
+        "help": {
+          "label": "Como a frota entra nas propostas",
+          "title": "Como a frota entra nas propostas",
+          "text": "O cálculo escolhe a combinação mais pequena de veículos ativos que leva o volume ajustado. Se nada chega, propõe viagens extra. Um veículo inativo não aparece nas propostas nem na agenda.",
+          "exampleVolume": "38,4 m³",
+          "exampleResult": "Camião grande + Furgão V-02"
+        }
+      },
+      "summary": {
+        "busy": "na estrada",
+        "free": "livres agora",
+        "inactive": {
+          "one": "inativo",
+          "other": "inativos"
+        }
+      },
+      "alerts": {
+        "label": "Avisos da frota",
+        "capacity": {
+          "title": {
+            "one": "Faltou capacidade em {count} proposta",
+            "other": "Faltou capacidade em {count} propostas"
+          },
+          "text": "Este mês precisaram de viagem extra. Um veículo maior podia baixar o preço.",
+          "action": "Ver propostas"
+        },
+        "idle": {
+          "title": {
+            "one": "{name} parado há {count} dia",
+            "other": "{name} parado há {count} dias"
+          },
+          "text": {
+            "one": "Entrou só em {count} proposta este mês. Confirma se ainda faz falta.",
+            "other": "Entrou só em {count} propostas este mês. Confirma se ainda faz falta."
+          },
+          "action": "Ver veículo"
+        },
+        "cost": {
+          "title": {
+            "one": "{count} veículo sem custo por km",
+            "other": "{count} veículos sem custo por km"
+          },
+          "text": "Sem ele, o custo e a margem das propostas ficam errados.",
+          "action": "Completar dados"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filtrar",
+        "filters": {
+          "all": "Todos",
+          "free": "Livres agora",
+          "busy": "Na estrada",
+          "idle": "Parados há +14 dias"
+        },
+        "searchLabel": "Procurar veículo",
+        "searchPlaceholder": "Nome ou matrícula",
+        "sortLabel": "Ordenar",
+        "sort": {
+          "capacity": "Capacidade",
+          "lastUse": "Último uso",
+          "nextUse": "Próximo uso",
+          "proposals": "Em propostas"
+        },
+        "view": {
+          "label": "Modo de visualização",
+          "list": "Lista",
+          "cards": "Cartões"
+        }
+      },
+      "table": {
+        "title": "Veículos da frota",
+        "vehicle": "Veículo",
+        "status": "Estado",
+        "capacity": "Capacidade",
+        "lastUse": "Último uso",
+        "nextUse": "Próximo uso",
+        "proposals": "Em propostas · 30 d",
+        "actions": "Ações",
+        "viewDetail": "Ver detalhe de {name}",
+        "open": "Abrir {name}",
+        "costMissing": "Custo por km em falta",
+        "notIncluded": "Não entra",
+        "inactiveTitle": "Inativos · {count}",
+        "inactiveHint": "não entram nas propostas nem na agenda",
+        "footnote": "\"Em propostas\": propostas dos últimos 30 dias em que o cálculo escolheu o veículo, e quantas foram aceites.",
+        "openSchedule": "Abrir agenda",
+        "emptySearch": "Nenhum veículo corresponde à pesquisa.",
+        "emptyFilter": "Nenhum veículo neste filtro."
+      },
+      "cards": {
+        "lastUse": "Último uso",
+        "next": "Próximo",
+        "in": "Em"
+      },
+      "panel": {
+        "previous": "Veículo anterior",
+        "next": "Veículo seguinte",
+        "position": "Veículo {position} de {total}",
+        "escHint": "Esc para fechar",
+        "close": "Fechar painel",
+        "on": "Ativo",
+        "off": "Inativo",
+        "deactivate": "Desativar {name}",
+        "activate": "Ativar {name}",
+        "pendingJobs": {
+          "one": "Tem {count} trabalho marcado a {date} ({orderId}). Reatribui-o antes de desativar ou fica sem veículo.",
+          "other": "Tem {count} trabalhos marcados, o próximo a {date} ({orderId}). Reatribui-os antes de desativar ou ficam sem veículo."
+        },
+        "week": {
+          "title": "Esta semana",
+          "allFree": "Livre a semana toda",
+          "summary": {
+            "one": "{count} dia ocupado · {hours} h",
+            "other": "{count} dias ocupados · {hours} h"
+          },
+          "aria": "Ocupação desta semana: {days}",
+          "dayAria": "{day} {hours} horas",
+          "free": "livre",
+          "hours": "{hours} h"
+        },
+        "jobs": {
+          "title": "Próximos trabalhos",
+          "viewSchedule": "Ver na agenda",
+          "none": "Sem trabalhos marcados."
+        },
+        "proposals": {
+          "title": "Em propostas · últimos 30 dias",
+          "accepted": "aceites",
+          "rate": "aceitação"
+        },
+        "data": {
+          "title": "Dados do veículo",
+          "readOnly": "Edição disponível em breve",
+          "capacity": "Capacidade",
+          "maxLoad": "Carga máxima",
+          "costPerKm": "Custo por km",
+          "type": "Tipo",
+          "costMissing": "Sem custo por km, o custo e a margem das propostas ficam errados.",
+          "privacy": "O custo por km só é visível para administradores. As alterações não mudam propostas já enviadas."
+        },
+        "usage": {
+          "title": "Uso em {month}",
+          "jobs": "trabalhos",
+          "hours": "horas",
+          "lowUse": "Pouco usado este mês. Vale a pena confirmar se ainda faz falta."
+        },
+        "history": {
+          "title": "Histórico",
+          "added": "Veículo adicionado",
+          "addedNoCost": "Veículo adicionado sem custo por km",
+          "costChanged": "Custo por km: {from} → {to}",
+          "maxLoadChanged": "Carga máxima: {from} → {to} kg",
+          "deactivated": "Desativado: {reason}"
         }
       }
     }

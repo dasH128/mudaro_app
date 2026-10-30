@@ -12,6 +12,11 @@ const euro = new Intl.NumberFormat(NUMBER_LOCALE, {
 });
 const decimal = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const integer = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0 });
+// Enteros con separador de miles (también de 4 cifras): "6 000"
+const grouped = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0, useGrouping: "always" });
+// Hasta un decimal, sin ceros de relleno: 25 → "25", 12.5 → "12,5"
+const compact = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 1 });
+const amount = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const date = new Intl.DateTimeFormat(NUMBER_LOCALE, {
   day: "2-digit",
   month: "2-digit",
@@ -40,6 +45,26 @@ export function formatDecimal(value: number): string {
 /** Volumen en metros cúbicos: 38.4 → "38,4 m³". */
 export function formatVolume(m3: number): string {
   return `${decimal.format(m3)} m³`;
+}
+
+/** Entero con separador de miles: 6000 → "6 000". */
+export function formatInteger(value: number): string {
+  return grouped.format(value);
+}
+
+/** Número con hasta un decimal y sin ceros de relleno: 25 → "25", 12.5 → "12,5". */
+export function formatCompact(value: number): string {
+  return compact.format(value);
+}
+
+/** Metros cúbicos sin decimales de relleno: 25 → "25 m³", 12.5 → "12,5 m³". */
+export function formatCubicMeters(m3: number): string {
+  return `${compact.format(m3)} m³`;
+}
+
+/** Importe en céntimos sin símbolo: 45 → "0,45". */
+export function formatAmount(cents: number): string {
+  return amount.format(cents / 100);
 }
 
 /** Proporción 0..1 → "64 %" (espacio de no separación, como en el diseño). */
@@ -131,6 +156,14 @@ export function formatLongDate(locale: Locale, now: Date = new Date()): string {
 /** Día de la semana en el idioma de la interfaz: "2026-11-20" → "Sexta-feira". */
 export function formatWeekday(locale: Locale, value: string): string {
   return upperFirst(new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: TIME_ZONE }).format(toDate(value)));
+}
+
+/** Día de la semana corto y número de día para el gráfico semanal: "2026-10-30" → "Sex 30". */
+export function formatWeekdayDay(locale: Locale, value: string): string {
+  const when = toDate(value);
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: TIME_ZONE }).format(when).replace(/\.$/, "");
+  const dayOfMonth = new Intl.DateTimeFormat(NUMBER_LOCALE, { day: "numeric", timeZone: TIME_ZONE }).format(when);
+  return `${upperFirst(weekday)} ${dayOfMonth}`;
 }
 
 /** Hora (0-23) de Lisboa, para el saludo. */
