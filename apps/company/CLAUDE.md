@@ -21,7 +21,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Frota | `/[lang]/fleet` | Hecha solo el diseño, con datos de ejemplo (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
 | Novo veículo | `/[lang]/fleet/new` | Hecha con datos de ejemplo (RF-05). Crea el vehículo en un almacén en memoria |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
-| Agenda, Clientes, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Clientes | `/[lang]/clients` | Hecha solo el diseño, con datos de ejemplo (RF-14). Filtro, búsqueda, orden y cliente abierto en la URL |
+| Agenda, Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de propuesta | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -42,6 +43,7 @@ app/
     app-icon.tsx            ← <Icon name="…" />, iconos de trazo decorativos (no se llama icon.tsx: Next lo reserva para el icono de la app)
     app-nav.tsx             ← enlaces del menú (cliente: lee la ruta para marcar el activo)
     form/                   ← campos compartidos: field.tsx (etiqueta, ayuda, error) y choice-group.tsx (radios en chips o segmentos)
+    ../lib/avatar-tone.ts   ← tono del avatar por identificador (Equipa y Clientes)
     first-use.tsx           ← estructura del estado de primer uso de una lista (Frota, Equipa): cabecera, invitación, ventajas y pie
     panel-escape.tsx        ← cierra un panel lateral con Escape (Frota y Equipa)
     theme-toggle.tsx, language-switcher.tsx, theme-provider.tsx
@@ -121,6 +123,18 @@ features/
       team-text.ts          ← estado, último/próximo trabajo, acceso, caducidad y histórico → textos del diccionario
       components/           ← team-header (+ team-help, único cliente con la ayuda), team-alerts, team-toolbar,
                               team-table, team-cards, team-admins, person-panel, team-empty (+ team-empty-art), team-parts
+  clients/
+    domain/
+      types.ts              ← Client, ClientOrder, ClientSummary, OrderNote, ContactEvent, DuplicateCandidate (céntimos, fechas aaaa-mm-dd)
+      clients.ts            ← filtros, orden, búsqueda, "voltou" (isReturning), importe aceptado y avisos
+    infrastructure/
+      clients.repo.ts       ← puerta de entrada: getClientsOverview({ today, includeValues })
+      mock-data.ts          ← 15 clientes de ejemplo con fechas relativas a hoy
+    presentation/
+      clients-href.ts       ← enlaces con filtro, búsqueda, orden y cliente en la URL
+      clients-text.ts       ← línea de situación, último contacto y notas de pedido → textos del diccionario
+      components/           ← clients-header, clients-alerts, clients-toolbar, clients-table, client-panel
+                              (+ copy-phone-button, único cliente: portapapeles), clients-parts
   inventory/
     domain/
       types.ts              ← CatalogItem, AccessPoint, ExtraService, pasos y divisiones; summarize() (totales) y normalizeSearch()
@@ -223,3 +237,4 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - Novo veículo (31/10/2026): `/fleet/new` (RF-05), con `ROUTES.fleet.new` (`ROUTES.fleet` pasó a ser `{ list, new }`). Los botones "Adicionar veículo" de la cabecera y del estado vacío ya enlazan aquí. El formulario es de Server Action con `useActionState` y zod en servidor (`create-vehicle.ts`, `schemas/new-vehicle.ts`); los campos son controlados. Los vehículos se guardan en `fleet/infrastructure/store.ts`, en memoria (se pierden al reiniciar), y `getFleetOverview` los suma a los de ejemplo. Obligatorios: matrícula, capacidad y coste por km (como marca el diseño); la carga máxima y el nombre son opcionales (sin nombre se usa la matrícula). Al elegir un tipo se sugieren nombre, capacidad, carga y coste (`VEHICLE_PRESETS`, valores provisionales); la etiqueta "Valor sugerido" desaparece al editar el campo. La matrícula se normaliza a `AA-00-AA` (dos letras o dos cifras por par, mezclando ambas) y es única en la frota: se avisa en vivo con la lista actual y el servidor lo vuelve a comprobar. Límites provisionales (`LIMITS`): 200 m³, 40 000 kg, 20 €/km y 60 caracteres. "Adicionar à frota" vuelve a la lista con el vehículo abierto (`?vehicle=`); "Adicionar e criar outro" vuelve al formulario con un aviso (`?added=<id>`, solo se muestra si el id existe). Un vehículo nuevo se da de alta como libre y sin salidas: por eso `lastUseOn` y `maxLoadKg` pueden ser `null` (la lista muestra "—" y "ainda sem trabalhos"), y un inactivo nace con motivo "Inativo". El borrador es real: `new-vehicle-draft.ts` guarda el formulario en `localStorage` con cada cambio (solo en ese navegador, todo en try/catch) y lo recupera al volver; se borra al enviar o al pulsar Cancelar. El aviso "Rascunho guardado automaticamente" solo sale si el navegador deja guardar. Pendiente: sesión y rol en la página y la acción (solo administradores, RNF-03). El diseño decía "Mudanças até 12 m³ podem ir só neste veículo": la cifra sale de la capacidad escrita. Las secciones Documentos, Fotos y Manutenção salen como "Em breve" (sin diseño).
 - Tokens (31/10/2026): en `packages/ui/src/tokens.css`, `--line` del tema oscuro pasó de `#3A4070` a `#4A5185`. Con el anterior, los bordes de tarjetas y tablas casi no se distinguían de la superficie `#252A4E`. Afecta a todas las vistas de la app. Los `id` de las secciones del formulario de Novo veículo llevan prefijo `section-` para no chocar con los de los campos (`capacity`).
 - Comprobación de vistas (31/10/2026): para ver una pantalla en oscuro o con interacción no basta `--screenshot` de Chrome (`--blink-settings` no cambia el tema). Se usó el protocolo de depuración (`--remote-debugging-port`) con `Emulation.setEmulatedMedia` (`prefers-color-scheme: dark`) y `Runtime.evaluate` para escribir en los campos y pulsar el envío.
+- Clientes (31/10/2026, solo diseño): `/clients` con datos de `features/clients/infrastructure/mock-data.ts` (15 clientes). Todo viaja en la URL: `?filter=` (all, negotiating, scheduled, done, companies y returned), `?q=` (nombre, teléfono, email o NIF), `?sort=` (lastContact, name, accepted, orders) y `?client=<id>` (panel lateral, con anterior/siguiente y Esc). "Voltaram" no tiene pastilla propia: se llega desde el aviso, como en el diseño, y mientras está activo se muestra una. Con el panel abierto la tabla oculta contacto, importe y último contacto. "Novo pedido" y "Novo pedido para este cliente" llevan a `/orders/new` (sin rellenar los datos del cliente: el formulario aún no acepta un cliente de partida). Desactivados por falta de flujo: "Juntar numa ficha", "São pessoas diferentes", "Exportar dados" y "Anonimizar cliente"; los campos de "Dados" son de solo lectura (sin guardar ni zod; el diseño decía "Guarda ao sair do campo"). "Copiar telemóvel" sí funciona. Los textos de situación, último contacto y notas de pedido son códigos del dominio (`ClientSummary`, `ContactEvent`, `OrderNote`) que se traducen en `clients-text.ts`; el motivo de pérdida, las rutas y los vehículos son datos de la empresa y no se traducen. "Voltou" = ya tiene una mudança aceptada y otro pedido que no se perdió (`isReturning`). Los importes aceptados solo salen del repo con `includeValues` (RNF-03): `CAN_SEE_VALUES = true` en `clients/page.tsx` hasta que exista el rol, y sin él se oculta la columna "Aceite" y el resumen del panel. Se muestran en euros enteros (`formatEuroWhole`), como el diseño. Los números de pedido enlazan al detalle (`/orders/<id>`), pero los pedidos de ejemplo de los clientes (p. ej. MD-0821, MD-0838) no coinciden todos con los de `features/orders`: algunos enlaces darán 404 hasta tener una sola fuente de datos. Los avisos del diseño decían "A TechHub e a Família Moreira": se dejó sin artículo ("TechHub Ibéria e Família Moreira") por no suponer género. Movido `avatarTone` de `team/domain` a `app/lib/avatar-tone.ts`.

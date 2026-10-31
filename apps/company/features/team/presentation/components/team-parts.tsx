@@ -1,5 +1,6 @@
+import { avatarTone } from "@/app/lib/avatar-tone";
 import { initials } from "@/features/orders/domain/client-name";
-import { avatarTone, stateOf, type PersonState } from "../../domain/team";
+import { stateOf, type PersonState } from "../../domain/team";
 import type { Person } from "../../domain/types";
 
 const PILL: Record<PersonState, string> = {

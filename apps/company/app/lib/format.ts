@@ -10,6 +10,12 @@ const euro = new Intl.NumberFormat(NUMBER_LOCALE, {
   // pt-PT no agrupa los miles de 4 cifras por defecto; el diseño muestra "1 123,48 €"
   useGrouping: "always",
 });
+const euroWhole = new Intl.NumberFormat(NUMBER_LOCALE, {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+  useGrouping: "always",
+});
 const decimal = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const integer = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0 });
 // Enteros con separador de miles (también de 4 cifras): "6 000"
@@ -35,6 +41,11 @@ const day = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
 /** Importe en céntimos → "1 123,48 €". */
 export function formatEuro(cents: number): string {
   return euro.format(cents / 100);
+}
+
+/** Importe en céntimos redondeado a euros enteros, para listas y resúmenes: 487000 → "4 870 €". */
+export function formatEuroWhole(cents: number): string {
+  return euroWhole.format(cents / 100);
 }
 
 /** Número con un decimal y coma: 38.4 → "38,4". */
@@ -135,6 +146,14 @@ function upperFirst(text: string): string {
 /** Nombre del mes en el idioma de la interfaz: "2026-12-01" → "Dezembro". */
 export function formatMonthName(locale: Locale, value: string): string {
   return upperFirst(new Intl.DateTimeFormat(locale, { month: "long", timeZone: TIME_ZONE }).format(toDate(value)));
+}
+
+/** Mes corto y año para "cliente desde": "2026-09-07" → "set 2026". */
+export function formatMonthYear(locale: Locale, value: string): string {
+  const when = toDate(value);
+  const month = new Intl.DateTimeFormat(locale, { month: "short", timeZone: TIME_ZONE }).format(when).replace(/\.$/, "");
+  const year = new Intl.DateTimeFormat(NUMBER_LOCALE, { year: "numeric", timeZone: TIME_ZONE }).format(when);
+  return `${month} ${year}`;
 }
 
 /** Día y mes corto para las fichas de agenda: "2026-11-05" → { day: "05", month: "nov" }. */

@@ -159,9 +159,3 @@ export function teamAlerts(people: readonly Person[], metrics: TeamMetrics, toda
     missingPhone: active.find(lacksPhone) ?? null,
   };
 }
-
-/** Tono del avatar (0..2), estable por persona. */
-export function avatarTone(id: string): 0 | 1 | 2 {
-  const sum = [...id].reduce((total, char) => total + char.charCodeAt(0), 0);
-  return (sum % 3) as 0 | 1 | 2;
-}

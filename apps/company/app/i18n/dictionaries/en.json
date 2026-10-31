@@ -14,7 +14,8 @@
     "orderDetailTitle": "Order detail · Mudaro",
     "fleetTitle": "Fleet · Mudaro",
     "teamTitle": "Team · Mudaro",
-    "fleetNewTitle": "New vehicle · Mudaro"
+    "fleetNewTitle": "New vehicle · Mudaro",
+    "clientsTitle": "Clients · Mudaro"
   },
   "auth": {
     "layout": {
@@ -1543,6 +1544,232 @@
         },
         "solo": "Working on your own? A team isn't required to use Mudaro.",
         "you": "admin · you"
+      }
+    },
+    "clients": {
+      "eyebrow": "Operations",
+      "title": "Clients",
+      "loading": "Loading clients…",
+      "soon": "Coming soon",
+      "newOrder": "New order",
+      "createHint": "Clients are created when you create an order.",
+      "resultsCount": {
+        "one": "{count} client",
+        "other": "{count} clients"
+      },
+      "summary": {
+        "total": {
+          "one": "client",
+          "other": "clients"
+        },
+        "negotiating": "negotiating",
+        "scheduled": "with a move booked",
+        "returned": "came back"
+      },
+      "types": {
+        "private": "Private",
+        "company": "Company"
+      },
+      "stages": {
+        "new": "New",
+        "awaiting-inventory": "Awaiting inventory",
+        "inventory-received": "Inventory received",
+        "quoted": "Quoted",
+        "scheduled": "Move booked",
+        "in-progress": "Move today",
+        "done": "Move done",
+        "lost": "Lost"
+      },
+      "badges": {
+        "returned": "Came back",
+        "duplicate": "Duplicate?",
+        "taxIdMissing": "Tax ID missing"
+      },
+      "noEmail": "no email",
+      "tomorrow": "Tomorrow",
+      "line": {
+        "inProgress": "{orderId} in progress",
+        "inProgressQuote": "{orderId} in progress · and a proposal about to expire",
+        "todayDraft": "{orderId} today · new order in draft",
+        "inventoryArrived": "{orderId} · inventory arrived {hours} h ago",
+        "missingMeasure": {
+          "one": "{orderId} · {count} item missing its size",
+          "other": "{orderId} · {count} items missing their size"
+        },
+        "linkExpires": "{orderId} · link expires tomorrow",
+        "noNews": {
+          "one": "{orderId} · no news for {count} day",
+          "other": "{orderId} · no news for {count} days"
+        },
+        "shareLink": "{orderId} · link still to be shared",
+        "scheduledTomorrow": "{orderId} · tomorrow {time}",
+        "scheduledDate": "{orderId} · {date} {time}",
+        "noResources": "{orderId} · {date} · no resources",
+        "delivered": "{orderId} · delivered on {date}",
+        "closed": "{orderId} · closed on {date}",
+        "lost": "{orderId} · {reason}"
+      },
+      "contact": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "daysAgo": {
+          "one": "{count} day ago",
+          "other": "{count} days ago"
+        },
+        "events": {
+          "move-in-progress": "move in progress",
+          "pickup-signed": "pickup report signed",
+          "sent-inventory": "sent the inventory",
+          "accepted-quote": "accepted the proposal",
+          "declined-quote": "declined the proposal",
+          "accepted-signed": "accepted and signed",
+          "signed-delivery": "signed the delivery",
+          "order-created": "order created"
+        }
+      },
+      "alerts": {
+        "label": "Client alerts",
+        "taxId": {
+          "title": "{name} has no tax ID",
+          "text": "It's a company and the move is on {date}. Without a tax ID, the invoicing export is incomplete.",
+          "action": "Complete details"
+        },
+        "duplicate": {
+          "title": "Possible duplicate client",
+          "text": "\"{first}\" and \"{second}\" have the same phone number.",
+          "action": "View and merge"
+        },
+        "returned": {
+          "title": {
+            "one": "{count} client came back",
+            "other": "{count} clients came back"
+          },
+          "text": {
+            "one": "{names} already has a second order with you.",
+            "other": "{names} already have a second order with you."
+          },
+          "action": "See who came back"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filter",
+        "filters": {
+          "all": "All",
+          "negotiating": "Negotiating",
+          "scheduled": "Move booked",
+          "done": "Move done",
+          "companies": "Companies",
+          "returned": "Came back"
+        },
+        "searchLabel": "Search clients",
+        "searchPlaceholder": "Name, phone, email or tax ID",
+        "sortLabel": "Sort",
+        "sort": {
+          "lastContact": "Last contact",
+          "name": "Name",
+          "accepted": "Accepted value",
+          "orders": "No. of orders"
+        }
+      },
+      "table": {
+        "title": "Client list",
+        "client": "Client",
+        "contact": "Contact",
+        "status": "Status",
+        "orders": "Orders",
+        "accepted": "Accepted",
+        "lastContact": "Last contact",
+        "actions": "Actions",
+        "viewDetail": "View details of {name}",
+        "open": "Open {name}",
+        "ordersWord": {
+          "one": "order",
+          "other": "orders"
+        },
+        "doneCount": {
+          "one": "{count} done",
+          "other": "{count} done"
+        },
+        "footnote": "\"Accepted\": sum of accepted proposals, VAT included. Only administrators see values.",
+        "footnoteNoValues": "Only administrators see values.",
+        "showing": "Showing {shown} of {total}",
+        "emptySearch": "No client matches the search.",
+        "emptyFilter": "No clients in this filter."
+      },
+      "panel": {
+        "previous": "Previous client",
+        "next": "Next client",
+        "position": "Client {position} of {total}",
+        "escHint": "Esc to close",
+        "close": "Close panel",
+        "since": "client since {date}",
+        "newOrder": "New order for this client",
+        "copyPhone": "Copy phone",
+        "copied": "Copied ✓",
+        "duplicate": {
+          "title": "Looks like the same person",
+          "withEmail": "with email",
+          "withoutEmail": "no email",
+          "lostIn": "{orderId} · lost in {month}",
+          "keep": "{name}'s details stay, along with the orders from both records. Documents already sent don't change.",
+          "merge": "Merge into one record",
+          "different": "They're different people"
+        },
+        "stats": {
+          "label": "Summary",
+          "orders": "orders",
+          "done": "moves done",
+          "accepted": "accepted"
+        },
+        "orders": {
+          "title": "Orders and moves",
+          "viewAll": "See in Orders",
+          "notes": {
+            "quoteSent": {
+              "one": "Proposal v{version} sent · expires in {count} day",
+              "other": "Proposal v{version} sent · expires in {count} days"
+            },
+            "inProgress": "In progress · {vehicle} · {crew}",
+            "closed": "Closed · {amount}",
+            "draft": "Proposal in draft since {time}",
+            "shortStaffed": {
+              "one": "{when} · {count} person short on the team",
+              "other": "{when} · {count} people short on the team"
+            },
+            "otherFile": "On the \"{file}\" record · no reply",
+            "scheduled": "{vehicle} · {start}–{end}",
+            "lastContact": "Last contact: {what}"
+          }
+        },
+        "data": {
+          "title": "Details",
+          "readOnly": "Editing coming soon",
+          "name": "Name",
+          "phone": "Phone",
+          "email": "Email",
+          "emailPlaceholder": "To get a copy of the reports",
+          "type": "Type",
+          "taxId": "Tax ID",
+          "taxIdPlaceholder": "9 digits",
+          "taxIdMissing": "Without a tax ID, the invoicing export is incomplete.",
+          "emailMissing": "Without an email, they don't get a copy of the accepted proposal or the reports."
+        },
+        "addresses": {
+          "title": "Addresses used",
+          "orders": {
+            "one": "{count} order",
+            "other": "{count} orders"
+          },
+          "origin": "origin",
+          "destination": "destination",
+          "seeOrder": "see in the order"
+        },
+        "privacy": {
+          "title": "Privacy",
+          "text": "If the client asks for their data or for it to be deleted. Reports and photos from closed jobs are kept for the set period.",
+          "export": "Export data",
+          "anonymize": "Anonymise client"
+        }
       }
     }
   }

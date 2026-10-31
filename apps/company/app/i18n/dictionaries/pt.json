@@ -14,7 +14,8 @@
     "orderDetailTitle": "Detalhe do pedido · Mudaro",
     "fleetTitle": "Frota · Mudaro",
     "teamTitle": "Equipa · Mudaro",
-    "fleetNewTitle": "Novo veículo · Mudaro"
+    "fleetNewTitle": "Novo veículo · Mudaro",
+    "clientsTitle": "Clientes · Mudaro"
   },
   "auth": {
     "layout": {
@@ -1543,6 +1544,232 @@
         },
         "solo": "Trabalhas sem equipa? Não é obrigatória para usar a Mudaro.",
         "you": "administração · tu"
+      }
+    },
+    "clients": {
+      "eyebrow": "Operação",
+      "title": "Clientes",
+      "loading": "A carregar os clientes…",
+      "soon": "Disponível em breve",
+      "newOrder": "Novo pedido",
+      "createHint": "Os clientes criam-se ao criar um pedido.",
+      "resultsCount": {
+        "one": "{count} cliente",
+        "other": "{count} clientes"
+      },
+      "summary": {
+        "total": {
+          "one": "cliente",
+          "other": "clientes"
+        },
+        "negotiating": "em negociação",
+        "scheduled": "com mudança marcada",
+        "returned": "voltaram"
+      },
+      "types": {
+        "private": "Particular",
+        "company": "Empresa"
+      },
+      "stages": {
+        "new": "Novo",
+        "awaiting-inventory": "À espera de inventário",
+        "inventory-received": "Inventário recebido",
+        "quoted": "Orçamentado",
+        "scheduled": "Mudança marcada",
+        "in-progress": "Mudança hoje",
+        "done": "Mudança feita",
+        "lost": "Perdido"
+      },
+      "badges": {
+        "returned": "Voltou",
+        "duplicate": "Repetido?",
+        "taxIdMissing": "NIF em falta"
+      },
+      "noEmail": "sem email",
+      "tomorrow": "Amanhã",
+      "line": {
+        "inProgress": "{orderId} em curso",
+        "inProgressQuote": "{orderId} em curso · e proposta a expirar",
+        "todayDraft": "{orderId} hoje · novo pedido em rascunho",
+        "inventoryArrived": "{orderId} · inventário chegou há {hours} h",
+        "missingMeasure": {
+          "one": "{orderId} · falta medida de {count} objeto",
+          "other": "{orderId} · falta medida de {count} objetos"
+        },
+        "linkExpires": "{orderId} · link expira amanhã",
+        "noNews": {
+          "one": "{orderId} · sem notícias há {count} dia",
+          "other": "{orderId} · sem notícias há {count} dias"
+        },
+        "shareLink": "{orderId} · falta partilhar o link",
+        "scheduledTomorrow": "{orderId} · amanhã {time}",
+        "scheduledDate": "{orderId} · {date} {time}",
+        "noResources": "{orderId} · {date} · sem recursos",
+        "delivered": "{orderId} · entregue a {date}",
+        "closed": "{orderId} · fechado a {date}",
+        "lost": "{orderId} · {reason}"
+      },
+      "contact": {
+        "today": "Hoje",
+        "yesterday": "Ontem",
+        "daysAgo": {
+          "one": "há {count} dia",
+          "other": "há {count} dias"
+        },
+        "events": {
+          "move-in-progress": "mudança em curso",
+          "pickup-signed": "ata de recolha assinada",
+          "sent-inventory": "enviou o inventário",
+          "accepted-quote": "aceitou a proposta",
+          "declined-quote": "recusou a proposta",
+          "accepted-signed": "aceitou e assinou",
+          "signed-delivery": "assinou a entrega",
+          "order-created": "pedido criado"
+        }
+      },
+      "alerts": {
+        "label": "Avisos de clientes",
+        "taxId": {
+          "title": "{name} sem NIF",
+          "text": "É uma empresa e a mudança é a {date}. Sem NIF, a exportação para faturar fica incompleta.",
+          "action": "Completar dados"
+        },
+        "duplicate": {
+          "title": "Possível cliente repetido",
+          "text": "\"{first}\" e \"{second}\" têm o mesmo telemóvel.",
+          "action": "Ver e juntar"
+        },
+        "returned": {
+          "title": {
+            "one": "{count} cliente voltou",
+            "other": "{count} clientes voltaram"
+          },
+          "text": {
+            "one": "{names} já tem um segundo pedido contigo.",
+            "other": "{names} já têm um segundo pedido contigo."
+          },
+          "action": "Ver quem voltou"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filtrar",
+        "filters": {
+          "all": "Todos",
+          "negotiating": "Em negociação",
+          "scheduled": "Mudança marcada",
+          "done": "Mudança feita",
+          "companies": "Empresas",
+          "returned": "Voltaram"
+        },
+        "searchLabel": "Procurar cliente",
+        "searchPlaceholder": "Nome, telemóvel, email ou NIF",
+        "sortLabel": "Ordenar",
+        "sort": {
+          "lastContact": "Último contacto",
+          "name": "Nome",
+          "accepted": "Valor aceite",
+          "orders": "Nº de pedidos"
+        }
+      },
+      "table": {
+        "title": "Lista de clientes",
+        "client": "Cliente",
+        "contact": "Contacto",
+        "status": "Situação",
+        "orders": "Pedidos",
+        "accepted": "Aceite",
+        "lastContact": "Último contacto",
+        "actions": "Ações",
+        "viewDetail": "Ver detalhe de {name}",
+        "open": "Abrir {name}",
+        "ordersWord": {
+          "one": "pedido",
+          "other": "pedidos"
+        },
+        "doneCount": {
+          "one": "{count} feita",
+          "other": "{count} feitas"
+        },
+        "footnote": "\"Aceite\": soma das propostas aceites, com IVA. Só administradores veem valores.",
+        "footnoteNoValues": "Só administradores veem valores.",
+        "showing": "A mostrar {shown} de {total}",
+        "emptySearch": "Nenhum cliente corresponde à pesquisa.",
+        "emptyFilter": "Nenhum cliente neste filtro."
+      },
+      "panel": {
+        "previous": "Cliente anterior",
+        "next": "Cliente seguinte",
+        "position": "Cliente {position} de {total}",
+        "escHint": "Esc para fechar",
+        "close": "Fechar painel",
+        "since": "cliente desde {date}",
+        "newOrder": "Novo pedido para este cliente",
+        "copyPhone": "Copiar telemóvel",
+        "copied": "Copiado ✓",
+        "duplicate": {
+          "title": "Parece a mesma pessoa",
+          "withEmail": "com email",
+          "withoutEmail": "sem email",
+          "lostIn": "{orderId} · perdido em {month}",
+          "keep": "Ficam os dados de {name} e os pedidos das duas fichas. Os documentos já enviados não mudam.",
+          "merge": "Juntar numa ficha",
+          "different": "São pessoas diferentes"
+        },
+        "stats": {
+          "label": "Resumo",
+          "orders": "pedidos",
+          "done": "mudanças feitas",
+          "accepted": "aceite"
+        },
+        "orders": {
+          "title": "Pedidos e mudanças",
+          "viewAll": "Ver em Pedidos",
+          "notes": {
+            "quoteSent": {
+              "one": "Proposta v{version} enviada · expira em {count} dia",
+              "other": "Proposta v{version} enviada · expira em {count} dias"
+            },
+            "inProgress": "Em curso · {vehicle} · {crew}",
+            "closed": "Fechado · {amount}",
+            "draft": "Proposta em rascunho desde as {time}",
+            "shortStaffed": {
+              "one": "{when} · falta {count} pessoa na equipa",
+              "other": "{when} · faltam {count} pessoas na equipa"
+            },
+            "otherFile": "Na ficha \"{file}\" · sem resposta",
+            "scheduled": "{vehicle} · {start}–{end}",
+            "lastContact": "Último contacto: {what}"
+          }
+        },
+        "data": {
+          "title": "Dados",
+          "readOnly": "Edição disponível em breve",
+          "name": "Nome",
+          "phone": "Telemóvel",
+          "email": "Email",
+          "emailPlaceholder": "Para receber cópia das atas",
+          "type": "Tipo",
+          "taxId": "NIF",
+          "taxIdPlaceholder": "9 dígitos",
+          "taxIdMissing": "Sem NIF, a exportação para faturar fica incompleta.",
+          "emailMissing": "Sem email, não recebe cópia da proposta aceite nem das atas."
+        },
+        "addresses": {
+          "title": "Moradas usadas",
+          "orders": {
+            "one": "{count} pedido",
+            "other": "{count} pedidos"
+          },
+          "origin": "origem",
+          "destination": "destino",
+          "seeOrder": "ver no pedido"
+        },
+        "privacy": {
+          "title": "Privacidade",
+          "text": "Se o cliente pedir os dados ou que os apaguem. Atas e fotos de trabalhos fechados mantêm-se pelo prazo definido.",
+          "export": "Exportar dados",
+          "anonymize": "Anonimizar cliente"
+        }
       }
     }
   }

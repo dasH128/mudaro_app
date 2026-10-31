@@ -14,7 +14,8 @@
     "orderDetailTitle": "Detalle del pedido · Mudaro",
     "fleetTitle": "Flota · Mudaro",
     "teamTitle": "Equipo · Mudaro",
-    "fleetNewTitle": "Nuevo vehículo · Mudaro"
+    "fleetNewTitle": "Nuevo vehículo · Mudaro",
+    "clientsTitle": "Clientes · Mudaro"
   },
   "auth": {
     "layout": {
@@ -1543,6 +1544,232 @@
         },
         "solo": "¿Trabajas sin equipo? No es obligatorio para usar Mudaro.",
         "you": "administración · tú"
+      }
+    },
+    "clients": {
+      "eyebrow": "Operación",
+      "title": "Clientes",
+      "loading": "Cargando los clientes…",
+      "soon": "Disponible próximamente",
+      "newOrder": "Nuevo pedido",
+      "createHint": "Los clientes se crean al crear un pedido.",
+      "resultsCount": {
+        "one": "{count} cliente",
+        "other": "{count} clientes"
+      },
+      "summary": {
+        "total": {
+          "one": "cliente",
+          "other": "clientes"
+        },
+        "negotiating": "en negociación",
+        "scheduled": "con mudanza marcada",
+        "returned": "han vuelto"
+      },
+      "types": {
+        "private": "Particular",
+        "company": "Empresa"
+      },
+      "stages": {
+        "new": "Nuevo",
+        "awaiting-inventory": "A la espera de inventario",
+        "inventory-received": "Inventario recibido",
+        "quoted": "Presupuestado",
+        "scheduled": "Mudanza marcada",
+        "in-progress": "Mudanza hoy",
+        "done": "Mudanza hecha",
+        "lost": "Perdido"
+      },
+      "badges": {
+        "returned": "Volvió",
+        "duplicate": "¿Repetido?",
+        "taxIdMissing": "Falta el NIF"
+      },
+      "noEmail": "sin email",
+      "tomorrow": "Mañana",
+      "line": {
+        "inProgress": "{orderId} en curso",
+        "inProgressQuote": "{orderId} en curso · y propuesta a punto de caducar",
+        "todayDraft": "{orderId} hoy · nuevo pedido en borrador",
+        "inventoryArrived": "{orderId} · el inventario llegó hace {hours} h",
+        "missingMeasure": {
+          "one": "{orderId} · falta la medida de {count} objeto",
+          "other": "{orderId} · falta la medida de {count} objetos"
+        },
+        "linkExpires": "{orderId} · el enlace caduca mañana",
+        "noNews": {
+          "one": "{orderId} · sin noticias desde hace {count} día",
+          "other": "{orderId} · sin noticias desde hace {count} días"
+        },
+        "shareLink": "{orderId} · falta compartir el enlace",
+        "scheduledTomorrow": "{orderId} · mañana {time}",
+        "scheduledDate": "{orderId} · {date} {time}",
+        "noResources": "{orderId} · {date} · sin recursos",
+        "delivered": "{orderId} · entregado el {date}",
+        "closed": "{orderId} · cerrado el {date}",
+        "lost": "{orderId} · {reason}"
+      },
+      "contact": {
+        "today": "Hoy",
+        "yesterday": "Ayer",
+        "daysAgo": {
+          "one": "hace {count} día",
+          "other": "hace {count} días"
+        },
+        "events": {
+          "move-in-progress": "mudanza en curso",
+          "pickup-signed": "acta de recogida firmada",
+          "sent-inventory": "envió el inventario",
+          "accepted-quote": "aceptó la propuesta",
+          "declined-quote": "rechazó la propuesta",
+          "accepted-signed": "aceptó y firmó",
+          "signed-delivery": "firmó la entrega",
+          "order-created": "pedido creado"
+        }
+      },
+      "alerts": {
+        "label": "Avisos de clientes",
+        "taxId": {
+          "title": "{name} sin NIF",
+          "text": "Es una empresa y la mudanza es el {date}. Sin NIF, la exportación para facturar queda incompleta.",
+          "action": "Completar datos"
+        },
+        "duplicate": {
+          "title": "Posible cliente repetido",
+          "text": "\"{first}\" y \"{second}\" tienen el mismo teléfono.",
+          "action": "Ver y juntar"
+        },
+        "returned": {
+          "title": {
+            "one": "{count} cliente ha vuelto",
+            "other": "{count} clientes han vuelto"
+          },
+          "text": {
+            "one": "{names} ya tiene un segundo pedido contigo.",
+            "other": "{names} ya tienen un segundo pedido contigo."
+          },
+          "action": "Ver quién ha vuelto"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filtrar",
+        "filters": {
+          "all": "Todos",
+          "negotiating": "En negociación",
+          "scheduled": "Mudanza marcada",
+          "done": "Mudanza hecha",
+          "companies": "Empresas",
+          "returned": "Han vuelto"
+        },
+        "searchLabel": "Buscar cliente",
+        "searchPlaceholder": "Nombre, teléfono, email o NIF",
+        "sortLabel": "Ordenar",
+        "sort": {
+          "lastContact": "Último contacto",
+          "name": "Nombre",
+          "accepted": "Valor aceptado",
+          "orders": "N.º de pedidos"
+        }
+      },
+      "table": {
+        "title": "Lista de clientes",
+        "client": "Cliente",
+        "contact": "Contacto",
+        "status": "Situación",
+        "orders": "Pedidos",
+        "accepted": "Aceptado",
+        "lastContact": "Último contacto",
+        "actions": "Acciones",
+        "viewDetail": "Ver detalle de {name}",
+        "open": "Abrir {name}",
+        "ordersWord": {
+          "one": "pedido",
+          "other": "pedidos"
+        },
+        "doneCount": {
+          "one": "{count} hecha",
+          "other": "{count} hechas"
+        },
+        "footnote": "\"Aceptado\": suma de las propuestas aceptadas, con IVA. Solo los administradores ven los importes.",
+        "footnoteNoValues": "Solo los administradores ven los importes.",
+        "showing": "Mostrando {shown} de {total}",
+        "emptySearch": "Ningún cliente coincide con la búsqueda.",
+        "emptyFilter": "Ningún cliente en este filtro."
+      },
+      "panel": {
+        "previous": "Cliente anterior",
+        "next": "Cliente siguiente",
+        "position": "Cliente {position} de {total}",
+        "escHint": "Esc para cerrar",
+        "close": "Cerrar panel",
+        "since": "cliente desde {date}",
+        "newOrder": "Nuevo pedido para este cliente",
+        "copyPhone": "Copiar teléfono",
+        "copied": "Copiado ✓",
+        "duplicate": {
+          "title": "Parece la misma persona",
+          "withEmail": "con email",
+          "withoutEmail": "sin email",
+          "lostIn": "{orderId} · perdido en {month}",
+          "keep": "Se quedan los datos de {name} y los pedidos de las dos fichas. Los documentos ya enviados no cambian.",
+          "merge": "Juntar en una ficha",
+          "different": "Son personas distintas"
+        },
+        "stats": {
+          "label": "Resumen",
+          "orders": "pedidos",
+          "done": "mudanzas hechas",
+          "accepted": "aceptado"
+        },
+        "orders": {
+          "title": "Pedidos y mudanzas",
+          "viewAll": "Ver en Pedidos",
+          "notes": {
+            "quoteSent": {
+              "one": "Propuesta v{version} enviada · caduca en {count} día",
+              "other": "Propuesta v{version} enviada · caduca en {count} días"
+            },
+            "inProgress": "En curso · {vehicle} · {crew}",
+            "closed": "Cerrado · {amount}",
+            "draft": "Propuesta en borrador desde las {time}",
+            "shortStaffed": {
+              "one": "{when} · falta {count} persona en el equipo",
+              "other": "{when} · faltan {count} personas en el equipo"
+            },
+            "otherFile": "En la ficha \"{file}\" · sin respuesta",
+            "scheduled": "{vehicle} · {start}–{end}",
+            "lastContact": "Último contacto: {what}"
+          }
+        },
+        "data": {
+          "title": "Datos",
+          "readOnly": "Edición disponible próximamente",
+          "name": "Nombre",
+          "phone": "Teléfono",
+          "email": "Email",
+          "emailPlaceholder": "Para recibir copia de las actas",
+          "type": "Tipo",
+          "taxId": "NIF",
+          "taxIdPlaceholder": "9 dígitos",
+          "taxIdMissing": "Sin NIF, la exportación para facturar queda incompleta.",
+          "emailMissing": "Sin email, no recibe copia de la propuesta aceptada ni de las actas."
+        },
+        "addresses": {
+          "title": "Direcciones usadas",
+          "orders": {
+            "one": "{count} pedido",
+            "other": "{count} pedidos"
+          },
+          "origin": "origen",
+          "destination": "destino",
+          "seeOrder": "ver en el pedido"
+        },
+        "privacy": {
+          "title": "Privacidad",
+          "text": "Si el cliente pide sus datos o que se borren. Las actas y fotos de trabajos cerrados se conservan durante el plazo definido.",
+          "export": "Exportar datos",
+          "anonymize": "Anonimizar cliente"
+        }
       }
     }
   }
