@@ -52,7 +52,7 @@ export function MoveSection({ t, values, errors, set }: Props) {
   ];
 
   return (
-    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-2xl border border-line bg-surface p-6">
+    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-[22px] border border-line bg-surface p-6">
       <legend className="sr-only">{m.title}</legend>
       <SectionHeading step={2}>{m.title}</SectionHeading>
 

@@ -25,8 +25,9 @@ type Props = {
   pager: { previous: string | null; next: string | null };
 };
 
-const th = "bg-surface-head px-3.5 py-3 text-left text-[11px] font-bold uppercase tracking-[0.14em] text-muted";
-const td = "border-b border-line-soft px-3.5 py-3.5 align-middle";
+// Plantilla de columnas (estática para que Tailwind la genere)
+const COLS = "grid-cols-[minmax(190px,1fr)_minmax(200px,1.1fr)_minmax(170px,0.9fr)_minmax(300px,1.9fr)_minmax(170px,0.8fr)]";
+const cell = "flex min-w-0 flex-col gap-1 px-2.5";
 const pagerButton =
   "grid size-9 place-items-center rounded-full border border-status-off-border bg-surface text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
@@ -49,10 +50,11 @@ function PagerLink({ href, label, icon }: { href: string | null; label: string; 
 /** Vista en lista: todos los pedidos en una tabla paginada. */
 export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, pager }: Props) {
   const { columns } = t.table;
+  const head = [columns.client, columns.move, columns.status, columns.note, columns.next];
 
   return (
-    <section aria-labelledby="table" className="flex flex-col gap-3.5 rounded-[20px] border border-line bg-surface p-5">
-      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+    <section aria-labelledby="table" className="rounded-3xl border border-line bg-surface px-2 pt-5 pb-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 px-4">
         <h2 id="table" className="font-display text-[22px] font-extrabold">
           {title}
         </h2>
@@ -62,76 +64,68 @@ export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, 
         </span>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-260 border-separate border-spacing-0 text-sm">
-          <thead>
-            <tr>
-              <th scope="col" className={`${th} rounded-l-xl`}>{columns.client}</th>
-              <th scope="col" className={th}>{columns.move}</th>
-              <th scope="col" className={th}>{columns.status}</th>
-              <th scope="col" className={th}>{columns.note}</th>
-              <th scope="col" className={`${th} rounded-r-xl text-right`}>{columns.next}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="px-3.5 py-10 text-center text-muted">
-                  {emptyMessage}
-                </td>
-              </tr>
-            ) : null}
-            {rows.map((item, index) => {
-              const action = nextAction(item.note);
-              const when = describeWhen(item, t, lang, today);
-              return (
-                <tr key={item.id} className="relative hover:bg-surface-soft">
-                  <td className={td}>
-                    <span className="flex items-center gap-3">
-                      <span className="relative inline-flex">
-                        <OrderAvatar name={item.client} index={index} size="sm" />
-                        {needsAttention(item) ? (
-                          <span className="absolute -top-0.75 -right-0.75 size-3 rounded-full border-2 border-surface bg-primary" />
-                        ) : null}
-                      </span>
-                      <span className="flex flex-col">
-                        <span className="font-bold">{item.client}</span>
-                        <OrderIdLink lang={lang} id={item.id} />
-                      </span>
-                    </span>
-                  </td>
-                  <td className={td}>
-                    <div className="whitespace-nowrap font-medium">
-                      {item.from} <span aria-hidden="true">→</span>
-                      <span className="sr-only">{t.common.routeTo}</span> {item.to}
-                    </div>
-                    <div className="whitespace-nowrap text-[13px] text-muted">
-                      {when.date} · {when.countdown}
-                    </div>
-                  </td>
-                  <td className={td}>
-                    <span className="flex flex-col items-start gap-1.5">
-                      <OrderStagePill stage={item.stage} label={t.status[item.stage]} />
-                      <OrderSteps stage={item.stage} label={interpolate(t.common.step, { step: STEP_OF[item.stage] })} />
-                    </span>
-                  </td>
-                  <td className={`${td} max-w-80`}>
-                    <span className={`text-[13px] leading-[1.45] ${isWarn(item.note) ? "font-bold text-warn-foreground" : "text-muted"}`}>
-                      {describeNote(item.note, t, lang, today)}
-                    </span>
-                  </td>
-                  <td className={`${td} whitespace-nowrap text-right`}>
-                    <span className="relative inline-flex items-center gap-1">
-                      {action ? <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="row" /> : null}
-                      <OrderMoreButton t={t} id={item.id} />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div role="table" aria-labelledby="table" className="min-w-260">
+          <div role="row" className={`mb-1 grid items-center border-b border-line-soft ${COLS}`}>
+            {head.map((label, index) => (
+              <span
+                key={label}
+                role="columnheader"
+                className={`whitespace-nowrap px-2.5 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-muted ${index === 0 ? "pl-3" : ""} ${index === head.length - 1 ? "text-right" : ""}`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          {rows.length === 0 ? <p className="px-3 py-8 text-center text-sm text-muted">{emptyMessage}</p> : null}
+          {rows.map((item, index) => {
+            const action = nextAction(item.note);
+            const when = describeWhen(item, t, lang, today);
+            return (
+              // `relative`: el enlace del número de pedido se estira sobre toda la fila
+              <div key={item.id} role="row" className={`relative grid min-h-16 items-center rounded-2xl py-1 hover:bg-surface-soft ${COLS}`}>
+                <div role="cell" className="flex min-w-0 items-center gap-3 px-3 py-2.5">
+                  <span className="relative inline-flex">
+                    <OrderAvatar name={item.client} index={index} size="sm" />
+                    {needsAttention(item) ? (
+                      <span className="absolute -top-0.75 -right-0.75 size-3 rounded-full border-2 border-surface bg-primary" />
+                    ) : null}
+                  </span>
+                  <span className="flex min-w-0 flex-col">
+                    <span className="font-bold">{item.client}</span>
+                    <OrderIdLink lang={lang} id={item.id} />
+                  </span>
+                </div>
+                <div role="cell" className={cell}>
+                  <span className="text-sm font-medium">
+                    {item.from} <span aria-hidden="true">→</span>
+                    <span className="sr-only">{t.common.routeTo}</span> {item.to}
+                  </span>
+                  <span className="text-xs text-muted">
+                    {when.date} · {when.countdown}
+                  </span>
+                </div>
+                <div role="cell" className="flex min-w-0 flex-col items-start gap-1.5 px-2.5">
+                  <OrderStagePill stage={item.stage} label={t.status[item.stage]} />
+                  <OrderSteps stage={item.stage} label={interpolate(t.common.step, { step: STEP_OF[item.stage] })} />
+                </div>
+                <div role="cell" className="px-2.5">
+                  <span className={`text-[13px] leading-[1.45] ${isWarn(item.note) ? "font-bold text-warn-foreground" : "text-muted"}`}>
+                    {describeNote(item.note, t, lang, today)}
+                  </span>
+                </div>
+                <div role="cell" className="flex justify-end px-2.5">
+                  <span className="relative inline-flex items-center gap-1">
+                    {action ? <OrderActionButton lang={lang} t={t} id={item.id} action={action} size="row" /> : null}
+                    <OrderMoreButton t={t} id={item.id} />
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2.5 px-1 text-[13px] text-muted">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 pt-2.5 text-xs text-muted">
         <span>{pluralize(lang, total, t.table.showing, { shown: rows.length })}</span>
         <span className="flex gap-1.5">
           <PagerLink href={pager.previous} label={t.table.previous} icon="chevronLeft" />

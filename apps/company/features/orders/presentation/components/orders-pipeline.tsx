@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { Icon, type IconName } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
-import { interpolate } from "@/app/i18n/interpolate";
 import { ORDER_STAGES, type OrderStage } from "@/features/orders/domain/types";
 import type { OrdersFilter, OrdersView } from "../../domain/list";
 import { ordersHref } from "../orders-href";
@@ -14,7 +13,6 @@ type Props = {
   stage: OrdersFilter | undefined;
   q: string;
   view: OrdersView;
-  total: number;
   counts: Record<OrderStage, number>;
   /** Etapas con algún pedido que pide algo a la empresa: llevan un punto naranja. */
   attention: ReadonlySet<OrderStage>;
@@ -31,9 +29,8 @@ const STAGE_STYLE: Record<OrderStage, { icon: IconName; box: string }> = {
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-export function OrdersPipeline({ lang, t, stage, q, view, total, counts, attention }: Props) {
+export function OrdersPipeline({ lang, t, stage, q, view, counts, attention }: Props) {
   const { pipeline } = t;
-  const allSelected = stage === undefined;
 
   return (
     <section
@@ -44,13 +41,6 @@ export function OrdersPipeline({ lang, t, stage, q, view, total, counts, attenti
         <h2 id="pipeline" className="font-display text-[22px] font-extrabold">
           {pipeline.title}
         </h2>
-        <Link
-          href={ordersHref(lang, { q, view })}
-          aria-current={allSelected ? "true" : undefined}
-          className={`inline-flex h-9 items-center rounded-full border px-3.5 text-[13px] font-bold ${focus} ${allSelected ? "border-foreground bg-foreground text-background" : "border-field-border bg-surface text-foreground"}`}
-        >
-          {interpolate(pipeline.all, { count: total })}
-        </Link>
       </div>
       <div role="group" aria-label={pipeline.filterLabel} className="relative grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-2">
         {/* Camino punteado que une las etapas */}

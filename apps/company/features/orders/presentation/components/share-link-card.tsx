@@ -33,7 +33,7 @@ export function ShareLinkCard({ t, order, sender, company }: Props) {
   const message = buildMessage(t.message, { name, sender, company, link: t.message.linkPlaceholder, days }).join("\n");
 
   return (
-    <section aria-labelledby="share" className="flex flex-col gap-5 rounded-2xl border border-line bg-surface p-7">
+    <section aria-labelledby="share" className="flex flex-col gap-5 rounded-3xl border border-line bg-surface p-7">
       <div className="flex flex-col gap-1">
         <h2 id="share" className="font-display text-2xl font-extrabold">
           {interpolate(c.shareTitle, { name })}

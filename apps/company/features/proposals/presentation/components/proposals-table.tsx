@@ -21,89 +21,104 @@ type Props = {
   showMargin: boolean;
 };
 
-const th = "px-3.5 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted";
-const td = "px-3.5 py-4";
+// Plantillas de columnas (estáticas para que Tailwind las genere)
+const COLS_MARGIN =
+  "grid-cols-[minmax(110px,0.8fr)_minmax(190px,1.4fr)_minmax(90px,0.6fr)_minmax(110px,0.7fr)_minmax(80px,0.5fr)_minmax(160px,1.1fr)_minmax(110px,0.8fr)_44px]";
+const COLS_NO_MARGIN =
+  "grid-cols-[minmax(110px,0.8fr)_minmax(190px,1.4fr)_minmax(90px,0.6fr)_minmax(110px,0.7fr)_minmax(160px,1.1fr)_minmax(110px,0.8fr)_44px]";
+
+const cell = "flex min-w-0 flex-col gap-1 px-2.5";
+const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 export function ProposalsTable({ lang, t, rows, total, today, showMargin }: Props) {
   const { columns, list } = t;
-  const columnCount = showMargin ? 8 : 7;
+  const cols = showMargin ? COLS_MARGIN : COLS_NO_MARGIN;
+  const head = [
+    columns.proposal,
+    columns.clientRoute,
+    columns.volume,
+    columns.total,
+    ...(showMargin ? [columns.margin] : []),
+    columns.validity,
+    columns.status,
+  ];
 
   return (
-    <>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-245 border-collapse text-sm">
-          <thead>
-            <tr className="bg-surface-head text-left">
-              <th scope="col" className={`${th} rounded-l-[10px]`}>{columns.proposal}</th>
-              <th scope="col" className={th}>{columns.clientRoute}</th>
-              <th scope="col" className={th}>{columns.volume}</th>
-              <th scope="col" className={`${th} text-right`}>{columns.total}</th>
-              {showMargin ? <th scope="col" className={`${th} text-right`}>{columns.margin}</th> : null}
-              <th scope="col" className={th}>{columns.validity}</th>
-              <th scope="col" className={th}>{columns.status}</th>
-              <th scope="col" className="rounded-r-[10px] px-3.5 py-3">
-                <span className="sr-only">{columns.open}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.length === 0 ? (
-              <tr>
-                <td colSpan={columnCount} className="px-3.5 py-10 text-center text-muted">
-                  {list.empty}
-                </td>
-              </tr>
-            ) : null}
-            {rows.map((proposal) => {
-              const validity = describeValidity(deriveValidity(proposal, today), t, lang, today);
-              return (
-                // Todas las versiones de una propuesta comparten número (RF-42)
-                <tr key={`${proposal.id}-v${proposal.version}`} className="border-b border-line-soft hover:bg-surface-soft">
-                  <td className={`${td} whitespace-nowrap`}>
-                    <div className="font-bold">{proposal.id}</div>
-                    <div className="text-[13px] text-muted">
-                      v{proposal.version} · {proposal.requestId}
-                    </div>
-                  </td>
-                  <td className={td}>
-                    <div className="font-bold">{proposal.client}</div>
-                    <div className="text-[13px] text-muted">
-                      {proposal.from} <span aria-hidden="true">→</span>
-                      <span className="sr-only">{list.routeTo}</span> {proposal.to}
-                    </div>
-                  </td>
-                  <td className={`${td} whitespace-nowrap`}>{formatVolume(proposal.volumeM3)}</td>
-                  <td className={`${td} whitespace-nowrap text-right font-bold`}>{formatEuro(proposal.totalCents)}</td>
-                  {showMargin ? (
-                    <td className={`${td} whitespace-nowrap text-right`}>
-                      {proposal.marginPercent === null ? "" : formatPercent(proposal.marginPercent / 100)}
-                    </td>
-                  ) : null}
-                  <td className={td}>
-                    <div className={validity.warn ? "font-bold text-warn-foreground" : "font-medium"}>
-                      {validity.title}
-                    </div>
-                    <div className="text-[13px] text-muted">{validity.note}</div>
-                  </td>
-                  <td className={td}>
-                    <StatusPill status={proposal.status} label={t.status[proposal.status]} />
-                  </td>
-                  <td className="px-2 py-4 text-right">
-                    <Link
-                      href={localePath(lang, ROUTES.proposals.detail(proposal.id))}
-                      aria-label={interpolate(list.open, { id: proposal.id })}
-                      className="inline-grid size-9 place-items-center rounded-[10px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                    >
-                      <Icon name="chevronRight" size={18} />
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+    <section aria-labelledby="list" className="overflow-x-auto rounded-3xl border border-line bg-surface px-2 pt-2 pb-3">
+      <h2 id="list" className="sr-only">
+        {list.title}
+      </h2>
+      <div role="table" aria-labelledby="list" className={showMargin ? "min-w-225" : "min-w-205"}>
+        <div role="row" className={`mb-1 grid items-center border-b border-line-soft ${cols}`}>
+          {head.map((label, index) => (
+            <span
+              key={label}
+              role="columnheader"
+              className={`px-2.5 py-3 text-[11px] leading-tight font-bold uppercase tracking-[0.12em] text-muted ${index === 0 ? "pl-3" : ""}`}
+            >
+              {label}
+            </span>
+          ))}
+          <span role="columnheader">
+            <span className="sr-only">{columns.open}</span>
+          </span>
+        </div>
+
+        {rows.length === 0 ? <p className="px-3 py-8 text-center text-sm text-muted">{list.empty}</p> : null}
+        {rows.map((proposal) => {
+          const validity = describeValidity(deriveValidity(proposal, today), t, lang, today);
+          const href = localePath(lang, ROUTES.proposals.detail(proposal.id));
+          return (
+            // Todas las versiones de una propuesta comparten número (RF-42)
+            <div key={`${proposal.id}-v${proposal.version}`} role="row" className={`grid min-h-16 items-center rounded-2xl hover:bg-surface-soft ${cols}`}>
+              <div role="cell" className="flex min-w-0 flex-col gap-0.75 px-3 py-2.5">
+                <Link href={href} className={`w-fit text-[15px] font-bold whitespace-nowrap text-foreground hover:underline ${focusRing}`}>
+                  {proposal.id}
+                </Link>
+                <span className="text-xs text-muted">
+                  v{proposal.version} · {proposal.requestId}
+                </span>
+              </div>
+              <div role="cell" className={cell}>
+                <span className="font-bold">{proposal.client}</span>
+                <span className="text-xs text-muted">
+                  {proposal.from} <span aria-hidden="true">→</span>
+                  <span className="sr-only">{list.routeTo}</span> {proposal.to}
+                </span>
+              </div>
+              <div role="cell" className="px-2.5 text-sm whitespace-nowrap">
+                {formatVolume(proposal.volumeM3)}
+              </div>
+              <div role="cell" className="px-2.5 text-sm font-bold whitespace-nowrap">
+                {formatEuro(proposal.totalCents)}
+              </div>
+              {showMargin ? (
+                <div role="cell" className="px-2.5 text-sm whitespace-nowrap">
+                  {proposal.marginPercent === null ? "" : formatPercent(proposal.marginPercent / 100)}
+                </div>
+              ) : null}
+              <div role="cell" className={cell}>
+                <strong className={`text-sm ${validity.warn ? "text-warn-foreground" : ""}`}>{validity.title}</strong>
+                <span className="text-xs text-muted">{validity.note}</span>
+              </div>
+              <div role="cell" className={cell}>
+                <StatusPill status={proposal.status} label={t.status[proposal.status]} />
+              </div>
+              <div role="cell">
+                <Link
+                  href={href}
+                  aria-label={interpolate(list.open, { id: proposal.id })}
+                  className={`mx-1 grid size-9 place-items-center rounded-full border border-status-off-border bg-surface text-foreground ${focusRing}`}
+                >
+                  <Icon name="chevronRight" size={16} strokeWidth={2.4} />
+                </Link>
+              </div>
+            </div>
+          );
+        })}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2.5 text-[13px] text-muted">
+
+      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 pt-2.5 text-xs text-muted">
         <span>{pluralize(lang, total, list.showing, { shown: rows.length })}</span>
         {showMargin ? (
           <span className="flex items-center gap-1.5">
@@ -112,6 +127,6 @@ export function ProposalsTable({ lang, t, rows, total, today, showMargin }: Prop
           </span>
         ) : null}
       </div>
-    </>
+    </section>
   );
 }

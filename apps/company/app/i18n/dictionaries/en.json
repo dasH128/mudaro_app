@@ -15,7 +15,8 @@
     "fleetTitle": "Fleet · Mudaro",
     "teamTitle": "Team · Mudaro",
     "fleetNewTitle": "New vehicle · Mudaro",
-    "clientsTitle": "Clients · Mudaro"
+    "clientsTitle": "Clients · Mudaro",
+    "homeTitle": "Today's operations · Mudaro"
   },
   "auth": {
     "layout": {
@@ -434,6 +435,10 @@
             "title": "Send the link on the day of the first contact.",
             "body": "With the move still fresh, it's easier for the client to remember everything they're taking."
           }
+        },
+        "toolbar": {
+          "all": "All",
+          "action": "Need you"
         }
       },
       "breadcrumb": {
@@ -1770,6 +1775,150 @@
           "export": "Export data",
           "anonymize": "Anonymise client"
         }
+      }
+    },
+    "home": {
+      "eyebrow": "Mudaro · Operations centre",
+      "title": "Today's operations",
+      "subtitle": "{date} · Activity summary",
+      "notifications": {
+        "one": "Notifications, {count} new",
+        "other": "Notifications, {count} new"
+      },
+      "newOrder": "New order",
+      "stats": {
+        "jobsToday": {
+          "label": "Jobs today",
+          "hint": "vs. yesterday"
+        },
+        "inProgress": {
+          "label": "In progress",
+          "hint": "Crews out on the road now"
+        },
+        "incidents": {
+          "label": "Incidents",
+          "hint": "Awaiting review"
+        }
+      },
+      "attention": {
+        "title": "Needs your attention",
+        "text": "Incident {incident} on job {job}: {reason}.",
+        "action": "Review incident"
+      },
+      "filters": {
+        "label": "Filter by status",
+        "all": "All",
+        "in-progress": "In progress",
+        "scheduled": "Scheduled",
+        "done": "Done",
+        "unassigned": "Unassigned",
+        "searchLabel": "Search jobs",
+        "searchPlaceholder": "Client, no. or route"
+      },
+      "jobs": {
+        "title": "Today's jobs",
+        "viewSchedule": "View schedule",
+        "empty": "No job matches the filter.",
+        "columns": {
+          "id": "ID",
+          "client": "Client",
+          "route": "Route",
+          "status": "Status",
+          "vehicle": "Vehicle and crew",
+          "time": "Exp. time",
+          "open": "Open"
+        },
+        "openJob": "Open job {id}",
+        "routeTo": "to",
+        "status": {
+          "in-progress": "In progress",
+          "scheduled": "Scheduled",
+          "done": "Done",
+          "unassigned": "Unassigned"
+        },
+        "phase": {
+          "loading": "Loading",
+          "travelling": "On the way",
+          "unloading": "Unloading"
+        },
+        "kinds": {
+          "full-move": "Full move, {typology}",
+          "office-transfer": "Office transfer",
+          "private": "Private, {typology}",
+          "office-material": "Office supplies"
+        },
+        "volume": "{volume} · {trips}",
+        "trips": {
+          "one": "{count} trip",
+          "other": "{count} trips"
+        },
+        "crew": {
+          "one": "{count} crew member",
+          "other": "{count} crew members"
+        },
+        "noVehicle": "No vehicle",
+        "noCrew": "No crew"
+      },
+      "pipeline": {
+        "title": "Orders in progress",
+        "subtitle": {
+          "one": "From first contact to accepted proposal. {count} inventory awaiting a quote.",
+          "other": "From first contact to accepted proposal. {count} inventories awaiting a quote."
+        },
+        "viewOrders": "View orders",
+        "stages": {
+          "new": {
+            "label": "New",
+            "hint": "Link not sent"
+          },
+          "link-sent": {
+            "label": "Link sent",
+            "hint": "Client filling in"
+          },
+          "inventory-received": {
+            "label": "Inventory received",
+            "hint": "Ready to quote"
+          },
+          "proposal-sent": {
+            "label": "Proposal sent",
+            "hint": "Awaiting reply"
+          },
+          "won": {
+            "label": "Won",
+            "hint": "This week"
+          }
+        }
+      },
+      "fleet": {
+        "title": "Fleet summary",
+        "viewFleet": "View fleet",
+        "vehicles": "vehicles",
+        "aria": "{total} vehicles: {service} in service, {loading} loading, {available} available",
+        "legend": {
+          "service": "In service",
+          "loading": "Loading",
+          "available": "Available"
+        }
+      },
+      "activity": {
+        "title": "Recent activity",
+        "viewAll": "View all activity",
+        "events": {
+          "arrived": "Arrived at destination",
+          "crew-left": "Crew left the base",
+          "proposal-accepted": "Proposal accepted",
+          "delivery-done": "Delivery completed",
+          "incident-logged": "Incident logged"
+        },
+        "signed": "Signed by the client",
+        "crew": "{vehicle}, {crew}"
+      },
+      "shortcuts": {
+        "title": "Shortcuts",
+        "volumeCalculator": "Volume calculator",
+        "newProposal": "New proposal",
+        "pricing": "Rates and extras",
+        "sendLink": "Send link to client"
       }
     }
   }

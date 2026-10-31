@@ -21,7 +21,7 @@ export function InventorySection({ lang, t, values, errors, set }: Props) {
   const error = (code: ErrorCode | undefined) => (code ? t.errors[code] : undefined);
 
   return (
-    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-2xl border border-line bg-surface p-6">
+    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-[22px] border border-line bg-surface p-6">
       <legend className="sr-only">{i.title}</legend>
       <SectionHeading step={3}>{i.title}</SectionHeading>
 

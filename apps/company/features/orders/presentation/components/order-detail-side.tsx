@@ -9,7 +9,7 @@ import { card } from "./order-detail-parts";
 
 const panel = `${card} gap-4 p-5.5`;
 const panelTitle = "font-display text-xl font-extrabold";
-const pill = "inline-flex h-10 items-center justify-center gap-2 rounded-full border border-field-border text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const pill = "inline-flex h-10 items-center justify-center gap-2 rounded-full border border-field-border px-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 /** Datos del cliente y atajos para llamarle o escribirle. */
 export function ClientPanel({ t, client }: { t: OrdersText; client: OrderDetail["client"] }) {

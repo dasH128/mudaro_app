@@ -15,7 +15,8 @@
     "fleetTitle": "Flota · Mudaro",
     "teamTitle": "Equipo · Mudaro",
     "fleetNewTitle": "Nuevo vehículo · Mudaro",
-    "clientsTitle": "Clientes · Mudaro"
+    "clientsTitle": "Clientes · Mudaro",
+    "homeTitle": "Operaciones de hoy · Mudaro"
   },
   "auth": {
     "layout": {
@@ -434,6 +435,10 @@
             "title": "Envía el enlace el mismo día del contacto.",
             "body": "Con la mudanza aún fresca, al cliente le resulta más fácil acordarse de todo lo que se lleva."
           }
+        },
+        "toolbar": {
+          "all": "Todos",
+          "action": "Te necesitan"
         }
       },
       "breadcrumb": {
@@ -1770,6 +1775,150 @@
           "export": "Exportar datos",
           "anonymize": "Anonimizar cliente"
         }
+      }
+    },
+    "home": {
+      "eyebrow": "Mudaro · Centro de operaciones",
+      "title": "Operaciones de hoy",
+      "subtitle": "{date} · Resumen de actividad",
+      "notifications": {
+        "one": "Notificaciones, {count} nueva",
+        "other": "Notificaciones, {count} nuevas"
+      },
+      "newOrder": "Nuevo pedido",
+      "stats": {
+        "jobsToday": {
+          "label": "Trabajos hoy",
+          "hint": "respecto a ayer"
+        },
+        "inProgress": {
+          "label": "En curso",
+          "hint": "Equipos en la calle ahora"
+        },
+        "incidents": {
+          "label": "Incidencias",
+          "hint": "Pendiente de revisión"
+        }
+      },
+      "attention": {
+        "title": "Requiere tu atención",
+        "text": "Incidencia {incident} en el trabajo {job}: {reason}.",
+        "action": "Revisar incidencia"
+      },
+      "filters": {
+        "label": "Filtrar por estado",
+        "all": "Todos",
+        "in-progress": "En curso",
+        "scheduled": "Programados",
+        "done": "Concluidos",
+        "unassigned": "Sin asignar",
+        "searchLabel": "Buscar trabajo",
+        "searchPlaceholder": "Cliente, n.º o ruta"
+      },
+      "jobs": {
+        "title": "Trabajos de hoy",
+        "viewSchedule": "Ver agenda",
+        "empty": "Ningún trabajo coincide con el filtro.",
+        "columns": {
+          "id": "ID",
+          "client": "Cliente",
+          "route": "Ruta",
+          "status": "Estado",
+          "vehicle": "Vehículo y equipo",
+          "time": "Hora prev.",
+          "open": "Abrir"
+        },
+        "openJob": "Abrir trabajo {id}",
+        "routeTo": "a",
+        "status": {
+          "in-progress": "En curso",
+          "scheduled": "Programado",
+          "done": "Concluido",
+          "unassigned": "Sin asignar"
+        },
+        "phase": {
+          "loading": "Cargando",
+          "travelling": "De camino",
+          "unloading": "Descargando"
+        },
+        "kinds": {
+          "full-move": "Mudanza integral, {typology}",
+          "office-transfer": "Traslado de oficina",
+          "private": "Particular, {typology}",
+          "office-material": "Material de oficina"
+        },
+        "volume": "{volume} · {trips}",
+        "trips": {
+          "one": "{count} viaje",
+          "other": "{count} viajes"
+        },
+        "crew": {
+          "one": "{count} operario",
+          "other": "{count} operarios"
+        },
+        "noVehicle": "Sin vehículo",
+        "noCrew": "Sin equipo"
+      },
+      "pipeline": {
+        "title": "Pedidos en curso",
+        "subtitle": {
+          "one": "Del primer contacto a la propuesta aceptada. {count} inventario a la espera de presupuesto.",
+          "other": "Del primer contacto a la propuesta aceptada. {count} inventarios a la espera de presupuesto."
+        },
+        "viewOrders": "Ver pedidos",
+        "stages": {
+          "new": {
+            "label": "Nuevos",
+            "hint": "Sin enlace enviado"
+          },
+          "link-sent": {
+            "label": "Enlace enviado",
+            "hint": "Cliente rellenando"
+          },
+          "inventory-received": {
+            "label": "Inventario recibido",
+            "hint": "Listos para presupuestar"
+          },
+          "proposal-sent": {
+            "label": "Propuesta enviada",
+            "hint": "A la espera de respuesta"
+          },
+          "won": {
+            "label": "Ganados",
+            "hint": "Esta semana"
+          }
+        }
+      },
+      "fleet": {
+        "title": "Resumen de la flota",
+        "viewFleet": "Ver flota",
+        "vehicles": "vehículos",
+        "aria": "{total} vehículos: {service} en servicio, {loading} cargando, {available} disponibles",
+        "legend": {
+          "service": "En servicio",
+          "loading": "Cargando",
+          "available": "Disponibles"
+        }
+      },
+      "activity": {
+        "title": "Actividad reciente",
+        "viewAll": "Ver toda la actividad",
+        "events": {
+          "arrived": "Llegó al destino",
+          "crew-left": "El equipo salió de la base",
+          "proposal-accepted": "Propuesta aceptada",
+          "delivery-done": "Entrega concluida",
+          "incident-logged": "Incidencia registrada"
+        },
+        "signed": "Firmada por el cliente",
+        "crew": "{vehicle}, {crew}"
+      },
+      "shortcuts": {
+        "title": "Atajos",
+        "volumeCalculator": "Calculadora de volumen",
+        "newProposal": "Nueva propuesta",
+        "pricing": "Tarifas y extras",
+        "sendLink": "Enviar enlace al cliente"
       }
     }
   }

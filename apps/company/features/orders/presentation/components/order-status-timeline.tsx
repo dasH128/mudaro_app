@@ -6,7 +6,7 @@ export function OrderStatusTimeline({ t, status }: { t: CreatedText; status: Ord
   const current = ORDER_STATUSES.indexOf(status);
 
   return (
-    <section aria-labelledby="status" className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6">
+    <section aria-labelledby="status" className="flex flex-col gap-4 rounded-3xl border border-line bg-surface p-6">
       <h2 id="status" className="font-display text-xl font-extrabold">
         {t.statusTitle}
       </h2>

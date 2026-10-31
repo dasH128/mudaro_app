@@ -10,7 +10,6 @@ import { DEFAULT_SORT, countByStatus, filterProposals, isSort, isStatus, sortPro
 import { applyExpiry } from "@/features/proposals/domain/status";
 import { getProposalsOverview } from "@/features/proposals/infrastructure/proposals.repo";
 import { ProposalsHeader } from "@/features/proposals/presentation/components/proposals-header";
-import { ProposalsStats } from "@/features/proposals/presentation/components/proposals-stats";
 import { ProposalsTable } from "@/features/proposals/presentation/components/proposals-table";
 import { ProposalsToolbar } from "@/features/proposals/presentation/components/proposals-toolbar";
 import { ReadyRequests } from "@/features/proposals/presentation/components/ready-requests";
@@ -50,32 +49,18 @@ export default async function ProposalsPage({ searchParams }: PageProps<"/[lang]
 
   return (
     <>
-      <ProposalsHeader lang={locale} t={t} />
-      <ProposalsStats t={t} summary={summarize(all)} metrics={overview.metrics} />
+      <ProposalsHeader lang={locale} t={t} summary={summarize(all)} metrics={overview.metrics} />
       <ReadyRequests lang={locale} t={t} requests={overview.readyRequests} />
-
-      <section aria-labelledby="list" className="flex flex-col gap-4.5 rounded-2xl border border-line bg-surface p-6">
-        <h2 id="list" className="sr-only">
-          {t.list.title}
-        </h2>
-        <ProposalsToolbar
-          lang={locale}
-          t={t}
-          status={status}
-          q={q}
-          sort={sort}
-          total={all.length}
-          counts={countByStatus(all)}
-        />
-        <ProposalsTable
-          lang={locale}
-          t={t}
-          rows={rows}
-          total={all.length}
-          today={today}
-          showMargin={CAN_SEE_MARGIN}
-        />
-      </section>
+      <ProposalsToolbar
+        lang={locale}
+        t={t}
+        status={status}
+        q={q}
+        sort={sort}
+        total={all.length}
+        counts={countByStatus(all)}
+      />
+      <ProposalsTable lang={locale} t={t} rows={rows} total={all.length} today={today} showMargin={CAN_SEE_MARGIN} />
     </>
   );
 }

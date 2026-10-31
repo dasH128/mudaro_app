@@ -69,7 +69,7 @@ export function OrderDetailHeader({ lang, t, order }: Props) {
         {proposalHref ? (
           <Link
             href={proposalHref}
-            className={`inline-flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-[0_6px_16px_color-mix(in_srgb,var(--primary)_28%,transparent)] ${focus}`}
+            className={`inline-flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md ${focus}`}
           >
             <Icon name="filePlus" size={18} />
             {d.actions.createProposal}

@@ -1,7 +1,7 @@
 import type { InventoryMode } from "@/features/orders/domain/types";
 import { buildMessage, type NewOrderText, type OrdersText } from "../orders-text";
 
-const card = "flex flex-col gap-3.5 rounded-2xl border border-line bg-surface p-6";
+const card = "flex flex-col gap-3.5 rounded-[22px] border border-line bg-surface p-6";
 
 type MessageProps = {
   t: OrdersText;

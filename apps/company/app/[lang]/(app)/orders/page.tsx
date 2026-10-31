@@ -30,7 +30,7 @@ import { OrdersListHeader } from "@/features/orders/presentation/components/orde
 import { OrdersPipeline } from "@/features/orders/presentation/components/orders-pipeline";
 import { OrdersSidePanels } from "@/features/orders/presentation/components/orders-side-panels";
 import { OrdersTable } from "@/features/orders/presentation/components/orders-table";
-import { OrdersViewBar } from "@/features/orders/presentation/components/orders-view-bar";
+import { OrdersToolbar } from "@/features/orders/presentation/components/orders-toolbar";
 import { OrdersWelcome } from "@/features/orders/presentation/components/orders-welcome";
 import { UrgentOrders } from "@/features/orders/presentation/components/urgent-orders";
 import { ordersHref } from "@/features/orders/presentation/orders-href";
@@ -107,7 +107,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
 
   return (
     <>
-      <OrdersListHeader lang={locale} t={t} q={q} stage={stage} view={view} />
+      <OrdersListHeader lang={locale} t={t} />
       <OrdersWelcome
         lang={locale}
         t={t}
@@ -122,11 +122,20 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
         stage={stage}
         q={q}
         view={view}
-        total={all.length}
         counts={counts}
         attention={stagesWithAttention(all)}
       />
-      <OrdersViewBar lang={locale} t={t} summary={summary} view={view} stage={stage} q={q} />
+      <OrdersToolbar
+        lang={locale}
+        t={t}
+        stage={stage}
+        q={q}
+        view={view}
+        total={all.length}
+        actionCount={attention.total}
+        counts={counts}
+        summary={summary}
+      />
 
       {view === "cards" ? (
         <div className="flex flex-wrap items-start gap-6">

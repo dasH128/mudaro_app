@@ -172,6 +172,13 @@ export function formatLongDate(locale: Locale, now: Date = new Date()): string {
   );
 }
 
+/** "Sábado, 31 de outubro de 2026": día de la semana, día, mes y año largos en el idioma de la interfaz. */
+export function formatFullDate(locale: Locale, now: Date = new Date()): string {
+  return upperFirst(
+    new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: TIME_ZONE }).format(now),
+  );
+}
+
 /** Día de la semana en el idioma de la interfaz: "2026-11-20" → "Sexta-feira". */
 export function formatWeekday(locale: Locale, value: string): string {
   return upperFirst(new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: TIME_ZONE }).format(toDate(value)));

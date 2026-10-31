@@ -2,16 +2,16 @@ import Link from "next/link";
 
 import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
+import { interpolate } from "@/app/i18n/interpolate";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import type { Job, JobStatus } from "@/features/dashboard/domain/types";
+import { describeCrew, describeJobKind, describeJobStatus, describeVolume, type HomeText } from "../home-text";
 
-const PILL_BASE =
-  "inline-flex h-7 items-center whitespace-nowrap rounded-full border px-3 text-[13px] font-bold";
 const PILL: Record<JobStatus, string> = {
-  "in-progress": "border-warn-border bg-warn-surface text-warn-foreground",
-  scheduled: "border-foreground bg-surface text-foreground",
-  done: "border-success-border bg-success-surface text-success-foreground",
-  unassigned: "border-status-off-border bg-line-soft text-muted",
+  "in-progress": "bg-warn-surface text-warn-foreground",
+  scheduled: "bg-foreground text-background",
+  done: "bg-success-surface text-success-foreground",
+  unassigned: "bg-line-soft text-muted",
 };
 const DOT: Record<JobStatus, string> = {
   "in-progress": "bg-primary",
@@ -20,77 +20,89 @@ const DOT: Record<JobStatus, string> = {
   unassigned: "bg-accent",
 };
 
-const th = "px-3.5 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted";
-const td = "px-3.5 py-4";
+// Plantilla de columnas (estática para que Tailwind la genere)
+const COLS =
+  "grid-cols-[minmax(112px,0.8fr)_minmax(130px,1.1fr)_minmax(140px,1.4fr)_minmax(115px,0.9fr)_minmax(120px,1fr)_minmax(52px,0.5fr)_44px]";
+const cell = "flex min-w-0 flex-col gap-1 px-2.5";
 
-export function JobsTable({ lang, jobs }: { lang: Locale; jobs: readonly Job[] }) {
+export function JobsTable({ lang, t, jobs }: { lang: Locale; t: HomeText; jobs: readonly Job[] }) {
+  const { jobs: j } = t;
+  const head = [j.columns.id, j.columns.client, j.columns.route, j.columns.status, j.columns.vehicle, j.columns.time];
+
   return (
-    <section aria-labelledby="jobs" className="rounded-2xl border border-line bg-surface p-6">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <section aria-labelledby="jobs" className="rounded-3xl border border-line bg-surface px-2 pt-5 pb-3">
+      <div className="mb-3 flex items-center justify-between gap-3 px-4">
         <h2 id="jobs" className="font-display text-[22px] font-extrabold">
-          Trabalhos de hoje
+          {j.title}
         </h2>
-        <Link href={localePath(lang, ROUTES.schedule)} className="flex items-center gap-1.5 text-sm font-bold">
-          Ver agenda
-          <Icon name="arrowRight" size={16} />
+        <Link
+          href={localePath(lang, ROUTES.schedule)}
+          className="text-[13px] font-bold underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          {j.viewSchedule}
         </Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] border-collapse text-sm">
-          <thead>
-            <tr className="bg-surface-head text-left">
-              <th scope="col" className={`${th} rounded-l-[10px]`}>ID</th>
-              <th scope="col" className={th}>Cliente</th>
-              <th scope="col" className={th}>Rota</th>
-              <th scope="col" className={th}>Estado</th>
-              <th scope="col" className={th}>Veículo e equipa</th>
-              <th scope="col" className={th}>Hora prev.</th>
-              <th scope="col" className="rounded-r-[10px] px-3.5 py-3">
-                <span className="sr-only">Abrir</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map((job) => (
-              <tr key={job.id} className="border-b border-line-soft hover:bg-surface-soft">
-                <td className={`${td} whitespace-nowrap`}>
-                  <span className="inline-flex items-center gap-2.5 font-bold">
-                    <span className={`size-[9px] rounded-full ${DOT[job.status]}`} />
-                    {job.id}
-                  </span>
-                </td>
-                <td className={td}>
-                  <div className="font-bold">{job.client}</div>
-                  <div className="text-[13px] text-muted">{job.kind}</div>
-                </td>
-                <td className={td}>
-                  <div className="font-medium">
-                    {job.from} <span aria-hidden="true">→</span>
-                    <span className="sr-only">para</span> {job.to}
-                  </div>
-                  <div className="text-[13px] text-muted">{job.volume}</div>
-                </td>
-                <td className={td}>
-                  <span className={`${PILL_BASE} ${PILL[job.status]}`}>{job.statusLabel}</span>
-                </td>
-                <td className={td}>
-                  <div className="font-medium">{job.vehicle}</div>
-                  <div className="text-[13px] text-muted">{job.crew}</div>
-                </td>
-                <td className={`${td} whitespace-nowrap font-bold`}>{job.time}</td>
-                <td className="px-2 py-4 text-right">
-                  <Link
-                    href={localePath(lang, ROUTES.jobs.detail(job.id))}
-                    aria-label={`Abrir trabalho ${job.id}`}
-                    className="inline-grid size-9 place-items-center rounded-[10px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                  >
-                    <Icon name="chevronRight" size={18} />
-                  </Link>
-                </td>
-              </tr>
+        <div role="table" aria-labelledby="jobs" className="min-w-178">
+          <div role="row" className={`mb-1 grid items-center border-b border-line-soft ${COLS}`}>
+            {head.map((label, index) => (
+              <span
+                key={label}
+                role="columnheader"
+                className={`px-2.5 py-3 text-[11px] leading-tight font-bold uppercase tracking-[0.12em] text-muted ${index === 0 ? "pl-3" : ""}`}
+              >
+                {label}
+              </span>
             ))}
-          </tbody>
-        </table>
+            <span role="columnheader">
+              <span className="sr-only">{j.columns.open}</span>
+            </span>
+          </div>
+
+          {jobs.length === 0 ? <p className="px-3 py-8 text-center text-sm text-muted">{j.empty}</p> : null}
+          {jobs.map((job) => (
+            <div key={job.id} role="row" className={`grid min-h-16 items-center rounded-2xl hover:bg-surface-soft ${COLS}`}>
+              <div role="cell" className="flex items-center gap-2 px-3 py-2.5 text-sm font-bold whitespace-nowrap">
+                <span aria-hidden className={`size-2.25 flex-none rounded-full ${DOT[job.status]}`} />
+                {job.id}
+              </div>
+              <div role="cell" className={cell}>
+                <span className="font-bold">{job.client}</span>
+                <span className="text-xs text-muted">{describeJobKind(job, t)}</span>
+              </div>
+              <div role="cell" className={cell}>
+                <span className="text-sm font-medium">
+                  {job.from} <span aria-hidden="true">→</span>
+                  <span className="sr-only">{j.routeTo}</span> {job.to}
+                </span>
+                <span className="text-xs text-muted">{describeVolume(job, t, lang)}</span>
+              </div>
+              <div role="cell" className={cell}>
+                <span
+                  className={`inline-flex h-6.5 items-center self-start whitespace-nowrap rounded-full px-2.5 text-xs font-bold ${PILL[job.status]}`}
+                >
+                  {describeJobStatus(job, t)}
+                </span>
+              </div>
+              <div role="cell" className={cell}>
+                <span className="text-sm font-medium">{job.vehicle ?? j.noVehicle}</span>
+                <span className="text-xs text-muted">{describeCrew(job.crewCount, t, lang)}</span>
+              </div>
+              <div role="cell" className="px-2.5 text-sm font-bold whitespace-nowrap">
+                {job.time ?? "—"}
+              </div>
+              <div role="cell">
+                <Link
+                  href={localePath(lang, ROUTES.jobs.detail(job.id))}
+                  aria-label={interpolate(j.openJob, { id: job.id })}
+                  className="mx-1 grid size-9 place-items-center rounded-full border border-status-off-border bg-surface text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  <Icon name="chevronRight" size={16} strokeWidth={2.4} />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

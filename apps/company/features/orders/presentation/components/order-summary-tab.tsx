@@ -11,7 +11,7 @@ import { AddressBadge, card, ghostButton, sectionTitle } from "./order-detail-pa
 
 type Props = { lang: Locale; t: OrdersText; order: OrderDetail; today: string };
 
-const tile = "flex flex-col gap-1 rounded-2xl bg-surface-head p-4";
+const tile = "flex flex-col gap-1 rounded-[14px] bg-surface-head p-4";
 const tileValue = "font-display text-[26px] font-extrabold leading-[1.1]";
 
 function AddressCard({ t, address }: { t: OrdersText; address: DetailAddress }) {
@@ -118,7 +118,7 @@ export function OrderSummaryTab({ lang, t, order, today }: Props) {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className={`flex flex-col gap-0.5 rounded-2xl p-3.5 ${stat.warn ? "bg-warn-surface text-warn-foreground" : "bg-surface-head"}`}
+                  className={`flex flex-col gap-0.5 rounded-[14px] p-3.5 ${stat.warn ? "bg-warn-surface text-warn-foreground" : "bg-surface-head"}`}
                 >
                   <span className="font-display text-2xl font-extrabold">{stat.value}</span>
                   <span className={`text-[13px] ${stat.warn ? "font-bold" : "text-muted"}`}>{stat.label}</span>

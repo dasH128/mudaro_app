@@ -37,7 +37,7 @@ export function ClientSection({ lang, t, values, errors, set, onPhoneChange, sug
   const error = (code: ErrorCode | undefined) => (code ? t.errors[code] : undefined);
 
   return (
-    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-2xl border border-line bg-surface p-6">
+    <fieldset className="flex min-w-0 flex-col gap-4.5 rounded-[22px] border border-line bg-surface p-6">
       <legend className="sr-only">{c.title}</legend>
       <SectionHeading step={1}>{c.title}</SectionHeading>
 

@@ -127,7 +127,7 @@ export function NewOrderForm({ lang, t, sender, company }: Props) {
           <button
             type="submit"
             disabled={pending}
-            className="inline-flex h-12 items-center gap-2.5 rounded-xl bg-primary px-5.5 text-base font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-wait disabled:opacity-70"
           >
             {pending ? n.actions.creating : isLink ? n.actions.createLink : n.actions.createSelf}
             {pending ? null : <Icon name="arrowRight" size={18} strokeWidth={2.2} />}
