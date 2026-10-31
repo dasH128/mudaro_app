@@ -9,6 +9,8 @@ export function interpolate(template: string, values: Record<string, string | nu
 export type PluralForms = { one: string; other: string };
 
 export function pluralize(locale: Locale, count: number, forms: PluralForms, values: Record<string, string | number> = {}): string {
-  const form = new Intl.PluralRules(locale).select(count) === "one" ? forms.one : forms.other;
+  // El idioma "pt" es portugués de Portugal: en él, el 0 va en plural ("0 clientes"), a diferencia del de Brasil
+  const rules = new Intl.PluralRules(locale === "pt" ? "pt-PT" : locale);
+  const form = rules.select(count) === "one" ? forms.one : forms.other;
   return interpolate(form, { count, ...values });
 }

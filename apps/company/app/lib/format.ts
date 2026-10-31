@@ -179,6 +179,32 @@ export function formatFullDate(locale: Locale, now: Date = new Date()): string {
   );
 }
 
+/** Día de la semana corto: "2026-10-26" → "Seg". */
+export function formatWeekdayShort(locale: Locale, value: string): string {
+  return upperFirst(new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: TIME_ZONE }).format(toDate(value)).replace(/\.$/, ""));
+}
+
+/** "26 out – 1 nov 2026": rango de días con mes corto; el año va al final. */
+export function formatDateRange(locale: Locale, from: string, to: string): string {
+  const short = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: TIME_ZONE });
+  const year = new Intl.DateTimeFormat(NUMBER_LOCALE, { year: "numeric", timeZone: TIME_ZONE }).format(toDate(to));
+  const clean = (value: string) => value.replace(/\./g, "").replace(/\sde\s/g, " ");
+  return `${clean(short.format(toDate(from)))} – ${clean(short.format(toDate(to)))} ${year}`;
+}
+
+/** "Sexta-feira, 30 out 2026": día de la semana, día, mes corto y año. */
+export function formatDayWithYear(locale: Locale, value: string): string {
+  const when = toDate(value);
+  const weekday = upperFirst(new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: TIME_ZONE }).format(when));
+  const rest = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric", timeZone: TIME_ZONE }).format(when);
+  return `${weekday}, ${rest.replace(/\./g, "").replace(/\sde\s/g, " ")}`;
+}
+
+/** "Novembro 2026": mes largo y año. */
+export function formatMonthWithYear(locale: Locale, value: string): string {
+  return `${formatMonthName(locale, value)} ${new Intl.DateTimeFormat(NUMBER_LOCALE, { year: "numeric", timeZone: TIME_ZONE }).format(toDate(value))}`;
+}
+
 /** Día de la semana en el idioma de la interfaz: "2026-11-20" → "Sexta-feira". */
 export function formatWeekday(locale: Locale, value: string): string {
   return upperFirst(new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: TIME_ZONE }).format(toDate(value)));

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Icon } from "@/app/components/app-icon";
+import { CopyButton } from "@/app/components/copy-button";
 import { PanelEscape } from "@/app/components/panel-escape";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
@@ -10,7 +11,6 @@ import { acceptedTotal, doneCount, lacksTaxId } from "../../domain/clients";
 import type { AddressUse, Client } from "../../domain/types";
 import { describeOrderNote, lostMonth, type ClientsText } from "../clients-text";
 import { ClientAvatar, StageBadge, TypeTag, focusRing } from "./clients-parts";
-import { CopyPhoneButton } from "./copy-phone-button";
 
 type Props = {
   lang: Locale;
@@ -103,7 +103,7 @@ export function ClientPanel({ lang, t, client, today, position, total, previousH
               <Icon name="plus" size={16} strokeWidth={2.5} />
               {p.newOrder}
             </Link>
-            <CopyPhoneButton phone={formatPhone(client.phone)} label={p.copyPhone} copiedLabel={p.copied} />
+            <CopyButton text={formatPhone(client.phone)} label={p.copyPhone} copiedLabel={p.copied} />
           </div>
         </div>
 

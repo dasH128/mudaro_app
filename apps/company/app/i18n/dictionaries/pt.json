@@ -16,7 +16,8 @@
     "teamTitle": "Equipa · Mudaro",
     "fleetNewTitle": "Novo veículo · Mudaro",
     "clientsTitle": "Clientes · Mudaro",
-    "homeTitle": "Operações de hoje · Mudaro"
+    "homeTitle": "Operações de hoje · Mudaro",
+    "scheduleTitle": "Agenda · Mudaro"
   },
   "auth": {
     "layout": {
@@ -1920,6 +1921,317 @@
         "pricing": "Tarifas e extras",
         "sendLink": "Enviar link ao cliente"
       }
+    },
+    "schedule": {
+      "eyebrow": "Operação",
+      "title": "Agenda",
+      "loading": "A carregar a agenda…",
+      "soon": "Disponível em breve",
+      "stats": {
+        "week": {
+          "one": "trabalho esta semana",
+          "other": "trabalhos esta semana"
+        },
+        "inProgress": "em curso agora",
+        "unassigned": "por atribuir",
+        "toClose": {
+          "one": "entregue por fechar",
+          "other": "entregues por fechar"
+        }
+      },
+      "when": {
+        "today": "hoje",
+        "yesterday": "ontem",
+        "tomorrow": "amanhã",
+        "on": "a {date}"
+      },
+      "alerts": {
+        "label": "Precisa de ti",
+        "shortCrew": {
+          "title": "{when} · {id} com {have} de {need} pessoas",
+          "text": "{client}, {time}. Livres: {names}.",
+          "textNoFree": "{client}, {time}. Ninguém livre nesse dia.",
+          "action": "Atribuir pessoa"
+        },
+        "noResources": {
+          "title": "{id} aceite {when}, sem recursos",
+          "text": "{client}, {date}. Falta veículo e equipa.",
+          "action": "Atribuir recursos"
+        },
+        "toClose": {
+          "title": "{id} entregue, falta fechar",
+          "text": "Regista as horas e os km reais para o exportar.",
+          "action": "Fechar trabalho"
+        }
+      },
+      "toolbar": {
+        "today": "Hoje",
+        "previous": "Anterior",
+        "next": "Seguinte",
+        "show": "Mostrar",
+        "showAll": "Todos os trabalhos",
+        "showUnassigned": "Só por atribuir",
+        "showVehicles": "Veículos",
+        "showPeople": "Pessoas",
+        "view": {
+          "label": "Vista",
+          "day": "Dia",
+          "week": "Semana",
+          "month": "Mês"
+        }
+      },
+      "status": {
+        "scheduled": "Programado",
+        "in-progress": "Em curso",
+        "delivered": "Entregue",
+        "closed": "Fechado"
+      },
+      "issues": {
+        "noResources": "sem veículo nem equipa",
+        "noVehicle": "sem veículo",
+        "smallVehicle": "veículo pequeno",
+        "shortCrew": {
+          "one": "falta {count} pessoa",
+          "other": "faltam {count} pessoas"
+        }
+      },
+      "week": {
+        "label": "Semana",
+        "count": {
+          "one": "{count} trabalho",
+          "other": "{count} trabalhos"
+        },
+        "free": "livre",
+        "noVehicle": "sem veículo",
+        "aria": "{id}, {client}, {start} a {end}",
+        "openHint": "Clica para abrir",
+        "badge": {
+          "in-progress": "Em curso",
+          "delivered": "Por fechar",
+          "missing": "Falta {count}"
+        },
+        "tip": {
+          "vehicle": "Veículo: {name}",
+          "noVehicle": "por atribuir",
+          "crew": "Equipa: {names} ({have} de {need})",
+          "nobody": "ninguém",
+          "ready": "Pronto para sair",
+          "missing": {
+            "one": "Falta {count} para estar pronto",
+            "other": "Faltam {count} para estar pronto"
+          },
+          "toClose": "Entregue · falta fechar"
+        },
+        "legend": {
+          "scheduled": "Programado",
+          "in-progress": "Em curso",
+          "delivered": "Entregue, por fechar",
+          "closed": "Fechado",
+          "missing": "Faltam recursos"
+        }
+      },
+      "day": {
+        "label": "Dia por recurso",
+        "resource": "Recurso",
+        "vehicles": "Veículos",
+        "people": "Pessoas",
+        "freeAllDay": "Livre o dia todo"
+      },
+      "month": {
+        "label": "Mês",
+        "summary": {
+          "one": "{count} mudança em {month}",
+          "other": "{count} mudanças em {month}"
+        },
+        "full": {
+          "one": "{count} dia cheio",
+          "other": "{count} dias cheios"
+        },
+        "issues": {
+          "one": "{count} dia com algo por resolver",
+          "other": "{count} dias com algo por resolver"
+        },
+        "levels": {
+          "free": "Livre",
+          "room": "Com espaço",
+          "almost-full": "Quase cheio",
+          "full": "Cheio"
+        },
+        "pending": "Proposta à espera",
+        "cellAria": "{day}: {text}",
+        "cellJobs": {
+          "one": "{count} mudança",
+          "other": "{count} mudanças"
+        },
+        "cellFree": "livre",
+        "over": "Estas mudanças precisam de {needed} pessoas e a equipa tem {have}. Muda uma de dia ou reforça a equipa antes de aceitar mais.",
+        "empty": "Sem mudanças marcadas. Toda a frota e a equipa estão livres.",
+        "people": {
+          "one": "{count} pessoa",
+          "other": "{count} pessoas"
+        },
+        "freeTitle": "Ainda livre neste dia",
+        "ofVehicles": "de {count} veículos",
+        "ofPeople": "de {count} pessoas",
+        "hintProposals": "Se a proposta à espera for aceite, conta mais {count} pessoas neste dia.",
+        "hintJobs": "Estimado pelas propostas aceites. As horas exatas estão na vista Semana.",
+        "hintFree": "Bom dia para propor a quem pede datas próximas.",
+        "viewWeek": "Ver na semana",
+        "tagAccepted": "Aceite"
+      },
+      "panel": {
+        "closePanel": "Fechar painel",
+        "escHint": "Esc para fechar",
+        "volume": "{volume} ajustados",
+        "state": {
+          "missing": "O que falta",
+          "ready": "Pronto para sair"
+        },
+        "unresolved": {
+          "one": "{count} por resolver",
+          "other": "{count} por resolver"
+        },
+        "confirmed": "Tudo confirmado",
+        "checks": {
+          "vehicle": "Veículo",
+          "crew": "Equipa",
+          "parking": "Estacionamento",
+          "inventory": "Inventário",
+          "vehicleOk": "{capacity} m³ para {volume}",
+          "vehicleNone": "por atribuir",
+          "vehicleNoneSub": "a proposta contava com um veículo para {volume}",
+          "crewValue": "{have} de {need} pessoas",
+          "crewOk": "como na proposta",
+          "crewMissing": {
+            "one": "falta {count} pessoa",
+            "other": "faltam {count} pessoas"
+          },
+          "permit": "licença tratada",
+          "permitSub": "{place} · licença concedida a {date}",
+          "noParking": "não precisa",
+          "noParkingSub": "segundo o cliente",
+          "inventoryValue": "sem alterações",
+          "inventorySub": "igual à versão da proposta"
+        },
+        "live": {
+          "title": "Como está a correr",
+          "tag": "ao vivo",
+          "now": "agora",
+          "lead": "Chefe de equipa:",
+          "events": {
+            "left-base": "Saíram da base",
+            "arrived-origin": "Chegaram à origem",
+            "pickup-signed": "Ata de recolha assinada",
+            "incident": "Incidência registada",
+            "unloading": "A descarregar no destino",
+            "loading": "A carregar"
+          },
+          "vehicleCrew": "{vehicle} · {names}",
+          "photosPickup": {
+            "one": "{count} foto da recolha",
+            "other": "{count} fotos da recolha"
+          },
+          "photosSoFar": {
+            "one": "{count} foto até agora",
+            "other": "{count} fotos até agora"
+          },
+          "signedByClient": "pelo cliente",
+          "endsAt": "fim previsto às {time}"
+        },
+        "close": {
+          "title": "Falta fechar",
+          "text": "Entregue às {time} com ata assinada. Regista o real para o exportar.",
+          "hours": "Horas reais",
+          "km": "Km reais",
+          "estimated": "Estimado: {value} {unit}",
+          "noIncidents": "Sem incidências abertas",
+          "action": "Fechar trabalho"
+        },
+        "real": {
+          "title": "Estimado e real",
+          "estimated": "Estimado",
+          "real": "Real",
+          "hours": "Horas",
+          "km": "Km",
+          "price": "Preço",
+          "noExtras": "sem extras",
+          "equal": "igual",
+          "closedOn": "Fechado a {when}. Fotos e atas já não se podem alterar.",
+          "pdf": "Descarregar expediente PDF"
+        },
+        "vehicle": {
+          "title": "Veículo",
+          "swap": "Trocar",
+          "none": "Sem veículo.",
+          "needed": "A proposta contava com um veículo para {volume}.",
+          "assign": "Atribuir veículo",
+          "fits": "{capacity} m³ para {volume} · cabe numa viagem",
+          "tooSmall": "{capacity} m³ para {volume} · não chega numa viagem"
+        },
+        "crew": {
+          "title": "Equipa",
+          "count": "{have} de {need} operários",
+          "remove": "Retirar {name}",
+          "missing": {
+            "one": "Falta {count} pessoa (a proposta conta com {need})",
+            "other": "Faltam {count} pessoas (a proposta conta com {need})"
+          },
+          "freeSlot": "Lugar livre",
+          "available": "Disponíveis {when}",
+          "assign": "Atribuir",
+          "busy": "Ocupado",
+          "freeAllDay": "Livre o dia todo",
+          "busyOn": "Ocupado {start}–{end} · {id}",
+          "hint": "Cada pessoa vê o trabalho na app logo que a atribuis. Não deixamos marcar a mesma pessoa ou veículo em horas sobrepostas."
+        },
+        "client": {
+          "title": "Cliente e moradas",
+          "view": "Ver cliente",
+          "copy": "Copiar telemóvel",
+          "copied": "Copiado ✓",
+          "origin": "Origem",
+          "destination": "Destino"
+        },
+        "history": {
+          "title": "Histórico",
+          "events": {
+            "closed": "Fechado",
+            "delivery-signed": "Ata de entrega assinada",
+            "pickup-signed": "Ata de recolha assinada",
+            "quote-accepted": "Proposta aceite",
+            "crew-assigned": "Equipa atribuída",
+            "crew-named": "Equipa: {names}",
+            "permit-granted": "Licença de estacionamento concedida",
+            "job-started": "Trabalho começou"
+          }
+        },
+        "actions": {
+          "open": "Abrir trabalho",
+          "reschedule": "Reprogramar",
+          "cancel": "Cancelar trabalho"
+        }
+      },
+      "access": {
+        "floor": {
+          "house": "Moradia",
+          "ground": "rés-do-chão",
+          "number": "{count}.º andar"
+        },
+        "elevator": {
+          "none": "sem elevador",
+          "small": "elevador pequeno",
+          "normal": "elevador normal",
+          "cargo": "elevador de carga"
+        },
+        "parking": {
+          "door": "à porta",
+          "garage": "garagem",
+          "dock": "cais de carga",
+          "permit": "licença de estacionamento",
+          "walk": "{meters} m até à porta"
+        }
+      },
+      "clientsAnd": "e"
     }
   }
 }

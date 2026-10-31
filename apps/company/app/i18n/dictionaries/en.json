@@ -16,7 +16,8 @@
     "teamTitle": "Team · Mudaro",
     "fleetNewTitle": "New vehicle · Mudaro",
     "clientsTitle": "Clients · Mudaro",
-    "homeTitle": "Today's operations · Mudaro"
+    "homeTitle": "Today's operations · Mudaro",
+    "scheduleTitle": "Schedule · Mudaro"
   },
   "auth": {
     "layout": {
@@ -1920,6 +1921,317 @@
         "pricing": "Rates and extras",
         "sendLink": "Send link to client"
       }
+    },
+    "schedule": {
+      "eyebrow": "Operations",
+      "title": "Schedule",
+      "loading": "Loading the schedule…",
+      "soon": "Coming soon",
+      "stats": {
+        "week": {
+          "one": "job this week",
+          "other": "jobs this week"
+        },
+        "inProgress": "in progress now",
+        "unassigned": "to assign",
+        "toClose": {
+          "one": "delivered, to close",
+          "other": "delivered, to close"
+        }
+      },
+      "when": {
+        "today": "today",
+        "yesterday": "yesterday",
+        "tomorrow": "tomorrow",
+        "on": "on {date}"
+      },
+      "alerts": {
+        "label": "Needs you",
+        "shortCrew": {
+          "title": "{when} · {id} with {have} of {need} people",
+          "text": "{client}, {time}. Free: {names}.",
+          "textNoFree": "{client}, {time}. Nobody free that day.",
+          "action": "Assign a person"
+        },
+        "noResources": {
+          "title": "{id} accepted {when}, no resources",
+          "text": "{client}, {date}. Needs a vehicle and a crew.",
+          "action": "Assign resources"
+        },
+        "toClose": {
+          "title": "{id} delivered, still to close",
+          "text": "Enter the real hours and km to export it.",
+          "action": "Close job"
+        }
+      },
+      "toolbar": {
+        "today": "Today",
+        "previous": "Previous",
+        "next": "Next",
+        "show": "Show",
+        "showAll": "All jobs",
+        "showUnassigned": "Only unassigned",
+        "showVehicles": "Vehicles",
+        "showPeople": "People",
+        "view": {
+          "label": "View",
+          "day": "Day",
+          "week": "Week",
+          "month": "Month"
+        }
+      },
+      "status": {
+        "scheduled": "Scheduled",
+        "in-progress": "In progress",
+        "delivered": "Delivered",
+        "closed": "Closed"
+      },
+      "issues": {
+        "noResources": "no vehicle or crew",
+        "noVehicle": "no vehicle",
+        "smallVehicle": "vehicle too small",
+        "shortCrew": {
+          "one": "{count} person short",
+          "other": "{count} people short"
+        }
+      },
+      "week": {
+        "label": "Week",
+        "count": {
+          "one": "{count} job",
+          "other": "{count} jobs"
+        },
+        "free": "free",
+        "noVehicle": "no vehicle",
+        "aria": "{id}, {client}, {start} to {end}",
+        "openHint": "Click to open",
+        "badge": {
+          "in-progress": "In progress",
+          "delivered": "To close",
+          "missing": "{count} short"
+        },
+        "tip": {
+          "vehicle": "Vehicle: {name}",
+          "noVehicle": "to assign",
+          "crew": "Crew: {names} ({have} of {need})",
+          "nobody": "nobody",
+          "ready": "Ready to go",
+          "missing": {
+            "one": "{count} missing to be ready",
+            "other": "{count} missing to be ready"
+          },
+          "toClose": "Delivered · still to close"
+        },
+        "legend": {
+          "scheduled": "Scheduled",
+          "in-progress": "In progress",
+          "delivered": "Delivered, to close",
+          "closed": "Closed",
+          "missing": "Resources missing"
+        }
+      },
+      "day": {
+        "label": "Day by resource",
+        "resource": "Resource",
+        "vehicles": "Vehicles",
+        "people": "People",
+        "freeAllDay": "Free all day"
+      },
+      "month": {
+        "label": "Month",
+        "summary": {
+          "one": "{count} move in {month}",
+          "other": "{count} moves in {month}"
+        },
+        "full": {
+          "one": "{count} full day",
+          "other": "{count} full days"
+        },
+        "issues": {
+          "one": "{count} day with something to resolve",
+          "other": "{count} days with something to resolve"
+        },
+        "levels": {
+          "free": "Free",
+          "room": "Room left",
+          "almost-full": "Almost full",
+          "full": "Full"
+        },
+        "pending": "Proposal pending",
+        "cellAria": "{day}: {text}",
+        "cellJobs": {
+          "one": "{count} move",
+          "other": "{count} moves"
+        },
+        "cellFree": "free",
+        "over": "These moves need {needed} people and the team has {have}. Move one to another day or reinforce the team before accepting more.",
+        "empty": "No moves booked. The whole fleet and team are free.",
+        "people": {
+          "one": "{count} person",
+          "other": "{count} people"
+        },
+        "freeTitle": "Still free this day",
+        "ofVehicles": "of {count} vehicles",
+        "ofPeople": "of {count} people",
+        "hintProposals": "If the pending proposal is accepted, it adds {count} more people this day.",
+        "hintJobs": "Estimated from accepted proposals. Exact hours are in the Week view.",
+        "hintFree": "A good day to offer to clients asking for nearby dates.",
+        "viewWeek": "View in the week",
+        "tagAccepted": "Accepted"
+      },
+      "panel": {
+        "closePanel": "Close panel",
+        "escHint": "Esc to close",
+        "volume": "{volume} adjusted",
+        "state": {
+          "missing": "What's missing",
+          "ready": "Ready to go"
+        },
+        "unresolved": {
+          "one": "{count} to resolve",
+          "other": "{count} to resolve"
+        },
+        "confirmed": "All confirmed",
+        "checks": {
+          "vehicle": "Vehicle",
+          "crew": "Crew",
+          "parking": "Parking",
+          "inventory": "Inventory",
+          "vehicleOk": "{capacity} m³ for {volume}",
+          "vehicleNone": "to assign",
+          "vehicleNoneSub": "the proposal counted on a vehicle for {volume}",
+          "crewValue": "{have} of {need} people",
+          "crewOk": "as in the proposal",
+          "crewMissing": {
+            "one": "{count} person missing",
+            "other": "{count} people missing"
+          },
+          "permit": "permit sorted",
+          "permitSub": "{place} · permit granted on {date}",
+          "noParking": "not needed",
+          "noParkingSub": "according to the client",
+          "inventoryValue": "no changes",
+          "inventorySub": "same as the proposal version"
+        },
+        "live": {
+          "title": "How it's going",
+          "tag": "live",
+          "now": "now",
+          "lead": "Team lead:",
+          "events": {
+            "left-base": "Left the base",
+            "arrived-origin": "Arrived at the origin",
+            "pickup-signed": "Pickup report signed",
+            "incident": "Incident logged",
+            "unloading": "Unloading at the destination",
+            "loading": "Loading"
+          },
+          "vehicleCrew": "{vehicle} · {names}",
+          "photosPickup": {
+            "one": "{count} pickup photo",
+            "other": "{count} pickup photos"
+          },
+          "photosSoFar": {
+            "one": "{count} photo so far",
+            "other": "{count} photos so far"
+          },
+          "signedByClient": "by the client",
+          "endsAt": "expected to end at {time}"
+        },
+        "close": {
+          "title": "Still to close",
+          "text": "Delivered at {time} with a signed report. Enter the real figures to export it.",
+          "hours": "Real hours",
+          "km": "Real km",
+          "estimated": "Estimated: {value} {unit}",
+          "noIncidents": "No open incidents",
+          "action": "Close job"
+        },
+        "real": {
+          "title": "Estimated and real",
+          "estimated": "Estimated",
+          "real": "Real",
+          "hours": "Hours",
+          "km": "Km",
+          "price": "Price",
+          "noExtras": "no extras",
+          "equal": "same",
+          "closedOn": "Closed on {when}. Photos and reports can no longer be changed.",
+          "pdf": "Download case file PDF"
+        },
+        "vehicle": {
+          "title": "Vehicle",
+          "swap": "Swap",
+          "none": "No vehicle.",
+          "needed": "The proposal counted on a vehicle for {volume}.",
+          "assign": "Assign vehicle",
+          "fits": "{capacity} m³ for {volume} · fits in one trip",
+          "tooSmall": "{capacity} m³ for {volume} · doesn't fit in one trip"
+        },
+        "crew": {
+          "title": "Crew",
+          "count": "{have} of {need} crew members",
+          "remove": "Remove {name}",
+          "missing": {
+            "one": "{count} person missing (the proposal counts on {need})",
+            "other": "{count} people missing (the proposal counts on {need})"
+          },
+          "freeSlot": "Open spot",
+          "available": "Available {when}",
+          "assign": "Assign",
+          "busy": "Busy",
+          "freeAllDay": "Free all day",
+          "busyOn": "Busy {start}–{end} · {id}",
+          "hint": "Each person sees the job in the app as soon as you assign it. We don't let you book the same person or vehicle at overlapping times."
+        },
+        "client": {
+          "title": "Client and addresses",
+          "view": "View client",
+          "copy": "Copy phone",
+          "copied": "Copied ✓",
+          "origin": "Origin",
+          "destination": "Destination"
+        },
+        "history": {
+          "title": "History",
+          "events": {
+            "closed": "Closed",
+            "delivery-signed": "Delivery report signed",
+            "pickup-signed": "Pickup report signed",
+            "quote-accepted": "Proposal accepted",
+            "crew-assigned": "Crew assigned",
+            "crew-named": "Crew: {names}",
+            "permit-granted": "Parking permit granted",
+            "job-started": "Job started"
+          }
+        },
+        "actions": {
+          "open": "Open job",
+          "reschedule": "Reschedule",
+          "cancel": "Cancel job"
+        }
+      },
+      "access": {
+        "floor": {
+          "house": "House",
+          "ground": "ground floor",
+          "number": "floor {count}"
+        },
+        "elevator": {
+          "none": "no lift",
+          "small": "small lift",
+          "normal": "standard lift",
+          "cargo": "freight lift"
+        },
+        "parking": {
+          "door": "at the door",
+          "garage": "garage",
+          "dock": "loading dock",
+          "permit": "parking permit",
+          "walk": "{meters} m to the door"
+        }
+      },
+      "clientsAnd": "and"
     }
   }
 }
