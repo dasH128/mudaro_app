@@ -39,7 +39,8 @@ export type Vehicle = {
   kind: VehicleKind;
   plate: string;
   capacityM3: number;
-  maxLoadKg: number;
+  /** Opcional al dar de alta el vehículo. */
+  maxLoadKg: number | null;
   /** Solo lo devuelve el repo con `includeCost` (RNF-03); si no, `null`. */
   costPerKmCents: number | null;
   /** Falta el coste por km. Se sabe aunque el importe esté oculto. */
@@ -48,8 +49,8 @@ export type Vehicle = {
   /** Presente solo en vehículos inactivos. */
   inactive?: { reason: InactiveReason; since: string; by: string };
   live: LiveStatus;
-  /** Último día en que salió, aaaa-mm-dd. */
-  lastUseOn: string;
+  /** Último día en que salió, aaaa-mm-dd. `null` si todavía no ha salido (vehículo recién añadido). */
+  lastUseOn: string | null;
   /** Trabajos marcados, por orden de fecha. */
   jobs: VehicleJob[];
   /** Horas ocupadas por día, empezando hoy (7 valores). */

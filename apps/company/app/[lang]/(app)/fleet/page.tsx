@@ -22,6 +22,7 @@ import {
 import { getFleetOverview } from "@/features/fleet/infrastructure/fleet.repo";
 import { FleetAlertsSection } from "@/features/fleet/presentation/components/fleet-alerts";
 import { FleetCards } from "@/features/fleet/presentation/components/fleet-cards";
+import { FleetEmpty } from "@/features/fleet/presentation/components/fleet-empty";
 import { FleetHeader } from "@/features/fleet/presentation/components/fleet-header";
 import { FleetTable } from "@/features/fleet/presentation/components/fleet-table";
 import { FleetToolbar } from "@/features/fleet/presentation/components/fleet-toolbar";
@@ -59,7 +60,11 @@ export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fle
   // "Parado há 23 dias", los trabajos de hoy y el gráfico de la semana dependen de hoy
   await connection();
   const today = todayLisbon();
-  const { vehicles, metrics } = await getFleetOverview({ today, includeCost: CAN_SEE_COST });
+  // TODO(supabase): `?empty=1` solo sirve para ver el estado vacío con los datos de ejemplo
+  const { vehicles, metrics } = await getFleetOverview({ today, includeCost: CAN_SEE_COST, empty: first(params.empty) === "1" });
+
+  // Primer uso: la empresa aún no tiene ningún vehículo (ni activo ni inactivo)
+  if (vehicles.length === 0) return <FleetEmpty lang={locale} t={t} />;
 
   const arranged = arrangeFleet(vehicles, { filter, q, sort }, today);
 

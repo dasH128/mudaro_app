@@ -58,7 +58,7 @@ export function FleetToolbar({ lang, t, filter, q, sort, view, vehicle, counts }
 
       <div className="flex flex-wrap items-center gap-2">
         {/* GET a la misma ruta: conserva filtro, vista y vehículo abierto */}
-        <Form action={localePath(lang, ROUTES.fleet)} className="flex flex-wrap items-center gap-2">
+        <Form action={localePath(lang, ROUTES.fleet.list)} className="flex flex-wrap items-center gap-2">
           {filter !== DEFAULT_FILTER ? <input type="hidden" name="filter" value={filter} /> : null}
           {view !== "list" ? <input type="hidden" name="view" value={view} /> : null}
           {vehicle ? <input type="hidden" name="vehicle" value={vehicle} /> : null}

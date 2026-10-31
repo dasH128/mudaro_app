@@ -40,12 +40,14 @@ export function stateOf(vehicle: Vehicle): VehicleState {
   return vehicle.active ? vehicle.live.kind : "inactive";
 }
 
-export function daysSinceLastUse(vehicle: Vehicle, today: string): number {
-  return Math.max(daysBetween(vehicle.lastUseOn, today), 0);
+/** Días desde la última salida, o `null` si el vehículo aún no ha salido. */
+export function daysSinceLastUse(vehicle: Vehicle, today: string): number | null {
+  return vehicle.lastUseOn === null ? null : Math.max(daysBetween(vehicle.lastUseOn, today), 0);
 }
 
 export function isIdle(vehicle: Vehicle, today: string): boolean {
-  return vehicle.active && daysSinceLastUse(vehicle, today) >= IDLE_DAYS;
+  const days = daysSinceLastUse(vehicle, today);
+  return vehicle.active && days !== null && days >= IDLE_DAYS;
 }
 
 /** Primer trabajo marcado después de hoy. */
@@ -101,7 +103,7 @@ function compare(sort: FleetSort, today: string): (a: Vehicle, b: Vehicle) => nu
     case "capacity":
       return (a, b) => b.capacityM3 - a.capacityM3;
     case "lastUse":
-      return (a, b) => b.lastUseOn.localeCompare(a.lastUseOn);
+      return (a, b) => (b.lastUseOn ?? "").localeCompare(a.lastUseOn ?? "");
     case "nextUse":
       return (a, b) => nextOf(a).localeCompare(nextOf(b));
     case "proposals":
@@ -136,7 +138,7 @@ export type FleetAlerts = {
 export function fleetAlerts(vehicles: readonly Vehicle[], metrics: FleetMetrics, today: string): FleetAlerts {
   const idle = vehicles
     .filter((v) => isIdle(v, today))
-    .map((vehicle) => ({ vehicle, days: daysSinceLastUse(vehicle, today) }))
+    .map((vehicle) => ({ vehicle, days: daysSinceLastUse(vehicle, today) ?? 0 }))
     .sort((a, b) => b.days - a.days)[0];
   const missing = vehicles.filter((v) => v.active && v.costMissing);
   return {

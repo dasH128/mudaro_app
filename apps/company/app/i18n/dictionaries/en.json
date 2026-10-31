@@ -12,7 +12,9 @@
     "orderCreatedTitle": "Order created · Mudaro",
     "orderInventoryTitle": "Order inventory · Mudaro",
     "orderDetailTitle": "Order detail · Mudaro",
-    "fleetTitle": "Fleet · Mudaro"
+    "fleetTitle": "Fleet · Mudaro",
+    "teamTitle": "Team · Mudaro",
+    "fleetNewTitle": "New vehicle · Mudaro"
   },
   "auth": {
     "layout": {
@@ -946,7 +948,8 @@
         "daysAgo": {
           "one": "{count} day ago",
           "other": "{count} days ago"
-        }
+        },
+        "never": "no jobs yet"
       },
       "nextUse": {
         "none": "No date",
@@ -1108,6 +1111,438 @@
           "maxLoadChanged": "Maximum load: {from} → {to} kg",
           "deactivated": "Deactivated: {reason}"
         }
+      },
+      "empty": {
+        "count": "0 vehicles",
+        "eyebrow": "Let's get started",
+        "title": "Your fleet starts with the first vehicle.",
+        "text": "Add the company's vehicles to calculate capacity, estimate costs and organise the schedule.",
+        "cta": "Add the first vehicle",
+        "hint": "Start with the vehicle you use most often.",
+        "perksTitle": "What you'll be able to do",
+        "perks": {
+          "capacity": {
+            "title": "The right capacity",
+            "text": "Know how many vehicles and trips each move needs."
+          },
+          "costs": {
+            "title": "Clearer costs",
+            "text": "The cost per km goes into your proposals and shows the real margin."
+          },
+          "schedule": {
+            "title": "An organised schedule",
+            "text": "See each vehicle's availability and avoid double bookings."
+          }
+        },
+        "later": "You can add the rest of your vehicles later.",
+        "setup": {
+          "label": "Company setup",
+          "step": "Step {current} of {total}"
+        }
+      },
+      "new": {
+        "title": "New vehicle",
+        "subtitle": "Only the essentials are required. You can fill in the rest whenever you like.",
+        "breadcrumb": {
+          "label": "Breadcrumb"
+        },
+        "errorSummary": "Check the highlighted fields.",
+        "added": "{plate} added to the fleet. You can add the next one.",
+        "nav": {
+          "label": "Vehicle sections",
+          "title": "Vehicle details",
+          "type": "Type",
+          "identification": "Identification",
+          "capacity": "Capacity and costs",
+          "availability": "Availability",
+          "documents": "Documents",
+          "photos": "Photos",
+          "maintenance": "Maintenance",
+          "soon": "Soon",
+          "done": "Completed",
+          "todo": "To complete"
+        },
+        "type": {
+          "title": "What type of vehicle is it?",
+          "subtitle": "We use the type to suggest usual values. You confirm them next.",
+          "legend": "Vehicle type"
+        },
+        "types": {
+          "small-van": {
+            "label": "Small van",
+            "hint": "≈ 8 m³ · up to 1,000 kg"
+          },
+          "van": {
+            "label": "Van",
+            "hint": "≈ 12 to 15 m³"
+          },
+          "medium-truck": {
+            "label": "Medium truck",
+            "hint": "≈ 20 m³ · 3.5 t"
+          },
+          "large-truck": {
+            "label": "Large truck",
+            "hint": "≈ 25 m³ or more"
+          },
+          "other": {
+            "label": "Other",
+            "hint": "You fill in the values"
+          }
+        },
+        "vanName": "Van V-{number}",
+        "identification": {
+          "title": "Identification",
+          "plate": "Licence plate",
+          "plateFree": "Not in your fleet yet",
+          "plateTaken": "Already in your fleet",
+          "plateFormat": "Format: AA-00-AA or 00-AA-00",
+          "name": "Short name",
+          "optional": "(optional)",
+          "nameHint": "What the team calls it. Shown in the schedule and in internal proposals."
+        },
+        "capacity": {
+          "title": "Capacity and costs",
+          "subtitle": "What the calculation uses to choose vehicles and work out the cost of each move.",
+          "suggestion": "Usual values for a {type}. Check them against your vehicle.",
+          "capacity": "Capacity",
+          "maxLoad": "Max load",
+          "cost": "Cost per km",
+          "suggested": "Suggested value",
+          "privacy": "Cost per km: fuel, tolls and wear. It goes into the cost and margin of proposals and only administrators can see it."
+        },
+        "availability": {
+          "title": "Availability",
+          "label": "Available for proposals and the schedule",
+          "on": "It enters the calculation and the schedule as soon as you save.",
+          "off": "It's saved, but stays out of proposals and the schedule until you activate it."
+        },
+        "upcoming": {
+          "badge": "Soon",
+          "title": "More about the vehicle",
+          "documents": {
+            "title": "Documents and deadlines",
+            "text": "Inspection, insurance and services, with a reminder before they expire."
+          },
+          "photos": {
+            "title": "Photos",
+            "text": "So the team can recognise the vehicle and record its condition."
+          },
+          "maintenance": {
+            "title": "Maintenance and expenses",
+            "text": "Workshop, fuel and real cost per km."
+          }
+        },
+        "preview": {
+          "title": "How it appears in the fleet",
+          "newName": "New vehicle",
+          "noCapacity": "capacity to be set",
+          "noPlate": "plate to be set"
+        },
+        "impact": {
+          "title": "What changes in proposals",
+          "fleet": "Available fleet",
+          "needCapacity": "Enter the capacity to see how this vehicle fits into proposals.",
+          "active": "Moves up to {capacity} m³ can go in this vehicle alone, and larger ones get more possible combinations.",
+          "inactive": "While inactive, it doesn't count for proposals."
+        },
+        "checks": {
+          "title": "Before saving",
+          "plate": "Valid, unique plate",
+          "capacity": "Capacity entered",
+          "cost": "Cost per km entered"
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "another": "Add and create another",
+          "add": "Add to the fleet",
+          "adding": "Adding…"
+        },
+        "errors": {
+          "plateRequired": "Enter the licence plate.",
+          "plateInvalid": "Invalid plate. Use the format AA-00-AA.",
+          "plateTaken": "There's already a vehicle with this plate in your fleet.",
+          "tooLong": "Maximum 60 characters.",
+          "capacityRequired": "Enter the capacity in m³.",
+          "capacityInvalid": "Invalid capacity. Enter a value between 0.1 and 200 m³.",
+          "maxLoadInvalid": "Invalid load. Enter whole kg, up to 40,000.",
+          "costRequired": "Enter the cost per km.",
+          "costInvalid": "Invalid cost. Enter a value between €0.01 and €20 per km.",
+          "invalid": "Invalid value."
+        },
+        "draftSaved": "Draft saved automatically"
+      }
+    },
+    "team": {
+      "eyebrow": "Settings",
+      "title": "Team",
+      "loading": "Loading the team…",
+      "soon": "Coming soon",
+      "invite": "Invite person",
+      "resultsCount": {
+        "one": "{count} person",
+        "other": "{count} people"
+      },
+      "positions": {
+        "driver": "Driver",
+        "loader": "Loader",
+        "foreman": "Team lead"
+      },
+      "operatorBadge": "Crew member",
+      "summary": {
+        "active": {
+          "one": "active crew member",
+          "other": "active crew members"
+        },
+        "busy": "on a job",
+        "free": "free now",
+        "invites": {
+          "one": "invite pending",
+          "other": "invites pending"
+        }
+      },
+      "help": {
+        "label": "How the team is used in proposals",
+        "title": "How the team is used in proposals",
+        "text": "The calculation estimates how many crew members each move needs and uses the hourly cost from the rate card, the same for everyone. Only active people appear in the schedule.",
+        "app": "Crew members use the phone app: they only see the jobs you assign them, with no prices or margins."
+      },
+      "status": {
+        "busy": "On a job",
+        "free": "Free",
+        "invite": "Invite pending",
+        "inactive": "Inactive"
+      },
+      "live": {
+        "busyUntil": "until {time} · {orderId}",
+        "returned": "back at {time}",
+        "returnedOrder": "back at {time} · {orderId}",
+        "dayOff": "day off today",
+        "noJobsToday": "no jobs today"
+      },
+      "lastWork": {
+        "today": "Today",
+        "until": "until {time}",
+        "daysAgo": {
+          "one": "{count} day ago",
+          "other": "{count} days ago"
+        },
+        "noAccount": "no account yet"
+      },
+      "nextWork": {
+        "none": "No date",
+        "nothing": "nothing scheduled"
+      },
+      "invites": {
+        "byEmail": "{position} · invited by email",
+        "byLink": "{position} · invited by link",
+        "sentExpires": "sent {sent} · expires {expires}",
+        "expires": "expires {expires}",
+        "today": "today, {date}",
+        "tomorrow": "tomorrow, {date}"
+      },
+      "inactiveReasons": {
+        "left": "Left the company",
+        "other": "Inactive"
+      },
+      "since": "since {date} · {by}",
+      "inactiveNote": "No access to the app",
+      "noAccess": "No access",
+      "phoneMissing": "Phone missing",
+      "access": {
+        "today": "today, {time}",
+        "yesterday": "yesterday, {time}",
+        "daysAgo": {
+          "one": "{count} day ago",
+          "other": "{count} days ago"
+        },
+        "never": "—"
+      },
+      "alerts": {
+        "label": "Team alerts",
+        "staffing": {
+          "title": {
+            "one": "{when}, {count} person short on {orderId}",
+            "other": "{when}, {count} people short on {orderId}"
+          },
+          "text": {
+            "one": "The proposal counts on {needed} crew members and only {assigned} is assigned.",
+            "other": "The proposal counts on {needed} crew members and only {assigned} are assigned."
+          },
+          "free": "Free {when}: {names}.",
+          "tomorrow": "tomorrow",
+          "onDate": "on {date}",
+          "action": "Assign in the schedule"
+        },
+        "invite": {
+          "title": "{name}'s invite expires {when}",
+          "today": "today",
+          "tomorrow": "tomorrow",
+          "onDate": "on {date}",
+          "text": {
+            "one": "Sent {count} day ago and still no reply. Resend it or give them a call.",
+            "other": "Sent {count} days ago and still no reply. Resend it or give them a call."
+          },
+          "action": "View invite"
+        },
+        "phone": {
+          "title": "{name} has no phone number",
+          "text": "Without a number, the team can't reach this person on moving day.",
+          "action": "Complete details"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filter",
+        "filters": {
+          "all": "All",
+          "busy": "On a job",
+          "free": "Free now",
+          "invites": "Pending invites"
+        },
+        "searchLabel": "Search people",
+        "searchPlaceholder": "Name, email or phone",
+        "sortLabel": "Sort",
+        "sort": {
+          "status": "Status today",
+          "name": "Name",
+          "nextJob": "Next job",
+          "jobs30": "Jobs · 30 d"
+        },
+        "view": {
+          "label": "View mode",
+          "list": "List",
+          "cards": "Cards"
+        }
+      },
+      "table": {
+        "title": "Company crew",
+        "person": "Person",
+        "status": "Status today",
+        "lastWork": "Last job",
+        "nextWork": "Next job",
+        "jobs30": "Jobs · 30 d",
+        "actions": "Actions",
+        "viewDetail": "View details of {name}",
+        "open": "Open {name}",
+        "jobsWord": {
+          "one": "job",
+          "other": "jobs"
+        },
+        "hoursReal": "{hours} h logged",
+        "resend": "Resend invite",
+        "inactiveTitle": "Inactive · {count}",
+        "inactiveHint": "no access to the app or the schedule",
+        "footnote": "\"Jobs · 30 d\": jobs the person was assigned to in the last 30 days, and the hours actually logged.",
+        "openSchedule": "Open schedule",
+        "emptySearch": "No one matches the search.",
+        "emptyFilter": "No one in this filter."
+      },
+      "cards": {
+        "lastWork": "Last",
+        "next": "Next"
+      },
+      "admins": {
+        "title": "Administrators · {count}",
+        "hint": "They see prices, margins and the company settings",
+        "you": "You",
+        "sessionNow": "session active now",
+        "lastAccess": "last access {when}",
+        "changeRole": "Change role"
+      },
+      "panel": {
+        "previous": "Previous person",
+        "next": "Next person",
+        "position": "Person {position} of {total}",
+        "escHint": "Esc to close",
+        "close": "Close panel",
+        "on": "Active",
+        "off": "Inactive",
+        "deactivate": "Deactivate {name}",
+        "activate": "Activate {name}",
+        "pendingJobs": {
+          "one": "Has {count} job scheduled. Deactivating removes access to the app, and that job will need someone else in the schedule.",
+          "other": "Has {count} jobs scheduled. Deactivating removes access to the app, and those jobs will need someone else in the schedule."
+        },
+        "noPhone": "No phone",
+        "invite": {
+          "title": "Invite pending",
+          "meta": "Sent {sent} · expires {expires}. Joins as {position} once accepted.",
+          "linkPlaceholder": "[INVITE LINK]",
+          "copy": "Copy link",
+          "resend": "Resend invite",
+          "regenerate": "Generate new link",
+          "note": "The link opens straight into the crew member's app. Generating a new link invalidates the previous one. You can send it by WhatsApp or SMS.",
+          "cancel": "Cancel invite"
+        },
+        "week": {
+          "title": "This week",
+          "allFree": "Free all week",
+          "summary": {
+            "one": "{count} day booked · {hours} h",
+            "other": "{count} days booked · {hours} h"
+          },
+          "aria": "This week's workload: {days}",
+          "dayAria": "{day} {hours} hours",
+          "free": "free",
+          "hours": "{hours} h"
+        },
+        "jobs": {
+          "title": "Upcoming jobs",
+          "viewSchedule": "View in schedule",
+          "none": "No jobs scheduled."
+        },
+        "month": {
+          "title": "Last 30 days",
+          "jobs": "jobs",
+          "hours": "hours logged",
+          "incidents": "incidents"
+        },
+        "data": {
+          "title": "Details and access",
+          "readOnly": "Editing coming soon",
+          "phone": "Phone",
+          "phonePlaceholder": "9 digits",
+          "position": "Position",
+          "role": "Role in Mudaro",
+          "roleOperator": "Crew member · app only, no prices",
+          "phoneMissing": "Without a phone number, the team can't reach this person on moving day.",
+          "lastAccess": "Last app access:",
+          "sendLink": "Send access link"
+        },
+        "history": {
+          "title": "History",
+          "accepted": "Accepted the invite",
+          "acceptedNoPhone": "Accepted the invite without a phone number",
+          "positionChanged": "Position: {from} → {to}",
+          "deactivated": "Deactivated: {reason}",
+          "inviteSentEmail": "Invite sent by email",
+          "inviteSentLink": "Invite sent by link",
+          "inviteLinkCopied": "Invite link copied"
+        }
+      },
+      "empty": {
+        "count": "0 crew members",
+        "eyebrow": "For now, just you",
+        "title": "Who's going on the moves with you?",
+        "text": "Invite your team. Each person sees the jobs you assign them on their phone, takes the photos and collects the client's signatures.",
+        "cta": "Invite your first crew member",
+        "hint": "A name and an email or phone number is all it takes.",
+        "perksTitle": "What your team will get",
+        "perks": {
+          "phone": {
+            "title": "Jobs on the phone",
+            "text": "Addresses, times and inventory for every move, even without signal."
+          },
+          "photos": {
+            "title": "Photos and signatures",
+            "text": "Pickup and delivery are recorded with time and place."
+          },
+          "prices": {
+            "title": "No prices in sight",
+            "text": "Crew members never see rates, costs or margins."
+          }
+        },
+        "solo": "Working on your own? A team isn't required to use Mudaro.",
+        "you": "admin · you"
       }
     }
   }

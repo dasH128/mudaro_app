@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 import { Icon } from "@/app/components/app-icon";
 import { pluralize } from "@/app/i18n/interpolate";
 import type { Locale } from "@/app/i18n/config";
 import { formatCubicMeters } from "@/app/lib/format";
+import { ROUTES, localePath } from "@/app/lib/routes";
 import type { FleetSummary } from "../../domain/fleet";
 import type { FleetText } from "../fleet-text";
 import { CapacityPill } from "./capacity-pill";
@@ -36,16 +39,13 @@ export function FleetHeader({ lang, t, summary }: Props) {
           </span>
         </div>
       </div>
-      {/* Sin diseño de flujo para el alta: queda desactivado */}
-      <button
-        type="button"
-        disabled
-        title={t.soon}
-        className={`flex h-12 cursor-not-allowed items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground opacity-50 shadow-md ${focusRing}`}
+      <Link
+        href={localePath(lang, ROUTES.fleet.new)}
+        className={`flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md ${focusRing}`}
       >
         <Icon name="plus" size={18} strokeWidth={2.5} />
         {t.add}
-      </button>
+      </Link>
     </header>
   );
 }

@@ -12,7 +12,9 @@
     "orderCreatedTitle": "Pedido criado · Mudaro",
     "orderInventoryTitle": "Inventário do pedido · Mudaro",
     "orderDetailTitle": "Detalhe do pedido · Mudaro",
-    "fleetTitle": "Frota · Mudaro"
+    "fleetTitle": "Frota · Mudaro",
+    "teamTitle": "Equipa · Mudaro",
+    "fleetNewTitle": "Novo veículo · Mudaro"
   },
   "auth": {
     "layout": {
@@ -946,7 +948,8 @@
         "daysAgo": {
           "one": "há {count} dia",
           "other": "há {count} dias"
-        }
+        },
+        "never": "ainda sem trabalhos"
       },
       "nextUse": {
         "none": "Sem data",
@@ -1108,6 +1111,438 @@
           "maxLoadChanged": "Carga máxima: {from} → {to} kg",
           "deactivated": "Desativado: {reason}"
         }
+      },
+      "empty": {
+        "count": "0 veículos",
+        "eyebrow": "Vamos começar",
+        "title": "A tua frota começa com o primeiro veículo.",
+        "text": "Junta os veículos da empresa para calcular capacidades, estimar custos e organizar a agenda.",
+        "cta": "Adicionar o primeiro veículo",
+        "hint": "Começa pelo veículo que usas mais vezes.",
+        "perksTitle": "O que vais poder fazer",
+        "perks": {
+          "capacity": {
+            "title": "Capacidade certa",
+            "text": "Sabe quantos veículos e viagens cada mudança precisa."
+          },
+          "costs": {
+            "title": "Custos mais claros",
+            "text": "O custo por km entra nas tuas propostas e mostra a margem real."
+          },
+          "schedule": {
+            "title": "Agenda organizada",
+            "text": "Vê a disponibilidade de cada veículo e evita marcações em cima umas das outras."
+          }
+        },
+        "later": "Podes juntar os restantes veículos mais tarde.",
+        "setup": {
+          "label": "Configuração da empresa",
+          "step": "Passo {current} de {total}"
+        }
+      },
+      "new": {
+        "title": "Novo veículo",
+        "subtitle": "Só o essencial é obrigatório. O resto podes completar quando quiseres.",
+        "breadcrumb": {
+          "label": "Caminho"
+        },
+        "errorSummary": "Revê os campos assinalados.",
+        "added": "{plate} adicionado à frota. Podes juntar o seguinte.",
+        "nav": {
+          "label": "Secções do veículo",
+          "title": "Ficha do veículo",
+          "type": "Tipo",
+          "identification": "Identificação",
+          "capacity": "Capacidade e custos",
+          "availability": "Disponibilidade",
+          "documents": "Documentos",
+          "photos": "Fotos",
+          "maintenance": "Manutenção",
+          "soon": "Em breve",
+          "done": "Preenchida",
+          "todo": "Por preencher"
+        },
+        "type": {
+          "title": "Que tipo de veículo é?",
+          "subtitle": "Usamos o tipo para sugerir valores habituais. Confirma-os a seguir.",
+          "legend": "Tipo de veículo"
+        },
+        "types": {
+          "small-van": {
+            "label": "Furgão pequeno",
+            "hint": "≈ 8 m³ · até 1 000 kg"
+          },
+          "van": {
+            "label": "Furgão",
+            "hint": "≈ 12 a 15 m³"
+          },
+          "medium-truck": {
+            "label": "Camião médio",
+            "hint": "≈ 20 m³ · 3,5 t"
+          },
+          "large-truck": {
+            "label": "Camião grande",
+            "hint": "≈ 25 m³ ou mais"
+          },
+          "other": {
+            "label": "Outro",
+            "hint": "Preenches tu os valores"
+          }
+        },
+        "vanName": "Furgão V-{number}",
+        "identification": {
+          "title": "Identificação",
+          "plate": "Matrícula",
+          "plateFree": "Não existe na tua frota",
+          "plateTaken": "Já existe na tua frota",
+          "plateFormat": "Formato: AA-00-AA ou 00-AA-00",
+          "name": "Nome curto",
+          "optional": "(opcional)",
+          "nameHint": "Como a equipa lhe chama. Aparece na agenda e nas propostas internas."
+        },
+        "capacity": {
+          "title": "Capacidade e custos",
+          "subtitle": "É o que o cálculo usa para escolher veículos e calcular o custo de cada mudança.",
+          "suggestion": "Valores habituais para um {type}. Confirma com os dados do teu veículo.",
+          "capacity": "Capacidade",
+          "maxLoad": "Carga máxima",
+          "cost": "Custo por km",
+          "suggested": "Valor sugerido",
+          "privacy": "Custo por km: combustível, portagens e desgaste. Entra no custo e na margem das propostas e só os administradores o veem."
+        },
+        "availability": {
+          "title": "Disponibilidade",
+          "label": "Disponível para propostas e agenda",
+          "on": "Entra no cálculo e na agenda logo que guardares.",
+          "off": "Fica guardado, mas não entra em propostas nem na agenda até o ativares."
+        },
+        "upcoming": {
+          "badge": "Em breve",
+          "title": "Mais sobre o veículo",
+          "documents": {
+            "title": "Documentos e prazos",
+            "text": "Inspeção (IPO), seguro e revisões, com aviso antes de caducarem."
+          },
+          "photos": {
+            "title": "Fotos",
+            "text": "Para a equipa reconhecer o veículo e registar o estado."
+          },
+          "maintenance": {
+            "title": "Manutenção e gastos",
+            "text": "Oficina, combustível e custos reais por km."
+          }
+        },
+        "preview": {
+          "title": "Assim aparece na frota",
+          "newName": "Novo veículo",
+          "noCapacity": "capacidade por indicar",
+          "noPlate": "matrícula por indicar"
+        },
+        "impact": {
+          "title": "O que muda nas propostas",
+          "fleet": "Frota disponível",
+          "needCapacity": "Indica a capacidade para vermos como este veículo entra nas propostas.",
+          "active": "Mudanças até {capacity} m³ podem ir só neste veículo, e as maiores ganham mais combinações possíveis.",
+          "inactive": "Enquanto estiver inativo, não conta para as propostas."
+        },
+        "checks": {
+          "title": "Antes de guardar",
+          "plate": "Matrícula válida e única",
+          "capacity": "Capacidade indicada",
+          "cost": "Custo por km indicado"
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "another": "Adicionar e criar outro",
+          "add": "Adicionar à frota",
+          "adding": "A adicionar…"
+        },
+        "errors": {
+          "plateRequired": "Indica a matrícula.",
+          "plateInvalid": "Matrícula inválida. Usa o formato AA-00-AA.",
+          "plateTaken": "Já existe um veículo com esta matrícula na tua frota.",
+          "tooLong": "Máximo de 60 caracteres.",
+          "capacityRequired": "Indica a capacidade em m³.",
+          "capacityInvalid": "Capacidade inválida. Indica um valor entre 0,1 e 200 m³.",
+          "maxLoadInvalid": "Carga inválida. Indica kg inteiros, até 40 000.",
+          "costRequired": "Indica o custo por km.",
+          "costInvalid": "Custo inválido. Indica um valor entre 0,01 e 20 € por km.",
+          "invalid": "Valor inválido."
+        },
+        "draftSaved": "Rascunho guardado automaticamente"
+      }
+    },
+    "team": {
+      "eyebrow": "Configuração",
+      "title": "Equipa",
+      "loading": "A carregar a equipa…",
+      "soon": "Disponível em breve",
+      "invite": "Convidar pessoa",
+      "resultsCount": {
+        "one": "{count} pessoa",
+        "other": "{count} pessoas"
+      },
+      "positions": {
+        "driver": "Motorista",
+        "loader": "Carregador",
+        "foreman": "Chefe de equipa"
+      },
+      "operatorBadge": "Operário",
+      "summary": {
+        "active": {
+          "one": "operário ativo",
+          "other": "operários ativos"
+        },
+        "busy": "em trabalho",
+        "free": "livres agora",
+        "invites": {
+          "one": "convite por aceitar",
+          "other": "convites por aceitar"
+        }
+      },
+      "help": {
+        "label": "Como a equipa entra nas propostas",
+        "title": "Como a equipa entra nas propostas",
+        "text": "O cálculo estima quantos operários cada mudança precisa e usa o custo por hora da tarifa, igual para todos. Na agenda, só aparecem as pessoas ativas.",
+        "app": "Os operários usam a app no telemóvel: veem só os trabalhos que lhes atribuis, sem preços nem margens."
+      },
+      "status": {
+        "busy": "Em trabalho",
+        "free": "Livre",
+        "invite": "Convite pendente",
+        "inactive": "Inativo"
+      },
+      "live": {
+        "busyUntil": "até {time} · {orderId}",
+        "returned": "voltou às {time}",
+        "returnedOrder": "voltou às {time} · {orderId}",
+        "dayOff": "folga hoje",
+        "noJobsToday": "sem trabalhos hoje"
+      },
+      "lastWork": {
+        "today": "Hoje",
+        "until": "até às {time}",
+        "daysAgo": {
+          "one": "há {count} dia",
+          "other": "há {count} dias"
+        },
+        "noAccount": "ainda sem conta"
+      },
+      "nextWork": {
+        "none": "Sem data",
+        "nothing": "nada marcado"
+      },
+      "invites": {
+        "byEmail": "{position} · convidado por email",
+        "byLink": "{position} · convidado por link",
+        "sentExpires": "enviado {sent} · expira {expires}",
+        "expires": "expira {expires}",
+        "today": "hoje, {date}",
+        "tomorrow": "amanhã, {date}"
+      },
+      "inactiveReasons": {
+        "left": "Saiu da empresa",
+        "other": "Inativo"
+      },
+      "since": "desde {date} · {by}",
+      "inactiveNote": "Sem acesso à app",
+      "noAccess": "Sem acesso",
+      "phoneMissing": "Telemóvel em falta",
+      "access": {
+        "today": "hoje, {time}",
+        "yesterday": "ontem, {time}",
+        "daysAgo": {
+          "one": "há {count} dia",
+          "other": "há {count} dias"
+        },
+        "never": "—"
+      },
+      "alerts": {
+        "label": "Avisos da equipa",
+        "staffing": {
+          "title": {
+            "one": "{when} falta {count} pessoa no {orderId}",
+            "other": "{when} faltam {count} pessoas no {orderId}"
+          },
+          "text": {
+            "one": "A proposta conta com {needed} operários e só há {assigned} atribuído.",
+            "other": "A proposta conta com {needed} operários e só há {assigned} atribuídos."
+          },
+          "free": "Livres {when}: {names}.",
+          "tomorrow": "amanhã",
+          "onDate": "a {date}",
+          "action": "Atribuir na agenda"
+        },
+        "invite": {
+          "title": "O convite de {name} expira {when}",
+          "today": "hoje",
+          "tomorrow": "amanhã",
+          "onDate": "a {date}",
+          "text": {
+            "one": "Enviado há {count} dia e ainda sem resposta. Reenvia ou liga à pessoa.",
+            "other": "Enviado há {count} dias e ainda sem resposta. Reenvia ou liga à pessoa."
+          },
+          "action": "Ver convite"
+        },
+        "phone": {
+          "title": "{name} sem telemóvel",
+          "text": "Sem número, a equipa não consegue falar com a pessoa no dia da mudança.",
+          "action": "Completar dados"
+        }
+      },
+      "toolbar": {
+        "filterLabel": "Filtrar",
+        "filters": {
+          "all": "Todos",
+          "busy": "Em trabalho",
+          "free": "Livres agora",
+          "invites": "Convites pendentes"
+        },
+        "searchLabel": "Procurar pessoa",
+        "searchPlaceholder": "Nome, email ou telemóvel",
+        "sortLabel": "Ordenar",
+        "sort": {
+          "status": "Estado hoje",
+          "name": "Nome",
+          "nextJob": "Próximo trabalho",
+          "jobs30": "Trabalhos · 30 d"
+        },
+        "view": {
+          "label": "Modo de visualização",
+          "list": "Lista",
+          "cards": "Cartões"
+        }
+      },
+      "table": {
+        "title": "Operários da empresa",
+        "person": "Pessoa",
+        "status": "Estado hoje",
+        "lastWork": "Último trabalho",
+        "nextWork": "Próximo trabalho",
+        "jobs30": "Trabalhos · 30 d",
+        "actions": "Ações",
+        "viewDetail": "Ver detalhe de {name}",
+        "open": "Abrir {name}",
+        "jobsWord": {
+          "one": "trabalho",
+          "other": "trabalhos"
+        },
+        "hoursReal": "{hours} h reais",
+        "resend": "Reenviar convite",
+        "inactiveTitle": "Inativos · {count}",
+        "inactiveHint": "não entram na app nem na agenda",
+        "footnote": "\"Trabalhos · 30 d\": trabalhos em que a pessoa esteve atribuída nos últimos 30 dias e horas reais registadas.",
+        "openSchedule": "Abrir agenda",
+        "emptySearch": "Nenhuma pessoa corresponde à pesquisa.",
+        "emptyFilter": "Ninguém neste filtro."
+      },
+      "cards": {
+        "lastWork": "Último",
+        "next": "Próximo"
+      },
+      "admins": {
+        "title": "Administradores · {count}",
+        "hint": "Veem preços, margens e a configuração da empresa",
+        "you": "Tu",
+        "sessionNow": "sessão ativa agora",
+        "lastAccess": "último acesso {when}",
+        "changeRole": "Mudar papel"
+      },
+      "panel": {
+        "previous": "Pessoa anterior",
+        "next": "Pessoa seguinte",
+        "position": "Pessoa {position} de {total}",
+        "escHint": "Esc para fechar",
+        "close": "Fechar painel",
+        "on": "Ativo",
+        "off": "Inativo",
+        "deactivate": "Desativar {name}",
+        "activate": "Ativar {name}",
+        "pendingJobs": {
+          "one": "Tem {count} trabalho marcado. Ao desativar, perde o acesso à app e esse trabalho fica a precisar de outra pessoa na agenda.",
+          "other": "Tem {count} trabalhos marcados. Ao desativar, perde o acesso à app e esses trabalhos ficam a precisar de outra pessoa na agenda."
+        },
+        "noPhone": "Sem telemóvel",
+        "invite": {
+          "title": "Convite por aceitar",
+          "meta": "Enviado a {sent} · expira {expires}. Fica como {position} ao aceitar.",
+          "linkPlaceholder": "[LINK DO CONVITE]",
+          "copy": "Copiar link",
+          "resend": "Reenviar convite",
+          "regenerate": "Gerar link novo",
+          "note": "O link entra direto na app do operário. Gerar um link novo invalida o anterior. Podes enviá-lo por WhatsApp ou SMS.",
+          "cancel": "Cancelar convite"
+        },
+        "week": {
+          "title": "Esta semana",
+          "allFree": "Livre a semana toda",
+          "summary": {
+            "one": "{count} dia ocupado · {hours} h",
+            "other": "{count} dias ocupados · {hours} h"
+          },
+          "aria": "Ocupação desta semana: {days}",
+          "dayAria": "{day} {hours} horas",
+          "free": "livre",
+          "hours": "{hours} h"
+        },
+        "jobs": {
+          "title": "Próximos trabalhos",
+          "viewSchedule": "Ver na agenda",
+          "none": "Sem trabalhos marcados."
+        },
+        "month": {
+          "title": "Últimos 30 dias",
+          "jobs": "trabalhos",
+          "hours": "horas reais",
+          "incidents": "incidências"
+        },
+        "data": {
+          "title": "Dados e acesso",
+          "readOnly": "Edição disponível em breve",
+          "phone": "Telemóvel",
+          "phonePlaceholder": "9 dígitos",
+          "position": "Função",
+          "role": "Papel na Mudaro",
+          "roleOperator": "Operário · só a app, sem preços",
+          "phoneMissing": "Sem telemóvel, a equipa não consegue falar com a pessoa no dia da mudança.",
+          "lastAccess": "Último acesso à app:",
+          "sendLink": "Enviar link de acesso"
+        },
+        "history": {
+          "title": "Histórico",
+          "accepted": "Aceitou o convite",
+          "acceptedNoPhone": "Aceitou o convite sem telemóvel",
+          "positionChanged": "Função: {from} → {to}",
+          "deactivated": "Desativado: {reason}",
+          "inviteSentEmail": "Convite enviado por email",
+          "inviteSentLink": "Convite enviado por link",
+          "inviteLinkCopied": "Link de convite copiado"
+        }
+      },
+      "empty": {
+        "count": "0 operários",
+        "eyebrow": "Por agora, só tu",
+        "title": "Quem vai contigo às mudanças?",
+        "text": "Convida a tua equipa. Cada pessoa vê no telemóvel os trabalhos que lhe atribuis, tira as fotos e recolhe as assinaturas do cliente.",
+        "cta": "Convidar o primeiro operário",
+        "hint": "Basta o nome e o email ou o telemóvel.",
+        "perksTitle": "O que a tua equipa vai ter",
+        "perks": {
+          "phone": {
+            "title": "Trabalhos no telemóvel",
+            "text": "Moradas, horas e inventário de cada mudança, mesmo sem rede."
+          },
+          "photos": {
+            "title": "Fotos e assinaturas",
+            "text": "Recolha e entrega ficam registadas com hora e local."
+          },
+          "prices": {
+            "title": "Sem preços à vista",
+            "text": "Os operários não veem tarifas, custos nem margens."
+          }
+        },
+        "solo": "Trabalhas sem equipa? Não é obrigatória para usar a Mudaro.",
+        "you": "administração · tu"
       }
     }
   }

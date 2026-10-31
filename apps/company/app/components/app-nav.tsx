@@ -18,7 +18,7 @@ const NAV: readonly NavItem[] = [
   { key: "proposals", icon: "proposals", route: ROUTES.proposals.list },
   { key: "schedule", icon: "calendar", route: ROUTES.schedule },
   { key: "clients", icon: "clients", route: ROUTES.clients },
-  { key: "fleet", icon: "truck", route: ROUTES.fleet },
+  { key: "fleet", icon: "truck", route: ROUTES.fleet.list },
   { key: "team", icon: "team", route: ROUTES.team },
   { key: "pricing", icon: "tags", route: ROUTES.pricing },
   { key: "reports", icon: "reports", route: ROUTES.reports },

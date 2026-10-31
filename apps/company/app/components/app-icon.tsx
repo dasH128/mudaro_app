@@ -59,6 +59,21 @@ const ICONS = {
       <path d="M5 21a7 7 0 0 1 14 0" />
     </>
   ),
+  userPlus: (
+    <>
+      <circle cx="9" cy="8" r="4" />
+      <path d="M2 21a7 7 0 0 1 14 0" />
+      <path d="M19 8v6" />
+      <path d="M16 11h6" />
+    </>
+  ),
+  userMinus: (
+    <>
+      <circle cx="9" cy="8" r="4" />
+      <path d="M2 21a7 7 0 0 1 14 0" />
+      <path d="M16 11h6" />
+    </>
+  ),
   tags: (
     <>
       <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" />

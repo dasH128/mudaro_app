@@ -28,7 +28,10 @@ export const ROUTES = {
   },
   schedule: "/schedule",
   clients: "/clients",
-  fleet: "/fleet",
+  fleet: {
+    list: "/fleet",
+    new: "/fleet/new",
+  },
   team: "/team",
   pricing: "/pricing",
   reports: "/reports",

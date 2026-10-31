@@ -43,6 +43,7 @@ export type DateText = { title: string; sub: string };
 /** "Hoje · em uso agora", "22/10 · há 8 dias". */
 export function describeLastUse(vehicle: Vehicle, t: FleetText, locale: Locale, today: string): DateText {
   const days = daysSinceLastUse(vehicle, today);
+  if (days === null || vehicle.lastUseOn === null) return { title: "—", sub: t.lastUse.never };
   if (days === 0) {
     const { live } = vehicle;
     const sub =

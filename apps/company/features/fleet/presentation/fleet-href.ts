@@ -27,6 +27,6 @@ export function fleetHref(lang: Locale, { filter, q, sort, view, vehicle }: Flee
   if (view && view !== DEFAULT_VIEW) params.set("view", view);
   if (vehicle) params.set("vehicle", vehicle);
   const query = params.toString();
-  const path = localePath(lang, ROUTES.fleet);
+  const path = localePath(lang, ROUTES.fleet.list);
   return query ? `${path}?${query}` : path;
 }

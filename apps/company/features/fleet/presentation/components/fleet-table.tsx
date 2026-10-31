@@ -72,7 +72,7 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
 
       <div role="cell" className={`${cell} ${muted}`}>
         <strong className="text-[15px]">{formatCubicMeters(vehicle.capacityM3)}</strong>
-        <span className="text-xs text-muted">{formatInteger(vehicle.maxLoadKg)} kg</span>
+        <span className="text-xs text-muted">{vehicle.maxLoadKg === null ? "—" : `${formatInteger(vehicle.maxLoadKg)} kg`}</span>
       </div>
 
       {compact ? null : (

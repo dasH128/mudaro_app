@@ -15,7 +15,7 @@ import {
 import { acceptanceRate, addDays, isIdle } from "../../domain/fleet";
 import type { Vehicle } from "../../domain/types";
 import { describeEvent, describeStatus, type FleetText } from "../fleet-text";
-import { PanelEscape } from "./panel-escape";
+import { PanelEscape } from "@/app/components/panel-escape";
 import { StatusPill, VehicleTile, focusRing } from "./fleet-parts";
 
 type Props = {
@@ -265,7 +265,7 @@ export function VehiclePanel({
             <label className={label}>
               {p.data.maxLoad}
               <span className="flex h-10.5 items-center overflow-hidden rounded-xl border border-field-border font-normal">
-                <input readOnly value={formatInteger(vehicle.maxLoadKg)} className={readonlyField} />
+                <input readOnly value={vehicle.maxLoadKg === null ? "" : formatInteger(vehicle.maxLoadKg)} className={readonlyField} />
                 <span className="px-2.5 text-[13px] text-muted">kg</span>
               </span>
             </label>

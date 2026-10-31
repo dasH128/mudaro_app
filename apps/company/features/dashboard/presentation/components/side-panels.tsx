@@ -30,7 +30,7 @@ export function FleetSummary({ lang }: { lang: Locale }) {
           <Icon name="truck" size={22} />
           Resumo da frota
         </h2>
-        <Link href={localePath(lang, ROUTES.fleet)} className="text-[13px] font-bold">
+        <Link href={localePath(lang, ROUTES.fleet.list)} className="text-[13px] font-bold">
           Ver frota
         </Link>
       </div>
