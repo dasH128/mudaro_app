@@ -1,7 +1,30 @@
+import { Contact } from "./components/contact";
+import { Features } from "./components/features";
+import { Footer } from "./components/footer";
+import { Header, TopBar } from "./components/header";
+import { Hero } from "./components/hero";
+import { HowItWorks } from "./components/how-it-works";
+import { Pilot } from "./components/pilot";
+import { Problem } from "./components/problem";
+import { Tape } from "./components/tape";
+import { Trust } from "./components/trust";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-3xl font-semibold">Mudaro</h1>
-    </main>
+    <>
+      <TopBar />
+      <Header />
+      <main>
+        <Hero />
+        <Tape />
+        <Problem />
+        <HowItWorks />
+        <Features />
+        <Trust />
+        <Pilot />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }

@@ -1,1 +1,42 @@
 @import "tailwindcss";
+@import "@mudaro/ui/tokens.css";
+
+/* Tailwind v4 no escanea otros paquetes del workspace por defecto */
+@source "../../../packages/ui/src";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Cinta que se desplaza despacio; se detiene si el usuario pide menos movimiento */
+@keyframes tape-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.tape-track {
+  animation: tape-slide 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .tape-track { animation: none; }
+}
+
+/* Trama de puntos de fondo: recuerda al cartón perforado, solo con tokens */
+.bg-dots {
+  background-image: radial-gradient(color-mix(in srgb, var(--foreground) 18%, transparent) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+/* Línea discontinua que une los pasos de "Como funciona" */
+.step-line {
+  background-image: linear-gradient(to right, var(--foreground) 50%, transparent 50%);
+  background-size: 12px 2px;
+  opacity: 0.35;
+}
