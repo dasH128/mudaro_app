@@ -10,10 +10,13 @@ import { IDLE, type ConfirmInvitationState } from "@/features/auth/application/a
 type ConfirmFormProps = {
   lang: Locale;
   tokenHash: string;
+  type: "invite" | "recovery";
+  /** Texto del botón: cambia entre invitación y recuperación. */
+  acceptLabel: string;
   t: Dictionary["auth"]["confirm"];
 };
 
-export function ConfirmForm({ lang, tokenHash, t }: ConfirmFormProps) {
+export function ConfirmForm({ lang, tokenHash, type, acceptLabel, t }: ConfirmFormProps) {
   const [state, formAction, pending] = useActionState<ConfirmInvitationState, FormData>(
     confirmInvitationAction,
     IDLE,
@@ -23,6 +26,7 @@ export function ConfirmForm({ lang, tokenHash, t }: ConfirmFormProps) {
     <form action={formAction} className="space-y-5">
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="token_hash" value={tokenHash} />
+      <input type="hidden" name="type" value={type} />
 
       {state.status === "error" && (
         <p
@@ -38,7 +42,7 @@ export function ConfirmForm({ lang, tokenHash, t }: ConfirmFormProps) {
         disabled={pending}
         className="w-full rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:translate-y-0 disabled:opacity-60"
       >
-        {pending ? t.accepting : t.accept}
+        {pending ? t.accepting : acceptLabel}
       </button>
     </form>
   );

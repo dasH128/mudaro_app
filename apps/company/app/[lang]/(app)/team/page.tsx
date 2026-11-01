@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { pluralize } from "@/app/i18n/interpolate";
 import { todayLisbon } from "@/app/lib/format";
@@ -39,11 +40,11 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, la página comprueba sesión y rol en servidor
 // (solo administradores gestionan el equipo).
 export default async function TeamPage({ searchParams }: PageProps<"/[lang]/team">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.team;
 

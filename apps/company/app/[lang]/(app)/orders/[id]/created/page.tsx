@@ -5,10 +5,11 @@ import { notFound, redirect } from "next/navigation";
 
 import { Icon } from "@/app/components/app-icon";
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
+import { firstNameOf } from "@/features/auth/domain/session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { interpolate } from "@/app/i18n/interpolate";
 import { formatDate } from "@/app/lib/format";
-import { MOCK_COMPANY_SHORT_NAME, MOCK_USER } from "@/app/lib/mock-session";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { getOrder } from "@/features/orders/infrastructure/orders.repo";
 import { OrderBreadcrumb } from "@/features/orders/presentation/components/order-breadcrumb";
@@ -23,10 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
 const linkClass =
   "text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Con datos reales, getOrder solo devuelve pedidos de la empresa (RLS).
+// Con datos reales, getOrder solo devuelve pedidos de la empresa (RLS).
 export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/orders/[id]/created">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  const session = await requireCompanySession(locale);
 
   const { id } = await params;
   const order = await getOrder(id);
@@ -57,7 +59,7 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
         </div>
       </header>
 
-      <ShareLinkCard lang={locale} t={t} order={order} sender={MOCK_USER.name} company={MOCK_COMPANY_SHORT_NAME} />
+      <ShareLinkCard lang={locale} t={t} order={order} sender={firstNameOf(session.name)} company={session.companyName} />
       <OrderStatusTimeline t={t.created} status={order.status} />
 
       <div className="flex flex-wrap items-center justify-between gap-3">

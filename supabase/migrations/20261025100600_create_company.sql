@@ -1,9 +1,7 @@
 -- Paso 5 · Alta de empresa desde la Edge Function `create-company` (RF-65, RF-67).
 --
--- Con Supabase Auth (architecture-system.md), el enlace del convite lo genera Auth,
--- así que el hash del token propio deja de ser obligatorio. Se conserva la columna
--- por si más adelante se usa para operarios con token propio.
-alter table public.invitations alter column token_hash drop not null;
+-- Con Supabase Auth (architecture-system.md), el enlace del convite y su token los genera Auth,
+-- así que `invitations` no guarda ningún token: solo el estado de la invitación.
 
 -- Crea empresa, datos internos, convite pendiente y su registro de auditoría en una sola transacción.
 -- El email del administrador lo envía la Edge Function después (con sent_at a null hasta entonces).

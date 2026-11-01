@@ -7,6 +7,8 @@ import { LOCALES } from "@/app/i18n/config";
 export const confirmInvitationSchema = z.object({
   lang: z.enum(LOCALES),
   tokenHash: z.string().min(1).max(256),
+  // Invitación de empresa o recuperación de contraseña: ambos canjean el token del email.
+  type: z.enum(["invite", "recovery"]),
 });
 
 export const setPasswordSchema = z

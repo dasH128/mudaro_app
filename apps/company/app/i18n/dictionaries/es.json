@@ -17,7 +17,8 @@
     "fleetNewTitle": "Nuevo vehículo · Mudaro",
     "clientsTitle": "Clientes · Mudaro",
     "homeTitle": "Operaciones de hoy · Mudaro",
-    "scheduleTitle": "Agenda · Mudaro"
+    "scheduleTitle": "Agenda · Mudaro",
+    "forgotPasswordTitle": "Recuperar contraseña · Mudaro"
   },
   "auth": {
     "layout": {
@@ -48,7 +49,13 @@
       "hidePassword": "Ocultar contraseña",
       "submit": "Entrar",
       "noAccount": "¿Primera vez por aquí?",
-      "createAccount": "Crea tu cuenta"
+      "createAccount": "Crea tu cuenta",
+      "errors": {
+        "invalid": "Correo o contraseña incorrectos.",
+        "noAccess": "Esta cuenta no tiene acceso al panel de la empresa. Habla con el equipo de Mudaro.",
+        "failed": "No hemos podido iniciar sesión. Inténtalo de nuevo."
+      },
+      "submitting": "Entrando…"
     },
     "confirm": {
       "eyebrow": "Invitación",
@@ -61,6 +68,12 @@
       "errors": {
         "invalid": "Esta invitación ya no es válida. Pide una nueva al equipo de Mudaro.",
         "failed": "No hemos podido aceptar la invitación. Inténtalo de nuevo."
+      },
+      "recovery": {
+        "eyebrow": "Recuperar acceso",
+        "title": "Define una contraseña nueva",
+        "subtitle": "Confirma que has sido tú quien ha pedido la recuperación para elegir una contraseña nueva.",
+        "accept": "Continuar"
       }
     },
     "setPassword": {
@@ -76,6 +89,22 @@
         "weak": "La contraseña debe tener al menos 8 caracteres.",
         "mismatch": "Las contraseñas no coinciden.",
         "failed": "No hemos podido guardar la contraseña. Inténtalo de nuevo."
+      }
+    },
+    "forgot": {
+      "eyebrow": "Tu cuenta",
+      "title": "Recuperar contraseña",
+      "subtitle": "Indica el correo de tu cuenta y te enviamos un enlace para definir una contraseña nueva.",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@correo.com",
+      "submit": "Enviar enlace",
+      "submitting": "Enviando…",
+      "back": "Volver a entrar",
+      "sentTitle": "Revisa tu correo",
+      "sentBody": "Si existe una cuenta con ese correo, recibirás un enlace para definir una contraseña nueva. El enlace caduca pasado un rato.",
+      "errors": {
+        "invalid": "Escribe un correo válido.",
+        "failed": "No hemos podido enviar el correo. Inténtalo de nuevo dentro de un rato."
       }
     }
   },

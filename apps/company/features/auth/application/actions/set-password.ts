@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { setPasswordSchema } from "@/features/auth/application/schemas/invitation";
-import { setInvitedUserPassword } from "@/features/auth/infrastructure/auth.repo";
+import { acceptInvitation, setInvitedUserPassword } from "@/features/auth/infrastructure/auth.repo";
 
 import type { SetPasswordState } from "./state";
 
@@ -23,6 +23,9 @@ export async function setPasswordAction(_previous: SetPasswordState, formData: F
   const result = await setInvitedUserPassword(parsed.data.password);
   if (result === "unauthenticated") redirect(localePath(parsed.data.lang, ROUTES.auth.login));
   if (result === "failed") return { status: "error", code: "failed" };
+
+  // Si venía de una invitación, ahora se crea su usuario de empresa. Con recuperación de contraseña no hace nada.
+  if (!(await acceptInvitation())) return { status: "error", code: "failed" };
 
   // Provisional: hasta que exista el asistente de configuración, vuelve al inicio.
   redirect(localePath(parsed.data.lang, ROUTES.home));

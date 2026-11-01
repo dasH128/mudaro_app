@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { formatDateRange, formatDayWithYear, formatMonthWithYear, formatTime, todayLisbon } from "@/app/lib/format";
 import {
@@ -39,10 +40,10 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, la página comprueba sesión y rol en servidor.
 export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/schedule">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const dict = await getDictionary();
   const t = dict.app.schedule;

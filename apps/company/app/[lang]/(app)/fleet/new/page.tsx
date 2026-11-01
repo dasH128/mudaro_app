@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { todayLisbon } from "@/app/lib/format";
 import type { FleetSnapshot } from "@/features/fleet/domain/new-vehicle";
@@ -19,11 +20,11 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, la página comprueba en servidor
-// que quien entra es administrador (el coste por km solo lo ven los administradores, RNF-03).
+// Solo los administradores entran en el panel (requireCompanySession), así que ven el coste por km (RNF-03).
 export default async function NewVehiclePage({ searchParams }: PageProps<"/[lang]/fleet/new">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.fleet;
   const params = await searchParams;

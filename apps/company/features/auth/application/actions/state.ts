@@ -1,6 +1,13 @@
 /** Los errores son códigos: el componente los traduce con el diccionario del idioma de la URL. */
 export type ConfirmInvitationState = { status: "idle" } | { status: "error"; code: "invalid" | "failed" };
 
+export type SignInState = { status: "idle" } | { status: "error"; code: "invalid" | "noAccess" | "failed" };
+
+export type ForgotPasswordState =
+  | { status: "idle" }
+  | { status: "sent" }
+  | { status: "error"; code: "invalid" | "failed" };
+
 export type SetPasswordState =
   | { status: "idle" }
   | { status: "error"; code: "weak" | "mismatch" | "failed" };

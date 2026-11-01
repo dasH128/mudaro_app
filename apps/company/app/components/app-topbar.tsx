@@ -3,12 +3,12 @@ import { LanguageSwitcher } from "@/app/components/language-switcher";
 import { ThemeToggle } from "@/app/components/theme-toggle";
 import { LOCALES, type Locale } from "@/app/i18n/config";
 import { getDictionary, loadDictionary } from "@/app/i18n/get-dictionary";
-import { MOCK_COMPANY_NAME, MOCK_USER } from "@/app/lib/mock-session";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { signOutAction } from "@/features/auth/application/actions/sign-out";
+import { initialsOf, type CompanySession } from "@/features/auth/domain/session";
 
 /** Barra superior común a todas las pantallas autenticadas: tema, idioma y cuenta. */
-export async function AppTopbar({ lang }: { lang: Locale }) {
+export async function AppTopbar({ lang, session }: { lang: Locale; session: CompanySession }) {
   const dict = await getDictionary();
   const { theme, language } = dict.auth.layout;
   const { account } = dict.app;
@@ -23,8 +23,8 @@ export async function AppTopbar({ lang }: { lang: Locale }) {
       <LanguageSwitcher current={lang} label={language} options={options} />
       <AccountMenu
         lang={lang}
-        user={MOCK_USER}
-        companyName={MOCK_COMPANY_NAME}
+        user={{ name: session.name, initials: initialsOf(session.name) }}
+        companyName={session.companyName}
         settingsHref={localePath(lang, ROUTES.settings)}
         labels={{ menu: account.menu, settings, signOut: account.signOut }}
         signOutAction={signOutAction}

@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { ROUTES, localePath } from "@/app/lib/routes";
+import { signInAction } from "@/features/auth/application/actions/sign-in";
+import { IDLE, type SignInState } from "@/features/auth/application/actions/state";
 
 const inputClass =
   "w-full rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-muted/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -16,16 +18,31 @@ const linkClass =
 type LoginFormProps = {
   lang: Locale;
   t: Dictionary["auth"]["login"];
+  /** Destino tras entrar (ya validado en la página; la acción lo valida otra vez). */
+  next?: string;
+  /** Error que llega por la URL (`?error=no-access`), cuando el servidor expulsó una sesión sin acceso. */
+  initialError?: "noAccess";
 };
 
-export function LoginForm({ lang, t }: LoginFormProps) {
+export function LoginForm({ lang, t, next, initialError }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [state, formAction, pending] = useActionState<SignInState, FormData>(signInAction, IDLE);
+  const errorCode = state.status === "error" ? state.code : initialError;
 
   return (
-    <form
-      className="space-y-5"
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form action={formAction} className="space-y-5">
+      <input type="hidden" name="lang" value={lang} />
+      {next && <input type="hidden" name="next" value={next} />}
+
+      {errorCode && (
+        <p
+          role="alert"
+          className="rounded-xl border border-danger-border bg-danger-surface px-4 py-3 text-sm font-medium text-danger-foreground"
+        >
+          {t.errors[errorCode]}
+        </p>
+      )}
+
       <div className="space-y-2">
         <label htmlFor="email" className="text-sm font-medium">
           {t.email}
@@ -86,9 +103,10 @@ export function LoginForm({ lang, t }: LoginFormProps) {
 
       <button
         type="submit"
-        className="w-full rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:translate-y-0"
+        disabled={pending}
+        className="w-full rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:translate-y-0 disabled:opacity-60"
       >
-        {t.submit}
+        {pending ? t.submitting : t.submit}
       </button>
 
       <p className="pt-2 text-center text-sm text-muted">

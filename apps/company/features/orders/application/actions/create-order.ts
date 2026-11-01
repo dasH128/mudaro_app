@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { todayLisbon } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { parseNewOrder, readValues } from "@/features/orders/application/schemas/new-order";
 import { createOrder } from "@/features/orders/infrastructure/orders.repo";
 
@@ -11,8 +12,8 @@ import type { FormState } from "./state";
 
 // RF-13: crear un pedido con lo mínimo. RF-19: o seguir al inventario si lo rellena la empresa.
 export async function createOrderAction(_previous: FormState, formData: FormData): Promise<FormState> {
-  // TODO(auth): el grupo (app) aún no tiene sesión. Antes de conectar datos reales, aquí se comprueba
-  // sesión y rol en servidor (una Server Action es un endpoint público), además de RLS.
+  // Una Server Action es un endpoint público: se comprueba sesión y rol en servidor, además de RLS.
+  await requireCompanySession(formData.get("lang"));
   const parsed = parseNewOrder(readValues(formData));
   if (!parsed.ok) return { status: "error", fieldErrors: parsed.fieldErrors };
 

@@ -3,13 +3,47 @@ import "server-only";
 import { createSupabaseServerClient } from "@mudaro/supabase/server";
 
 export type SetPasswordResult = "ok" | "unauthenticated" | "failed";
+export type SignInResult = "ok" | "invalid" | "failed";
 
 // Único acceso a Supabase Auth de esta feature: las acciones no importan @mudaro/supabase.
 
-/** Canjea el token del enlace de invitación y deja la sesión creada. Devuelve false si no es válido. */
-export async function verifyInvitationToken(tokenHash: string): Promise<boolean> {
+/** Canjea el token del enlace del email (invitación o recuperación) y deja la sesión creada. Devuelve false si no es válido. */
+export async function verifyEmailToken(tokenHash: string, type: "invite" | "recovery"): Promise<boolean> {
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.verifyOtp({ type: "invite", token_hash: tokenHash });
+  const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+  return !error;
+}
+
+/** Inicia sesión con email y contraseña. "invalid" son credenciales erróneas; "failed", cualquier otro fallo (límite de intentos, red). */
+export async function signInWithPassword(email: string, password: string): Promise<SignInResult> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (!error) return "ok";
+  return error.code === "invalid_credentials" ? "invalid" : "failed";
+}
+
+/**
+ * Pide el email de recuperación. Auth responde igual exista o no la cuenta, así que no se revela cuáles existen.
+ * El enlace lo define la plantilla de Supabase (`/auth/confirm?token_hash=…&type=recovery`).
+ */
+export async function requestPasswordReset(email: string): Promise<boolean> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  return !error;
+}
+
+/**
+ * Crea la fila de company_users a partir de la invitación vigente de quien tiene sesión (migración accept_invitation).
+ * Es idempotente. Devuelve false si falla la llamada; sin invitación vigente tampoco hay error, y la sesión de empresa
+ * no existirá, cosa que detecta `requireCompanySession`.
+ */
+export async function acceptInvitation(): Promise<boolean> {
+  const supabase = await createSupabaseServerClient();
+  // Cast temporal: `accept_invitation` aún no está en database.types.ts. Se quita al ejecutar `pnpm db:types`
+  // tras aplicar la migración 20261101100000.
+  const { error } = await (supabase as unknown as { rpc(fn: string): PromiseLike<{ error: unknown }> }).rpc(
+    "accept_invitation",
+  );
   return !error;
 }
 

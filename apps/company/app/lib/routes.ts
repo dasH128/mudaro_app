@@ -10,7 +10,7 @@ export const ROUTES = {
   auth: {
     login: "/login",
     register: "/registro",
-    forgotPassword: "/recuperar-contrasena",
+    forgotPassword: "/forgot-password",
     confirm: "/auth/confirm",
     setPassword: "/auth/set-password",
   },

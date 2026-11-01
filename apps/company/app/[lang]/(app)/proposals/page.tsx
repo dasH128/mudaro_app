@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { todayLisbon } from "@/app/lib/format";
 import { DEFAULT_SORT, countByStatus, filterProposals, isSort, isStatus, sortProposals, summarize } from "@/features/proposals/domain/filters";
@@ -23,13 +24,14 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, el margen solo se pide
-// si el rol es administrador (RNF-03) y la página comprueba sesión y rol en servidor.
+// Solo los administradores entran en el panel (requireCompanySession), así que ven el margen (RNF-03).
+// Si se admite otro rol en el panel, este valor debe salir del rol de la sesión.
 const CAN_SEE_MARGIN = true;
 
 export default async function ProposalsPage({ searchParams }: PageProps<"/[lang]/proposals">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.proposals;
 

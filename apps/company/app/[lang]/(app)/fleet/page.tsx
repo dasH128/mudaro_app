@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { pluralize } from "@/app/i18n/interpolate";
 import { todayLisbon } from "@/app/lib/format";
@@ -41,10 +42,10 @@ function first(value: string | string[] | undefined): string | undefined {
 // TODO(auth): hasta que exista el rol, el coste por km se muestra siempre. Después, solo administradores (RNF-03).
 const CAN_SEE_COST = true;
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, la página comprueba sesión y rol en servidor.
 export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fleet">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.fleet;
 

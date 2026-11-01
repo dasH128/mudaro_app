@@ -17,7 +17,8 @@
     "fleetNewTitle": "Novo veículo · Mudaro",
     "clientsTitle": "Clientes · Mudaro",
     "homeTitle": "Operações de hoje · Mudaro",
-    "scheduleTitle": "Agenda · Mudaro"
+    "scheduleTitle": "Agenda · Mudaro",
+    "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro"
   },
   "auth": {
     "layout": {
@@ -48,7 +49,13 @@
       "hidePassword": "Ocultar palavra-passe",
       "submit": "Entrar",
       "noAccount": "Primeira vez por cá?",
-      "createAccount": "Cria a tua conta"
+      "createAccount": "Cria a tua conta",
+      "errors": {
+        "invalid": "Email ou palavra-passe incorretos.",
+        "noAccess": "Esta conta não tem acesso ao painel da empresa. Fala com a equipa da Mudaro.",
+        "failed": "Não foi possível entrar. Tenta novamente."
+      },
+      "submitting": "A entrar…"
     },
     "confirm": {
       "eyebrow": "Convite",
@@ -61,6 +68,12 @@
       "errors": {
         "invalid": "Este convite já não é válido. Pede um novo à equipa da Mudaro.",
         "failed": "Não foi possível aceitar o convite. Tenta novamente."
+      },
+      "recovery": {
+        "eyebrow": "Recuperar acesso",
+        "title": "Define uma nova palavra-passe",
+        "subtitle": "Confirma que foste tu a pedir a recuperação para escolheres uma nova palavra-passe.",
+        "accept": "Continuar"
       }
     },
     "setPassword": {
@@ -76,6 +89,22 @@
         "weak": "A palavra-passe deve ter pelo menos 8 caracteres.",
         "mismatch": "As palavras-passe não coincidem.",
         "failed": "Não foi possível guardar a palavra-passe. Tenta novamente."
+      }
+    },
+    "forgot": {
+      "eyebrow": "A tua conta",
+      "title": "Recuperar palavra-passe",
+      "subtitle": "Indica o email da tua conta e enviamos-te um link para definires uma nova palavra-passe.",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "submit": "Enviar link",
+      "submitting": "A enviar…",
+      "back": "Voltar a entrar",
+      "sentTitle": "Verifica o teu email",
+      "sentBody": "Se existir uma conta com esse email, vais receber um link para definir uma nova palavra-passe. O link caduca ao fim de pouco tempo.",
+      "errors": {
+        "invalid": "Escreve um email válido.",
+        "failed": "Não foi possível enviar o email. Tenta novamente daqui a pouco."
       }
     }
   },

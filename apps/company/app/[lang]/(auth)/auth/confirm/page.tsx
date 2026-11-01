@@ -20,8 +20,11 @@ async function Invitation({ searchParams }: { searchParams: PageProps<"/[lang]/a
   if (!hasLocale(locale)) notFound();
 
   const { confirm } = (await getDictionary()).auth;
-  const { token_hash: tokenHash } = await searchParams;
+  const { token_hash: tokenHash, type: typeParam } = await searchParams;
   const token = typeof tokenHash === "string" ? tokenHash : "";
+  // El email de invitación y el de recuperación llevan al mismo sitio; `type` decide el texto y el canje.
+  const type = typeParam === "recovery" ? "recovery" : "invite";
+  const copy = type === "recovery" ? confirm.recovery : confirm;
 
   if (!token) {
     return (
@@ -35,10 +38,10 @@ async function Invitation({ searchParams }: { searchParams: PageProps<"/[lang]/a
 
   return (
     <div className={cardClass}>
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted">{confirm.eyebrow}</p>
-      <h1 className="mt-3 font-display text-4xl font-extrabold leading-none tracking-tight">{confirm.title}</h1>
-      <p className="mt-3 mb-8 leading-relaxed text-muted">{confirm.subtitle}</p>
-      <ConfirmForm lang={locale} tokenHash={token} t={confirm} />
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted">{copy.eyebrow}</p>
+      <h1 className="mt-3 font-display text-4xl font-extrabold leading-none tracking-tight">{copy.title}</h1>
+      <p className="mt-3 mb-8 leading-relaxed text-muted">{copy.subtitle}</p>
+      <ConfirmForm lang={locale} tokenHash={token} type={type} acceptLabel={copy.accept} t={confirm} />
     </div>
   );
 }

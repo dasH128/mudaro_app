@@ -17,7 +17,8 @@
     "fleetNewTitle": "New vehicle · Mudaro",
     "clientsTitle": "Clients · Mudaro",
     "homeTitle": "Today's operations · Mudaro",
-    "scheduleTitle": "Schedule · Mudaro"
+    "scheduleTitle": "Schedule · Mudaro",
+    "forgotPasswordTitle": "Reset password · Mudaro"
   },
   "auth": {
     "layout": {
@@ -48,7 +49,13 @@
       "hidePassword": "Hide password",
       "submit": "Sign in",
       "noAccount": "First time here?",
-      "createAccount": "Create your account"
+      "createAccount": "Create your account",
+      "errors": {
+        "invalid": "Wrong email or password.",
+        "noAccess": "This account has no access to the company panel. Talk to the Mudaro team.",
+        "failed": "We could not sign you in. Please try again."
+      },
+      "submitting": "Signing in…"
     },
     "confirm": {
       "eyebrow": "Invitation",
@@ -61,6 +68,12 @@
       "errors": {
         "invalid": "This invitation is no longer valid. Ask the Mudaro team for a new one.",
         "failed": "We could not accept the invitation. Please try again."
+      },
+      "recovery": {
+        "eyebrow": "Account recovery",
+        "title": "Set a new password",
+        "subtitle": "Confirm that you requested the recovery to choose a new password.",
+        "accept": "Continue"
       }
     },
     "setPassword": {
@@ -76,6 +89,22 @@
         "weak": "The password must have at least 8 characters.",
         "mismatch": "The passwords do not match.",
         "failed": "We could not save the password. Please try again."
+      }
+    },
+    "forgot": {
+      "eyebrow": "Your account",
+      "title": "Reset your password",
+      "subtitle": "Enter your account email and we will send you a link to set a new password.",
+      "email": "Email",
+      "emailPlaceholder": "you@email.com",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "back": "Back to sign in",
+      "sentTitle": "Check your email",
+      "sentBody": "If an account exists for that email, you will receive a link to set a new password. The link expires after a short while.",
+      "errors": {
+        "invalid": "Enter a valid email.",
+        "failed": "We could not send the email. Please try again in a moment."
       }
     }
   },

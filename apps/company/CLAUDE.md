@@ -9,7 +9,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Pantalla | Ruta | Estado |
 | --- | --- | --- |
 | Login | `/[lang]/login` | Hecha |
-| Confirmar invitación | `/[lang]/auth/confirm` | Hecha |
+| Recuperar contraseña | `/[lang]/forgot-password` | Hecha |
+| Confirmar invitación o recuperación | `/[lang]/auth/confirm` | Hecha (`?type=invite\|recovery`) |
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
 | Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
 | Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL |
@@ -35,7 +36,7 @@ Organizada por feature. Dentro de cada feature hay cuatro capas: `domain`, `appl
 app/
   [lang]/
     layout.tsx              ← html, fuentes y ThemeProvider
-    (auth)/                 ← login, auth/confirm, auth/set-password (layout con panel de marca)
+    (auth)/                 ← login, forgot-password, auth/confirm, auth/set-password (layout con panel de marca)
     (app)/                  ← zona autenticada
       layout.tsx            ← menú lateral + <main>
       page.tsx              ← Início (Operações de hoje)
@@ -53,14 +54,18 @@ app/
   lib/
     routes.ts               ← ROUTES y localePath()
     format.ts               ← euros, fechas, números y hora de Lisboa (RNF-10)
-    mock-session.ts         ← empresa y usuario de ejemplo (saldrán de la sesión)
 features/
   auth/
+    domain/
+      session.ts            ← CompanySession, canAccessPanel (solo administrador), iniciales
+      redirect.ts           ← safeNextPath: destino del login solo si es interno
     application/
-      actions/              ← Server Actions: confirm-invitation, set-password (+ state.ts)
-      schemas/              ← zod de invitación y contraseña
+      require-session.ts    ← requireCompanySession(lang): sesión y rol en servidor; va al inicio de cada página protegida y Server Action
+      actions/              ← Server Actions: sign-in, forgot-password, confirm-invitation, set-password, sign-out (+ state.ts)
+      schemas/              ← zod de credenciales, invitación y contraseña
     infrastructure/
-      auth.repo.ts          ← único acceso a Supabase Auth
+      auth.repo.ts          ← único acceso a Supabase Auth (login, recuperación, aceptar invitación vía rpc `accept_invitation`)
+      session.repo.ts       ← getCompanySession(): Auth + company_users (RLS), cacheado por petición
   dashboard/
     domain/
       types.ts              ← entidades: Job, Stat, Stage, ActivityItem, Attention, Dashboard (códigos y números, sin frases)

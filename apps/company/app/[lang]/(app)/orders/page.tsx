@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
+import { firstNameOf } from "@/features/auth/domain/session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { pluralize } from "@/app/i18n/interpolate";
 import { formatLongDate, hourLisbon, todayLisbon } from "@/app/lib/format";
-import { MOCK_USER } from "@/app/lib/mock-session";
 import {
   DEFAULT_VIEW,
   PAGE_SIZE,
@@ -56,11 +57,11 @@ function periodOf(hour: number) {
   return hour < 20 ? "afternoon" : "evening";
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Cuando exista, la página comprueba sesión y rol en servidor
 // y el saludo usa el nombre del usuario de la sesión.
 export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/orders">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  const session = await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.orders.list;
 
@@ -111,7 +112,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
       <OrdersWelcome
         lang={locale}
         t={t}
-        name={MOCK_USER.name}
+        name={firstNameOf(session.name)}
         period={periodOf(hourLisbon(now))}
         dateLabel={formatLongDate(locale, now)}
         summary={attention}

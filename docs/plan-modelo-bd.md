@@ -31,7 +31,7 @@ Tablas, columnas, funciones, enums y políticas en inglés. Los comentarios SQL,
 - **Las escrituras no van directas desde el navegador.** Solo hay políticas de lectura para `authenticated`. Crear empresas, invitar y desactivar pasan por Edge Functions que validan el rol y usan la clave de servicio (`architecture-system.md`).
 - **`companies` lleva `country_code`** (ISO 3166-1 alfa-2, por defecto `PT`) junto a `tax_id`. La unicidad es por `(country_code, tax_id)` y el dígito de control del NIF solo se valida cuando el país es `PT`. Al abrir otros países, la validación se hará en servidor con zod por país y se quitará el valor por defecto.
 - **Notas internas, origen y región van en `company_internal`**, con RLS solo para plataforma. Así una empresa no puede leer las notas del equipo aunque tenga acceso a su fila.
-- **La invitación guarda solo el hash del token** (`token_hash`), nunca el token en claro (RNF-02).
+- **La invitación no guarda ningún token.** El enlace y su token los genera Supabase Auth (`generateLink`); `invitations` solo guarda el estado (email, rol, caducidad, aceptada, revocada). La invitación se localiza por email al aceptarla.
 - **Una única invitación pendiente de administrador por empresa**, forzada con un índice parcial. "Generar enlace nuevo" revoca la anterior antes de crear la siguiente.
 - **Caducidad de la invitación de 7 días** como valor por defecto, provisional (decisión abierta del requisito).
 - **Auditoría inmutable**: bloqueo de `update`, `delete` y `truncate` con trigger. Sin clave foránea en `company_id`, para que el registro sobreviva a una empresa borrada.

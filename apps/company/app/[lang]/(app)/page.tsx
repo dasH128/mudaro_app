@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { DEFAULT_JOB_FILTER, countJobsByFilter, filterJobs, isJobFilter } from "@/features/dashboard/domain/jobs";
 
@@ -24,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DashboardPage({ searchParams }: PageProps<"/[lang]">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.home;
   const params = await searchParams;

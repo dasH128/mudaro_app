@@ -3,6 +3,7 @@ import { lang } from "next/root-params";
 import { notFound } from "next/navigation";
 
 import { hasLocale } from "@/app/i18n/config";
+import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { getActiveExtras, getCatalog } from "@/features/inventory/infrastructure/inventory.repo";
@@ -15,10 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: dict.metadata.orderInventoryTitle };
 }
 
-// TODO(auth): el grupo (app) aún no tiene sesión ni rol. Con datos reales, getOrder solo devuelve pedidos de la empresa (RLS).
+// Con datos reales, getOrder solo devuelve pedidos de la empresa (RLS).
 export default async function OrderInventoryPage({ params }: PageProps<"/[lang]/orders/[id]/inventory">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
+  await requireCompanySession(locale);
 
   const { id } = await params;
   const order = await getOrder(id);

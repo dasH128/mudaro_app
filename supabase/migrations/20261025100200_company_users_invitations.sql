@@ -77,8 +77,6 @@ create table public.invitations (
   email text not null,
   name text not null check (length(btrim(name)) > 0),
   role public.company_role not null,
-  -- sha256 del token (mínimo 32 bytes aleatorios, RNF-02). El token en claro solo existe en el enlace.
-  token_hash text not null unique,
   -- null mientras el equipo no ha enviado el email (casilla "Enviar o convite por email agora").
   sent_at timestamptz,
   -- 7 días es un valor provisional (decisión abierta del requisito).

@@ -7,14 +7,14 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { interpolate } from "@/app/i18n/interpolate";
-import { MOCK_COMPANY_NAME, MOCK_USER } from "@/app/lib/mock-session";
 import { ROUTES, localePath } from "@/app/lib/routes";
+import { firstNameOf, initialsOf, type CompanySession } from "@/features/auth/domain/session";
 
 const itemBase =
   "flex items-center gap-3 rounded-xl px-3.5 py-3 text-[15px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const itemIdle = "text-on-ink hover:bg-white/[0.08] hover:text-white";
 
-export async function AppSidebar({ lang }: { lang: Locale }) {
+export async function AppSidebar({ lang, session }: { lang: Locale; session: CompanySession }) {
   const { sidebar } = (await getDictionary()).app;
 
   return (
@@ -33,7 +33,7 @@ export async function AppSidebar({ lang }: { lang: Locale }) {
         <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
           {sidebar.company}
         </span>
-        <span className="text-[15px] font-bold text-white">{MOCK_COMPANY_NAME}</span>
+        <span className="text-[15px] font-bold text-white">{session.companyName}</span>
       </div>
 
       <AppNav lang={lang} label={sidebar.mainMenu} labels={sidebar.nav} />
@@ -50,11 +50,11 @@ export async function AppSidebar({ lang }: { lang: Locale }) {
         </Link>
         <div className="flex items-center gap-3 border-t border-white/15 px-3 pt-3.5 lg:group-data-[collapsed=true]/shell:justify-center lg:group-data-[collapsed=true]/shell:px-0">
           <span className="grid size-10 place-items-center rounded-full bg-on-ink text-sm font-bold text-primary-foreground">
-            {MOCK_USER.initials}
+            {initialsOf(session.name)}
           </span>
           <span className="flex flex-col lg:group-data-[collapsed=true]/shell:sr-only">
             <span className="text-sm font-bold text-white">
-              {interpolate(sidebar.greeting, { name: MOCK_USER.name })}
+              {interpolate(sidebar.greeting, { name: firstNameOf(session.name) })}
             </span>
             <span className="text-[13px] text-on-ink">{sidebar.role}</span>
           </span>
