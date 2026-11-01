@@ -109,7 +109,7 @@ export function VehiclePanel({
                   </span>
                   <span className="px-2">{vehicle.plate}</span>
                 </span>
-                <span className="text-[13px] text-muted">{vehicle.typeLabel}</span>
+                <span className="text-[13px] text-muted">{t.new.types[vehicle.type].label}</span>
               </span>
             </div>
           </div>
@@ -284,7 +284,7 @@ export function VehiclePanel({
               {p.data.type}
               <input
                 readOnly
-                value={vehicle.typeLabel}
+                value={t.new.types[vehicle.type].label}
                 className="h-10.5 rounded-xl border border-field-border bg-transparent px-3 text-[15px] font-normal text-foreground outline-none"
               />
             </label>

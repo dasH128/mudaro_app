@@ -260,21 +260,147 @@ export type Database = {
         }
         Relationships: []
       }
+      vehicle_costs: {
+        Row: {
+          company_id: string
+          cost_per_km_cents: number
+          updated_at: string
+          vehicle_id: string
+        }
+        Insert: {
+          company_id: string
+          cost_per_km_cents: number
+          updated_at?: string
+          vehicle_id: string
+        }
+        Update: {
+          company_id?: string
+          cost_per_km_cents?: number
+          updated_at?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_costs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vehicle_costs_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: true
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicles: {
+        Row: {
+          active: boolean
+          capacity_m3: number
+          company_id: string
+          created_at: string
+          id: string
+          inactive_by: string | null
+          inactive_reason:
+            | Database["public"]["Enums"]["vehicle_inactive_reason"]
+            | null
+          inactive_since: string | null
+          max_load_kg: number | null
+          name: string | null
+          plate: string
+          type: Database["public"]["Enums"]["vehicle_type"]
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          capacity_m3: number
+          company_id: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["vehicle_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          max_load_kg?: number | null
+          name?: string | null
+          plate: string
+          type: Database["public"]["Enums"]["vehicle_type"]
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          capacity_m3?: number
+          company_id?: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["vehicle_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          max_load_kg?: number | null
+          name?: string | null
+          plate?: string
+          type?: Database["public"]["Enums"]["vehicle_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vehicles_inactive_by_fkey"
+            columns: ["inactive_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      accept_invitation: { Args: never; Returns: string }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
       }
+      create_vehicle: {
+        Args: {
+          p_active: boolean
+          p_capacity_m3: number
+          p_cost_per_km_cents: number
+          p_max_load_kg: number
+          p_name: string
+          p_plate: string
+          p_type: Database["public"]["Enums"]["vehicle_type"]
+        }
+        Returns: string
+      }
       current_company_id: { Args: never; Returns: string }
+      is_company_administrator: { Args: never; Returns: boolean }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
     }
     Enums: {
       company_role: "administrator" | "operator"
+      vehicle_inactive_reason: "workshop" | "other"
+      vehicle_type:
+        | "small-van"
+        | "van"
+        | "medium-truck"
+        | "large-truck"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -403,6 +529,14 @@ export const Constants = {
   public: {
     Enums: {
       company_role: ["administrator", "operator"],
+      vehicle_inactive_reason: ["workshop", "other"],
+      vehicle_type: [
+        "small-van",
+        "van",
+        "medium-truck",
+        "large-truck",
+        "other",
+      ],
     },
   },
 } as const

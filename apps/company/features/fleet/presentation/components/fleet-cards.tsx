@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LinkPending } from "@/app/components/link-pending";
 import type { Locale } from "@/app/i18n/config";
 import { pluralize } from "@/app/i18n/interpolate";
 import { formatCubicMeters } from "@/app/lib/format";
@@ -43,14 +44,21 @@ export function FleetCards({ lang, t, vehicles, selectedId, params, today, empty
             <span className="flex items-center gap-3">
               <VehicleTile vehicle={vehicle} size={44} iconSize={22} radius="rounded-[14px]" />
               <span className="flex min-w-0 flex-col">
-                {/* Enlace estirado: toda la tarjeta abre el panel */}
-                <Link
-                  href={fleetHref(lang, { ...params, vehicle: vehicle.id })}
-                  scroll={false}
-                  className={`text-[15px] font-bold after:absolute after:inset-0 after:rounded-[20px] ${focusRing}`}
-                >
-                  {vehicle.name}
-                </Link>
+                {/* Enlace estirado: toda la tarjeta abre el panel. La abierta no es enlace: volver a pulsarla pediría la misma página */}
+                {selected ? (
+                  <span aria-current="true" className="text-[15px] font-bold">
+                    {vehicle.name}
+                  </span>
+                ) : (
+                  <Link
+                    href={fleetHref(lang, { ...params, vehicle: vehicle.id })}
+                    scroll={false}
+                    className={`inline-flex items-center gap-2 text-[15px] font-bold after:absolute after:inset-0 after:rounded-[20px] ${focusRing}`}
+                  >
+                    {vehicle.name}
+                    <LinkPending />
+                  </Link>
+                )}
                 <span className="text-xs text-muted">
                   <span className="font-mono font-bold text-foreground">{vehicle.plate}</span> · {formatCubicMeters(vehicle.capacityM3)}
                 </span>

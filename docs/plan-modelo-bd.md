@@ -10,7 +10,7 @@ El esquema completo (22 tablas) está en el documento "Modelo de negocio y domin
 | Paso | Bloque | Requisitos | Estado |
 | --- | --- | --- | --- |
 | 1 | Base: equipo Mudaro, empresas, usuarios, convites, auditoría | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | En curso |
-| 2 | Configuración: vehículos, tarifas versionadas, servicios extra, perfil | RF-02, RF-05 a RF-07 | Pendiente |
+| 2 | Configuración: vehículos, tarifas versionadas, servicios extra, perfil | RF-02, RF-05 a RF-07 | En curso (vehículos: migración `20261101200000`) |
 | 3 | Catálogo global de objetos (sin `company_id`) | RF-10, RF-11 | Pendiente |
 | 4 | Solicitudes, clientes, inventario, enlaces con token | RF-13 a RF-27, RNF-02 | Pendiente |
 | 5 | Presupuestos, propuestas, aceptación | RF-30 a RF-46 | Pendiente |

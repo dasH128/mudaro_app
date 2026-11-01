@@ -1,74 +1,112 @@
 import "server-only";
 
-import { compactPlate } from "../domain/plate";
+import { createSupabaseServerClient } from "@mudaro/supabase/server";
+
 import { kindOf, type NewVehicle } from "../domain/new-vehicle";
-import type { FleetOverview, Vehicle } from "../domain/types";
-import { MOCK_METRICS, mockVehicles } from "./mock-data";
-import { listCreatedVehicles, nextVehicleId, saveVehicle } from "./store";
+import type { FleetOverview, Vehicle, VehicleEvent } from "../domain/types";
 
 // Única puerta de entrada a los datos de la frota: las páginas importan de aquí.
-// TODO(supabase): sustituir los datos de ejemplo por consultas (RLS por company_id, RNF-01), conservando la firma.
+// RLS por company_id (RNF-01); el coste por km vive en vehicle_costs, que solo lee el administrador (RNF-03).
 
 type Options = {
-  /** Día de hoy en Lisboa (aaaa-mm-dd): las fechas de ejemplo se calculan desde él. */
-  today: string;
-  /** Solo el administrador ve el coste por km (RNF-03). Con `false` el importe ni sale de esta capa. */
+  /** Solo el administrador ve el coste por km (RNF-03). Con `false` ni se consulta. */
   includeCost: boolean;
-  /** Provisional: simula una empresa sin vehículos para ver el estado vacío. Desaparece al usar Supabase. */
-  empty?: boolean;
 };
 
-const allVehicles = (today: string): Vehicle[] => [...mockVehicles(today), ...listCreatedVehicles()];
+type CreateInput = NewVehicle;
 
-/** Vehículos de la empresa de la sesión y los indicadores del mes. */
-export async function getFleetOverview({ today, includeCost, empty = false }: Options): Promise<FleetOverview> {
-  if (empty) return { vehicles: [], metrics: { extraTripProposals: 0 } };
+export type CreateVehicleResult = { ok: true; vehicleId: string } | { ok: false; error: "plateTaken" };
 
-  const hideCost = (vehicle: Vehicle): Vehicle => ({
-    ...vehicle,
-    costPerKmCents: null,
-    history: vehicle.history.filter((event) => event.kind !== "cost-changed"),
-  });
-  const vehicles = allVehicles(today);
+// Un solo literal: el cliente de Supabase deduce el tipo de las filas del texto del select.
+const VEHICLE_COLUMNS = "id, type, plate, name, capacity_m3, max_load_kg, active, inactive_reason, inactive_since, inactive_user:company_users!vehicles_inactive_by_fkey(name)";
 
-  return { vehicles: includeCost ? vehicles : vehicles.map(hideCost), metrics: MOCK_METRICS };
+/** aaaa-mm-dd de Lisboa a partir de un instante. */
+function lisbonDay(instant: string): string {
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Lisbon" }).format(new Date(instant));
 }
 
-type CreateInput = NewVehicle & {
-  /** Texto del tipo en el idioma de la interfaz ("Furgão"): el tipo es texto libre de la empresa. */
-  typeLabel: string;
-  /** Quién da el alta (de la sesión cuando exista). */
-  by: string;
-};
+/** Vehículos de la empresa de la sesión y los indicadores del mes. */
+export async function getFleetOverview({ includeCost }: Options): Promise<FleetOverview> {
+  const supabase = await createSupabaseServerClient();
 
-export type CreateVehicleResult = { ok: true; vehicle: Vehicle } | { ok: false; error: "plateTaken" };
+  const [vehiclesResult, costsResult, auditResult] = await Promise.all([
+    supabase.from("vehicles").select(VEHICLE_COLUMNS).order("created_at", { ascending: true }),
+    // Con includeCost a false la consulta ni se hace: el importe no sale de esta capa.
+    includeCost ? supabase.from("vehicle_costs").select("vehicle_id, cost_per_km_cents") : Promise.resolve(null),
+    supabase
+      .from("audit_log")
+      .select("entity_id, action, occurred_at, data")
+      .eq("entity", "vehicle")
+      .order("occurred_at", { ascending: false }),
+  ]);
 
-/** Da de alta un vehículo. La matrícula es única en la frota. */
-export async function createVehicle(input: CreateInput, { today }: { today: string }): Promise<CreateVehicleResult> {
-  // TODO(supabase): la unicidad la garantiza un índice único (company_id, plate)
-  const taken = allVehicles(today).some((v) => compactPlate(v.plate) === compactPlate(input.plate));
-  if (taken) return { ok: false, error: "plateTaken" };
+  if (vehiclesResult.error) throw new Error(`fleet: no se pudieron leer los vehículos (${vehiclesResult.error.code})`);
 
-  const vehicle: Vehicle = {
-    id: nextVehicleId(),
-    name: input.name ?? input.plate,
-    typeLabel: input.typeLabel,
-    kind: kindOf(input.type),
-    plate: input.plate,
-    capacityM3: input.capacityM3,
-    maxLoadKg: input.maxLoadKg,
-    costPerKmCents: input.costPerKmCents,
-    costMissing: false,
-    active: input.active,
-    inactive: input.active ? undefined : { reason: "other", since: today, by: input.by },
-    live: { kind: "free" },
-    lastUseOn: null,
-    jobs: [],
-    weekHours: [0, 0, 0, 0, 0, 0, 0],
-    proposals30d: { total: 0, accepted: 0 },
-    usage: { jobs: 0, km: 0, hours: 0 },
-    history: [{ kind: "added", withoutCost: false, at: today, by: input.by }],
-  };
-  saveVehicle(vehicle);
-  return { ok: true, vehicle };
+  const costs = new Map((costsResult?.data ?? []).map((row) => [row.vehicle_id, row.cost_per_km_cents]));
+
+  // Histórico por vehículo, del más reciente al más antiguo. Solo se conocen las acciones de este módulo.
+  const history = new Map<string, VehicleEvent[]>();
+  for (const row of auditResult.data ?? []) {
+    if (row.action !== "vehicle_created") continue;
+    const data = (row.data ?? {}) as { by?: string; withoutCost?: boolean };
+    const event: VehicleEvent = {
+      kind: "added",
+      withoutCost: data.withoutCost === true,
+      at: lisbonDay(row.occurred_at),
+      by: data.by ?? "",
+    };
+    history.set(row.entity_id, [...(history.get(row.entity_id) ?? []), event]);
+  }
+
+  const vehicles: Vehicle[] = vehiclesResult.data.map((row) => {
+    const cost = costs.get(row.id) ?? null;
+    return {
+      id: row.id,
+      name: row.name ?? row.plate,
+      type: row.type,
+      kind: kindOf(row.type),
+      plate: row.plate,
+      capacityM3: Number(row.capacity_m3),
+      maxLoadKg: row.max_load_kg,
+      costPerKmCents: cost,
+      // Sin permiso de coste no se sabe si falta: solo el administrador entra en el panel.
+      costMissing: includeCost && cost === null,
+      active: row.active,
+      inactive:
+        !row.active && row.inactive_reason && row.inactive_since
+          ? { reason: row.inactive_reason, since: row.inactive_since, by: row.inactive_user?.name ?? "" }
+          : undefined,
+      // TODO(agenda): estado en directo, trabajos, uso y propostas dependen de los pasos 5 y 6 del modelo.
+      live: { kind: "free" },
+      lastUseOn: null,
+      jobs: [],
+      weekHours: [0, 0, 0, 0, 0, 0, 0],
+      proposals30d: { total: 0, accepted: 0 },
+      usage: { jobs: 0, km: 0, hours: 0 },
+      history: history.get(row.id) ?? [],
+    };
+  });
+
+  // TODO(propostas): sin propostas todavía no hay viajes extra que contar.
+  return { vehicles, metrics: { extraTripProposals: 0 } };
+}
+
+/** Da de alta un vehículo con la función `create_vehicle` (valida sesión y rol en la base de datos). */
+export async function createVehicle(input: CreateInput): Promise<CreateVehicleResult> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("create_vehicle", {
+    p_type: input.type,
+    p_plate: input.plate,
+    p_name: input.name ?? "",
+    p_capacity_m3: input.capacityM3,
+    // La carga máxima es opcional y la función acepta null, pero el generador de tipos marca todos los argumentos como no nulos.
+    p_max_load_kg: input.maxLoadKg as number,
+    p_cost_per_km_cents: input.costPerKmCents,
+    p_active: input.active,
+  });
+
+  // 23505: unique_violation de (company_id, plate)
+  if (error?.code === "23505") return { ok: false, error: "plateTaken" };
+  if (error || !data) throw new Error(`fleet: no se pudo crear el vehículo (${error?.code ?? "sin id"})`);
+  return { ok: true, vehicleId: data };
 }

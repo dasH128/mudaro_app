@@ -1,5 +1,7 @@
 // Entidades de la frota (RF-05). Importes en céntimos y fechas ISO (aaaa-mm-dd), nunca texto formateado.
 
+import type { VehicleType } from "./new-vehicle";
+
 export type VehicleKind = "truck" | "van";
 
 /** Estado en directo de un vehículo activo. `until` y `returnedAt` son horas hh:mm de Lisboa. */
@@ -34,8 +36,8 @@ export type VehicleEvent = { at: string; by: string } & VehicleChange;
 export type Vehicle = {
   id: string;
   name: string;
-  /** Tipo libre que escribe la empresa ("Camião", "Furgão pequeno"): no se traduce. */
-  typeLabel: string;
+  /** Tipo de la lista cerrada; el texto ("Furgão pequeno") sale del diccionario del idioma de la URL. */
+  type: VehicleType;
   kind: VehicleKind;
   plate: string;
   capacityM3: number;

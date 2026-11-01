@@ -19,8 +19,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Pedidos · Lista | `/[lang]/orders` | Hecha solo el diseño, con datos de ejemplo (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Hecha solo el diseño (RF-19): el borrador vive en el navegador y no se guarda |
 | Detalhe do pedido | `/[lang]/orders/[id]` | Hecha solo el diseño, con datos de ejemplo. Pestaña en la URL (`?tab=`) |
-| Frota | `/[lang]/fleet` | Hecha solo el diseño, con datos de ejemplo (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
-| Novo veículo | `/[lang]/fleet/new` | Hecha con datos de ejemplo (RF-05). Crea el vehículo en un almacén en memoria |
+| Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05, solo listar y detalle). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
+| Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
 | Agenda | `/[lang]/schedule` | Hecha solo el diseño, con datos de ejemplo. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Hecha solo el diseño, con datos de ejemplo (RF-14). Filtro, búsqueda, orden y cliente abierto en la URL |
@@ -109,9 +109,7 @@ features/
       actions/              ← create-vehicle (+ state.ts)
       schemas/new-vehicle.ts ← zod en servidor; los errores son códigos que traduce el formulario
     infrastructure/
-      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ today, includeCost }) y createVehicle
-      store.ts              ← vehículos creados, en memoria
-      mock-data.ts          ← 6 vehículos de ejemplo con fechas relativas a hoy
+      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ includeCost }) y createVehicle (rpc `create_vehicle`)
     presentation/
       fleet-href.ts         ← enlaces con filtro, orden, vista y vehículo en la URL
       fleet-text.ts         ← estado, último/próximo uso y histórico → textos del diccionario
@@ -222,6 +220,8 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - Si un componente se usa también en otra app, muévelo a `packages/ui`.
 
 ## Estado actual y pendientes (29/10/2026)
+
+- Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Pendiente: edición, baja y reactivación del vehículo, y los cambios de coste o carga en el histórico. Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
 
 - `app/[lang]/page.tsx` (plantilla de Next) eliminado; el inicio vive en `app/[lang]/(app)/page.tsx`.
 - Se añadieron tokens `success-*`, `danger-dot`, `surface-soft`, `surface-head` y `sidebar` a `packages/ui/src/tokens.css`.

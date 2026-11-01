@@ -39,13 +39,12 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// TODO(auth): hasta que exista el rol, el coste por km se muestra siempre. Después, solo administradores (RNF-03).
-const CAN_SEE_COST = true;
-
 export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fleet">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
-  await requireCompanySession(locale);
+  const session = await requireCompanySession(locale);
+  // Solo el administrador ve el coste por km (RNF-03); además vehicle_costs solo le deja leerlo a él.
+  const canSeeCost = session.role === "administrator";
 
   const t = (await getDictionary()).app.fleet;
 
@@ -61,8 +60,7 @@ export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fle
   // "Parado há 23 dias", los trabajos de hoy y el gráfico de la semana dependen de hoy
   await connection();
   const today = todayLisbon();
-  // TODO(supabase): `?empty=1` solo sirve para ver el estado vacío con los datos de ejemplo
-  const { vehicles, metrics } = await getFleetOverview({ today, includeCost: CAN_SEE_COST, empty: first(params.empty) === "1" });
+  const { vehicles, metrics } = await getFleetOverview({ includeCost: canSeeCost });
 
   // Primer uso: la empresa aún no tiene ningún vehículo (ni activo ni inactivo)
   if (vehicles.length === 0) return <FleetEmpty lang={locale} t={t} />;
@@ -82,7 +80,7 @@ export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fle
   return (
     <>
       <FleetHeader lang={locale} t={t} summary={summarize(vehicles)} />
-      <FleetAlertsSection lang={locale} t={t} alerts={fleetAlerts(vehicles, metrics, today)} showCost={CAN_SEE_COST} />
+      <FleetAlertsSection lang={locale} t={t} alerts={fleetAlerts(vehicles, metrics, today)} showCost={canSeeCost} />
       <FleetToolbar
         lang={locale}
         t={t}
@@ -135,7 +133,7 @@ export default async function FleetPage({ searchParams }: PageProps<"/[lang]/fle
             previousHref={hrefFor(index - 1)}
             nextHref={hrefFor(index + 1)}
             closeHref={fleetHref(locale, base)}
-            showCost={CAN_SEE_COST}
+            showCost={canSeeCost}
           />
         ) : null}
       </div>

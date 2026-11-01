@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LinkPending } from "@/app/components/link-pending";
 import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
@@ -52,14 +53,25 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
       <div role="cell" className="flex min-w-0 items-center gap-3 px-3 py-2.5">
         <VehicleTile vehicle={vehicle} size={40} iconSize={20} radius="rounded-xl" />
         <span className="flex min-w-0 flex-col gap-0.75">
-          <Link
-            href={href}
-            scroll={false}
-            aria-label={interpolate(t.table.viewDetail, { name: vehicle.name })}
-            className={`w-fit whitespace-nowrap text-[15px] font-bold hover:underline ${vehicle.active ? "text-foreground" : "text-muted"} ${focusRing}`}
-          >
-            {vehicle.name}
-          </Link>
+          {/* La fila abierta no es enlace: volver a pulsarla pediría al servidor la misma página */}
+          {selected ? (
+            <span
+              aria-current="true"
+              className={`w-fit whitespace-nowrap text-[15px] font-bold ${vehicle.active ? "text-foreground" : "text-muted"}`}
+            >
+              {vehicle.name}
+            </span>
+          ) : (
+            <Link
+              href={href}
+              scroll={false}
+              aria-label={interpolate(t.table.viewDetail, { name: vehicle.name })}
+              className={`inline-flex w-fit items-center gap-2 whitespace-nowrap text-[15px] font-bold hover:underline ${vehicle.active ? "text-foreground" : "text-muted"} ${focusRing}`}
+            >
+              {vehicle.name}
+              <LinkPending />
+            </Link>
+          )}
           <span className="font-mono text-xs font-bold text-muted">{vehicle.plate}</span>
           {vehicle.active && vehicle.costMissing ? <IssueBadge>{t.table.costMissing}</IssueBadge> : null}
         </span>
@@ -105,14 +117,22 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
       </div>
 
       <div role="cell">
-        <Link
-          href={href}
-          scroll={false}
-          aria-label={interpolate(t.table.open, { name: vehicle.name })}
-          className={`mx-1 grid size-9 place-items-center rounded-full ${focusRing} ${selected ? "bg-foreground text-background" : "border border-status-off-border bg-surface text-foreground"}`}
-        >
-          <Icon name="chevronRight" size={16} strokeWidth={2.4} />
-        </Link>
+        {selected ? (
+          <span className="mx-1 grid size-9 place-items-center rounded-full bg-foreground text-background">
+            <Icon name="chevronRight" size={16} strokeWidth={2.4} />
+          </span>
+        ) : (
+          <Link
+            href={href}
+            scroll={false}
+            aria-label={interpolate(t.table.open, { name: vehicle.name })}
+            className={`mx-1 grid size-9 place-items-center rounded-full border border-status-off-border bg-surface text-foreground ${focusRing}`}
+          >
+            <LinkPending>
+              <Icon name="chevronRight" size={16} strokeWidth={2.4} />
+            </LinkPending>
+          </Link>
+        )}
       </div>
     </div>
   );

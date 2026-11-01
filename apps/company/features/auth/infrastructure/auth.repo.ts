@@ -39,11 +39,7 @@ export async function requestPasswordReset(email: string): Promise<boolean> {
  */
 export async function acceptInvitation(): Promise<boolean> {
   const supabase = await createSupabaseServerClient();
-  // Cast temporal: `accept_invitation` aún no está en database.types.ts. Se quita al ejecutar `pnpm db:types`
-  // tras aplicar la migración 20261101100000.
-  const { error } = await (supabase as unknown as { rpc(fn: string): PromiseLike<{ error: unknown }> }).rpc(
-    "accept_invitation",
-  );
+  const { error } = await supabase.rpc("accept_invitation");
   return !error;
 }
 

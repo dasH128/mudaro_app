@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 
 import { Icon } from "@/app/components/app-icon";
+import { Spinner } from "@/app/components/spinner";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { ROUTES, localePath } from "@/app/lib/routes";
@@ -168,7 +169,8 @@ export function NewVehicleForm({ lang, t: n, statusLabels, fleetTitle, fleet, ad
           <button type="submit" form={FORM_ID} name="intent" value="another" disabled={pending} className={secondary}>
             {n.actions.another}
           </button>
-          <button type="submit" form={FORM_ID} name="intent" value="add" disabled={pending} className={primary}>
+          <button type="submit" form={FORM_ID} name="intent" value="add" disabled={pending} aria-busy={pending} className={`${primary} gap-2`}>
+            {pending ? <Spinner /> : null}
             {pending ? n.actions.adding : n.actions.add}
           </button>
         </div>

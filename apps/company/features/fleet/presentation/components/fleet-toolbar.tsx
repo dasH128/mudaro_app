@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Icon } from "@/app/components/app-icon";
 import { SortSelect } from "@/app/components/form/sort-select";
+import { LinkPending } from "@/app/components/link-pending";
 import type { Locale } from "@/app/i18n/config";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import {
@@ -51,6 +52,7 @@ export function FleetToolbar({ lang, t, filter, q, sort, view, vehicle, counts }
               className={`${chip} ${selected ? "border-foreground bg-foreground text-background" : "border-transparent text-foreground hover:bg-surface-soft"}`}
             >
               {tb.filters[key]} <span className="opacity-70">{counts[key]}</span>
+              <LinkPending />
             </Link>
           );
         })}
