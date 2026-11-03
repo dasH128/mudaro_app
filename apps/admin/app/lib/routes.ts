@@ -13,6 +13,9 @@ export const ROUTES = {
   loginCode: "/login/code",
   /** Primer acceso: activar la app de autenticación (MFA). */
   loginMfa: "/login/mfa",
+  catalog: {
+    list: "/catalog",
+  },
   companies: {
     list: "/companies",
     new: "/companies/new",

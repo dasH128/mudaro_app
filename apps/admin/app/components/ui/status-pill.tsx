@@ -10,8 +10,13 @@ const TONE: Record<PillTone, string> = {
   warn: "border-warn-border bg-warn-surface text-warn-foreground",
 };
 
-export function StatusPill({ tone, children }: { tone: PillTone; children: ReactNode }) {
+const SIZE = {
+  md: "px-2.5 py-1 text-[13px]",
+  sm: "px-[9px] py-[3px] text-xs",
+} as const;
+
+export function StatusPill({ tone, size = "md", children }: { tone: PillTone; size?: keyof typeof SIZE; children: ReactNode }) {
   return (
-    <span className={`inline-block whitespace-nowrap rounded-full border px-2.5 py-1 text-[13px] font-bold ${TONE[tone]}`}>{children}</span>
+    <span className={`inline-block whitespace-nowrap rounded-full border font-bold ${SIZE[size]} ${TONE[tone]}`}>{children}</span>
   );
 }

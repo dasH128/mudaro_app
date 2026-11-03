@@ -11,9 +11,10 @@ Solo lo usa el equipo Mudaro. Sirve para dar de alta las empresas del piloto, ma
 | `/login/mfa` | Ativar verificação | | Primer acceso: QR y primer código. Solo si no hay ningún factor verificado |
 | `/companies` | Lista de empresas | RF-66 | Búsqueda y filtro por estado (en la URL): convite pendente, em configuração, ativa, desativada |
 | `/companies/new` | Nova empresa | RF-65 | Datos de empresa, administrador y piloto. Llamará a la Edge Function `create-company` |
+| `/catalog` | Catálogo global | | Pestañas Objetos, Divisões y Categorias (`?tab=`). Filtros de objetos en la URL. Solo diseño: datos de ejemplo (`features/catalog/data/mock.ts`), "Guardar" no guarda y "Novo objeto" está inerte |
 | `/companies/[id]` | Detalhe da empresa | RF-67, RF-68 | Convite (copiar, reenviar, enlace nuevo), utilizadores, configuración, IMT y RGPD, datos, histórico. Desactivar y reactivar con diálogo |
 
-Referencia visual: `docs/design/admin/` (P0 a P3). Las reglas de validación y de estado están en `docs/requirement-mvp.md`, sección M13.
+Referencia visual: `docs/design/admin/` (P0 a P4). Las reglas de validación y de estado están en `docs/requirement-mvp.md`, sección M13.
 
 ## Estructura del código
 
@@ -80,7 +81,7 @@ Provisional o simulado:
 - MFA sin códigos de recuperación: si alguien pierde el móvil, hay que borrar su factor desde el dashboard de Supabase.
 
 Sin diseño de flujo (botones inertes, con "em breve"):
-- "Editar dados", "Registar contrato", "Desativar" y "Ver" de un utilizador, "Catálogo de objetos" y "Suporte".
+- "Editar dados", "Registar contrato", "Desativar" y "Ver" de un utilizador, "Novo objeto" (sin diseño de pantalla) y "Suporte".
 - No hay botón de cerrar sesión.
 
 Otros:

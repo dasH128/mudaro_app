@@ -28,6 +28,7 @@ type AdminSidebarProps = {
 export function AdminSidebar({ userName }: AdminSidebarProps) {
   const pathname = usePathname();
   const inCompanies = pathname === ROUTES.companies.list || pathname.startsWith(`${ROUTES.companies.list}/`);
+  const inCatalog = pathname === ROUTES.catalog.list || pathname.startsWith(`${ROUTES.catalog.list}/`);
   const current = pathname === ROUTES.companies.list ? "page" : inCompanies ? "true" : undefined;
 
   return (
@@ -59,8 +60,11 @@ export function AdminSidebar({ userName }: AdminSidebarProps) {
           Empresas
         </Link>
 
-        {/* Sin pantalla todavía: se muestran inertes hasta que existan sus rutas. */}
-        <span aria-disabled="true" className={`${itemClass} cursor-not-allowed text-background opacity-70`}>
+        <Link
+          href={ROUTES.catalog.list}
+          aria-current={pathname === ROUTES.catalog.list ? "page" : inCatalog ? "true" : undefined}
+          className={`${itemClass} ${inCatalog ? "bg-background text-foreground" : "text-background"}`}
+        >
           <svg {...iconProps}>
             <rect x="3" y="3" width="7" height="7" rx="1" />
             <rect x="14" y="3" width="7" height="7" rx="1" />
@@ -68,8 +72,9 @@ export function AdminSidebar({ userName }: AdminSidebarProps) {
             <rect x="14" y="14" width="7" height="7" rx="1" />
           </svg>
           Catálogo de objetos
-          <span className="sr-only">(em breve)</span>
-        </span>
+        </Link>
+
+        {/* Sin pantalla todavía: se muestra inerte hasta que exista su ruta. */}
         <span aria-disabled="true" className={`${itemClass} cursor-not-allowed text-background opacity-70`}>
           <svg {...iconProps}>
             <circle cx="12" cy="12" r="9" />

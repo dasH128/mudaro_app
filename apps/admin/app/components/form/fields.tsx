@@ -62,6 +62,7 @@ type TextFieldProps = BaseProps & {
   autoComplete?: string;
   maxLength?: number;
   pattern?: string;
+  readOnly?: boolean;
   /** Sustituye la altura y el tamaño de texto por defecto (h-11 text-[15px]). */
   sizeClassName?: string;
 };
@@ -77,6 +78,7 @@ export function TextField({
   autoComplete,
   maxLength,
   pattern,
+  readOnly,
   sizeClassName = DEFAULT_SIZE,
   ...base
 }: TextFieldProps) {
@@ -96,6 +98,7 @@ export function TextField({
         autoComplete={autoComplete}
         maxLength={maxLength}
         pattern={pattern}
+        readOnly={readOnly}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, hint, error)}
         className={`${controlClass} ${sizeClassName} ${borderClass(error)}`}
