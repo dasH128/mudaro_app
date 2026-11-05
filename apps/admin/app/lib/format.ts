@@ -37,3 +37,27 @@ export function formatDateTime(iso: string): string {
   const parts = Object.fromEntries(dateTimeFormatter.formatToParts(new Date(iso)).map((part) => [part.type, part.value]));
   return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
 }
+
+// RNF-10: coma decimal, sea cual sea el idioma del navegador.
+const volumeFormatter = new Intl.NumberFormat("pt-PT", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const measureFormatter = new Intl.NumberFormat("pt-PT", { maximumFractionDigits: 2 });
+
+/** 1.5 -> "1,500 m³" */
+export function formatVolume(m3: number): string {
+  return `${volumeFormatter.format(m3)} m³`;
+}
+
+/** 45 -> "45 kg", null -> "—" */
+export function formatWeight(kg: number | null): string {
+  return kg === null ? "—" : `${measureFormatter.format(kg)} kg`;
+}
+
+/** 220 -> "220 cm", null -> "—" */
+export function formatLength(cm: number | null): string {
+  return cm === null ? "—" : `${measureFormatter.format(cm)} cm`;
+}
+
+/** 10 -> "10 min" */
+export function formatMinutes(minutes: number): string {
+  return `${measureFormatter.format(minutes)} min`;
+}

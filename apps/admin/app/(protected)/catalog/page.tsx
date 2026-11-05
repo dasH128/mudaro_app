@@ -85,7 +85,7 @@ export default async function CatalogPage({ searchParams }: PageProps<"/catalog"
         </p>
         <ObjectsTable items={shown} categories={categories} rooms={rooms} />
         <p className="m-0 text-[13px] text-muted">
-          A mostrar {shown.length} de {items.length} objetos de exemplo. Os cuidados são valores por defeito: o
+          A mostrar {shown.length} de {items.length} objetos. Os cuidados são valores por defeito: o
           cliente e a empresa ajustam-nos em cada inventário. Volumes, pesos e tempos a validar com transportistas
           antes do piloto (RF-10).
         </p>

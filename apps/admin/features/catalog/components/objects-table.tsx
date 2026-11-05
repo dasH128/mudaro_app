@@ -1,4 +1,5 @@
 import { StatusPill } from "@/app/components/ui/status-pill";
+import { formatLength, formatMinutes, formatVolume, formatWeight } from "@/app/lib/format";
 import type { CatalogGroup, CatalogItem } from "../domain/types";
 import { CareMarks, Translations } from "./item-pills";
 
@@ -66,11 +67,11 @@ export function ObjectsTable({ items, categories, rooms }: ObjectsTableProps) {
                     {roomsLabel(item, rooms)}
                   </span>
                 </td>
-                {/* Valores de ejemplo: pendientes de validar con transportistas (RF-10). */}
-                <td className={`${tdClass} text-right tabular-nums`}>[0,000] m³</td>
-                <td className={numClass}>[cm]</td>
-                <td className={numClass}>[kg]</td>
-                <td className={numClass}>[min]</td>
+                {/* Valores por defecto del catálogo, pendientes de validar con transportistas (RF-10). */}
+                <td className={`${tdClass} text-right tabular-nums`}>{formatVolume(item.volumeM3)}</td>
+                <td className={numClass}>{formatLength(item.maxDimensionCm)}</td>
+                <td className={numClass}>{formatWeight(item.weightKg)}</td>
+                <td className={numClass}>{formatMinutes(item.handlingMinutes)}</td>
                 <td className={tdClass}>
                   <CareMarks marks={item.marks} />
                 </td>

@@ -50,6 +50,236 @@ export type Database = {
         }
         Relationships: []
       }
+      catalog_categories: {
+        Row: {
+          active: boolean
+          created_at: string
+          icon: string | null
+          id: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_category_translations: {
+        Row: {
+          category_id: string
+          description: string | null
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Insert: {
+          category_id: string
+          description?: string | null
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Update: {
+          category_id?: string
+          description?: string | null
+          locale?: Database["public"]["Enums"]["app_locale"]
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_category_translations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_item_rooms: {
+        Row: {
+          item_id: string
+          room_id: string
+        }
+        Insert: {
+          item_id: string
+          room_id: string
+        }
+        Update: {
+          item_id?: string
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_item_rooms_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_item_rooms_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_item_translations: {
+        Row: {
+          item_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+          synonyms: string | null
+        }
+        Insert: {
+          item_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+          synonyms?: string | null
+        }
+        Update: {
+          item_id?: string
+          locale?: Database["public"]["Enums"]["app_locale"]
+          name?: string
+          synonyms?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_item_translations_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_items: {
+        Row: {
+          active: boolean
+          category_id: string
+          created_at: string
+          handling_flags: Database["public"]["Enums"]["handling_flag"][]
+          handling_minutes: number
+          icon: string | null
+          id: string
+          max_dimension_cm: number | null
+          slug: string
+          sort_order: number
+          updated_at: string
+          volume_m3: number
+          weight_kg: number | null
+        }
+        Insert: {
+          active?: boolean
+          category_id: string
+          created_at?: string
+          handling_flags?: Database["public"]["Enums"]["handling_flag"][]
+          handling_minutes?: number
+          icon?: string | null
+          id?: string
+          max_dimension_cm?: number | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          volume_m3: number
+          weight_kg?: number | null
+        }
+        Update: {
+          active?: boolean
+          category_id?: string
+          created_at?: string
+          handling_flags?: Database["public"]["Enums"]["handling_flag"][]
+          handling_minutes?: number
+          icon?: string | null
+          id?: string
+          max_dimension_cm?: number | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          volume_m3?: number
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_room_translations: {
+        Row: {
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+          room_id: string
+        }
+        Insert: {
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+          room_id: string
+        }
+        Update: {
+          locale?: Database["public"]["Enums"]["app_locale"]
+          name?: string
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_room_translations_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_rooms: {
+        Row: {
+          active: boolean
+          created_at: string
+          icon: string | null
+          id: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           base_address: string | null
@@ -388,12 +618,25 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      f_unaccent: { Args: { "": string }; Returns: string }
       is_company_administrator: { Args: never; Returns: boolean }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
+      search_catalog_items: {
+        Args: { lang?: Database["public"]["Enums"]["app_locale"]; q: string }
+        Returns: {
+          category_id: string
+          handling_flags: Database["public"]["Enums"]["handling_flag"][]
+          item_id: string
+          name: string
+          volume_m3: number
+        }[]
+      }
     }
     Enums: {
+      app_locale: "pt" | "es" | "en"
       company_role: "administrator" | "operator"
+      handling_flag: "fragile" | "disassembly" | "extra_crew"
       vehicle_inactive_reason: "workshop" | "other"
       vehicle_type:
         | "small-van"
@@ -528,7 +771,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_locale: ["pt", "es", "en"],
       company_role: ["administrator", "operator"],
+      handling_flag: ["fragile", "disassembly", "extra_crew"],
       vehicle_inactive_reason: ["workshop", "other"],
       vehicle_type: [
         "small-van",

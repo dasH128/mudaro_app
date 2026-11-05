@@ -42,7 +42,7 @@ export function GroupsTable({ label, groups, counts }: GroupsTableProps) {
               <td className={tdClass}>{group.en}</td>
               <td className={tdClass}>
                 <code className="text-[13px] text-muted">
-                  {group.slug} · {group.icon}
+                  {group.icon ? `${group.slug} · ${group.icon}` : group.slug}
                 </code>
               </td>
               <td className={`${tdClass} text-right tabular-nums`}>{counts.get(group.slug) ?? 0}</td>

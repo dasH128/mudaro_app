@@ -24,6 +24,11 @@ export type CatalogItem = {
   /** Slugs de las divisões donde puede aparecer. */
   rooms: readonly string[];
   marks: readonly CareMark[];
+  /** Valores por defecto: cada línea de inventario los copia al crearse. */
+  volumeM3: number;
+  maxDimensionCm: number | null;
+  weightKg: number | null;
+  handlingMinutes: number;
   active: boolean;
 };
 
