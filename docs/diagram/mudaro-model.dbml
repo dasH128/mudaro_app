@@ -12,6 +12,7 @@
 //   - el dinero va en céntimos en todas las tablas, como en la base real
 //   - quotes tiene supersedes_id para encadenar versiones tras la aceptación
 //   - las tablas del pedido (addresses, inventories...) no llevan company_id: su RLS pasa por shipments
+//   - la dirección (texto, coordenadas y accesos) se guarda por versión del inventario, en inventory_addresses (A1)
 // Para ver el diagrama: dbdiagram.io > Import > DBML
 
 // Resumen del proyecto: qué es cada entidad central.
@@ -495,34 +496,25 @@ Table shipment_events {
   occurred_at timestamptz [not null, default: `now()`]
 }
 
-// Direcciones del pedido (origen, destino y paradas) con los accesos que afectan al cálculo. Cuelga del pedido. [PROPOSED]
+// Las direcciones que tiene un pedido (origen, destino y paradas), solo como "huecos": qué función cumple cada una y en qué orden. No guarda el texto ni los accesos: eso cambia con las versiones y vive en inventory_addresses. Cuelga del pedido. [PROPOSED]
 Table addresses {
   id uuid [pk, default: `gen_random_uuid()`]
   order_id uuid [not null]
   role address_role [not null]
   sort_order integer [not null, default: 0]
-  address text [not null]
-  lat double
-  lng double
-  floor integer [not null, default: 0]
-  lift lift_size [not null, default: 'none']
-  narrow_stairs boolean [not null, default: false]
-  parking_distance_m integer [not null, default: 0]
-  needs_permit boolean [not null, default: false]
-  notes text
 }
 
 // =====================================================================
 // 5. INVENTARIO (del pedido, versionado)  [PROPOSED]
 // =====================================================================
 
-// Versión del inventario de un pedido. Un cambio de cálculo o de accesos crea versión nueva; fotos y notas no. [PROPOSED]
+// Versión del inventario de un pedido. Un cambio de cálculo, de direcciones o de accesos crea versión nueva; fotos y notas no. Una fila sin submitted_at es el borrador, que se edita en sitio (ver A10). [PROPOSED]
 Table inventories {
   id uuid [pk, default: `gen_random_uuid()`]
   order_id uuid [not null, note: 'El inventario es del pedido, no del envio']
   version integer [not null]
   filled_by filled_by [not null]
-  submitted_at timestamptz
+  submitted_at timestamptz [note: 'Nulo = borrador editable. Con valor = version cerrada, no se edita']
 
   indexes {
     (order_id, version) [unique]
@@ -543,6 +535,26 @@ Table inventory_lines {
   unit_minutes integer [not null, default: 5]
   handling_flags handling_flag[] [not null, default: '{}']
   photos text[] [not null, default: '{}']
+}
+
+// Datos de cada dirección en una versión del inventario: texto, coordenadas y accesos. Como viven aquí, cambiar el destino, el piso o el ascensor crea una versión nueva y la versión anterior conserva lo que tenía (A1). [PROPOSED]
+Table inventory_addresses {
+  id uuid [pk, default: `gen_random_uuid()`]
+  inventory_id uuid [not null, note: 'Version del inventario a la que pertenece']
+  address_id uuid [not null, note: 'Hueco del pedido (origen, destino o parada) al que corresponde']
+  address text [not null]
+  lat double
+  lng double
+  floor integer [not null, default: 0]
+  lift lift_size [not null, default: 'none']
+  narrow_stairs boolean [not null, default: false]
+  parking_distance_m integer [not null, default: 0]
+  needs_permit boolean [not null, default: false]
+  notes text
+
+  indexes {
+    (inventory_id, address_id) [unique]
+  }
 }
 
 // Servicios extra elegidos por el cliente en una versión del inventario (RF-24). [PROPOSED]
@@ -729,6 +741,8 @@ Ref: inventories.order_id > orders.id
 Ref: inventory_lines.inventory_id > inventories.id
 Ref: inventory_lines.catalog_item_id > catalog_items.id
 Ref: inventory_lines.company_item_id > company_items.id
+Ref: inventory_addresses.inventory_id > inventories.id
+Ref: inventory_addresses.address_id > addresses.id
 Ref: inventory_extras.inventory_id > inventories.id
 Ref: inventory_extras.extra_id > company_extras.id
 
@@ -800,6 +814,7 @@ TableGroup order_and_shipment [color: #B5651D] {
 TableGroup inventory [color: #8A5A9E] {
   inventories
   inventory_lines
+  inventory_addresses
   inventory_extras
 }
 
@@ -843,21 +858,22 @@ TableGroup execution [color: #2A7F9E] {
 // Fechas de actividad del envío: status_changed_at se actualiza en cada cambio de estado (misma función que lo cambia). last_activity_at se actualiza con un trigger al insertar un shipment_events. Un borrador de inventario guardado por el cliente no cambia la fila de shipments, por eso no basta con updated_at. [PROPOSED]
 // Numeración de envíos: shipments.number lo asigna create_order() con el siguiente número de la empresa (contador propio, bloqueado para evitar duplicados). Nunca se reutiliza ni se reasigna. El número de pedido que ve el cliente no existe en el MVP: con cuentas se añade orders.reference, un código corto no secuencial. Pendiente: prefijo de la numeración de presupuestos (hoy PR-xxxx). [PROPOSED]
 // Restricción shipments.client_id: la ficha debe ser de la misma empresa. Clave compuesta (clients id + company_id, shipments client_id + company_id) o trigger. [PROPOSED]
-// Trigger de nueva versión de inventario: si cambian objetos, cantidades, volúmenes, pesos o accesos, crea una versión y pasa a superseded los presupuestos enviados que usaban la anterior. [PROPOSED]
+// Trigger de nueva versión de inventario: si cambian objetos, cantidades, volúmenes, pesos, direcciones (texto o coordenadas) o accesos, crea una versión y pasa a superseded los presupuestos enviados que usaban la anterior. Solo actúa sobre versiones ya enviadas: el borrador se edita en sitio (A10). [PROPOSED]
 // Regla tras aceptar: el presupuesto aceptado sigue vigente hasta que se acepte el nuevo; el envío no vuelve atrás de won y el trabajo no se recrea. [PROPOSED]
 // Cancelación (RF-69): cancel_order() cancela el pedido y sus envíos vivos, y su trabajo si está scheduled (se bloquea si está in_progress o delivered). Autoriza por dueño del pedido y avisa a las demás empresas con envío vivo. Un envío cancelado no se reactiva. Detalle en A4. [PROPOSED]
 // Restricción check en orders: token_hash y token_expires_at están los dos o ninguno. Un pedido sin enlace (inventario rellenado por la empresa) los tiene nulos hasta que se comparte el enlace. [PROPOSED]
 // Caducidad del enlace: bloquea editar el inventario, no ver ni aceptar un presupuesto vigente. Edge Function que valida el hash del token (RNF-02). [PROPOSED]
 // Restricción exclude en assignments: sin solapes de vehículo ni de usuario en el mismo periodo. [PROPOSED]
 // Caducidad automática de presupuestos: pasado valid_until no se puede aceptar (RF-45). [PROPOSED]
-// RLS de orders, addresses, inventories e inventory_lines: se lee solo si la empresa tiene un shipment en ese pedido. [PROPOSED]
+// RLS de orders, addresses, inventories, inventory_lines e inventory_addresses: se lee solo si la empresa tiene un shipment en ese pedido. [PROPOSED]
+// create_order(): además de crear el pedido y su envío, crea la versión 1 del inventario en borrador con las filas de addresses y los datos de origen y destino en inventory_addresses, porque el texto de la dirección ya no vive en addresses (A1). [PROPOSED]
 //
 // =====================================================================
 // PENDIENTES (revisión del 09/11/2026). Cada punto lleva un código para citarlo.
 // =====================================================================
 //
 // A. Correcciones acordadas, aún sin aplicar en este DBML
-// A1 (alta, bloquea el paso 4b) Accesos sin versionar. RF-27 dice que cambiar piso, ascensor, aparcamiento o escaleras crea una versión nueva del inventario, pero esos campos están en addresses, que cuelga del pedido y se edita en sitio. Así el trigger de versión no ve el cambio y el anexo del presupuesto (RF-39) no puede mostrar la versión exacta. Mover floor, lift, narrow_stairs, parking_distance_m, needs_permit y las notas de acceso a una tabla ligada a inventories (por ejemplo inventory_addresses). addresses se queda con role, sort_order, address, lat y lng.
+// A1 (APLICADO el 09/11/2026, versión ampliada) Direcciones y accesos sin versionar. RF-27 dice que cambiar piso, ascensor, aparcamiento o escaleras crea una versión nueva del inventario, pero esos campos estaban en addresses, que cuelga del pedido y se edita en sitio. Así el trigger de versión no veía el cambio y el anexo del presupuesto (RF-39) no podía mostrar la versión exacta. Además, cambiar el destino a otro más lejos cambia los km y el precio (RF-34) y tampoco creaba versión. Ahora addresses solo guarda role y sort_order, y el texto, las coordenadas y los accesos viven en inventory_addresses, ligada a inventories. Cambiar el destino, el piso o el ascensor crea una versión nueva y la anterior conserva lo que tenía. Consecuencias: create_order() crea la versión 1 en borrador con las direcciones; el 4a del paso 4 necesita inventories e inventory_addresses (ver D2); RF-27 incluye las direcciones; el borrador se edita en sitio (A10).
 // A2 inventory_lines no cubre lo que piden los requisitos: falta la marca de revisión (objeto libre sin medidas, RF-21 y RF-36), el valor ajustado a mano (RF-37) y la marca "la base cambió" (RF-27). Decidir además dónde vive el ajuste manual: el inventario es del pedido y el ajuste de una empresa no debe afectar a otra cuando haya varias.
 // A3 (APLICADO el 09/11/2026) orders.desired_date es not null (el formulario la exige, RF-13) y flexibility_days se sustituyó por el enum date_flexibility. Motivo: month significa "solo sé el mes", no 30 días de margen. Pendiente: fijar en el comentario del enum si el margen de two_days y one_week es antes, después o a ambos lados de la fecha (lo define el texto de la pantalla). Mejora de producto, no necesaria para el MVP: el formulario obliga a escribir una fecha completa aunque se elija "Só o mês"; podría pedir solo el mes y guardar el día 1.
 // A4 (DECIDIDO el 09/11/2026, falta implementarlo en SQL) La cancelación vive en dos sitios (orders.cancelled_at y shipments.status) y solo debe cambiarla cancel_order(), en una transacción: (1) autoriza por dueño del pedido, que es account_id si existe y, si no, created_by_company_id; una empresa que solo tiene un envío en un pedido ajeno no puede cancelarlo; en el MVP cancela un administrador de la empresa creadora; (2) rellena orders.cancelled_at, cancellation_reason, cancelled_by_type y cancelled_by_id; (3) pasa a cancelled solo los envíos aún vivos (new, awaiting_inventory, inventory_received, quoted, won) y actualiza status_changed_at; (4) si un envío estaba won, cancela su trabajo cuando está scheduled y bloquea toda la cancelación si el trabajo está in_progress o delivered; (5) inserta el evento cancelled en shipment_events de cada envío y una fila en audit_log; (6) avisa a las empresas con envío vivo salvo a la que canceló (en el MVP, a nadie). Un trigger en shipments impide salir de cancelled. La aceptación de un presupuesto rechaza los envíos cancelados, sin añadir un valor a quote_status.
@@ -866,6 +882,9 @@ TableGroup execution [color: #2A7F9E] {
 // A7 Índice único temporal sobre shipments(order_id) para forzar un envío por pedido en el MVP. Se quita al abrir varias empresas por pedido.
 // A8 shipment_events: triggers que bloqueen update y delete, como en audit_log. Solo se inserta desde las funciones que hacen el cambio. note_added guarda solo note_id.
 // A9 Número de presupuesto: quotes no tiene columna de número y RF-42 pide que las versiones compartan número. Decidir el prefijo (hoy PR-xxxx en el código) y si el número cuelga del envío o tiene su propia secuencia.
+// A10 (POR CONFIRMAR, necesaria para que A1 funcione) Cuándo nace una versión del inventario. El cliente guarda borrador automáticamente (RF-25) y la empresa crea el pedido con direcciones antes de que haya inventario. Si cada edición creara versión, habría decenas. Propuesta: el borrador es la fila de inventories sin submitted_at y se edita en sitio; la versión se cierra al enviar el inventario (submitted_at). Solo editar una versión ya enviada abre un borrador nuevo, que al enviarse es la versión siguiente. Un índice único parcial permite un solo borrador por pedido. Las versiones nuevas copian lo anterior (incluidos los ajustes manuales, A2).
+// A11 (POR CONFIRMAR) Qué versión es la vigente de un pedido: la última con submitted_at. Escribirlo como regla (o como vista) para que las pantallas, el cálculo y la lista de envíos no la interpreten cada uno a su manera.
+// A12 (POR CONFIRMAR) jobs.quote_id es único y se actualiza si el cliente acepta un presupuesto nuevo antes de la mudanza, así que se pierde qué presupuesto originó el trabajo. Propuesta: dejar el cambio como evento en shipment_events (con el id del presupuesto anterior y del nuevo) en lugar de una tabla nueva.
 //
 // B. Decisiones abiertas
 // B1 (RESUELTO para el MVP el 09/11/2026) Quién cancela un pedido (RF-69): lo cancela su dueño. En el MVP es la empresa creadora y no hay a quién avisar. Con cuentas (fase 3) cancela el cliente y se avisa a las empresas con envío vivo. Ver A4. Sigue abierto si un cliente sin cuenta puede cancelar desde su enlace.
@@ -889,6 +908,6 @@ TableGroup execution [color: #2A7F9E] {
 //
 // D. Antes de crear las migraciones del paso 4
 // D1 Comprobar el historial de migraciones en Supabase. Según una nota de octubre, las del paso 1 se aplicaron a mano y un supabase db push intentaría reaplicarlas (supabase migration repair).
-// D2 Partir el paso 4. 4a: clients, orders, shipments, shipment_notes, shipment_events y addresses solo con dirección, más create_order(), cancel_order() y RLS. 4b: inventario con accesos versionados, extras y generación del enlace. 4b espera a A1, A2 y B5.
+// D2 Partir el paso 4. 4a: clients, orders, shipments, shipment_notes, shipment_events, addresses, inventories e inventory_addresses (sin líneas ni extras), más create_order(), cancel_order() y RLS. Con A1, el texto de origen y destino vive en inventory_addresses, así que inventories e inventory_addresses entran en 4a: create_order() crea la versión 1 en borrador. 4b: inventory_lines, inventory_extras y generación del enlace. 4b espera a A2, A10 y B5.
 // D3 Documentación por corregir: borrar o marcar como históricos mudaro-model-es_v1.dbml y requests-model.dbml, que siguen en docs/diagram/. (Ya hecho el 09/11/2026: rutas del DBML, supabase/CLAUDE.md, nota de pedido y envío en apps/company/CLAUDE.md y la decisión de "Orçamentos" en requirement-mvp.md.)
 // D4 Impacto en apps/company: renombrar features/proposals a quotes (unos 72 ficheros, 656 líneas, 107 claves por idioma en los diccionarios, ruta /proposals y NavKey), requestId a orderId, pasar OrderStatus y OrderStage a un estado de envío con cancelled, resolver el TODO de "lost", e implementar RF-69.
