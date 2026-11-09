@@ -1,7 +1,7 @@
 # Mudaro · Requisitos del MVP
 
 Versión 0.2 · 09/11/2026 (versión 0.1 del 21/10/2026)
-Documento de referencia: *Mudaro · Modelo de negocio y dominio (MVP transportistas)*. El modelo de datos vigente, con pedido y envío separados, está en `docs/models/mudaro-model.dbml` y su construcción por pasos en `docs/plan-modelo-bd.md`.
+Documento de referencia: *Mudaro · Modelo de negocio y dominio (MVP transportistas)*. El modelo de datos vigente, con pedido y envío separados, está en `docs/diagram/mudaro-model.dbml` y su construcción por pasos en `docs/plan-modelo-bd.md`.
 
 ---
 
@@ -258,7 +258,7 @@ Pasos obligatorios de configuración: cuenta del administrador, perfil de la emp
 
 | ID | Área | Requisito |
 | --- | --- | --- |
-| RNF-01 | Aislamiento | Todas las tablas con datos de empresa tienen RLS por `company_id`. Ninguna consulta desde la app puede devolver datos de otra empresa |
+| RNF-01 | Aislamiento | Todas las tablas con datos de empresa tienen RLS por `company_id`. Excepción: `orders`, `addresses`, `inventories`, `inventory_lines` e `inventory_extras` pertenecen al pedido y no llevan `company_id` propio (`orders` guarda `created_by_company_id`, que no se usa para la RLS); una empresa solo los lee si tiene un envío (`shipments`) en ese pedido. Ninguna consulta desde la app puede devolver datos de otra empresa |
 | RNF-02 | Acceso del cliente | El enlace pertenece al pedido y usa un token aleatorio de al menos 32 bytes, con caducidad. Solo se guarda el hash del token. Solo las Edge Functions acceden a los datos con clave de servicio, tras validar el token |
 | RNF-03 | Privacidad de precios | Tarifas, costes y márgenes nunca se envían al cliente ni al rol operario. Los precios de una empresa nunca se muestran a otra. El cliente ve los presupuestos que ha recibido |
 | RNF-04 | RGPD | Contrato de encargo de tratamiento con cada empresa, política de privacidad para el cliente final y plazo de conservación de fotos y firmas configurable |
@@ -275,7 +275,7 @@ Pasos obligatorios de configuración: cuenta del administrador, perfil de la emp
 
 ## 7. Modelo de datos
 
-El modelo vigente está en `docs/models/mudaro-model.dbml` (nombres en inglés, comentarios en español) y su construcción por pasos en `docs/plan-modelo-bd.md`. Puntos que la implementación debe respetar:
+El modelo vigente está en `docs/diagram/mudaro-model.dbml` (nombres en inglés, comentarios en español) y su construcción por pasos en `docs/plan-modelo-bd.md`. Puntos que la implementación debe respetar:
 
 - Pedido (`orders`) y envío (`shipments`) son entidades separadas. Hay un envío por empresa; en el MVP, uno por pedido. La entidad "solicitud" del modelo anterior desaparece: su contenido se reparte entre pedido y envío.
 - La ficha del cliente (`clients`) es de cada empresa y se vincula al envío (`shipments.client_id`). El pedido guarda solo el nombre y el teléfono de contacto.
@@ -350,5 +350,5 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Diseño de los flujos pendientes del panel: editar empresa, registrar IMT y contrato RGPD, desactivar o ver utilizadores, cerrar sesión.
 - [ ] Qué hacer si se da de alta una empresa con un NIF o un email de administrador que ya existen.
 - [ ] Servicios extra (RF-07, RF-24): `inventory_extras` apunta a los extras de cada empresa, pero el inventario es del pedido. Pendiente de análisis: un catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea la tabla de extras (paso 2 del plan de BD) y la parte de extras del paso 4.
-- [ ] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10). Los diseños de la empresa todavía dicen "Proposta"; no se renombran hasta decidirla.
+- [x] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10): "Orçamento" (decidido el 09/11/2026). En el código el término es `quotes`. Pendiente de aplicar: los diseños de la empresa y la app todavía dicen "Proposta" y `proposals`.
 - [ ] Diseño pendiente tras separar pedido y envío: pantalla de pedido creado con un único enlace, pestaña "Envío" en el detalle del pedido, aviso de inventario alterado (indica si crea versión y qué presupuestos afecta), reenvío del enlace del pedido y "marcar como perdido" sobre el envío.

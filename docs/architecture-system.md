@@ -38,7 +38,7 @@ Cambios respecto a `requisitos-mvp.md`, ya trasladados a `requirement-mvp.md` (2
 
 ## Modelo de datos: pedido y envío
 
-El pedido (`orders`) es la mudanza y el envío (`shipments`) es el pedido enviado a una empresa. En el MVP cada pedido tiene un solo envío, pero el modelo ya permite varias empresas por pedido. El cliente final no tiene cuenta: entra por un enlace del pedido. Modelo completo en `docs/models/mudaro-model.dbml` y decisiones por paso en `docs/plan-modelo-bd.md`.
+El pedido (`orders`) es la mudanza y el envío (`shipments`) es el pedido enviado a una empresa. En el MVP cada pedido tiene un solo envío, pero el modelo ya permite varias empresas por pedido. El cliente final no tiene cuenta: entra por un enlace del pedido. Modelo completo en `docs/diagram/mudaro-model.dbml` y decisiones por paso en `docs/plan-modelo-bd.md`.
 
 ## Seguridad del panel interno
 

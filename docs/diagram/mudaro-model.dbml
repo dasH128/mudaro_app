@@ -84,6 +84,27 @@ Enum shipment_status {
   cancelled
 }
 
+// Qué ocurrió en un envío, para la pestaña de historial. [PROPOSED]
+Enum shipment_event_kind {
+  created
+  link_shared
+  link_resent
+  inventory_submitted
+  quote_sent
+  won
+  lost
+  cancelled
+  note_added
+}
+
+// Margen de la fecha aproximada de la mudanza. month = el cliente solo sabe el mes. [PROPOSED]
+Enum date_flexibility {
+  exact
+  two_days
+  one_week
+  month
+}
+
 // Función de una dirección dentro del pedido. [PROPOSED]
 Enum address_role {
   origin
@@ -416,16 +437,18 @@ Table clients {
 // La mudanza (antes solicitud). Guarda el contacto declarado y el enlace del cliente. Dueño: la empresa creadora; con cuentas, account_id. [PROPOSED]
 Table orders {
   id uuid [pk, default: `gen_random_uuid()`]
-  company_id uuid [not null, note: 'Empresa creadora y dueña del pedido. No es la ficha del cliente']
+  created_by_company_id uuid [not null, note: 'Empresa que creo el pedido. Es la dueña mientras no haya cuenta; con cuentas, el dueño pasa a ser account_id y esta columna queda como historico. No es la ficha del cliente. La RLS de orders no usa esta columna: pasa por shipments']
   contact_name text [not null, note: 'Contacto declarado. La ficha de cada empresa vive en shipments.client_id']
   contact_phone text [not null, note: 'Normalizado +351XXXXXXXXX']
-  desired_date date [note: 'Fecha aproximada']
-  flexibility_days integer [not null, default: 0]
-  token_hash text [not null, unique, note: 'Solo el hash del enlace, nunca el token (RNF-02)']
-  token_expires_at timestamptz [not null, note: '7 dias por defecto, configurable y reenviable. Caducado, solo bloquea editar el inventario: el cliente aun puede ver y aceptar un presupuesto vigente']
+  desired_date date [not null, note: 'Fecha aproximada. Obligatoria (RF-13). Con date_flexibility = month solo importa el mes: se guarda el dia que escribio el usuario']
+  date_flexibility date_flexibility [not null, default: 'exact', note: 'Margen de la fecha. Coincide con el enum del codigo (exact, two-days, one-week, month)']
+  token_hash text [unique, note: 'Solo el hash del enlace, nunca el token (RNF-02). Nulo hasta que se comparte el enlace por primera vez: si la empresa rellena el inventario (RF-19) no hay enlace. Reenviar genera un token nuevo y el anterior deja de valer']
+  token_expires_at timestamptz [note: '7 dias por defecto, configurable y reenviable. Nulo mientras no haya enlace. token_hash y token_expires_at van juntos: los dos nulos o los dos con valor. Caducado, solo bloquea editar el inventario: el cliente aun puede ver y aceptar un presupuesto vigente']
   contact_source text [note: 'Como llego el contacto: telefono, WhatsApp, recomendacion...']
-  cancelled_at timestamptz [note: 'Cancelar el pedido cancela sus shipments (RF-69)']
+  cancelled_at timestamptz [note: 'Cancelar el pedido cancela sus shipments vivos (RF-69). Solo lo rellena cancel_order()']
   cancellation_reason text
+  cancelled_by_type text [note: 'Quien cancelo: company o client. Nulo si no esta cancelado. Con cuentas, cancela el dueño del pedido']
+  cancelled_by_id uuid [note: 'Usuario de la empresa que cancelo. Nulo si cancelo el cliente por su enlace o si no esta cancelado']
   created_at timestamptz [not null, default: `now()`]
   // Fase de cuentas: account_id uuid
 }
@@ -435,14 +458,41 @@ Table shipments {
   id uuid [pk, default: `gen_random_uuid()`]
   company_id uuid [not null, note: 'Empresa destinataria']
   order_id uuid [not null]
+  number integer [not null, note: 'Numero visible para la empresa (MD-0836 se arma en la interfaz). Secuencia propia de cada empresa, sin saltos. Pedido y envio comparten este numero para la empresa (RF-17). Los presupuestos cuelgan de el. El cliente no lo ve: con cuentas tendra orders.reference']
   client_id uuid [not null, note: 'Ficha del cliente en ESTA empresa: clients.company_id debe ser igual a shipments.company_id']
   status shipment_status [not null, default: 'new']
   lost_reason text [note: 'Solo si status = lost. Distinto de cancelled']
+  status_changed_at timestamptz [not null, default: `now()`, note: 'Cuando cambio el estado por ultima vez. Lo actualiza la funcion que cambia el estado. Sirve para "lleva X dias esperando inventario" (RF-18) y para las cifras del mes (ganados, perdidos)']
+  last_activity_at timestamptz [not null, default: `now()`, note: 'Ultimo evento relevante: inventario enviado, presupuesto enviado, aceptacion, nota. Lo actualiza un trigger al insertar una fila en shipment_events, no set_updated_at (que solo salta si cambia esta fila). Alimenta "sin novedades hace X dias" y el orden de la lista']
   created_at timestamptz [not null, default: `now()`]
 
   indexes {
     (order_id, company_id) [unique]
+    (company_id, number) [unique]
   }
+}
+
+// Notas internas de la empresa sobre un envío. Las escribe una persona y se pueden editar o borrar (RGPD). Privadas de cada empresa: cuelgan del envío, no del pedido. [PROPOSED]
+Table shipment_notes {
+  id uuid [pk, default: `gen_random_uuid()`]
+  company_id uuid [not null, note: 'Repetido a proposito para la RLS (RNF-01). Debe ser igual a shipments.company_id']
+  shipment_id uuid [not null]
+  author_id uuid [not null, note: 'Usuario de la empresa que la escribio']
+  body text [not null]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+// Historial del envío: lo que ocurrió y cuándo. Solo se escribe desde las funciones que hacen el cambio, nunca se edita ni se borra. Alimenta la pestaña de historial y last_activity_at. [PROPOSED]
+Table shipment_events {
+  id uuid [pk, default: `gen_random_uuid()`]
+  company_id uuid [not null, note: 'Repetido a proposito para la RLS (RNF-01). Debe ser igual a shipments.company_id']
+  shipment_id uuid [not null]
+  kind shipment_event_kind [not null]
+  actor_type text [not null, note: 'company, client o system. El cliente actua por el enlace y no tiene usuario']
+  actor_id uuid [note: 'Usuario de la empresa. Nulo si actua el cliente o el sistema']
+  data jsonb [not null, default: '{}', note: 'Datos del evento: dias de validez del enlace, version del inventario o del presupuesto, motivo. note_added guarda solo note_id, nunca el texto de la nota']
+  occurred_at timestamptz [not null, default: `now()`]
 }
 
 // Direcciones del pedido (origen, destino y paradas) con los accesos que afectan al cálculo. Cuelga del pedido. [PROPOSED]
@@ -649,7 +699,7 @@ Ref: tariffs.company_id > companies.id
 Ref: company_extras.company_id > companies.id
 Ref: company_items.company_id > companies.id
 Ref: clients.company_id > companies.id
-Ref: orders.company_id > companies.id
+Ref: orders.created_by_company_id > companies.id
 Ref: shipments.company_id > companies.id
 
 // El catálogo global: categorías, habitaciones, objetos y sus traducciones.
@@ -665,6 +715,14 @@ Ref: company_items.catalog_item_id > catalog_items.id
 Ref: shipments.order_id > orders.id
 Ref: shipments.client_id > clients.id
 Ref: addresses.order_id > orders.id
+
+// Notas e historial del envío.
+Ref: shipment_notes.shipment_id > shipments.id
+Ref: shipment_notes.author_id > company_users.id
+Ref: shipment_notes.company_id > companies.id
+Ref: shipment_events.shipment_id > shipments.id
+Ref: shipment_events.actor_id > company_users.id
+Ref: shipment_events.company_id > companies.id
 
 // Inventario versionado del pedido y sus líneas.
 Ref: inventories.order_id > orders.id
@@ -733,6 +791,8 @@ TableGroup order_and_shipment [color: #B5651D] {
   clients
   orders
   shipments
+  shipment_notes
+  shipment_events
   addresses
 }
 
@@ -780,16 +840,55 @@ TableGroup execution [color: #2A7F9E] {
 // Edge Functions en supabase/functions: create-company (alta de empresa) y resend-invite (reenviar invitación). [EXISTS]
 //
 // Pendientes para el paso 4 y siguientes:
+// Fechas de actividad del envío: status_changed_at se actualiza en cada cambio de estado (misma función que lo cambia). last_activity_at se actualiza con un trigger al insertar un shipment_events. Un borrador de inventario guardado por el cliente no cambia la fila de shipments, por eso no basta con updated_at. [PROPOSED]
+// Numeración de envíos: shipments.number lo asigna create_order() con el siguiente número de la empresa (contador propio, bloqueado para evitar duplicados). Nunca se reutiliza ni se reasigna. El número de pedido que ve el cliente no existe en el MVP: con cuentas se añade orders.reference, un código corto no secuencial. Pendiente: prefijo de la numeración de presupuestos (hoy PR-xxxx). [PROPOSED]
 // Restricción shipments.client_id: la ficha debe ser de la misma empresa. Clave compuesta (clients id + company_id, shipments client_id + company_id) o trigger. [PROPOSED]
 // Trigger de nueva versión de inventario: si cambian objetos, cantidades, volúmenes, pesos o accesos, crea una versión y pasa a superseded los presupuestos enviados que usaban la anterior. [PROPOSED]
 // Regla tras aceptar: el presupuesto aceptado sigue vigente hasta que se acepte el nuevo; el envío no vuelve atrás de won y el trabajo no se recrea. [PROPOSED]
-// Cancelación (RF-69): cancelar un pedido cancela sus shipments y avisa a las empresas; un envío cancelado no se reactiva. [PROPOSED]
+// Cancelación (RF-69): cancel_order() cancela el pedido y sus envíos vivos, y su trabajo si está scheduled (se bloquea si está in_progress o delivered). Autoriza por dueño del pedido y avisa a las demás empresas con envío vivo. Un envío cancelado no se reactiva. Detalle en A4. [PROPOSED]
+// Restricción check en orders: token_hash y token_expires_at están los dos o ninguno. Un pedido sin enlace (inventario rellenado por la empresa) los tiene nulos hasta que se comparte el enlace. [PROPOSED]
 // Caducidad del enlace: bloquea editar el inventario, no ver ni aceptar un presupuesto vigente. Edge Function que valida el hash del token (RNF-02). [PROPOSED]
 // Restricción exclude en assignments: sin solapes de vehículo ni de usuario en el mismo periodo. [PROPOSED]
 // Caducidad automática de presupuestos: pasado valid_until no se puede aceptar (RF-45). [PROPOSED]
 // RLS de orders, addresses, inventories e inventory_lines: se lee solo si la empresa tiene un shipment en ese pedido. [PROPOSED]
 //
-// Puntos aún abiertos:
-// PENDIENTE DE ANÁLISIS: inventory_extras apunta a company_extras, que es de cada empresa, y el inventario es del pedido. Falta decidir cómo se eligen los extras cuando hay varias empresas. No se cambia nada hasta analizarlo.
-// El nombre shipments puede confundirse con transporte de mercancías; confirmar o cambiar antes de crear las migraciones.
-// "Presupuesto" en la interfaz: en portugués de Portugal es otra palabra (RNF-10); confirmarla antes de renombrar los diseños.
+// =====================================================================
+// PENDIENTES (revisión del 09/11/2026). Cada punto lleva un código para citarlo.
+// =====================================================================
+//
+// A. Correcciones acordadas, aún sin aplicar en este DBML
+// A1 (alta, bloquea el paso 4b) Accesos sin versionar. RF-27 dice que cambiar piso, ascensor, aparcamiento o escaleras crea una versión nueva del inventario, pero esos campos están en addresses, que cuelga del pedido y se edita en sitio. Así el trigger de versión no ve el cambio y el anexo del presupuesto (RF-39) no puede mostrar la versión exacta. Mover floor, lift, narrow_stairs, parking_distance_m, needs_permit y las notas de acceso a una tabla ligada a inventories (por ejemplo inventory_addresses). addresses se queda con role, sort_order, address, lat y lng.
+// A2 inventory_lines no cubre lo que piden los requisitos: falta la marca de revisión (objeto libre sin medidas, RF-21 y RF-36), el valor ajustado a mano (RF-37) y la marca "la base cambió" (RF-27). Decidir además dónde vive el ajuste manual: el inventario es del pedido y el ajuste de una empresa no debe afectar a otra cuando haya varias.
+// A3 (APLICADO el 09/11/2026) orders.desired_date es not null (el formulario la exige, RF-13) y flexibility_days se sustituyó por el enum date_flexibility. Motivo: month significa "solo sé el mes", no 30 días de margen. Pendiente: fijar en el comentario del enum si el margen de two_days y one_week es antes, después o a ambos lados de la fecha (lo define el texto de la pantalla). Mejora de producto, no necesaria para el MVP: el formulario obliga a escribir una fecha completa aunque se elija "Só o mês"; podría pedir solo el mes y guardar el día 1.
+// A4 (DECIDIDO el 09/11/2026, falta implementarlo en SQL) La cancelación vive en dos sitios (orders.cancelled_at y shipments.status) y solo debe cambiarla cancel_order(), en una transacción: (1) autoriza por dueño del pedido, que es account_id si existe y, si no, created_by_company_id; una empresa que solo tiene un envío en un pedido ajeno no puede cancelarlo; en el MVP cancela un administrador de la empresa creadora; (2) rellena orders.cancelled_at, cancellation_reason, cancelled_by_type y cancelled_by_id; (3) pasa a cancelled solo los envíos aún vivos (new, awaiting_inventory, inventory_received, quoted, won) y actualiza status_changed_at; (4) si un envío estaba won, cancela su trabajo cuando está scheduled y bloquea toda la cancelación si el trabajo está in_progress o delivered; (5) inserta el evento cancelled en shipment_events de cada envío y una fila en audit_log; (6) avisa a las empresas con envío vivo salvo a la que canceló (en el MVP, a nadie). Un trigger en shipments impide salir de cancelled. La aceptación de un presupuesto rechaza los envíos cancelados, sin añadir un valor a quote_status.
+// A5 (APLICADO el 09/11/2026) orders.company_id se renombró a created_by_company_id y la excepción quedó escrita en RNF-01 (requirement-mvp.md): orders, addresses, inventories, inventory_lines e inventory_extras no llevan company_id propio y su RLS pasa por shipments. El dueño del pedido es account_id cuando exista (tras la reclamación) y, si no, created_by_company_id; esa regla la usa cancel_order().
+// A6 Restricciones de coherencia que faltan: quotes.company_id igual a shipments.company_id; quotes.inventory_id del mismo pedido que su envío (inventories.order_id igual a shipments.order_id); company_id de shipment_notes y shipment_events igual al de su envío; jobs sin shipment_id, así que nada impide dos trabajos por envío (añadir shipment_id unique).
+// A7 Índice único temporal sobre shipments(order_id) para forzar un envío por pedido en el MVP. Se quita al abrir varias empresas por pedido.
+// A8 shipment_events: triggers que bloqueen update y delete, como en audit_log. Solo se inserta desde las funciones que hacen el cambio. note_added guarda solo note_id.
+// A9 Número de presupuesto: quotes no tiene columna de número y RF-42 pide que las versiones compartan número. Decidir el prefijo (hoy PR-xxxx en el código) y si el número cuelga del envío o tiene su propia secuencia.
+//
+// B. Decisiones abiertas
+// B1 (RESUELTO para el MVP el 09/11/2026) Quién cancela un pedido (RF-69): lo cancela su dueño. En el MVP es la empresa creadora y no hay a quién avisar. Con cuentas (fase 3) cancela el cliente y se avisa a las empresas con envío vivo. Ver A4. Sigue abierto si un cliente sin cuenta puede cancelar desde su enlace.
+// B2 Nombre shipments. Puede confundirse con transporte de mercancías. Decidirlo antes de crear migraciones: después es caro de cambiar.
+// B3 Convención de enums. Las migraciones usan guion en vehicle_type (small-van) y guion bajo en handling_flag (extra_crew). El frontend usa guion (awaiting-inventory) y este DBML guion bajo. Elegir una y mapear en la capa infrastructure si no coinciden.
+// B4 Quién lee shipment_notes: solo el administrador (lo asumido) o también el operario.
+// B5 inventory_extras apunta a company_extras, que es de cada empresa, y el inventario es del pedido. Opciones: catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea company_extras (paso 2) y la parte de extras del paso 4.
+// B6 Qué pasa con los borradores de presupuesto cuando llega una versión nueva del inventario. La regla solo define los presupuestos enviados.
+// B7 Caducidad del enlace: RF-15 dice 7 días por defecto y el código tiene 14 (DEFAULT_LINK_VALIDITY_DAYS, con 7, 14 y 30 como opciones). Alinear.
+// B8 Notificaciones y recordatorios (RF-18, RF-63): no hay tabla. Decidir si hace falta (tokens push de dispositivos, recordatorios ya enviados).
+// B9 Dónde se construye la web del cliente (enlace del pedido). Ver architecture-system.md, sección "Pendiente de decidir".
+// B10 (fase 3 o 4, SIN DECIDIR, ningún documento lo define) Qué pasa con las demás empresas cuando una gana un pedido enviado a varias. Lo que sigue es una propuesta del 09/11/2026, no una regla. Hoy lost significa "el cliente no aceptó" (requirement-mvp.md, estados del envío). Mezclar en lost el caso "el cliente eligió a otra empresa" revolvería las métricas de pérdida. Propuesta preferida: un valor nuevo en shipment_status, not_selected, que el sistema asigna a los demás envíos cuando uno pasa a won. Así se miden por separado las pérdidas por rechazo del cliente (lost, con su motivo) y las de comparación (not_selected). Alternativa: mantener lost y distinguir la causa en lost_reason o en el evento, sin valor nuevo. Con cualquiera de las dos: el cambio queda en el historial de cada empresa; reciben una notificación sin saber qué empresa ganó ni su precio (RNF-03); sus presupuestos enviados dejan de poder aceptarse; y una regla (índice único parcial) impide dos envíos won en el mismo pedido. Si se elige not_selected, tampoco se podrá reactivar y habrá que decidir si cuenta como estado final. No se añade al enum shipment_status hasta decidirlo.
+// B11 (fase 2 y 3, no se diseña ahora) Penalización o acción especial al cancelar un pedido ya ganado. Cuando se retome: el cobro está fuera del MVP, las condiciones de cancelación tendrían que formar parte de quotes.conditions firmadas por el cliente (consultarlo con un abogado) y convendría guardar en el evento cancelled el importe aceptado, la fecha programada y las horas que faltaban. Como todo pasa por cancel_order(), la regla se añade en un solo sitio.
+//
+// C. Decididas el 09/11/2026 (ya reflejadas arriba)
+// C1 El número visible va en shipments, no en orders. La referencia del cliente (orders.reference) llega con las cuentas.
+// C2 orders.token_hash y token_expires_at son nulos hasta que se comparte el enlace, con check de los dos o ninguno.
+// C3 Notas e historial en tablas nuevas, shipment_notes y shipment_events. No se usa audit_log: las empresas no pueden leerlo y es inmutable (RGPD).
+// C4 shipments tiene status_changed_at y last_activity_at. last_activity_at lo actualiza un trigger de shipment_events. No se añade orders.updated_at.
+// C5 Código y rutas: proposals pasa a quotes (inglés) y la interfaz portuguesa usa Orçamentos.
+//
+// D. Antes de crear las migraciones del paso 4
+// D1 Comprobar el historial de migraciones en Supabase. Según una nota de octubre, las del paso 1 se aplicaron a mano y un supabase db push intentaría reaplicarlas (supabase migration repair).
+// D2 Partir el paso 4. 4a: clients, orders, shipments, shipment_notes, shipment_events y addresses solo con dirección, más create_order(), cancel_order() y RLS. 4b: inventario con accesos versionados, extras y generación del enlace. 4b espera a A1, A2 y B5.
+// D3 Documentación por corregir: borrar o marcar como históricos mudaro-model-es_v1.dbml y requests-model.dbml, que siguen en docs/diagram/. (Ya hecho el 09/11/2026: rutas del DBML, supabase/CLAUDE.md, nota de pedido y envío en apps/company/CLAUDE.md y la decisión de "Orçamentos" en requirement-mvp.md.)
+// D4 Impacto en apps/company: renombrar features/proposals a quotes (unos 72 ficheros, 656 líneas, 107 claves por idioma en los diccionarios, ruta /proposals y NavKey), requestId a orderId, pasar OrderStatus y OrderStage a un estado de envío con cancelled, resolver el TODO de "lost", e implementar RF-69.
