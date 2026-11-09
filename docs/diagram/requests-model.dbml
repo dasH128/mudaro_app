@@ -1,0 +1,399 @@
+// Mudaro · Modelo propuesto del paso 4 y 5 (pedidos, inventario y propuestas)
+// Borrador para discutir. Nombres en inglés, notas en español.
+// Las tablas marcadas "ya existe" están en supabase/migrations. Las marcadas "pendiente" son del paso 2 del plan.
+
+// ---------------------------------------------------------------------
+// Tipos
+// ---------------------------------------------------------------------
+
+Enum client_type {
+  private
+  company
+}
+
+Enum flexibility {
+  exact
+  two_days
+  one_week
+  month
+}
+
+Enum contact_source {
+  phone
+  whatsapp
+  referral
+  website
+  other
+}
+
+Enum version_status {
+  draft      [note: 'Editable. No afecta a las propuestas ya hechas']
+  submitted  [note: 'Congelada. Las propuestas sobre versiones anteriores pasan a superseded']
+}
+
+Enum submitted_by {
+  client
+  company
+}
+
+Enum address_role {
+  origin
+  destination
+  // stop: pendiente de decidir si hay paradas intermedias
+}
+
+Enum lift_size {
+  none
+  small
+  large
+}
+
+Enum company_request_status {
+  new
+  awaiting_inventory
+  inventory_received
+  quoted
+  won
+  lost  [note: 'Pendiente de confirmar como estado real']
+}
+
+Enum proposal_status {
+  draft
+  sent
+  accepted
+  rejected
+  expired     [note: 'Se deriva de valid_until (RF-45)']
+  superseded
+  // changes_requested: pendiente de decidir
+}
+
+Enum proposal_line_kind {
+  labor
+  vehicle
+  distance
+  supplement
+  extra
+}
+
+Enum handling_flag {
+  fragile
+  disassembly
+  extra_crew
+}
+
+// ---------------------------------------------------------------------
+// Ya existen
+// ---------------------------------------------------------------------
+
+Table companies {
+  id uuid [pk]
+  name text
+  tax_id text
+  Note: 'Ya existe'
+}
+
+Table company_users {
+  id uuid [pk, note: 'Es el id de Supabase Auth']
+  company_id uuid [not null]
+  role text [note: 'administrator u operator']
+  Note: 'Ya existe'
+}
+
+Table catalog_rooms {
+  id uuid [pk]
+  slug text
+  Note: 'Ya existe. Catálogo global, sin company_id'
+}
+
+Table catalog_items {
+  id uuid [pk]
+  slug text
+  volume_m3 numeric
+  weight_kg numeric
+  Note: 'Ya existe. Catálogo global, sin company_id'
+}
+
+// ---------------------------------------------------------------------
+// Pendientes del paso 2
+// ---------------------------------------------------------------------
+
+Table company_extras {
+  id uuid [pk]
+  company_id uuid [not null]
+  name text
+  price_mode text [note: 'fijo, por unidad, por m3 o por hora (RF-07)']
+  active boolean
+  Note: 'Pendiente (paso 2). Ojo: es catálogo de cada empresa y request_extras apunta aquí. Ver pregunta abierta'
+}
+
+Table tariff_versions {
+  id uuid [pk]
+  company_id uuid [not null]
+  version int
+  Note: 'Pendiente (paso 2). Las propuestas enviadas conservan la versión con la que se calcularon (RF-06)'
+}
+
+// ---------------------------------------------------------------------
+// La mudanza: neutra, sin company_id de gestión
+// ---------------------------------------------------------------------
+
+Table requests {
+  id uuid [pk]
+  created_by_type submitted_by [not null, note: 'Hoy siempre company. En el futuro también client']
+  created_by_company_id uuid [note: 'Empresa que la creó. Null cuando la cree un cliente']
+  client_account_id uuid [note: 'Futuro (fase 3): cuenta del cliente. Hoy siempre null']
+  created_at timestamptz [not null]
+  Note: 'La mudanza en sí. No guarda estado ni notas de ninguna empresa'
+}
+
+Table request_versions {
+  id uuid [pk]
+  request_id uuid [not null]
+  version int [not null]
+  status version_status [not null]
+  submitted_by submitted_by
+  submitted_by_user_id uuid [note: 'Usuario de la empresa. Null si lo envió el cliente']
+  desired_date date [not null, note: 'Fecha aproximada']
+  flexibility flexibility [not null]
+  submitted_at timestamptz
+  created_at timestamptz [not null]
+
+  indexes {
+    (request_id, version) [unique]
+  }
+  Note: 'Todo lo que el cliente controla va aquí. Una versión enviada no se edita'
+}
+
+Table request_addresses {
+  id uuid [pk]
+  request_version_id uuid [not null]
+  role address_role [not null]
+  place text [not null, note: 'Zona: Arroios, Lisboa']
+  street text [note: 'Se completa antes de calcular la propuesta']
+  postal_code text
+  latitude numeric
+  longitude numeric
+  floor int [note: '0 = rés-do-chão']
+  lift lift_size
+  narrow_stairs boolean
+  parking_meters int
+  needs_parking_permit boolean
+  client_note text
+
+  indexes {
+    (request_version_id, role) [unique]
+  }
+  Note: 'Una por origen y otra por destino. Los accesos son obligatorios al enviar (RF-23)'
+}
+
+Table inventory_items {
+  id uuid [pk]
+  request_version_id uuid [not null]
+  catalog_item_id uuid [note: 'Null si es un objeto libre']
+  catalog_room_id uuid [note: 'Null si la división es de nombre propio']
+  room_name text [note: 'Nombre propio de la división, si no viene del catálogo']
+  name text [not null, note: 'Copia del nombre al crearse']
+  quantity int [not null]
+  volume_m3 numeric [note: 'Copiado del catálogo. Null = sin medidas, no entra en el total']
+  weight_kg numeric
+  handling_flags handling_flag[]
+  is_free boolean [not null, note: 'Objeto fuera del catálogo (RF-21)']
+  note text
+  Note: 'Cada línea copia volumen y peso del catálogo al crearse (§7)'
+}
+
+Table inventory_photos {
+  id uuid [pk]
+  request_version_id uuid [not null]
+  item_id uuid [note: 'Null si la foto es de una división']
+  room_name text [note: 'Solo si item_id es null']
+  storage_path text [not null]
+  created_at timestamptz [not null]
+  Note: 'Una foto es de un objeto o de una división (RF-22). Check: item_id o room_name, no ambos'
+}
+
+Table request_extras {
+  id uuid [pk]
+  request_version_id uuid [not null]
+  extra_id uuid [not null]
+  quantity int
+  Note: 'Servicios extra elegidos por el cliente (RF-24). Ver pregunta abierta sobre el catálogo'
+}
+
+// ---------------------------------------------------------------------
+// El caso de cada empresa: privado, con company_id (RLS, RNF-01)
+// ---------------------------------------------------------------------
+
+Table clients {
+  id uuid [pk]
+  company_id uuid [not null]
+  name text [not null]
+  phone text [not null, note: 'Normalizado +351XXXXXXXXX']
+  email text
+  type client_type [not null]
+  tax_id text [note: 'Solo empresas']
+  created_at timestamptz [not null]
+
+  indexes {
+    (company_id, phone) [unique]
+  }
+  Note: 'Ficha del cliente de cada empresa (RF-14). En el marketplace se crea cuando el cliente comparte su contacto'
+}
+
+Table company_requests {
+  id uuid [pk]
+  company_id uuid [not null]
+  request_id uuid [not null]
+  client_id uuid [not null]
+  display_number text [not null, note: 'MD-0835. Solo visible, no es la clave']
+  status company_request_status [not null]
+  source contact_source
+  lost_reason text
+  internal_note text
+  assigned_to uuid [note: 'Usuario de la empresa responsable']
+  created_by uuid
+  created_at timestamptz [not null]
+
+  indexes {
+    (company_id, request_id) [unique]
+    (company_id, display_number) [unique]
+  }
+  Note: 'El caso de una empresa con una mudanza. En el MVP hay exactamente uno por request'
+}
+
+Table client_links {
+  id uuid [pk]
+  company_request_id uuid [not null]
+  token_hash text [not null, note: 'Solo el hash. El token nunca se guarda (RNF-02)']
+  validity_days int [not null]
+  expires_at timestamptz [not null]
+  revoked_at timestamptz
+  created_at timestamptz [not null]
+  Note: 'Enlace del cliente (RF-15). Es el canal de cada empresa, por eso cuelga de company_requests'
+}
+
+// ---------------------------------------------------------------------
+// Propuestas
+// ---------------------------------------------------------------------
+
+Table proposals {
+  id uuid [pk]
+  company_id uuid [not null, note: 'Repetido a propósito para la RLS']
+  company_request_id uuid [not null]
+  request_version_id uuid [not null, note: 'Versión exacta usada. Es el anexo (RF-39)']
+  tariff_version_id uuid
+  number text [not null, note: 'PR-0415. Todas las versiones comparten número (RF-42)']
+  version int [not null]
+  status proposal_status [not null]
+  snapshot jsonb [note: 'Datos usados en el cálculo (§7)']
+  total_cents bigint
+  valid_until date
+  conditions text [note: 'Copia de la plantilla al enviar (RF-40)']
+  rejection_reason text
+  sent_at timestamptz
+  created_by uuid
+  created_at timestamptz [not null]
+
+  indexes {
+    (company_id, number, version) [unique]
+  }
+}
+
+Table proposal_lines {
+  id uuid [pk]
+  proposal_id uuid [not null]
+  kind proposal_line_kind [not null]
+  description text [not null]
+  quantity numeric
+  unit_price_cents bigint
+  total_cents bigint [not null]
+  suggested_total_cents bigint [note: 'Valor calculado antes del ajuste manual (RF-37)']
+}
+
+Table proposal_costs {
+  proposal_id uuid [pk]
+  estimated_cost_cents bigint
+  margin_percent numeric
+  Note: 'Solo administradores (RNF-03). Igual que vehicle_costs'
+}
+
+Table proposal_acceptances {
+  proposal_id uuid [pk]
+  signer_name text [not null]
+  signature_path text [not null]
+  accepted_at timestamptz [not null]
+  ip inet
+  document_hash text [not null]
+  Note: 'Inmutable (RF-43, RF-57)'
+}
+
+// ---------------------------------------------------------------------
+// Relaciones
+// ---------------------------------------------------------------------
+
+Ref: requests.created_by_company_id > companies.id
+Ref: request_versions.request_id > requests.id
+Ref: request_versions.submitted_by_user_id > company_users.id
+Ref: request_addresses.request_version_id > request_versions.id
+Ref: inventory_items.request_version_id > request_versions.id
+Ref: inventory_items.catalog_item_id > catalog_items.id
+Ref: inventory_items.catalog_room_id > catalog_rooms.id
+Ref: inventory_photos.request_version_id > request_versions.id
+Ref: inventory_photos.item_id > inventory_items.id
+Ref: request_extras.request_version_id > request_versions.id
+Ref: request_extras.extra_id > company_extras.id
+
+Ref: clients.company_id > companies.id
+Ref: company_requests.company_id > companies.id
+Ref: company_requests.request_id > requests.id
+Ref: company_requests.client_id > clients.id
+Ref: company_requests.assigned_to > company_users.id
+Ref: company_requests.created_by > company_users.id
+Ref: client_links.company_request_id > company_requests.id
+
+Ref: proposals.company_id > companies.id
+Ref: proposals.company_request_id > company_requests.id
+Ref: proposals.request_version_id > request_versions.id
+Ref: proposals.tariff_version_id > tariff_versions.id
+Ref: proposals.created_by > company_users.id
+Ref: proposal_lines.proposal_id > proposals.id
+Ref: proposal_costs.proposal_id - proposals.id
+Ref: proposal_acceptances.proposal_id - proposals.id
+Ref: company_extras.company_id > companies.id
+Ref: tariff_versions.company_id > companies.id
+Ref: company_users.company_id > companies.id
+
+// ---------------------------------------------------------------------
+// Grupos (colores en dbdiagram.io)
+// ---------------------------------------------------------------------
+
+TableGroup shared_request [color: #2E7D6B] {
+  requests
+  request_versions
+  request_addresses
+  inventory_items
+  inventory_photos
+  request_extras
+}
+
+TableGroup company_private [color: #B5651D] {
+  clients
+  company_requests
+  client_links
+}
+
+TableGroup proposals_group [color: #3D4A8F] {
+  proposals
+  proposal_lines
+  proposal_costs
+  proposal_acceptances
+}
+
+TableGroup existing_or_pending [color: #777777] {
+  companies
+  company_users
+  catalog_rooms
+  catalog_items
+  company_extras
+  tariff_versions
+}

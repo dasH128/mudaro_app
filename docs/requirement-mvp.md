@@ -1,7 +1,7 @@
 # Mudaro · Requisitos del MVP
 
-Versión 0.1 · 21/10/2026
-Documento de referencia: *Mudaro · Modelo de negocio y dominio (MVP transportistas)*, que contiene el mapa de entidades, los estados y el script SQL.
+Versión 0.2 · 09/11/2026 (versión 0.1 del 21/10/2026)
+Documento de referencia: *Mudaro · Modelo de negocio y dominio (MVP transportistas)*. El modelo de datos vigente, con pedido y envío separados, está en `docs/models/mudaro-model.dbml` y su construcción por pasos en `docs/plan-modelo-bd.md`.
 
 ---
 
@@ -12,7 +12,7 @@ Que una empresa de mudanzas pase de una llamada a un presupuesto aceptado y a un
 El MVP se considera validado cuando, en un piloto con 5 a 10 empresas de una misma región:
 
 - Al menos la mitad de las empresas usa la herramienta en todos sus presupuestos durante 4 semanas seguidas.
-- El tiempo medio desde que se crea la solicitud hasta que se envía el presupuesto baja respecto al método actual de cada empresa (medido en las entrevistas previas).
+- El tiempo medio desde que se crea el pedido hasta que se envía el presupuesto baja respecto al método actual de cada empresa (medido en las entrevistas previas).
 - La diferencia media entre horas estimadas y horas reales queda por debajo del 20 %.
 - Al menos 3 empresas aceptan pagar una suscripción al terminar el piloto.
 
@@ -26,16 +26,16 @@ Estos umbrales son una propuesta inicial y se ajustan tras las entrevistas.
 
 - Alta de empresa, equipo, vehículos, tarifas y servicios extra.
 - Catálogo de objetos con volúmenes.
-- Solicitudes con enlace para que el cliente rellene su inventario.
+- Pedidos con enlace para que el cliente rellene su inventario.
 - Cálculo automático de volumen, recursos, precio, coste y margen.
-- Propuesta profesional y aceptación con firma.
+- Presupuesto profesional y aceptación con firma.
 - Agenda de trabajos con asignación de vehículos y operarios.
 - Registro fotográfico, actas de recogida y entrega, incidencias.
 - Cierre del trabajo con horas reales y exportación de datos para facturar.
 
 ### Fuera del MVP
 
-- Marketplace (varias empresas cotizando la misma solicitud).
+- Marketplace (varias empresas cotizando el mismo pedido). El modelo ya separa pedido y envío para permitirlo más adelante sin rehacerlo.
 - Pagos, señales y retención de importes.
 - Facturación propia (en Portugal requiere software certificado).
 - Optimización de rutas y viajes de regreso.
@@ -48,9 +48,9 @@ Estos umbrales son una propuesta inicial y se ajustan tras las entrevistas.
 
 | Actor | Acceso | Puede |
 | --- | --- | --- |
-| Administrador | App con cuenta | Todo lo de su empresa: configuración, precios, márgenes, solicitudes, presupuestos, agenda |
+| Administrador | App con cuenta | Todo lo de su empresa: configuración, precios, márgenes, pedidos, presupuestos, agenda |
 | Operario | App con cuenta | Ver sus trabajos asignados, subir fotos, recoger firmas, registrar incidencias. No ve precios ni márgenes |
-| Cliente final | Enlace web con token, sin cuenta | Rellenar inventario, ver la propuesta, aceptarla y firmar actas |
+| Cliente final | Enlace web con token, sin cuenta | Rellenar inventario, ver el presupuesto, aceptarlo y firmar actas |
 | Equipo Mudaro | Panel interno | Mantener el catálogo global, dar de alta empresas del piloto, soporte |
 
 ---
@@ -60,13 +60,13 @@ Estos umbrales son una propuesta inicial y se ajustan tras las entrevistas.
 | Pieza | Tecnología propuesta | Uso |
 | --- | --- | --- |
 | App de la empresa | Flutter (iOS, Android) | Administrador y operarios |
-| Web del cliente | React with Next.js | Inventario, propuesta y aceptación desde el enlace |
+| Web del cliente | React with Next.js | Inventario, presupuesto y aceptación desde el enlace |
 | Panel interno | Web con Next.js (`apps/admin`, admin.mudaro.pt) | Equipo Mudaro: alta de empresas del piloto, catálogo global y soporte |
 | Backend | Supabase: Postgres, Auth, Storage, Edge Functions | Datos, autenticación, fotos, lógica del enlace del cliente |
 | Seguridad | RLS por `company_id` | Aislamiento total entre empresas |
 | Rol de plataforma | Tabla `platform_users` (o claim equivalente), con MFA obligatorio | Separa al equipo Mudaro de los usuarios de empresa (`administrador`, `operario`). Lo privilegiado pasa por Edge Functions que validan el rol; el panel no usa la clave de servicio |
 | Mapas | Servicio de geocodificación y rutas (a decidir) | Coordenadas, km y tiempo de viaje |
-| PDF | Edge Function | Generar la propuesta y las actas |
+| PDF | Edge Function | Generar el presupuesto y las actas |
 | Envío al cliente | Enlace compartido con la hoja nativa del móvil (WhatsApp, SMS, email) | Sin integración con la API de WhatsApp en el MVP |
 
 ---
@@ -83,7 +83,7 @@ Prioridad:
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
 | RF-01 | Registro de empresa con email y contraseña | P2 | El primer usuario queda como administrador de la empresa creada. Durante el piloto las empresas no se registran solas: las da de alta el equipo Mudaro (RF-65) |
-| RF-02 | Perfil de empresa: nombre, NIF, logo, contacto | P0 | El logo y los datos aparecen en la propuesta PDF |
+| RF-02 | Perfil de empresa: nombre, NIF, logo, contacto | P0 | El logo y los datos aparecen en el presupuesto PDF |
 | RF-03 | Invitar operarios por email o enlace | P0 | El invitado crea su cuenta y queda con rol operario en esa empresa |
 | RF-04 | Cambiar rol y desactivar usuarios | P1 | Un usuario desactivado no puede iniciar sesión |
 
@@ -93,7 +93,7 @@ Prioridad:
 | --- | --- | --- | --- |
 | RF-05 | Alta, edición y baja de vehículos con capacidad (m³), carga máxima (kg) y coste por km | P0 | Un vehículo inactivo no se propone en cálculos ni en la agenda |
 | RF-06 | Configurar tarifa: precio y coste por hora de operario, precio por km, suplementos por piso y aparcamiento, mínimo por servicio, factor de estiba, velocidad media, IVA | P0 | Guardar cambios crea una versión nueva; los presupuestos enviados conservan la versión con la que se calcularon |
-| RF-07 | Catálogo de servicios extra con modo de precio (fijo, por unidad, por m³, por hora) | P0 | Los extras activos aparecen en el inventario del cliente |
+| RF-07 | Catálogo de servicios extra con modo de precio (fijo, por unidad, por m³, por hora) | P0 | Los extras activos aparecen en el inventario del cliente. Pendiente de análisis: cómo se eligen los extras cuando un pedido llega a varias empresas (sección 11) |
 | RF-08 | Asistente de configuración inicial con valores por defecto | P1 | Una empresa nueva puede crear su primer presupuesto en menos de 10 minutos desde el registro |
 | RF-09 | Ajustar volumen o peso de un objeto del catálogo solo para la empresa | P1 | El ajuste se usa en los cálculos de esa empresa y no afecta a las demás |
 
@@ -105,17 +105,26 @@ Prioridad:
 | RF-11 | Búsqueda de objetos por nombre en PT, ES y EN | P0 | Buscar "sofá" o "sofa" devuelve los sofás del catálogo |
 | RF-12 | Panel interno para mantener el catálogo | P1 | El equipo Mudaro puede añadir y corregir objetos sin desplegar código |
 
-### M4 · Solicitudes
+### M4 · Pedidos
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-13 | Crear solicitud con nombre, teléfono, origen, destino y fecha aproximada | P0 | Se completa en 30 segundos o menos desde el móvil |
-| RF-14 | Reutilizar un cliente existente al crear la solicitud | P1 | Al escribir el teléfono, sugiere el cliente si ya existe en la empresa |
-| RF-15 | Generar enlace único con token y caducidad configurable | P0 | El enlace da acceso a una sola solicitud; caducado, muestra un aviso y no permite editar |
-| RF-16 | Compartir el enlace con un mensaje predefinido | P0 | Abre la hoja de compartir del móvil con el texto y el enlace listos |
-| RF-17 | Lista de solicitudes filtrable por estado | P0 | Muestra los estados del ciclo de vida de la solicitud |
-| RF-18 | Recordatorio cuando el cliente no completa el inventario en X días | P1 | Notificación al administrador con opción de reenviar el enlace |
+| RF-13 | Crear pedido con nombre, teléfono, origen, destino y fecha aproximada | P0 | Se completa en 30 segundos o menos desde el móvil. El formulario crea el pedido y su envío a la empresa que lo crea |
+| RF-14 | Reutilizar un cliente existente al crear el pedido | P1 | Al escribir el teléfono, sugiere el cliente si ya existe en la empresa. La ficha del cliente se vincula al envío, no al pedido |
+| RF-15 | Generar enlace único con token y caducidad configurable | P0 | El enlace pertenece al pedido, no al envío. Caduca a los 7 días por defecto y se puede reenviar. Caducado, muestra un aviso y no permite editar el inventario; el cliente sigue pudiendo ver y aceptar un presupuesto vigente |
+| RF-16 | Compartir el enlace del pedido con un mensaje predefinido | P0 | Abre la hoja de compartir del móvil con el texto y el enlace listos |
+| RF-17 | Lista de envíos filtrable por estado | P0 | Muestra los estados del ciclo de vida del envío. Un pedido y su envío tienen el mismo número para la empresa |
+| RF-18 | Recordatorio cuando el cliente no completa el inventario en X días | P1 | Se aplica por envío. Notificación al administrador con opción de reenviar el enlace |
 | RF-19 | Rellenar el inventario desde la app (por teléfono o en visita) | P0 | Queda registrado como inventario rellenado por la empresa |
+| RF-69 | Cancelar un pedido | P0 | Cancelar el pedido cancela su envío (o envíos) y avisa a las empresas afectadas. Un envío cancelado no se puede reactivar: hay que crear un pedido nuevo |
+
+**Pedido y envío.** El pedido es la mudanza: direcciones, fecha, contacto del cliente, inventario y enlace. El envío es el pedido enviado a una empresa: lleva el estado y los presupuestos de esa empresa. En el MVP cada pedido tiene un solo envío. El modelo ya los separa para que, en fases posteriores, un mismo pedido pueda llegar a varias empresas.
+
+- **Estados del envío:** nueva, esperando inventario, inventario recibido, presupuestada, ganada, perdida y cancelado. "Perdida" (el cliente no aceptó) y "cancelado" (se anula el pedido) son distintos y se miden por separado.
+- **Propiedad:** el pedido creado por una empresa pertenece a esa empresa. La empresa ve su pedido y su envío, nunca los de otras.
+- **Enlace:** único por pedido, caduca a los 7 días por defecto (configurable) y es reenviable. La caducidad solo impide editar el inventario.
+- **Precios:** los precios de una empresa nunca se muestran a otra. El cliente ve los presupuestos que ha recibido; en el MVP solo recibe uno.
+- **Cuenta de cliente y reclamación:** son de la fase 3 (sección 10) y no están en este MVP. El modelo ya permite el paso.
 
 ### M5 · Inventario del cliente (web)
 
@@ -125,10 +134,10 @@ Prioridad:
 | RF-21 | Añadir objetos libres con descripción y medidas aproximadas | P0 | El objeto libre pide volumen o medidas; si no se dan, se marca para revisión |
 | RF-22 | Subir fotos por objeto o por habitación | P0 | Las fotos se comprimen en el dispositivo antes de subir |
 | RF-23 | Condiciones de acceso de cada dirección: piso, ascensor y tamaño, escaleras estrechas, distancia al aparcamiento, permiso de aparcamiento | P0 | Campos obligatorios antes de enviar |
-| RF-24 | Selección de servicios extra de la empresa | P0 | Solo aparecen los extras activos |
+| RF-24 | Selección de servicios extra de la empresa | P0 | Solo aparecen los extras activos. Pendiente de análisis: ver sección 11 |
 | RF-25 | Guardado automático del borrador | P0 | Cerrar y reabrir el enlace conserva lo introducido |
-| RF-26 | Enviar inventario | P0 | Pasa la solicitud a Inventario recibido y notifica a la empresa |
-| RF-27 | Modificar el inventario tras recibir presupuesto | P1 | Crea una versión nueva; el presupuesto enviado pasa a Sustituido |
+| RF-26 | Enviar inventario | P0 | Pasa el envío a Inventario recibido y notifica a la empresa |
+| RF-27 | Modificar el inventario tras recibir presupuesto | P1 | Cualquier cambio que afecte al cálculo (objetos, cantidades, volúmenes, pesos) o a los accesos (piso, ascensor, aparcamiento, escaleras) crea una versión nueva del inventario; los cambios de fotos o notas no. Los presupuestos enviados que usaban la versión anterior pasan a Sustituido, el envío vuelve a Inventario recibido y la empresa debe presupuestar sobre la versión nueva. La versión nueva copia los ajustes manuales de la anterior y marca las líneas cuya base ha cambiado. Si el cambio llega después de aceptar: antes de la mudanza, la empresa genera un presupuesto nuevo que el cliente debe volver a aceptar (el aceptado sigue vigente hasta entonces, el envío no vuelve atrás de Ganada y el trabajo no se recrea); el día de la mudanza, se registra como incidencia con importe y firma del cliente (RF-53, RF-54) |
 | RF-28 | Interfaz en portugués, español e inglés | P0 PT, P1 ES y EN | Idioma detectado por el navegador y seleccionable |
 | RF-29 | Grabar un vídeo corto por habitación | P2 | Vídeo de hasta 60 s visible para la empresa |
 
@@ -145,24 +154,24 @@ Prioridad:
 | RF-36 | Mostrar alertas: sin ascensor, objetos especiales, aparcamiento lejano, objetos libres sin medidas | P0 | Las alertas aparecen antes de enviar el presupuesto |
 | RF-37 | Ajustar manualmente cualquier valor calculado | P0 | Se guardan el valor sugerido y el final |
 
-### M7 · Propuesta
+### M7 · Presupuesto
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-38 | Generar propuesta con logo, líneas desglosadas, IVA, total, validez, qué incluye y qué no | P0 | Disponible como página web y como PDF |
-| RF-39 | Anexar el inventario a la propuesta | P0 | El anexo muestra la versión exacta usada en el cálculo |
-| RF-40 | Plantilla de condiciones editable por la empresa | P1 | Las condiciones se copian en cada propuesta al enviarla |
-| RF-41 | Enviar la propuesta por el mismo enlace del cliente | P0 | El cliente la ve al abrir su enlace |
-| RF-42 | Versionado de propuestas | P0 | Una propuesta enviada no se edita; cambiarla crea una versión nueva |
+| RF-38 | Generar presupuesto con logo, líneas desglosadas, IVA, total, validez, qué incluye y qué no | P0 | Disponible como página web y como PDF |
+| RF-39 | Anexar el inventario al presupuesto | P0 | El anexo muestra la versión exacta usada en el cálculo |
+| RF-40 | Plantilla de condiciones editable por la empresa | P1 | Las condiciones se copian en cada presupuesto al enviarlo |
+| RF-41 | Enviar el presupuesto por el enlace del pedido | P0 | El cliente lo ve al abrir el enlace del pedido |
+| RF-42 | Versionado de presupuestos | P0 | Un presupuesto enviado no se edita; cambiarlo crea una versión nueva |
 
 ### M8 · Aceptación
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-43 | Aceptar la propuesta con nombre y firma dibujada | P0 | Se guardan firma, fecha y hora, IP y huella del documento |
-| RF-44 | Rechazar la propuesta con motivo opcional | P1 | La empresa ve el motivo |
-| RF-45 | Caducidad automática de propuestas | P0 | Pasada la validez, no se puede aceptar |
-| RF-46 | Al aceptar, crear el trabajo y pasar la solicitud a Ganada | P0 | El trabajo aparece en la agenda en estado Programado |
+| RF-43 | Aceptar el presupuesto con nombre y firma dibujada | P0 | Se guardan firma, fecha y hora, IP y huella del documento |
+| RF-44 | Rechazar el presupuesto con motivo opcional | P1 | La empresa ve el motivo |
+| RF-45 | Caducidad automática de presupuestos | P0 | Pasada la validez, no se puede aceptar |
+| RF-46 | Al aceptar, crear el trabajo y pasar el envío a Ganada | P0 | El trabajo aparece en la agenda en estado Programado |
 
 ### M9 · Agenda
 
@@ -193,14 +202,14 @@ Prioridad:
 | RF-59 | Cerrar el trabajo | P0 | Solo si no quedan incidencias abiertas |
 | RF-60 | Exportar trabajos cerrados a CSV para facturar | P0 | Incluye cliente, NIF, líneas, extras, IVA y total |
 | RF-61 | Informe de estimado frente a real por empresa | P1 | Muestra desviación media de horas y de precio |
-| RF-62 | Expediente PDF del trabajo (propuesta, actas, fotos, incidencias) | P1 | Descargable desde el trabajo cerrado |
+| RF-62 | Expediente PDF del trabajo (presupuesto, actas, fotos, incidencias) | P1 | Descargable desde el trabajo cerrado |
 
 ### M12 · Notificaciones
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-63 | Notificación push a la empresa cuando el cliente envía inventario o acepta | P0 | Llega en menos de 1 minuto |
-| RF-64 | Email al cliente con copia de la propuesta aceptada y de las actas | P1 | Se envía solo si el cliente dio su email |
+| RF-63 | Notificación push a la empresa cuando el cliente envía inventario o acepta | P0 | Llega en menos de 1 minuto. Se envía por envío |
+| RF-64 | Email al cliente con copia del presupuesto aceptado y de las actas | P1 | Se envía solo si el cliente dio su email |
 
 ### M13 · Panel interno (equipo Mudaro)
 
@@ -250,8 +259,8 @@ Pasos obligatorios de configuración: cuenta del administrador, perfil de la emp
 | ID | Área | Requisito |
 | --- | --- | --- |
 | RNF-01 | Aislamiento | Todas las tablas con datos de empresa tienen RLS por `company_id`. Ninguna consulta desde la app puede devolver datos de otra empresa |
-| RNF-02 | Acceso del cliente | El enlace usa un token aleatorio de al menos 32 bytes, con caducidad. Solo las Edge Functions acceden a los datos con clave de servicio, tras validar el token |
-| RNF-03 | Privacidad de precios | Tarifas, costes y márgenes nunca se envían al cliente ni al rol operario |
+| RNF-02 | Acceso del cliente | El enlace pertenece al pedido y usa un token aleatorio de al menos 32 bytes, con caducidad. Solo se guarda el hash del token. Solo las Edge Functions acceden a los datos con clave de servicio, tras validar el token |
+| RNF-03 | Privacidad de precios | Tarifas, costes y márgenes nunca se envían al cliente ni al rol operario. Los precios de una empresa nunca se muestran a otra. El cliente ve los presupuestos que ha recibido |
 | RNF-04 | RGPD | Contrato de encargo de tratamiento con cada empresa, política de privacidad para el cliente final y plazo de conservación de fotos y firmas configurable |
 | RNF-05 | Almacenamiento | Fotos y firmas en un bucket privado con URLs firmadas y temporales |
 | RNF-06 | Rendimiento | La web del cliente es usable en menos de 3 s con 4G en un móvil de gama media |
@@ -266,11 +275,16 @@ Pasos obligatorios de configuración: cuenta del administrador, perfil de la emp
 
 ## 7. Modelo de datos
 
-El esquema completo (22 tablas, tipos, restricciones y RLS) está en el documento de modelo de dominio. Puntos que la implementación debe respetar:
+El modelo vigente está en `docs/models/mudaro-model.dbml` (nombres en inglés, comentarios en español) y su construcción por pasos en `docs/plan-modelo-bd.md`. Puntos que la implementación debe respetar:
 
+- Pedido (`orders`) y envío (`shipments`) son entidades separadas. Hay un envío por empresa; en el MVP, uno por pedido. La entidad "solicitud" del modelo anterior desaparece: su contenido se reparte entre pedido y envío.
+- La ficha del cliente (`clients`) es de cada empresa y se vincula al envío (`shipments.client_id`). El pedido guarda solo el nombre y el teléfono de contacto.
+- Direcciones e inventarios cuelgan del pedido, no del envío. Las versiones del inventario son de pedido.
+- El enlace pertenece al pedido y se guarda como hash del token.
 - Presupuestos, tarifas e inventarios son versionados. Nunca se sobrescribe una versión enviada.
+- Cada presupuesto cuelga del envío, de una versión del inventario y de una versión de tarifa, y guarda un `snapshot` con los datos usados en el cálculo.
 - Cada línea de inventario copia volumen y peso del catálogo al crearse.
-- Cada presupuesto guarda un `snapshot` con los datos usados en el cálculo.
+- Los importes van en céntimos.
 - Las asignaciones usan restricciones `exclude` para impedir solapes.
 - Segunda migración pendiente: índices sobre claves foráneas y políticas RLS específicas del rol operario.
 
@@ -283,8 +297,8 @@ Cada hito termina con algo que se puede probar con un transportista real.
 | Hito | Contenido | Resultado esperado |
 | --- | --- | --- |
 | 0 · Validación | Entrevistas a 20 o 30 empresas y prueba manual con formulario y WhatsApp | Confirmar el dolor, recoger tarifas reales y valores de estiba y acceso |
-| 1 · Del contacto al presupuesto | M1, M2, M3, M4, M5, M6, M7 (P0) | Una empresa crea una solicitud, el cliente rellena el inventario y recibe una propuesta |
-| 2 · Aceptación y agenda | M8, M9, M12 (P0) | Las propuestas se aceptan y se convierten en trabajos programados |
+| 1 · Del contacto al presupuesto | M1, M2, M3, M4, M5, M6, M7 (P0) | Una empresa crea un pedido, el cliente rellena el inventario y recibe un presupuesto |
+| 2 · Aceptación y agenda | M8, M9, M12 (P0) | Los presupuestos se aceptan y se convierten en trabajos programados |
 | 3 · Mudanza documentada | M10, M11 (P0) | El equipo documenta recogida y entrega y cierra el trabajo |
 | 4 · Piloto | Ajustes P1 según uso real, 5 a 10 empresas durante 8 semanas | Datos para medir los criterios de la sección 1 |
 
@@ -295,9 +309,9 @@ Cada hito termina con algo que se puede probar con un transportista real.
 | Métrica | Cómo se mide |
 | --- | --- |
 | Empresas activas por semana | Empresas con al menos 1 presupuesto enviado en la semana |
-| Tiempo hasta presupuesto | Desde creación de la solicitud hasta envío de la propuesta |
-| Tasa de inventario completado | Solicitudes con inventario enviado / solicitudes con enlace enviado |
-| Tasa de aceptación | Propuestas aceptadas / propuestas enviadas |
+| Tiempo hasta presupuesto | Desde creación del pedido hasta envío del presupuesto |
+| Tasa de inventario completado | Pedidos con inventario enviado / pedidos con enlace enviado |
+| Tasa de aceptación | Presupuestos aceptados / presupuestos enviados |
 | Precisión del cálculo | Desviación entre horas estimadas y reales, y entre precio sugerido y final |
 | Incidencias por trabajo | Número y tipo de incidencias por trabajo cerrado |
 | Intención de pago | Empresas que aceptan suscripción al final del piloto |
@@ -313,9 +327,9 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 | 2 | Calibración automática por empresa (horas y factores ajustados con datos reales) | Estimado frente a real guardado en cada trabajo |
 | 2 | Integración con InvoiceXpress, Moloni u otro software certificado | Trabajos cerrados con líneas y extras |
 | 2 | Señal o depósito pagado por la plataforma (Stripe Connect o similar) | Presupuesto aceptado con importe y versión exacta |
-| 3 | Cuenta para el cliente final y valoraciones | Tabla `cuentas_cliente` ligada a varias fichas de `clientes` |
-| 3 | Canal B2B: inmobiliarias, gestores de alquiler, residencias | Solicitudes creadas por terceros con origen del contacto |
-| 4 | Marketplace: varias empresas proponen sobre el mismo inventario | Inventario independiente del presupuesto |
+| 3 | Cuenta para el cliente final y valoraciones | Tabla de cuentas de cliente (`client_accounts`); `orders` y `clients` ganan `account_id`. El cliente reclama el pedido con una invitación por enlace, con caducidad y prueba de email o teléfono |
+| 3 | Canal B2B: inmobiliarias, gestores de alquiler, residencias | Pedidos creados por terceros con origen del contacto |
+| 4 | Marketplace: varias empresas presupuestan sobre el mismo pedido, y el cliente compara sus presupuestos | Pedido y envío separados, e inventario del pedido independiente del presupuesto |
 | 4 | Rutas y viajes de regreso | Direcciones con coordenadas y trabajos con fecha y vehículo |
 
 ---
@@ -335,3 +349,6 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Regiones del piloto para el desplegable "Região" (hoy hay un valor de ejemplo).
 - [ ] Diseño de los flujos pendientes del panel: editar empresa, registrar IMT y contrato RGPD, desactivar o ver utilizadores, cerrar sesión.
 - [ ] Qué hacer si se da de alta una empresa con un NIF o un email de administrador que ya existen.
+- [ ] Servicios extra (RF-07, RF-24): `inventory_extras` apunta a los extras de cada empresa, pero el inventario es del pedido. Pendiente de análisis: un catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea la tabla de extras (paso 2 del plan de BD) y la parte de extras del paso 4.
+- [ ] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10). Los diseños de la empresa todavía dicen "Proposta"; no se renombran hasta decidirla.
+- [ ] Diseño pendiente tras separar pedido y envío: pantalla de pedido creado con un único enlace, pestaña "Envío" en el detalle del pedido, aviso de inventario alterado (indica si crea versión y qué presupuestos afecta), reenvío del enlace del pedido y "marcar como perdido" sobre el envío.

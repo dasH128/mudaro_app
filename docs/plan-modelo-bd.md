@@ -1,51 +1,81 @@
 # Mudaro · Plan del modelo de base de datos
 
-Fecha: 25/10/2026
-Fuentes: `requirement-mvp.md` (RF y RNF citados), `architecture-system.md`, `supabase/CLAUDE.md`.
+Fecha: 25/10/2026 · Actualizado: 09/11/2026
+Fuentes: `requirement-mvp.md`, `architecture-system.md`, `supabase/CLAUDE.md`.
+Modelo vigente: `docs/models/mudaro-model.dbml` (nombres en inglés, comentarios en español). Sustituye al documento "Modelo de negocio y dominio", que no está en el repo y usaba una solicitud en lugar de pedido y envío.
 
-El esquema completo (22 tablas) está en el documento "Modelo de negocio y dominio", que no está en el repo. Este plan lo construye por bloques, en orden de dependencias. Cada bloque es una migración nueva en `supabase/migrations/`.
+## Estado por pasos
 
-## Orden de construcción
+Cada paso es una o más migraciones nuevas en `supabase/migrations/`. Nunca se edita una migración ya aplicada.
 
-| Paso | Bloque | Requisitos | Estado |
-| --- | --- | --- | --- |
-| 1 | Base: equipo Mudaro, empresas, usuarios, convites, auditoría | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | En curso |
-| 2 | Configuración: vehículos, tarifas versionadas, servicios extra, perfil | RF-02, RF-05 a RF-07 | En curso (vehículos: migración `20261101200000`) |
-| 3 | Catálogo global de objetos (sin `company_id`) | RF-10, RF-11 | Pendiente |
-| 4 | Solicitudes, clientes, inventario, enlaces con token | RF-13 a RF-27, RNF-02 | Pendiente |
-| 5 | Presupuestos, propuestas, aceptación | RF-30 a RF-46 | Pendiente |
-| 6 | Agenda, trabajos, actas, incidencias, cierre | RF-47 a RF-62 | Pendiente |
+| Paso | Bloque | Tablas | Migraciones | Requisitos | Estado |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Base | `platform_users`, `companies`, `company_internal`, `company_users`, `invitations`, `audit_log` | `20261025100000` a `20261025100600` y `20261101100000` (8 archivos) | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | Creado |
+| 2 | Configuración | `vehicles`, `vehicle_costs` | `20261101200000_vehicles` | RF-05 | Parcial |
+| 2 | Configuración (pendiente) | `tariffs`, `company_extras`, `company_items` | | RF-06, RF-07, RF-09 | Pendiente. Los extras esperan un análisis |
+| 3 | Catálogo global | `catalog_*` (7 tablas) | `20261103100000_catalog` | RF-10, RF-11, RF-12 | Creado |
+| 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_lines`, `inventory_extras` | | RF-13 a RF-27, RF-69, RNF-02 | Pendiente |
+| 5 | Presupuestos | `quotes`, `quote_lines`, `acceptances` | | RF-30 a RF-46 | Pendiente |
+| 6 | Ejecución | `jobs`, `assignments`, `incidents`, `evidence`, `handover_records` | | RF-47 a RF-62 | Pendiente |
 
-La autenticación no es un bloque de tablas. Supabase Auth gestiona las cuentas. El esquema solo modela los vínculos: qué cuenta es de plataforma, a qué empresa pertenece cada usuario y qué invitaciones están pendientes.
+La autenticación no es un bloque de tablas. Supabase Auth gestiona las cuentas y el esquema solo modela los vínculos: qué cuenta es de plataforma, a qué empresa pertenece cada usuario y qué invitaciones están pendientes.
 
-Los clientes no son un bloque aparte. Las fichas de cliente pertenecen a cada empresa y se crean con las solicitudes (paso 4). El cliente final no tiene cuenta en el MVP (`cuentas_cliente` es fase 3).
+Las fichas de cliente no son un bloque aparte: pertenecen a cada empresa y se crean junto al envío (paso 4). El cliente final no tiene cuenta en el MVP; la tabla de cuentas de cliente (`client_accounts`) es de la fase 3.
 
-## Convención de nombres
+## Convenciones
 
-Tablas, columnas, funciones, enums y políticas en inglés. Los comentarios SQL, en español. Los términos portugueses sin equivalente directo se explican en un comentario (por ejemplo, `tax_id` es el NIF).
+- Tablas, columnas, funciones, enums y políticas en inglés. Comentarios SQL en español.
+- El pedido es `orders` y el envío, `shipments`. Los importes van en céntimos.
+- Los términos portugueses sin equivalente directo se explican en un comentario (`tax_id` es el NIF).
+- Las escrituras no van directas desde el navegador: pasan por Edge Functions o por funciones `security definer` que sacan la identidad y la empresa de la sesión.
 
-## Paso 1 · Decisiones tomadas
+## Decisiones tomadas
 
-- **Un operario pertenece a una sola empresa.** La clave primaria de `company_users` es el `id` de Auth. Si la decisión abierta de "operario en varias empresas" cambia, habrá que añadir una tabla intermedia.
-- **MFA obligatorio para plataforma** se exige en la propia función `is_platform_user()` (`aal2`). Así la base de datos lo impide aunque la app no lo compruebe.
-- **Las escrituras no van directas desde el navegador.** Solo hay políticas de lectura para `authenticated`. Crear empresas, invitar y desactivar pasan por Edge Functions que validan el rol y usan la clave de servicio (`architecture-system.md`).
-- **`companies` lleva `country_code`** (ISO 3166-1 alfa-2, por defecto `PT`) junto a `tax_id`. La unicidad es por `(country_code, tax_id)` y el dígito de control del NIF solo se valida cuando el país es `PT`. Al abrir otros países, la validación se hará en servidor con zod por país y se quitará el valor por defecto.
-- **Notas internas, origen y región van en `company_internal`**, con RLS solo para plataforma. Así una empresa no puede leer las notas del equipo aunque tenga acceso a su fila.
-- **La invitación no guarda ningún token.** El enlace y su token los genera Supabase Auth (`generateLink`); `invitations` solo guarda el estado (email, rol, caducidad, aceptada, revocada). La invitación se localiza por email al aceptarla.
-- **Una única invitación pendiente de administrador por empresa**, forzada con un índice parcial. "Generar enlace nuevo" revoca la anterior antes de crear la siguiente.
-- **Caducidad de la invitación de 7 días** como valor por defecto, provisional (decisión abierta del requisito).
-- **Auditoría inmutable**: bloqueo de `update`, `delete` y `truncate` con trigger. Sin clave foránea en `company_id`, para que el registro sobreviva a una empresa borrada.
+**Acceso y roles (paso 1)**
 
-## Paso 1 · Migraciones
+- Un operario pertenece a una sola empresa: la clave primaria de `company_users` es el `id` de Auth. Si la decisión abierta de "operario en varias empresas" cambia, habrá que añadir una tabla intermedia.
+- MFA obligatorio para plataforma: lo exige `is_platform_user()` (`aal2`), así la base de datos lo impide aunque la app no lo compruebe.
+- `companies` lleva `country_code` (ISO 3166-1 alfa-2, por defecto `PT`). La unicidad es por `(country_code, tax_id)` y el dígito de control del NIF solo se valida cuando el país es `PT`.
+- Notas internas, origen y región van en `company_internal`, con RLS solo para plataforma.
+- La invitación no guarda token: el enlace y su token los genera Supabase Auth. `invitations` solo guarda el estado. Una única invitación pendiente de administrador por empresa (índice parcial). Caducidad de 7 días, provisional.
+- La auditoría es inmutable: triggers bloquean `update`, `delete` y `truncate`. Sin clave foránea en `company_id`, para que el registro sobreviva a una empresa borrada.
 
-1. `20261025100000_platform.sql`: `platform_users`, `is_platform_user()`, `set_updated_at()`.
-2. `20261025100100_companies.sql`: `is_valid_tax_id()`, `companies`, `company_internal`.
-3. `20261025100200_company_users_invitations.sql`: enum `company_role` (`administrator`, `operator`), `company_users`, `invitations`, `current_company_id()`, y la política de `companies` para miembros.
-4. `20261025100300_audit_log.sql`: `audit_log` con inmutabilidad.
+**Vehículos (paso 2)**
 
-## Pendiente de decidir (no bloquea el paso 1)
+- El coste por km va en `vehicle_costs`, aparte: RLS filtra filas, no columnas, y el operario lee los vehículos de su empresa pero nunca los costes (RNF-03). Sin fila significa "falta el coste por km".
+- Las altas pasan por `create_vehicle()`: solo el administrador, matrícula normalizada (AA-00-AA) y rastro de auditoría en la misma transacción.
+- Un vehículo inactivo no se propone en cálculos ni en la agenda (RF-05).
 
+**Catálogo (paso 3)**
+
+- Global, sin `company_id`. Lo mantiene el equipo Mudaro desde `apps/admin` y lo leen todas las empresas. Las escrituras pasan por Edge Functions que validan el rol de plataforma y registran el evento en `audit_log`.
+- Una fila de traducción por idioma. El portugués es obligatorio.
+- Los objetos nunca se borran, se desactivan, porque las líneas de inventario los referencian. El `slug` no cambia después de crearse.
+- Búsqueda sin acentos por nombre y sinónimos (`search_catalog_items`, RF-11).
+
+**Pedido y envío (paso 4, 09/11/2026)**
+
+- `orders` es la mudanza (contacto, fecha, enlace, direcciones, inventario). `shipments` es el pedido enviado a una empresa (estado y presupuestos). Hay un envío por empresa: `unique(order_id, company_id)`. El límite de uno por pedido en el MVP lo impone la aplicación, no la base de datos.
+- `orders` guarda `contact_name` y `contact_phone`. La ficha `clients` (privada de cada empresa) se vincula con `shipments.client_id`, y debe ser de la misma empresa del envío: se fuerza con una clave compuesta o un trigger.
+- Dueño del pedido: hoy `orders.company_id` (la empresa creadora); con cuentas, `account_id`. El dueño no se deduce de `client_id`.
+- Enlace: `orders.token_hash` guarda solo el hash (RNF-02). Caduca a los 7 días por defecto, configurable. La caducidad solo bloquea editar el inventario: el cliente sigue pudiendo ver y aceptar un presupuesto vigente. Lo valida una Edge Function.
+- Direcciones, inventarios, líneas y extras de inventario cuelgan del pedido, sin `company_id`. Su RLS se resuelve por `shipments`: una empresa los lee si tiene un envío en ese pedido, así las políticas no cambian cuando haya varias empresas. `quotes` sí repite `company_id` para su RLS (RNF-01).
+- Cancelación (RF-69): `orders.cancelled_at` y motivo. Cancelar el pedido cancela sus envíos. Un envío `cancelled` no se reactiva. "Perdido" (`lost`, con `lost_reason`) es otro estado.
+
+**Versiones y cambios tras aceptar (pasos 4 y 5)**
+
+- Un cambio de cálculo o de accesos crea una versión nueva del inventario; fotos y notas no. La versión nueva copia los ajustes manuales y marca las líneas cuya base cambió.
+- Los presupuestos enviados con la versión anterior pasan a `superseded`. El aceptado sigue vigente hasta que se acepte el nuevo (`quotes.supersedes_id` encadena las versiones). El envío no vuelve atrás de `won` y el trabajo no se recrea. El día de la mudanza el cambio se registra como incidencia con importe y firma.
+
+## Pendiente de decidir
+
+- **Servicios extra.** `inventory_extras` apunta a los extras de cada empresa, pero el inventario es del pedido. Falta decidir entre un catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea `company_extras` (paso 2) y la parte de extras del paso 4.
 - Qué hacer si se da de alta una empresa con un NIF que ya existe. Hoy hay `unique` sobre `(country_code, tax_id)`, lo que bloquea el alta.
 - Región: lista cerrada aún por definir. Hoy es texto libre.
 - Caducidad real del convite (depende de la configuración de Supabase Auth).
-- Flujos pendientes del panel (editar empresa, registrar IMT o RGPD después del alta, desactivar un usuario concreto).
+- Flujos pendientes del panel: editar empresa, registrar IMT o RGPD después del alta, desactivar un usuario concreto.
+
+## Notas operativas
+
+- Los comentarios de algunas migraciones usan una numeración antigua de pasos ("Paso 5" en `create_company`, "Paso 2/4" en el renombrado del NIF) y el del catálogo habla de "solicitud". No se editan: la referencia es la tabla de estado de este documento.
+- Por verificar: según una nota de octubre, las migraciones del paso 1 se aplicaron a mano en Supabase y el historial de migraciones del proyecto estaba vacío. Un `supabase db push` intentaría reaplicarlas y habría que usar `supabase migration repair`. Comprobar el estado actual antes de empezar el paso 4.
