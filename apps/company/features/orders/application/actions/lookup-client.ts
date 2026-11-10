@@ -2,7 +2,6 @@
 
 import { normalizePtPhone } from "@mudaro/validation";
 
-import { todayLisbon } from "@/app/lib/format";
 import { requireCompanySession } from "@/features/auth/application/require-session";
 import type { ClientSuggestion } from "@/features/orders/domain/types";
 import { findClientByPhone } from "@/features/orders/infrastructure/orders.repo";
@@ -13,5 +12,5 @@ export async function lookupClientAction(phone: string): Promise<ClientSuggestio
   await requireCompanySession(null);
   const normalized = typeof phone === "string" ? normalizePtPhone(phone) : null;
   if (!normalized) return null;
-  return findClientByPhone(normalized, { today: todayLisbon() });
+  return findClientByPhone(normalized);
 }

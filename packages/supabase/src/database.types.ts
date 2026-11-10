@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      addresses: {
+        Row: {
+          id: string
+          order_id: string
+          role: Database["public"]["Enums"]["address_role"]
+          sort_order: number
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          role: Database["public"]["Enums"]["address_role"]
+          sort_order: number
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          role?: Database["public"]["Enums"]["address_role"]
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "addresses_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -280,6 +309,50 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          company_id: string
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          phone: string
+          tax_id: string | null
+          type: Database["public"]["Enums"]["client_type"]
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          phone: string
+          tax_id?: string | null
+          type?: Database["public"]["Enums"]["client_type"]
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          phone?: string
+          tax_id?: string | null
+          type?: Database["public"]["Enums"]["client_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           base_address: string | null
@@ -410,6 +483,107 @@ export type Database = {
           },
         ]
       }
+      inventories: {
+        Row: {
+          created_at: string
+          filled_by: Database["public"]["Enums"]["filled_by"]
+          id: string
+          order_id: string
+          submitted_at: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          filled_by: Database["public"]["Enums"]["filled_by"]
+          id?: string
+          order_id: string
+          submitted_at?: string | null
+          updated_at?: string
+          version: number
+        }
+        Update: {
+          created_at?: string
+          filled_by?: Database["public"]["Enums"]["filled_by"]
+          id?: string
+          order_id?: string
+          submitted_at?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventories_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_addresses: {
+        Row: {
+          address: string
+          address_id: string
+          floor: number
+          id: string
+          inventory_id: string
+          lat: number | null
+          lift: Database["public"]["Enums"]["lift_size"]
+          lng: number | null
+          narrow_stairs: boolean
+          needs_permit: boolean
+          notes: string | null
+          order_id: string
+          parking_distance_m: number
+        }
+        Insert: {
+          address: string
+          address_id: string
+          floor?: number
+          id?: string
+          inventory_id: string
+          lat?: number | null
+          lift?: Database["public"]["Enums"]["lift_size"]
+          lng?: number | null
+          narrow_stairs?: boolean
+          needs_permit?: boolean
+          notes?: string | null
+          order_id: string
+          parking_distance_m?: number
+        }
+        Update: {
+          address?: string
+          address_id?: string
+          floor?: number
+          id?: string
+          inventory_id?: string
+          lat?: number | null
+          lift?: Database["public"]["Enums"]["lift_size"]
+          lng?: number | null
+          narrow_stairs?: boolean
+          needs_permit?: boolean
+          notes?: string | null
+          order_id?: string
+          parking_distance_m?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_addresses_address_id_order_id_fkey"
+            columns: ["address_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "addresses"
+            referencedColumns: ["id", "order_id"]
+          },
+          {
+            foreignKeyName: "inventory_addresses_inventory_id_order_id_fkey"
+            columns: ["inventory_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventories"
+            referencedColumns: ["id", "order_id"]
+          },
+        ]
+      }
       invitations: {
         Row: {
           accepted_at: string | null
@@ -466,6 +640,75 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by_id: string | null
+          cancelled_by_type: string | null
+          contact_name: string
+          contact_phone: string
+          contact_source: string | null
+          created_at: string
+          created_by_company_id: string
+          date_flexibility: Database["public"]["Enums"]["date_flexibility"]
+          desired_date: string
+          id: string
+          link_validity_days: number | null
+          token_expires_at: string | null
+          token_hash: string | null
+        }
+        Insert: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by_id?: string | null
+          cancelled_by_type?: string | null
+          contact_name: string
+          contact_phone: string
+          contact_source?: string | null
+          created_at?: string
+          created_by_company_id: string
+          date_flexibility?: Database["public"]["Enums"]["date_flexibility"]
+          desired_date: string
+          id?: string
+          link_validity_days?: number | null
+          token_expires_at?: string | null
+          token_hash?: string | null
+        }
+        Update: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by_id?: string | null
+          cancelled_by_type?: string | null
+          contact_name?: string
+          contact_phone?: string
+          contact_source?: string | null
+          created_at?: string
+          created_by_company_id?: string
+          date_flexibility?: Database["public"]["Enums"]["date_flexibility"]
+          desired_date?: string
+          id?: string
+          link_validity_days?: number | null
+          token_expires_at?: string | null
+          token_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_cancelled_by_id_fkey"
+            columns: ["cancelled_by_id"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_created_by_company_id_fkey"
+            columns: ["created_by_company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_users: {
         Row: {
           active: boolean
@@ -489,6 +732,176 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      shipment_counters: {
+        Row: {
+          company_id: string
+          last_number: number
+        }
+        Insert: {
+          company_id: string
+          last_number: number
+        }
+        Update: {
+          company_id?: string
+          last_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_counters_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipment_events: {
+        Row: {
+          actor_id: string | null
+          actor_type: string
+          company_id: string
+          data: Json
+          id: number
+          kind: Database["public"]["Enums"]["shipment_event_kind"]
+          occurred_at: string
+          shipment_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_type: string
+          company_id: string
+          data?: Json
+          id?: never
+          kind: Database["public"]["Enums"]["shipment_event_kind"]
+          occurred_at?: string
+          shipment_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_type?: string
+          company_id?: string
+          data?: Json
+          id?: never
+          kind?: Database["public"]["Enums"]["shipment_event_kind"]
+          occurred_at?: string
+          shipment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_events_shipment_id_company_id_fkey"
+            columns: ["shipment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      shipment_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          company_id: string
+          created_at: string
+          id: string
+          shipment_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          company_id: string
+          created_at?: string
+          id?: string
+          shipment_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          shipment_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_notes_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipment_notes_shipment_id_company_id_fkey"
+            columns: ["shipment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          client_id: string
+          company_id: string
+          created_at: string
+          id: string
+          last_activity_at: string
+          lost_reason: string | null
+          number: number
+          order_id: string
+          status: Database["public"]["Enums"]["shipment_status"]
+          status_changed_at: string
+        }
+        Insert: {
+          client_id: string
+          company_id: string
+          created_at?: string
+          id?: string
+          last_activity_at?: string
+          lost_reason?: string | null
+          number: number
+          order_id: string
+          status?: Database["public"]["Enums"]["shipment_status"]
+          status_changed_at?: string
+        }
+        Update: {
+          client_id?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          last_activity_at?: string
+          lost_reason?: string | null
+          number?: number
+          order_id?: string
+          status?: Database["public"]["Enums"]["shipment_status"]
+          status_changed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_client_id_company_id_fkey"
+            columns: ["client_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "shipments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vehicle_costs: {
         Row: {
@@ -601,9 +1014,33 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: never; Returns: string }
+      can_read_order: { Args: { p_order_id: string }; Returns: boolean }
+      cancel_order: {
+        Args: { p_order_id: string; p_reason: string }
+        Returns: undefined
+      }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
+      }
+      create_order: {
+        Args: {
+          p_client_email: string
+          p_client_id: string
+          p_client_name: string
+          p_client_phone: string
+          p_client_tax_id: string
+          p_client_type: Database["public"]["Enums"]["client_type"]
+          p_contact_source: string
+          p_date_flexibility: Database["public"]["Enums"]["date_flexibility"]
+          p_desired_date: string
+          p_destination: string
+          p_filled_by: Database["public"]["Enums"]["filled_by"]
+          p_link_validity_days: number
+          p_origin: string
+          p_stops: string[]
+        }
+        Returns: number
       }
       create_vehicle: {
         Args: {
@@ -634,9 +1071,32 @@ export type Database = {
       }
     }
     Enums: {
+      address_role: "origin" | "destination" | "stop"
       app_locale: "pt" | "es" | "en"
+      client_type: "private" | "company"
       company_role: "administrator" | "operator"
+      date_flexibility: "exact" | "two_days" | "one_week" | "month"
+      filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
+      lift_size: "none" | "small" | "large"
+      shipment_event_kind:
+        | "created"
+        | "link_shared"
+        | "link_resent"
+        | "inventory_submitted"
+        | "quote_sent"
+        | "won"
+        | "lost"
+        | "cancelled"
+        | "note_added"
+      shipment_status:
+        | "new"
+        | "awaiting_inventory"
+        | "inventory_received"
+        | "quoted"
+        | "won"
+        | "lost"
+        | "cancelled"
       vehicle_inactive_reason: "workshop" | "other"
       vehicle_type:
         | "small-van"
@@ -771,9 +1231,34 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      address_role: ["origin", "destination", "stop"],
       app_locale: ["pt", "es", "en"],
+      client_type: ["private", "company"],
       company_role: ["administrator", "operator"],
+      date_flexibility: ["exact", "two_days", "one_week", "month"],
+      filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],
+      lift_size: ["none", "small", "large"],
+      shipment_event_kind: [
+        "created",
+        "link_shared",
+        "link_resent",
+        "inventory_submitted",
+        "quote_sent",
+        "won",
+        "lost",
+        "cancelled",
+        "note_added",
+      ],
+      shipment_status: [
+        "new",
+        "awaiting_inventory",
+        "inventory_received",
+        "quoted",
+        "won",
+        "lost",
+        "cancelled",
+      ],
       vehicle_inactive_reason: ["workshop", "other"],
       vehicle_type: [
         "small-van",
