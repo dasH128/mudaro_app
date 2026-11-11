@@ -26,6 +26,7 @@ import {
   upcomingMoves,
 } from "@/features/orders/domain/list";
 import { getOrdersOverview } from "@/features/orders/infrastructure/orders.repo";
+import { OrdersEmpty } from "@/features/orders/presentation/components/orders-empty";
 import { FooterLink, OrdersCardsList } from "@/features/orders/presentation/components/orders-cards-list";
 import { OrdersListHeader } from "@/features/orders/presentation/components/orders-list-header";
 import { OrdersPipeline } from "@/features/orders/presentation/components/orders-pipeline";
@@ -79,6 +80,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
   const now = new Date();
   const today = todayLisbon(now);
   const { orders: all, metrics } = await getOrdersOverview();
+  if (all.length === 0) return <OrdersEmpty lang={locale} t={t} />;
 
   const counts = countByStage(all);
   const attention = summarizeAttention(all);
