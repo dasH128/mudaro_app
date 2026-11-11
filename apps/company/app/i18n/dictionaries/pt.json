@@ -109,6 +109,18 @@
     }
   },
   "app": {
+    "errors": {
+      "notFound": {
+        "title": "Esta página não existe",
+        "text": "O endereço pode estar mal escrito ou a página mudou de sítio.",
+        "cta": "Ir para o início"
+      },
+      "orderNotFound": {
+        "title": "Não encontrámos este pedido",
+        "text": "Confirma o número. Se o link veio de outra pessoa, pode ser de outra empresa.",
+        "cta": "Voltar aos pedidos"
+      }
+    },
     "account": {
       "menu": "Menu da conta",
       "signOut": "Terminar sessão"

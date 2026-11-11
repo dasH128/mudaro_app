@@ -109,6 +109,18 @@
     }
   },
   "app": {
+    "errors": {
+      "notFound": {
+        "title": "This page doesn't exist",
+        "text": "The address may be mistyped, or the page has moved.",
+        "cta": "Go to home"
+      },
+      "orderNotFound": {
+        "title": "We couldn't find this order",
+        "text": "Check the order number. If someone else sent you the link, it may belong to another company.",
+        "cta": "Back to orders"
+      }
+    },
     "account": {
       "menu": "Account menu",
       "signOut": "Sign out"
