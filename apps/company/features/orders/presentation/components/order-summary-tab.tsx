@@ -3,27 +3,32 @@ import Link from "next/link";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatVolume, formatWeekday } from "@/app/lib/format";
-import { summarizeInventory, type DetailAddress, type OrderDetail } from "../../domain/detail";
+import { routeOf, summarizeInventory, type DetailAddress, type OrderDetail } from "../../domain/detail";
 import { accessChips } from "../detail-text";
 import { describeWhen, type OrdersText } from "../orders-text";
 import { orderDetailHref } from "../orders-href";
-import { AddressBadge, card, ghostButton, sectionTitle } from "./order-detail-parts";
+import { AddressBadge, addressKind, card, ghostButton, sectionTitle } from "./order-detail-parts";
 
 type Props = { lang: Locale; t: OrdersText; order: OrderDetail; today: string };
 
 const tile = "flex flex-col gap-1 rounded-[14px] bg-surface-head p-4";
 const tileValue = "font-display text-[26px] font-extrabold leading-[1.1]";
 
-function AddressCard({ t, address }: { t: OrdersText; address: DetailAddress }) {
+/** Un punto del recorrido; la línea de puntos lo une con el siguiente. */
+function RoutePoint({ t, address, last }: { t: OrdersText; address: DetailAddress; last: boolean }) {
   const s = t.detail.summary;
   return (
-    <div className="flex flex-col gap-2.5 rounded-2xl border border-line p-4">
-      <span className="flex items-center gap-2.5">
-        <AddressBadge role={address.role} />
-        <span className="flex flex-col">
-          <span className="text-[13px] text-muted">{address.role === "origin" ? s.origin : s.destination}</span>
-          <span className="font-bold">{address.place}</span>
-        </span>
+    <li
+      className={`relative flex flex-col gap-2.5 py-2 pl-12 ${
+        last ? "" : "after:absolute after:-bottom-2 after:left-4.25 after:top-11 after:border-l-2 after:border-dotted after:border-accent"
+      }`}
+    >
+      <span className="absolute left-0 top-2">
+        <AddressBadge address={address} />
+      </span>
+      <span className="flex min-h-9 flex-col justify-center">
+        <span className="text-[13px] text-muted">{addressKind(address, s)}</span>
+        <span className="font-bold">{address.place}</span>
       </span>
       {address.access ? (
         <span className="flex flex-wrap gap-1.5">
@@ -39,13 +44,14 @@ function AddressCard({ t, address }: { t: OrdersText; address: DetailAddress }) 
           ))}
         </span>
       ) : null}
-    </div>
+    </li>
   );
 }
 
 /** Pestaña Resumo: la mudança, las dos direcciones y lo que pide atención en el inventario. */
 export function OrderSummaryTab({ lang, t, order, today }: Props) {
   const s = t.detail.summary;
+  const route = routeOf(order);
   const when = describeWhen(order, t.list, lang, today);
   const totals = order.inventory ? summarizeInventory(order.inventory) : null;
   const whenParts = [
@@ -89,10 +95,11 @@ export function OrderSummaryTab({ lang, t, order, today }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
-          <AddressCard t={t} address={order.origin} />
-          <AddressCard t={t} address={order.destination} />
-        </div>
+        <ol className="flex flex-col rounded-2xl border border-line p-4">
+          {route.map((address, index) => (
+            <RoutePoint key={`${address.role}-${address.stopNumber ?? 0}`} t={t} address={address} last={index === route.length - 1} />
+          ))}
+        </ol>
       </section>
 
       <section aria-labelledby="attention" className={`${card} gap-4`}>

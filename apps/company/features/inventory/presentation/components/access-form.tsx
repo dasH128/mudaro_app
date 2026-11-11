@@ -1,14 +1,13 @@
 import { ChoiceGroup } from "@/app/components/form/choice-group";
 import { Field, inputClass } from "@/app/components/form/field";
 import { interpolate } from "@/app/i18n/interpolate";
-import { LIFT_SIZES, type AccessPoint } from "../../domain/types";
+import { LIFT_SIZES, type AccessPoint, type RoutePoint } from "../../domain/types";
 import type { InventoryText } from "../inventory-text";
 
 type Props = {
   t: InventoryText;
-  /** Prefijo de los ids de los campos: "origin" o "destination". */
-  id: "origin" | "destination";
-  place: string;
+  /** Punto del recorrido: su id es el prefijo de los ids de los campos. */
+  point: RoutePoint;
   value: AccessPoint;
   onChange: (value: AccessPoint) => void;
 };
@@ -38,9 +37,17 @@ function Switch({ label, checked, onChange }: { label: string; checked: boolean;
   );
 }
 
-export function AccessForm({ t, id, place, value, onChange }: Props) {
+const BADGE_STYLE = {
+  origin: "bg-foreground text-background",
+  destination: "bg-primary text-primary-foreground",
+  stop: "border-2 border-dashed border-accent bg-surface-head text-foreground",
+} as const;
+
+export function AccessForm({ t, point, value, onChange }: Props) {
   const a = t.access;
-  const kind = a.kinds[id];
+  const { id, place } = point;
+  const kind = point.role === "stop" ? interpolate(a.kinds.stop, { n: point.stopNumber ?? "" }) : a.kinds[point.role];
+  const badge = point.role === "origin" ? "A" : point.role === "destination" ? "B" : `P${point.stopNumber ?? ""}`;
   const set = <K extends keyof AccessPoint>(key: K, next: AccessPoint[K]) => onChange({ ...value, [key]: next });
 
   return (
@@ -49,11 +56,9 @@ export function AccessForm({ t, id, place, value, onChange }: Props) {
       <span className="flex items-center gap-3">
         <span
           aria-hidden="true"
-          className={`grid size-9 flex-none place-items-center rounded-xl text-sm font-bold ${
-            id === "origin" ? "bg-foreground text-background" : "bg-primary text-primary-foreground"
-          }`}
+          className={`grid size-9 flex-none place-items-center rounded-xl text-sm font-bold ${BADGE_STYLE[point.role]}`}
         >
-          {id === "origin" ? "A" : "B"}
+          {badge}
         </span>
         <span className="flex min-w-0 flex-col">
           <span className="text-[13px] text-muted">{kind}</span>

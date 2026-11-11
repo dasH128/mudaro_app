@@ -37,6 +37,7 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
   if (order.inventoryMode !== "link") redirect(localePath(locale, ROUTES.orders.inventory(order.id)));
 
   const t = (await getDictionary()).app.orders;
+  const stops = order.stops.filter(Boolean);
   const flexibility = order.flexibility === "exact" ? "" : ` (${t.new.move.flexibilities[order.flexibility]})`;
 
   return (
@@ -56,6 +57,7 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
             <span className="sr-only">{t.created.routeTo}</span> {order.destination} · {formatDate(order.date)}
             {flexibility}
           </p>
+          {stops.length > 0 ? <p className="text-base text-muted">{interpolate(t.created.stops, { list: stops.join(" · ") })}</p> : null}
         </div>
       </header>
 

@@ -247,6 +247,30 @@
         "new": "Nuevo pedido",
         "searchLabel": "Buscar pedidos",
         "searchPlaceholder": "Buscar por nombre o nº",
+        "empty": {
+          "count": "0 pedidos",
+          "eyebrow": "Vamos a empezar",
+          "title": "Tu primer pedido empieza aquí.",
+          "text": "Registra la mudanza de un cliente para tenerlo todo en un solo sitio, del inventario al presupuesto.",
+          "cta": "Crear el primer pedido",
+          "hint": "Empieza por la próxima mudanza que tengas que gestionar.",
+          "perksTitle": "Qué podrás hacer",
+          "perks": {
+            "client": {
+              "title": "Un pedido por cliente",
+              "text": "Guarda la ficha del cliente y las direcciones de la mudanza sin repetir datos."
+            },
+            "inventory": {
+              "title": "Inventario completo",
+              "text": "El cliente o tú indican lo que va en la mudanza, habitación a habitación."
+            },
+            "quote": {
+              "title": "Presupuesto con base real",
+              "text": "Con el inventario hecho, preparas el presupuesto y lo sigues hasta que se acepta."
+            }
+          },
+          "later": "Los pedidos que crees aparecerán aquí, organizados por etapa."
+        },
         "welcome": {
           "greeting": {
             "morning": "Buenos días",
@@ -625,6 +649,7 @@
       "created": {
         "title": "Pedido {id} creado",
         "routeTo": "a",
+        "stops": "Paradas: {list}",
         "shareTitle": "Ahora envía el enlace a {name}",
         "shareText": "Por aquí indica {name} qué se va a llevar. Más adelante verá la propuesta en el mismo enlace.",
         "linkLabel": "Enlace del pedido",
@@ -729,7 +754,8 @@
         "access": {
           "kinds": {
             "origin": "Origen",
-            "destination": "Destino"
+            "destination": "Destino",
+            "stop": "Parada {n}"
           },
           "floor": "Planta",
           "parking": "Aparcamiento a",
@@ -836,6 +862,7 @@
           "distanceUnknown": "Por calcular",
           "origin": "Origen",
           "destination": "Destino",
+          "stop": "Parada {n}",
           "attentionTitle": "Qué requiere atención en el inventario",
           "viewInventory": "Ver inventario completo",
           "missing": "sin medidas",

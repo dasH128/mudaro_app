@@ -23,7 +23,9 @@ export type AddressAccess = {
 };
 
 export type DetailAddress = {
-  role: "origin" | "destination";
+  role: "origin" | "stop" | "destination";
+  /** Número de la parada (1, 2, 3). `null` en origen y destino. */
+  stopNumber: number | null;
   /** Zona de la dirección, tal como la escribió la empresa o el cliente: "Arroios, Lisboa". */
   place: string;
   /** `null` mientras no haya inventario con accesos. */
@@ -88,6 +90,8 @@ export type OrderDetail = {
   /** Distancia entre origen y destino. `null` hasta calcularla (se calcula en la proposta). */
   distanceKm: number | null;
   origin: DetailAddress;
+  /** Paradas intermedias, en el orden del recorrido. */
+  stops: readonly DetailAddress[];
   destination: DetailAddress;
   inventory: DetailInventory | null;
   link: DetailLink | null;
@@ -96,6 +100,11 @@ export type OrderDetail = {
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
 };
+
+/** Recorrido completo: origen, paradas y destino, en ese orden. */
+export function routeOf(order: Pick<OrderDetail, "origin" | "stops" | "destination">): DetailAddress[] {
+  return [order.origin, ...order.stops, order.destination];
+}
 
 // --- Percurso ---
 

@@ -312,11 +312,11 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | undefine
   const sorted = [...order.addresses].sort((a, b) => a.sort_order - b.sort_order);
 
   // Los accesos de una versión en borrador no están confirmados (son obligatorios al enviar, RF-23): no se muestran.
-  const addressOf = (role: "origin" | "destination"): DetailAddress => {
-    const slot = sorted.find((address) => address.role === role);
+  const addressOf = (slot: { id: string } | undefined, role: DetailAddress["role"], stopNumber: number | null): DetailAddress => {
     const row = inventory?.inventory_addresses.find((candidate) => candidate.address_id === slot?.id);
     return {
       role,
+      stopNumber,
       place: row?.address ?? "",
       access:
         row && inventory?.submitted_at
@@ -331,6 +331,7 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | undefine
       clientNote: row?.notes ?? null,
     };
   };
+  const slotsOf = (role: DetailAddress["role"]) => sorted.filter((address) => address.role === role);
 
   const events = data.events
     .map((row) => eventOf(row, source))
@@ -365,8 +366,9 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | undefine
     flexibility: FLEXIBILITY_FROM_DB[order.date_flexibility],
     // TODO(paso 5): los km se calculan al hacer el presupuesto.
     distanceKm: null,
-    origin: addressOf("origin"),
-    destination: addressOf("destination"),
+    origin: addressOf(slotsOf("origin")[0], "origin", null),
+    stops: slotsOf("stop").map((slot, index) => addressOf(slot, "stop", index + 1)),
+    destination: addressOf(slotsOf("destination")[0], "destination", null),
     // TODO(4b): el inventario con líneas llega con `inventory_lines`.
     inventory: null,
     link,

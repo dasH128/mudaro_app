@@ -44,6 +44,7 @@ export default async function OrderInventoryPage({ params }: PageProps<"/[lang]/
         order={{
           clientName: order.clientName,
           origin: order.origin,
+          stops: order.stops,
           destination: order.destination,
           date: order.date,
           linkLocked: order.inventoryMode === "link",

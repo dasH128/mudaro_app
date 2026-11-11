@@ -247,6 +247,30 @@
         "new": "Novo pedido",
         "searchLabel": "Pesquisar pedidos",
         "searchPlaceholder": "Procurar por nome ou nº",
+        "empty": {
+          "count": "0 pedidos",
+          "eyebrow": "Vamos começar",
+          "title": "O teu primeiro pedido começa aqui.",
+          "text": "Regista a mudança de um cliente para teres tudo num só sítio, do inventário ao orçamento.",
+          "cta": "Criar o primeiro pedido",
+          "hint": "Começa pela próxima mudança que tens para tratar.",
+          "perksTitle": "O que vais poder fazer",
+          "perks": {
+            "client": {
+              "title": "Um pedido por cliente",
+              "text": "Guarda a ficha do cliente e as moradas da mudança sem repetir dados."
+            },
+            "inventory": {
+              "title": "Inventário completo",
+              "text": "O cliente ou tu listam o que vai na mudança, divisão a divisão."
+            },
+            "quote": {
+              "title": "Orçamento com base real",
+              "text": "Com o inventário feito, preparas o orçamento e acompanhas até ser aceite."
+            }
+          },
+          "later": "Os pedidos que criares aparecem aqui, organizados por etapa."
+        },
         "welcome": {
           "greeting": {
             "morning": "Bom dia",
@@ -625,6 +649,7 @@
       "created": {
         "title": "Pedido {id} criado",
         "routeTo": "para",
+        "stops": "Paragens: {list}",
         "shareTitle": "Agora envia o link a {name}",
         "shareText": "É por aqui que {name} indica o que vai levar. Mais tarde, verá a proposta no mesmo link.",
         "linkLabel": "Link do pedido",
@@ -729,7 +754,8 @@
         "access": {
           "kinds": {
             "origin": "Origem",
-            "destination": "Destino"
+            "destination": "Destino",
+            "stop": "Paragem {n}"
           },
           "floor": "Andar",
           "parking": "Estacionamento a",
@@ -836,6 +862,7 @@
           "distanceUnknown": "Por calcular",
           "origin": "Origem",
           "destination": "Destino",
+          "stop": "Paragem {n}",
           "attentionTitle": "O que pede atenção no inventário",
           "viewInventory": "Ver inventário completo",
           "missing": "sem medidas",

@@ -9,6 +9,7 @@ import {
   EMPTY_ACCESS,
   INVENTORY_STEPS,
   ROOM_KEYS,
+  buildRoutePoints,
   countInRoom,
   normalizeSearch,
   summarize,
@@ -32,6 +33,8 @@ import { RoomsNav } from "./rooms-nav";
 export type InventoryOrder = {
   clientName: string;
   origin: string;
+  /** Paradas intermedias, en orden. */
+  stops: readonly string[];
   destination: string;
   /** aaaa-mm-dd */
   date: string;
@@ -56,10 +59,9 @@ export function InventoryEditor({ lang, t, order, catalog, extras, exitHref }: P
   const [room, setRoom] = useState<RoomKey>(ROOM_KEYS[0]);
   const [query, setQuery] = useState("");
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [access, setAccess] = useState<Record<"origin" | "destination", AccessPoint>>({
-    origin: EMPTY_ACCESS,
-    destination: EMPTY_ACCESS,
-  });
+  // Accesos por punto del recorrido (clave: RoutePoint.id). Lo que falta se trata como vacío.
+  const [access, setAccess] = useState<Record<string, AccessPoint>>({});
+  const points = buildRoutePoints(order.origin, order.stops, order.destination);
   const [chosen, setChosen] = useState<Record<string, boolean>>({});
 
   const totals = summarize(catalog, quantities);
@@ -118,14 +120,13 @@ export function InventoryEditor({ lang, t, order, catalog, extras, exitHref }: P
 
         {step === "access" ? (
           <div className="grid gap-5 lg:grid-cols-2">
-            {(["origin", "destination"] as const).map((point) => (
+            {points.map((point) => (
               <AccessForm
-                key={point}
+                key={point.id}
                 t={t}
-                id={point}
-                place={order[point]}
-                value={access[point]}
-                onChange={(value) => setAccess((current) => ({ ...current, [point]: value }))}
+                point={point}
+                value={access[point.id] ?? EMPTY_ACCESS}
+                onChange={(value) => setAccess((current) => ({ ...current, [point.id]: value }))}
               />
             ))}
           </div>

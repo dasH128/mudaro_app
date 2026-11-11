@@ -26,7 +26,7 @@ export type InventoryStep = (typeof INVENTORY_STEPS)[number];
 export const LIFT_SIZES = ["none", "small", "normal"] as const;
 export type LiftSize = (typeof LIFT_SIZES)[number];
 
-/** Condiciones de acceso del origen o del destino. */
+/** Condiciones de acceso de un punto del recorrido (origen, parada o destino). */
 export type AccessPoint = {
   floor: string;
   /** Distancia de estacionamiento, en metros (texto del campo). */
@@ -36,6 +36,25 @@ export type AccessPoint = {
   needsParkingPermit: boolean;
   notes: string;
 };
+
+/** Punto del recorrido que lleva sus propios accesos: origen, cada parada o destino. */
+export type RoutePoint = {
+  /** "origin", "stop-1", "stop-2"... o "destination". Sirve de clave y de prefijo de los campos. */
+  id: string;
+  role: "origin" | "stop" | "destination";
+  /** Número de la parada (1, 2, 3). `null` en origen y destino. */
+  stopNumber: number | null;
+  place: string;
+};
+
+/** Origen, paradas y destino, en el orden del recorrido. */
+export function buildRoutePoints(origin: string, stops: readonly string[], destination: string): RoutePoint[] {
+  return [
+    { id: "origin", role: "origin", stopNumber: null, place: origin },
+    ...stops.map((place, index): RoutePoint => ({ id: `stop-${index + 1}`, role: "stop", stopNumber: index + 1, place })),
+    { id: "destination", role: "destination", stopNumber: null, place: destination },
+  ];
+}
 
 export const EMPTY_ACCESS: AccessPoint = {
   floor: "",

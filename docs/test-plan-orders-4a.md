@@ -30,16 +30,16 @@ Fuentes: `docs/plan-modelo-bd.md` (decisiones del paso 4), `docs/diagram/mudaro-
 | A1 | Numeración sin saltos (RF-17) | Con sesión de administrador, crear dos pedidos seguidos con `create_order()` | Los números devueltos son consecutivos (`n` y `n+1`) | Claude | OK (10/11/2026) |
 | A2 | Reutilizar la ficha del cliente (RF-14) | Crear dos pedidos con el mismo teléfono y distinto nombre | `clients` tiene una sola fila con ese teléfono y los dos envíos apuntan a ella | Claude | OK (10/11/2026) |
 | A3 | Paradas en blanco | Crear un pedido con paradas `['Paragem 1', '  ']` | Se guarda una parada, con su hueco en `addresses` y su texto en `inventory_addresses`; el pedido tiene 3 direcciones en total (origen, parada, destino) | Claude | OK (10/11/2026) |
-| A4 | Máximo de paradas | Crear un pedido con 4 paradas | La función falla con el código `22023` y no se crea ninguna fila | Claude | Pendiente |
-| A5 | Datos obligatorios | Crear pedidos con teléfono sin `+351` o con 8 dígitos, con el origen vacío, con el destino vacío y sin fecha | Cada caso falla con el código `22023` y no se crea ninguna fila | Claude | Pendiente |
+| A4 | Máximo de paradas | Crear un pedido con 4 paradas | La función falla con el código `22023` y no se crea ninguna fila | Claude | OK (10/11/2026) |
+| A5 | Datos obligatorios | Crear pedidos con teléfono sin `+351` o con 8 dígitos, con el origen vacío, con el destino vacío y sin fecha | Cada caso falla con el código `22023` y no se crea ninguna fila | Claude | OK (10/11/2026) |
 | A6 | Lectura de la propia empresa (RNF-01) | Como administrador, leer `clients`, `orders`, `shipments`, `addresses`, `inventories` e `inventory_addresses` | Devuelven las filas de los pedidos creados en el caso A1 | Claude | OK (10/11/2026) |
 | A7 | Escritura directa bloqueada | Como usuario autenticado, hacer `update` sobre `shipments` y `select` sobre `shipment_counters` | Ambos fallan con `insufficient_privilege` | Claude | OK (10/11/2026) |
 | A8 | Sin acceso anónimo | Como `anon`, leer `orders` | Falla con `insufficient_privilege` | Claude | OK (10/11/2026) |
-| A9 | Aislamiento entre empresas (RNF-01) | Crear dentro de la prueba una empresa B con un administrador y leer, como B, todas las tablas de pedidos que contienen datos de A | 0 filas en cada tabla | Claude | Pendiente |
-| A10 | Cancelar un pedido ajeno | Como administrador de B, llamar a `cancel_order()` con un pedido de A | Falla con `42501`; el pedido de A sigue sin cancelar | Claude | Pendiente |
-| A11 | Cliente de otra empresa | Como administrador de B, llamar a `create_order()` con el `p_client_id` de una ficha de A | Falla con el error `client not found` y no se crea ninguna fila | Claude | Pendiente |
-| A12 | Rol operario | Como usuario con rol `operator`, llamar a `create_order()` y leer `shipments` | La función falla con `42501` y la lectura devuelve 0 filas | Claude | Pendiente |
-| A13 | Coherencia envío y cliente | Como propietario, insertar un `shipments` cuyo `client_id` pertenece a otra empresa | Falla por la clave compuesta (`foreign_key_violation`) | Claude | Pendiente |
+| A9 | Aislamiento entre empresas (RNF-01) | Crear dentro de la prueba una empresa B con un administrador y leer, como B, todas las tablas de pedidos que contienen datos de A | 0 filas en cada tabla | Claude | OK (10/11/2026) |
+| A10 | Cancelar un pedido ajeno | Como administrador de B, llamar a `cancel_order()` con un pedido de A | Falla con `42501`; el pedido de A sigue sin cancelar | Claude | OK (10/11/2026) |
+| A11 | Cliente de otra empresa | Como administrador de B, llamar a `create_order()` con el `p_client_id` de una ficha de A | Falla con el error `client not found` y no se crea ninguna fila | Claude | OK (10/11/2026) |
+| A12 | Rol operario | Como usuario con rol `operator`, llamar a `create_order()` y leer `shipments` | La función falla con `42501` y la lectura devuelve 0 filas | Claude | OK (10/11/2026) |
+| A13 | Coherencia envío y cliente | Como propietario, insertar un `shipments` cuyo `client_id` pertenece a otra empresa | Falla por la clave compuesta (`foreign_key_violation`) | Claude | OK (10/11/2026) |
 | A14 | Cancelar el propio pedido (RF-69) | Cancelar un pedido con motivo `"  cliente desistiu "` | `orders.cancelled_at` y `cancelled_by_id` rellenos, motivo guardado sin espacios, envío en `cancelled`, un evento `cancelled` y una fila `order_cancelled` en `audit_log` | Claude | OK (10/11/2026) |
 | A15 | Cancelación repetida o inexistente | Cancelar dos veces el mismo pedido y cancelar un id que no existe | La segunda falla con `23514`; el id inexistente falla con `42501` | Claude | OK (10/11/2026) |
 | A16 | Envío cancelado no se reactiva | Cambiar el estado de un envío `cancelled` a `new` | Falla con `23514` | Claude | OK (10/11/2026) |
@@ -54,12 +54,12 @@ Prerrequisito: sesión iniciada como administrador y los datos de prueba de la s
 
 | ID | Prueba | Pasos | Criterio de aceptación | Quién | Estado |
 | --- | --- | --- | --- | --- | --- |
-| B1 | Lista sin pedidos | Abrir `/pt/orders` con 0 pedidos | La página carga sin error ni pantalla en blanco | Persona | Pendiente |
-| B2 | Alta con enlace (RF-13, RF-15) | En "Novo pedido", rellenar los datos de prueba, elegir "el cliente rellena por enlace" y una validez de 14 días, y enviar | Redirige a `/pt/orders/MD-0001/created`; el título muestra `MD-0001`, y la ruta (origen, destino) y la fecha coinciden con lo escrito | Persona | Pendiente |
+| B1 | Lista sin pedidos | Abrir `/pt/orders` con 0 pedidos | La página carga sin error ni pantalla en blanco | Persona | OK (11/11/2026) |
+| B2 | Alta con enlace (RF-13, RF-15) | En "Novo pedido", rellenar los datos de prueba, elegir "el cliente rellena por enlace" y una validez de 14 días, y enviar | Redirige a `/pt/orders/MD-0001/created`; el título muestra `MD-0001`, y la ruta (origen, destino) y la fecha coinciden con lo escrito | Persona | OK (11/11/2026) |
 | B3 | Alta con inventario por la empresa (RF-19) | Crear otro pedido eligiendo "lo relleno yo" | Redirige a `/pt/orders/MD-0002/inventory` y la pantalla del inventario carga con los datos del pedido | Persona | Pendiente |
-| B4 | Sugerir cliente existente (RF-14) | En "Novo pedido", escribir el teléfono `+351900000001` | Aparece la sugerencia con el nombre del cliente ya creado y su número de pedidos | Persona | Pendiente |
-| B5 | Validaciones de formulario | Intentar enviar con teléfono inválido, con fecha pasada, sin origen y con 4 paradas | Cada error aparece junto a su campo, el formulario conserva lo escrito y no se crea ningún pedido | Persona | Pendiente |
-| B6 | Paradas intermedias | Crear un pedido con 2 paradas | "Pedido criado" y el detalle muestran las paradas en el orden escrito | Persona | Pendiente |
+| B4 | Sugerir cliente existente (RF-14) | En "Novo pedido", escribir el teléfono `+351900000001` | Aparece la sugerencia con el nombre del cliente ya creado ("Este número já é cliente: Cliente Teste"). Con solo pedidos en "Nova" muestra "Sem pedidos anteriores": el contador "N pedidos anteriores" solo cuenta con un pedido ganado y se comprueba en el paso 5 | Persona | OK (11/11/2026) |
+| B5 | Validaciones de formulario | Intentar enviar con teléfono inválido, con fecha pasada y sin origen. Después añadir paradas hasta llegar a 3 (origen y destino no cuentan) | Cada error aparece junto a su campo, el formulario conserva lo escrito y no se crea ningún pedido. Con 3 paradas el botón de añadir desaparece, así que no se puede añadir una cuarta (el rechazo de 4 paradas en servidor se prueba en A4) | Persona | OK (11/11/2026) |
+| B6 | Paradas intermedias | Crear un pedido con 2 paradas | "Pedido criado" y el detalle muestran las paradas en el orden escrito | Persona | Fallo (11/11/2026), corregido: repetir |
 | B7 | Lista con datos | Abrir `/pt/orders` tras crear los pedidos | Aparecen todos los pedidos creados, con su número, cliente, ruta, fecha, etapa "Nova" y la nota de recién creado | Persona | Pendiente |
 | B8 | Filtros y búsqueda (RF-17) | Filtrar por etapa "Nova" y buscar por nombre y por `MD-0001` | Cada filtro devuelve solo los pedidos esperados; la búsqueda por número encuentra exactamente ese pedido | Persona | Pendiente |
 | B9 | Detalle del pedido | Abrir `/pt/orders/MD-0001` | Muestra cliente, fecha y direcciones correctos; las direcciones no muestran accesos; el historial tiene un evento "criado" con el nombre de quien lo creó; no hay panel de enlace; las notas aparecen vacías | Persona | Pendiente |
@@ -110,4 +110,5 @@ El paso 4a se da por validado cuando:
 
 | Caso | Fecha | Qué se vio | Qué se esperaba | Estado |
 | --- | --- | --- | --- | --- |
-| | | | | |
+| B6 | 11/11/2026 | Con 2 paradas, "Pedido criado" y el detalle (Resumo y Moradas) solo mostraban origen y destino. Las paradas sí estaban en la base de datos | Las paradas visibles y en el orden escrito | Corregido en código (paradas en los tres sitios y en el formulario de accesos del inventario). Pendiente de repetir B6 |
+

@@ -13,6 +13,7 @@ import {
   firstMissingMeasure,
   isDetailTab,
   linkState,
+  routeOf,
   summarizeInventory,
 } from "@/features/orders/domain/detail";
 import { getOrderDetail } from "@/features/orders/infrastructure/orders.repo";
@@ -77,13 +78,13 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
             current={tab}
             counts={{
               ...(totals ? { inventory: totals.items } : {}),
-              addresses: 2,
+              addresses: routeOf(order).length,
               proposals: order.proposalCount,
             }}
           />
           {tab === "summary" ? <OrderSummaryTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "inventory" ? <OrderInventoryTab lang={locale} t={t} order={order} /> : null}
-          {tab === "addresses" ? <OrderAddressesTab t={t} addresses={[order.origin, order.destination]} /> : null}
+          {tab === "addresses" ? <OrderAddressesTab t={t} addresses={routeOf(order)} /> : null}
           {tab === "proposals" ? <OrderProposalsTab lang={locale} t={t} order={order} /> : null}
           {tab === "history" ? <OrderHistoryTab lang={locale} t={t} events={order.events} /> : null}
         </div>
