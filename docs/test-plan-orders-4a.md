@@ -56,7 +56,7 @@ Prerrequisito: sesión iniciada como administrador y los datos de prueba de la s
 | --- | --- | --- | --- | --- | --- |
 | B1 | Lista sin pedidos | Abrir `/pt/orders` con 0 pedidos | La página carga sin error ni pantalla en blanco | Persona | OK (11/11/2026) |
 | B2 | Alta con enlace (RF-13, RF-15) | En "Novo pedido", rellenar los datos de prueba, elegir "el cliente rellena por enlace" y una validez de 14 días, y enviar | Redirige a `/pt/orders/MD-0001/created`; el título muestra `MD-0001`, y la ruta (origen, destino) y la fecha coinciden con lo escrito | Persona | OK (11/11/2026) |
-| B3 | Alta con inventario por la empresa (RF-19) | Crear otro pedido eligiendo "lo relleno yo" | Redirige a `/pt/orders/MD-0002/inventory` y la pantalla del inventario carga con los datos del pedido | Persona | Pendiente |
+| B3 | Alta con inventario por la empresa (RF-19) | Crear otro pedido eligiendo "lo relleno yo" | Redirige a `/pt/orders/MD-0002/inventory` y la pantalla del inventario carga con los datos del pedido | Persona | OK (11/11/2026) |
 | B4 | Sugerir cliente existente (RF-14) | En "Novo pedido", escribir el teléfono `+351900000001` | Aparece la sugerencia con el nombre del cliente ya creado ("Este número já é cliente: Cliente Teste"). Con solo pedidos en "Nova" muestra "Sem pedidos anteriores": el contador "N pedidos anteriores" solo cuenta con un pedido ganado y se comprueba en el paso 5 | Persona | OK (11/11/2026) |
 | B5 | Validaciones de formulario | Intentar enviar con teléfono inválido, con fecha pasada y sin origen. Después añadir paradas hasta llegar a 3 (origen y destino no cuentan) | Cada error aparece junto a su campo, el formulario conserva lo escrito y no se crea ningún pedido. Con 3 paradas el botón de añadir desaparece, así que no se puede añadir una cuarta (el rechazo de 4 paradas en servidor se prueba en A4) | Persona | OK (11/11/2026) |
 | B6 | Paradas intermedias | Crear un pedido con 2 paradas | "Pedido criado" y el detalle muestran las paradas en el orden escrito | Persona | OK (11/11/2026) |
@@ -64,11 +64,11 @@ Prerrequisito: sesión iniciada como administrador y los datos de prueba de la s
 | B8 | Filtros y búsqueda (RF-17) | Filtrar por etapa "Nova" y buscar por nombre y por `MD-0001` | Cada filtro devuelve solo los pedidos esperados; la búsqueda por número encuentra exactamente ese pedido | Persona | OK (11/11/2026) |
 | B9 | Detalle del pedido | Abrir `/pt/orders/MD-0001` | Muestra cliente, fecha y direcciones correctos; las direcciones no muestran accesos; el historial tiene un evento "criado" con el nombre de quien lo creó; no hay panel de enlace; las notas aparecen vacías | Persona | OK (11/11/2026) |
 | B10 | Pestañas sin datos | Abrir en el detalle las pestañas Inventário y Propostas | Estado vacío, sin error ni pantalla en blanco | Persona | OK (11/11/2026) |
-| B11 | Rutas inválidas | Abrir `/pt/orders/abc` y `/pt/orders/MD-9999` | Ambas muestran la página de "no encontrado" | Persona | Pendiente |
-| B12 | Persistencia | Detener y reiniciar el servidor y abrir `/pt/orders` | Los pedidos creados siguen en la lista | Persona | Pendiente |
-| B13 | Idiomas | Repetir B7 y B9 en `/es` y `/en` | No hay textos sin traducir ni claves visibles | Persona | Pendiente |
-| B14 | Sin sesión | Cerrar sesión y abrir `/pt/orders` | Redirige al login | Persona | Pendiente |
-| B15 | Pedido de otra empresa | Con una segunda empresa activa (si existe), abrir el `MD-0001` de la primera | Muestra "no encontrado", igual que un pedido inexistente | Persona | Pendiente |
+| B11 | Rutas inválidas | Abrir `/pt/orders/abc` y `/pt/orders/MD-9999` | Ambas muestran la página de "no encontrado" | Persona | OK (11/11/2026) |
+| B12 | Persistencia | Detener y reiniciar el servidor y abrir `/pt/orders` | Los pedidos creados siguen en la lista | Persona | OK (11/11/2026) |
+| B13 | Idiomas | Repetir B7 y B9 en `/es` y `/en` | No hay textos sin traducir ni claves visibles | Persona | OK (11/11/2026) |
+| B14 | Sin sesión | Cerrar sesión y abrir `/pt/orders` | Redirige al login | Persona | OK (11/11/2026) |
+| B15 | Pedido de otra empresa | Con una segunda empresa activa (si existe), abrir el `MD-0001` de la primera | Muestra "no encontrado", igual que un pedido inexistente | Persona | OK (11/11/2026) |
 
 ## C. Datos guardados
 
