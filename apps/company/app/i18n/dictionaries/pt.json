@@ -405,6 +405,10 @@
           "step": "Etapa {step} de 5",
           "moreActions": "Mais ações para {id}",
           "routeTo": "para",
+          "stops": {
+            "one": "{count} paragem",
+            "other": "{count} paragens"
+          },
           "needsYou": "Precisa de ti"
         },
         "when": {

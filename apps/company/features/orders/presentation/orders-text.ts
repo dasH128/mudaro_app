@@ -18,6 +18,11 @@ export function buildMessage(t: OrdersText["message"], values: MessageValues): s
   return t.body.map((paragraph) => interpolate(paragraph, values));
 }
 
+/** "(2 paragens)" tras el destino. `null` si el pedido no tiene paradas. */
+export function describeStops(count: number, t: OrdersListText, locale: Locale): string | null {
+  return count > 0 ? `(${pluralize(locale, count, t.common.stops)})` : null;
+}
+
 /** Pasa la nota del dominio al texto de la lista. */
 export function describeNote(note: OrderNote, t: OrdersListText, locale: Locale, today: string): string {
   const n = t.notes;

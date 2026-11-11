@@ -195,6 +195,7 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
       client: row.client?.name ?? row.order.contact_name,
       from: route.origin,
       to: route.destination,
+      stopCount: route.stops.length,
       date: row.order.desired_date,
       flexibility: FLEXIBILITY_FROM_DB[row.order.date_flexibility],
       stage,

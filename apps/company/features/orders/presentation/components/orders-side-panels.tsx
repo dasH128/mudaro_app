@@ -5,7 +5,7 @@ import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatDayMonthShort } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import type { OrderListItem, OrderStage, OrdersMetrics } from "../../domain/types";
-import type { OrdersListText } from "../orders-text";
+import { describeStops, type OrdersListText } from "../orders-text";
 
 type Props = {
   lang: Locale;
@@ -52,7 +52,8 @@ export function OrdersSidePanels({ lang, t, upcoming, metrics }: Props) {
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate text-sm font-bold">{item.client}</span>
                     <span className="truncate text-[13px] text-muted">
-                      {item.from} → {item.to} · {t.status[item.stage]}
+                      {item.from} → {item.to}
+                      {item.stopCount > 0 ? ` ${describeStops(item.stopCount, t, lang)}` : ""} · {t.status[item.stage]}
                     </span>
                   </span>
                 </li>

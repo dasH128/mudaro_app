@@ -5,7 +5,7 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { STEP_OF, isWarn, needsAttention, nextAction } from "../../domain/list";
 import type { OrderListItem } from "../../domain/types";
-import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
+import { describeNote, describeStops, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton, OrderMoreButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
 import { OrderIdLink } from "./order-id-link";
@@ -100,6 +100,7 @@ export function OrdersTable({ lang, t, title, rows, total, today, emptyMessage, 
                   <span className="text-sm font-medium">
                     {item.from} <span aria-hidden="true">→</span>
                     <span className="sr-only">{t.common.routeTo}</span> {item.to}
+                    {item.stopCount > 0 ? <> {describeStops(item.stopCount, t, lang)}</> : null}
                   </span>
                   <span className="text-xs text-muted">
                     {when.date} · {when.countdown}

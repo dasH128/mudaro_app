@@ -104,6 +104,8 @@ export type OrderListItem = {
   client: string;
   from: string;
   to: string;
+  /** Paradas intermedias entre origen y destino. */
+  stopCount: number;
   /** Fecha aproximada de la mudanza, aaaa-mm-dd. */
   date: string;
   flexibility: Flexibility;

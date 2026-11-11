@@ -5,7 +5,7 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { STEP_OF, nextAction } from "../../domain/list";
 import type { OrderListItem } from "../../domain/types";
-import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
+import { describeNote, describeStops, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton, OrderMoreButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
 import { OrderIdLink } from "./order-id-link";
@@ -45,6 +45,7 @@ export function OrdersCardsList({ lang, t, title, rows, today, empty, footer }: 
                 <span className="text-[13px] text-muted">
                   <OrderIdLink lang={lang} id={item.id} /> · {item.from} <span aria-hidden="true">→</span>
                   <span className="sr-only">{t.common.routeTo}</span> {item.to}
+                  {item.stopCount > 0 ? <> {describeStops(item.stopCount, t, lang)}</> : null}
                 </span>
               </span>
               <span className="flex min-w-0 flex-[2_1_260px] flex-col gap-1.5">

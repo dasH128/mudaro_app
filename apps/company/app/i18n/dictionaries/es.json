@@ -405,6 +405,10 @@
           "step": "Etapa {step} de 5",
           "moreActions": "Más acciones para {id}",
           "routeTo": "a",
+          "stops": {
+            "one": "{count} parada",
+            "other": "{count} paradas"
+          },
           "needsYou": "Te necesita"
         },
         "when": {

@@ -2,7 +2,7 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { isWarn, nextAction } from "../../domain/list";
 import type { OrderListItem } from "../../domain/types";
-import { describeNote, describeWhen, type OrdersListText } from "../orders-text";
+import { describeNote, describeStops, describeWhen, type OrdersListText } from "../orders-text";
 import { OrderActionButton } from "./order-action";
 import { OrderAvatar } from "./order-avatar";
 import { OrderIdLink } from "./order-id-link";
@@ -58,6 +58,7 @@ export function UrgentOrders({ lang, t, items, today }: Props) {
                 <Icon name="arrowRight" size={16} className="text-accent" />
                 <span className="size-2.5 rounded-full bg-primary" />
                 {item.to}
+                {item.stopCount > 0 ? <span className="text-[13px] font-normal text-muted">{describeStops(item.stopCount, t, lang)}</span> : null}
                 <span className="sr-only">{t.common.routeTo}</span>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-line pt-3.5">
