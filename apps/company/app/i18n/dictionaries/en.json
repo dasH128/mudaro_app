@@ -110,6 +110,13 @@
   },
   "app": {
     "errors": {
+      "unexpected": {
+        "title": "Something went wrong",
+        "text": "We couldn't load this page. Try again in a moment. If it keeps happening, send us the code below.",
+        "retry": "Try again",
+        "home": "Go to home",
+        "code": "Reference code: {code}"
+      },
       "notFound": {
         "title": "This page doesn't exist",
         "text": "The address may be mistyped, or the page has moved.",

@@ -21,6 +21,25 @@ export function EmptyBoxArt() {
   );
 }
 
+/** Caja tumbada con la cinta rota: algo falló al cargar. */
+export function TippedBoxArt() {
+  return (
+    <svg aria-hidden="true" width="200" height="170" viewBox="0 0 200 170" className="max-w-full">
+      <ellipse cx="100" cy="158" rx="78" ry="8" className="fill-line-soft" />
+      <g transform="rotate(-14 100 95)">
+        <polygon points="100,26 40,58 100,90 160,58" className="fill-status-config-surface" />
+        <polygon points="40,58 100,90 100,156 40,124" className="fill-accent" />
+        <polygon points="100,90 160,58 160,124 100,156" className="fill-accent opacity-70" />
+        {/* cinta rasgada: dos trozos con el borde en zigzag */}
+        <polygon points="64,45.2 76,38.8 94,48.4 88,56 96,60 82,65.2" className="fill-primary" />
+        <polygon points="108,60 114,56.6 136,70.8 124,77.2 104,66.4 112,63.6" className="fill-primary" />
+      </g>
+      <circle cx="170" cy="150" r="5" className="fill-accent" />
+      <circle cx="184" cy="141" r="3" className="fill-accent opacity-70" />
+    </svg>
+  );
+}
+
 /** Caja cerrada con una interrogación en un lateral: la página no existe. */
 export function UnknownBoxArt() {
   return (

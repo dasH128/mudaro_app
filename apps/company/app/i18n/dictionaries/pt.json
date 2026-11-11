@@ -110,6 +110,13 @@
   },
   "app": {
     "errors": {
+      "unexpected": {
+        "title": "Algo correu mal",
+        "text": "Não conseguimos carregar esta página. Tenta outra vez dentro de momentos. Se continuar, envia-nos o código abaixo.",
+        "retry": "Tentar novamente",
+        "home": "Ir para o início",
+        "code": "Código de referência: {code}"
+      },
       "notFound": {
         "title": "Esta página não existe",
         "text": "O endereço pode estar mal escrito ou a página mudou de sítio.",
