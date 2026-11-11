@@ -76,13 +76,22 @@ Se ejecutan después de la sección B, con lo que haya creado la persona.
 
 | ID | Qué se comprueba | Criterio de aceptación | Quién | Estado |
 | --- | --- | --- | --- | --- |
-| C1 | `orders` y `shipments` | Un envío por pedido y los números `1, 2, 3...` sin saltos | Claude | Pendiente |
-| C2 | `inventories` | Cada pedido tiene la versión 1, sin `submitted_at`; `filled_by` es `client` si se eligió enlace y `company` si lo rellena la empresa | Claude | Pendiente |
-| C3 | `addresses` e `inventory_addresses` | Origen, paradas y destino con el texto escrito, `sort_order` correlativo (origen 0, destino el último) y los accesos por defecto | Claude | Pendiente |
-| C4 | `shipment_events` y `audit_log` | Un evento `created` por envío, con el nombre de quien lo creó en `data.by`, y una fila `order_created` por pedido | Claude | Pendiente |
-| C5 | `clients` | Un solo cliente para todos los pedidos con el mismo teléfono | Claude | Pendiente |
-| C6 | `orders.link_validity_days` | Es 14 en el pedido con enlace y `null` en el que rellena la empresa | Claude | Pendiente |
-| C7 | Fechas | `desired_date` y `date_flexibility` coinciden con lo escrito en el formulario | Claude | Pendiente |
+| C1 | `orders` y `shipments` | Un envío por pedido y los números `1, 2, 3...` sin saltos | Claude | OK (11/11/2026) |
+| C2 | `inventories` | Cada pedido tiene la versión 1, sin `submitted_at`; `filled_by` es `client` si se eligió enlace y `company` si lo rellena la empresa | Claude | OK (11/11/2026) |
+| C3 | `addresses` e `inventory_addresses` | Origen, paradas y destino con el texto escrito, `sort_order` correlativo (origen 0, destino el último) y los accesos por defecto | Claude | OK (11/11/2026) |
+| C4 | `shipment_events` y `audit_log` | Un evento `created` por envío, con el nombre de quien lo creó en `data.by`, y una fila `order_created` por pedido | Claude | OK (11/11/2026) |
+| C5 | `clients` | Un solo cliente para todos los pedidos con el mismo teléfono | Claude | OK (11/11/2026) |
+| C6 | `orders.link_validity_days` | Es 14 en el pedido con enlace y `null` en el que rellena la empresa | Claude | OK (11/11/2026) |
+| C7 | Fechas | `desired_date` y `date_flexibility` coinciden con lo escrito en el formulario | Claude | OK (11/11/2026) |
+
+**Resultado de la sección C (11/11/2026).** Consultas de solo lectura sobre la empresa principal. En la base hay 2 pedidos, `MD-0001` (Cliente Teste, sin paradas) y `MD-0002` (Rafa, 2 paradas), los dos con enlace de 14 días. El pedido de B3 ("lo relleno yo") ya no está, y el contador de la empresa vale 2.
+
+- C1: un envío por pedido, números 1 y 2 sin saltos, coherentes con `shipment_counters.last_number = 2`.
+- C2 y C6: `MD-0001` y `MD-0002` tienen la versión 1, sin `submitted_at`, `filled_by = client` y `link_validity_days = 14`. Para la otra mitad del criterio se creó `MD-0003` eligiendo "lo relleno yo": versión 1, sin `submitted_at`, `filled_by = company` y `link_validity_days = null`. Su evento `created` también guarda `filledBy: company` y `linkValidityDays: null`, y el contador pasó a 3 sin saltos.
+- C3: origen con `sort_order` 0, paradas en el orden escrito y destino el último, con su texto en `inventory_addresses` y los accesos por defecto (rés-do-chão, sin ascensor, sin escaleras estrechas, 0 m, sin licencia, sin notas ni coordenadas).
+- C4: un evento `created` por envío, con el nombre del administrador en `data.by`, y una fila `order_created` en `audit_log` por cada pedido. Queda además una fila `order_created` del 10/11/2026 de un pedido que ya no existe: es lo esperado, porque `audit_log` no tiene claves foráneas y conserva el historial de lo borrado.
+- C5: 2 clientes con teléfonos distintos y 1 envío cada uno; ningún teléfono repetido. La reutilización de la ficha ya se probó en A2 y B4.
+- C7: `MD-0001` guarda 01/12/2026 con flexibilidad `month`; la persona confirmó que eligió "só o mês" para diciembre. `MD-0002` guarda 10/12/2026 con `two_days`, igual que se ve en "Pedido criado". `MD-0003` guarda 12/11/2026 con `one_week`.
 
 ## D. Regresión
 
