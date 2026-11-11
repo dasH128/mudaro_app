@@ -28,7 +28,11 @@ export const getCompanySession = cache(async (): Promise<SessionResult> => {
     .eq("id", userId)
     .maybeSingle();
 
-  if (!row || !row.active || !row.companies) return { status: "no-company" };
+  // El usuario siempre puede leer su propia fila (active, rol), pero su empresa solo si está activa y él también
+  // (`current_company_id()`). Por eso, con la cuenta activa, no poder leer la empresa significa que está desactivada.
+  if (!row) return { status: "blocked", reason: "none" };
+  if (!row.active) return { status: "blocked", reason: "account" };
+  if (!row.companies) return { status: "blocked", reason: "company" };
 
   return {
     status: "ok",

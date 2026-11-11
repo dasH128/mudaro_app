@@ -13,6 +13,7 @@ export const ROUTES = {
     forgotPassword: "/forgot-password",
     confirm: "/auth/confirm",
     setPassword: "/auth/set-password",
+    noAccess: "/no-access",
   },
   orders: {
     list: "/orders",

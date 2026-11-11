@@ -12,6 +12,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Recuperar contraseña | `/[lang]/forgot-password` | Hecha |
 | Confirmar invitación o recuperación | `/[lang]/auth/confirm` | Hecha (`?type=invite\|recovery`) |
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
+| Acceso bloqueado | `/[lang]/no-access` | Hecha. Motivo calculado en servidor (`blockedReasonOf`): empresa desactivada, cuenta desactivada, operario o cuenta sin empresa. Email de soporte provisional en `app/lib/contact.ts` (pendiente) |
 | Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
 | Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL. Pasa a "Orçamentos" y a `/quotes`: renombre pendiente (ver "Estado actual") |
 | Novo pedido | `/[lang]/orders/new` | Conectada a Supabase (RF-13, RF-14, RF-19). Crea el pedido con la función `create_order` |

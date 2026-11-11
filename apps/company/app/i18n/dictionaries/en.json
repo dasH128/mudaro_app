@@ -21,6 +21,29 @@
     "forgotPasswordTitle": "Reset password · Mudaro"
   },
   "auth": {
+    "noAccess": {
+      "eyebrow": "Access",
+      "contact": "To use Mudaro again, contact our team:",
+      "copy": "Copy email",
+      "copied": "Copied ✓",
+      "signOut": "Sign out",
+      "company": {
+        "title": "Your company's access is suspended",
+        "text": "The company's Mudaro account has been deactivated, so nobody on the team can sign in to the panel."
+      },
+      "account": {
+        "title": "Your account has been deactivated",
+        "text": "Whoever manages Mudaro at your company can turn it back on. Talk to your company's administrator."
+      },
+      "role": {
+        "title": "The web panel is for administrators",
+        "text": "As an operator, your jobs are in the Mudaro mobile app. Sign in there with the same email."
+      },
+      "none": {
+        "title": "This account has no company",
+        "text": "We couldn't find a company linked to this email. If you think this is a mistake, contact our team."
+      }
+    },
     "layout": {
       "eyebrow": "Your move",
       "headline": "In good hands.",
@@ -52,7 +75,6 @@
       "createAccount": "Create your account",
       "errors": {
         "invalid": "Wrong email or password.",
-        "noAccess": "This account has no access to the company panel. Talk to the Mudaro team.",
         "failed": "We could not sign you in. Please try again."
       },
       "submitting": "Signing in…"

@@ -21,6 +21,29 @@
     "forgotPasswordTitle": "Recuperar contraseña · Mudaro"
   },
   "auth": {
+    "noAccess": {
+      "eyebrow": "Acceso",
+      "contact": "Para volver a usar Mudaro, habla con nuestro equipo:",
+      "copy": "Copiar email",
+      "copied": "Copiado ✓",
+      "signOut": "Cerrar sesión",
+      "company": {
+        "title": "El acceso de tu empresa está suspendido",
+        "text": "La cuenta de la empresa en Mudaro se ha desactivado, así que nadie del equipo puede entrar en el panel."
+      },
+      "account": {
+        "title": "Tu cuenta se ha desactivado",
+        "text": "Quien gestiona Mudaro en tu empresa puede volver a activarla. Habla con el administrador de tu empresa."
+      },
+      "role": {
+        "title": "El panel web es para administradores",
+        "text": "Como operario, tus trabajos están en la app móvil de Mudaro. Entra allí con el mismo email."
+      },
+      "none": {
+        "title": "Esta cuenta no tiene empresa asociada",
+        "text": "No hemos encontrado ninguna empresa ligada a este email. Si crees que es un error, habla con nuestro equipo."
+      }
+    },
     "layout": {
       "eyebrow": "Tu mudanza",
       "headline": "En buenas manos.",
@@ -52,7 +75,6 @@
       "createAccount": "Crea tu cuenta",
       "errors": {
         "invalid": "Correo o contraseña incorrectos.",
-        "noAccess": "Esta cuenta no tiene acceso al panel de la empresa. Habla con el equipo de Mudaro.",
         "failed": "No hemos podido iniciar sesión. Inténtalo de nuevo."
       },
       "submitting": "Entrando…"

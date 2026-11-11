@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { DEFAULT_LOCALE, hasLocale } from "@/app/i18n/config";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { canAccessPanel, type CompanySession } from "@/features/auth/domain/session";
+import { blockedReasonOf, type CompanySession } from "@/features/auth/domain/session";
 import { getCompanySession } from "@/features/auth/infrastructure/session.repo";
 
 /**
@@ -17,8 +17,7 @@ export async function requireCompanySession(lang: unknown): Promise<CompanySessi
   const result = await getCompanySession();
 
   if (result.status === "anonymous") redirect(localePath(locale, ROUTES.auth.login));
-  if (result.status === "no-company" || !canAccessPanel(result.session.role)) {
-    redirect(`${localePath(locale, ROUTES.auth.login)}?error=no-access`);
-  }
+  // Bloqueada: la página de acceso bloqueado vuelve a leer la sesión para explicar el motivo (no va en la URL)
+  if (result.status !== "ok" || blockedReasonOf(result)) redirect(localePath(locale, ROUTES.auth.noAccess));
   return result.session;
 }

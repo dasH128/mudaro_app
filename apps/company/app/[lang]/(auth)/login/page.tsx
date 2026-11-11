@@ -42,7 +42,6 @@ async function Login({ searchParams }: { searchParams: PageProps<"/[lang]/login"
         lang={locale}
         t={login}
         next={next === home ? undefined : next}
-        initialError={params.error === "no-access" ? "noAccess" : undefined}
       />
     </div>
   );

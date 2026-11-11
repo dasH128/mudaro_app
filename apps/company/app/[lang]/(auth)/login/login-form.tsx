@@ -20,14 +20,12 @@ type LoginFormProps = {
   t: Dictionary["auth"]["login"];
   /** Destino tras entrar (ya validado en la página; la acción lo valida otra vez). */
   next?: string;
-  /** Error que llega por la URL (`?error=no-access`), cuando el servidor expulsó una sesión sin acceso. */
-  initialError?: "noAccess";
 };
 
-export function LoginForm({ lang, t, next, initialError }: LoginFormProps) {
+export function LoginForm({ lang, t, next }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [state, formAction, pending] = useActionState<SignInState, FormData>(signInAction, IDLE);
-  const errorCode = state.status === "error" ? state.code : initialError;
+  const errorCode = state.status === "error" ? state.code : null;
 
   return (
     <form action={formAction} className="space-y-5">
