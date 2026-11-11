@@ -46,7 +46,9 @@ Fuentes: `docs/plan-modelo-bd.md` (decisiones del paso 4), `docs/diagram/mudaro-
 | A17 | Historial inmutable | Hacer `update` y `delete` sobre `shipment_events` | Ambos fallan con el mensaje `shipment_events is immutable` | Claude | OK (10/11/2026) |
 | A18 | Versión enviada inmutable | Marcar una versión como enviada y modificar sus direcciones | La modificación falla con `23514` | Claude | OK (10/11/2026) |
 | A19 | Un solo borrador por pedido | Con una versión enviada, abrir un borrador (versión 2) y luego intentar abrir otro | El primero se crea; el segundo falla con `unique_violation` | Claude | OK (10/11/2026) |
-| A20 | Numeración con concurrencia (opcional) | Lanzar dos `create_order()` a la vez para la misma empresa | Números distintos y sin huecos; ninguna falla por duplicado | Claude | Pendiente |
+| A20 | Numeración con concurrencia (opcional) | Lanzar dos `create_order()` a la vez para la misma empresa | Números distintos y sin huecos; ninguna falla por duplicado | Claude | OK por análisis (11/11/2026) |
+
+**A20, validado por análisis (11/11/2026).** No se ejecutó con dos conexiones: hace falta `dblink`, que no está instalado, y con un usuario no superusuario pide la contraseña de la base. Se revisó el código: `create_order()` numera con un único `insert ... on conflict (company_id) do update set last_number = last_number + 1 returning` sobre `shipment_counters` (`20261109100200_orders_functions.sql`, líneas 116 a 119). El `update` bloquea la fila del contador de la empresa hasta el final de la transacción, así que una segunda llamada simultánea espera y obtiene `n+1`. Si una transacción falla, se deshace con el contador incluido y no deja hueco. La carrera del primer pedido de una empresa la resuelve `on conflict`.
 
 ## B. Aplicación
 
@@ -97,8 +99,8 @@ Se ejecutan después de la sección B, con lo que haya creado la persona.
 
 | ID | Prueba | Criterio de aceptación | Quién | Estado |
 | --- | --- | --- | --- | --- |
-| D1 | `/fleet` y `/fleet/new` | Cargan y crear un vehículo sigue funcionando | Persona | Pendiente |
-| D2 | Inicio, Clientes, Agenda y Propostas | Cargan con sus datos de ejemplo, sin error | Persona | Pendiente |
+| D1 | `/fleet` y `/fleet/new` | Cargan y crear un vehículo sigue funcionando | Persona | OK (11/11/2026) |
+| D2 | Inicio, Clientes, Agenda y Propostas | Cargan con sus datos de ejemplo, sin error | Persona | OK (11/11/2026) |
 | D3 | `pnpm lint` y `pnpm typecheck` en la raíz | Terminan sin errores en las tres apps | Claude | OK (10/11/2026) |
 | D4 | Avisos de seguridad de Supabase | No aparece ninguna alerta nueva respecto al estado del 10/11/2026 (sí figuran las de `shipment_counters` sin políticas y las funciones `security definer`, ambas intencionadas) | Claude | OK (10/11/2026) |
 
