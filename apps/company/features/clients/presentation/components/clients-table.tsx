@@ -62,6 +62,7 @@ function ClientRow({ lang, t, client, selectedId, params, today, compact, showVa
           </Link>
           <span className="flex flex-wrap items-center gap-1.5">
             <TypeTag type={client.type} label={t.types[client.type]} />
+            {client.sample ? <Badge tone="neutral">{t.badges.sample}</Badge> : null}
             {client.duplicate ? <Badge tone="warn">{t.badges.duplicate}</Badge> : null}
             {client.type === "company" && client.taxId === null ? <Badge tone="warn">{t.badges.taxIdMissing}</Badge> : null}
             {isReturning(client) ? <Badge tone="success">{t.badges.returned}</Badge> : null}

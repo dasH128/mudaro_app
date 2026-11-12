@@ -24,7 +24,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
 | Agenda | `/[lang]/schedule` | Hecha solo el diseño, con datos de ejemplo. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
-| Clientes | `/[lang]/clients` | Hecha solo el diseño, con datos de ejemplo (RF-14). Filtro, búsqueda, orden y cliente abierto en la URL |
+| Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
@@ -136,8 +136,8 @@ features/
       types.ts              ← Client, ClientOrder, ClientSummary, OrderNote, ContactEvent, DuplicateCandidate (céntimos, fechas aaaa-mm-dd)
       clients.ts            ← filtros, orden, búsqueda, "voltou" (isReturning), importe aceptado y avisos
     infrastructure/
-      clients.repo.ts       ← puerta de entrada: getClientsOverview({ today, includeValues })
-      mock-data.ts          ← 15 clientes de ejemplo con fechas relativas a hoy
+      clients.repo.ts       ← puerta de entrada (Supabase): getClientsOverview({ today, includeValues })
+      mock-data.ts          ← 15 clientes de ejemplo con fechas relativas a hoy (se añaden marcados `sample` mientras el modelo no cubra todo)
     presentation/
       clients-href.ts       ← enlaces con filtro, búsqueda, orden y cliente en la URL
       clients-text.ts       ← línea de situación, último contacto y notas de pedido → textos del diccionario
@@ -232,7 +232,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
   - **Notas.** Se leen (la más reciente del envío), pero no hay función para escribirlas: el panel sigue sin poder guardar.
   - **Teléfonos y clientes de ejemplo desaparecen:** `912 345 821` y `916 667 777` ya no sugieren nada. La sugerencia (RF-14) sale de las fichas reales de la empresa.
   - **Lista completa en una consulta**, sin paginar en servidor: vale para el piloto (decenas de pedidos por empresa). Las cifras del mes se calculan en `buildOrdersMetrics`.
-  - **Pantalla Clientes** sigue con datos de ejemplo: un cliente creado desde un pedido no aparece todavía.
+  - **Pantalla Clientes** ya lee las fichas reales (ver su fila en la tabla de pantallas). Las fichas de ejemplo salen siempre detrás de las reales, con cualquier orden.
   - **Ascensor:** la base lo llama `large` y el dominio `normal` (`liftOf` los traduce). Pendiente unificar el nombre antes de conectar el inventario.
 - Pedidos · Primeiro uso (11/11/2026, solo diseño): cuando la empresa no tiene ningún pedido, `/orders` muestra `orders-empty.tsx` (sobre `app/components/first-use.tsx`) en lugar de banner, pipeline y lista. No hay prototipo: se derivó de P7-1. A diferencia de Frota y Equipa, el botón "Criar o primeiro pedido" está activo (lleva a `/orders/new`). El pie solo lleva una nota, sin insignia de asistente. "Tudo arrumado por aqui." (`rows.emptyTitle`) se conserva para cuando hay pedidos pero ninguno cumple el filtro (p. ej. "Precisam de ti" sin urgentes). Las tres ventajas no prometen envío del enlace por canal hasta que exista el paso 4b. Sin revisar en tema oscuro ni en móvil.
 - Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Pendiente: edición, baja y reactivación del vehículo, y los cambios de coste o carga en el histórico. Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.

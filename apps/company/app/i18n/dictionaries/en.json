@@ -1690,7 +1690,8 @@
       "badges": {
         "returned": "Came back",
         "duplicate": "Duplicate?",
-        "taxIdMissing": "Tax ID missing"
+        "taxIdMissing": "Tax ID missing",
+        "sample": "Sample"
       },
       "noEmail": "no email",
       "tomorrow": "Tomorrow",

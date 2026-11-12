@@ -96,7 +96,9 @@ export type ClientQuery = { filter: ClientFilter; q: string; sort: ClientSort };
 export function arrangeClients(clients: readonly Client[], { filter, q, sort }: ClientQuery): Client[] {
   const needle = normalize(q);
   const found = (c: Client) => needle === "" || normalize(`${c.name}${c.phone}${c.email ?? ""}${c.taxId ?? ""}`).includes(needle);
-  return clients.filter((c) => found(c) && matches(c, filter)).sort(compare(sort));
+  const byOrder = compare(sort);
+  // Las fichas de ejemplo (temporales) van siempre detrás de las reales, con cualquier orden
+  return clients.filter((c) => found(c) && matches(c, filter)).sort((a, b) => Number(a.sample === true) - Number(b.sample === true) || byOrder(a, b));
 }
 
 /** Una empresa sin NIF no puede exportarse para facturar. */

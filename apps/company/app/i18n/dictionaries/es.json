@@ -1690,7 +1690,8 @@
       "badges": {
         "returned": "Volvió",
         "duplicate": "¿Repetido?",
-        "taxIdMissing": "Falta el NIF"
+        "taxIdMissing": "Falta el NIF",
+        "sample": "Ejemplo"
       },
       "noEmail": "sin email",
       "tomorrow": "Mañana",

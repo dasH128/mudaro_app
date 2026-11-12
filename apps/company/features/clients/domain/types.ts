@@ -99,6 +99,8 @@ export type Client = {
   orders: ClientOrder[];
   addresses: { text: string; use: AddressUse }[];
   duplicate?: DuplicateCandidate;
+  /** Ficha de ejemplo (mock-data), no existe en la base de datos. Temporal, mientras faltan datos del modelo. */
+  sample?: boolean;
 };
 
 export type ClientsOverview = { clients: Client[] };

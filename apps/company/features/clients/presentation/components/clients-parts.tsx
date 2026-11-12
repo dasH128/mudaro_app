@@ -36,11 +36,17 @@ export function TypeTag({ type, label }: { type: ClientType; label: string }) {
   );
 }
 
-/** Insignia pequeña de aviso (naranja) o de éxito (verde). */
-export function Badge({ tone, children }: { tone: "warn" | "success"; children: string }) {
+const BADGE_TONES = {
+  warn: "bg-warn-surface text-warn-foreground",
+  success: "bg-success-surface text-success-foreground",
+  neutral: "bg-surface-soft text-muted",
+} as const;
+
+/** Insignia pequeña de aviso (naranja), de éxito (verde) o neutra (gris). */
+export function Badge({ tone, children }: { tone: keyof typeof BADGE_TONES; children: string }) {
   return (
     <span
-      className={`inline-flex h-5 items-center whitespace-nowrap rounded-full px-2 text-[11px] font-bold ${tone === "warn" ? "bg-warn-surface text-warn-foreground" : "bg-success-surface text-success-foreground"}`}
+      className={`inline-flex h-5 items-center whitespace-nowrap rounded-full px-2 text-[11px] font-bold ${BADGE_TONES[tone]}`}
     >
       {children}
     </span>
