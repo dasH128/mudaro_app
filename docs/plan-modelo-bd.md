@@ -1,6 +1,6 @@
 # Mudaro · Plan del modelo de base de datos
 
-Fecha: 25/10/2026 · Actualizado: 09/11/2026
+Fecha: 25/10/2026 · Actualizado: 18/11/2026
 Fuentes: `requirement-mvp.md`, `architecture-system.md`, `supabase/CLAUDE.md`.
 Modelo vigente: `docs/diagram/mudaro-model.dbml` (nombres en inglés, comentarios en español). Sustituye al documento "Modelo de negocio y dominio", que no está en el repo y usaba una solicitud en lugar de pedido y envío.
 
@@ -12,9 +12,10 @@ Cada paso es una o más migraciones nuevas en `supabase/migrations/`. Nunca se e
 | --- | --- | --- | --- | --- | --- |
 | 1 | Base | `platform_users`, `companies`, `company_internal`, `company_users`, `invitations`, `audit_log` | `20261025100000` a `20261025100600` y `20261101100000` (8 archivos) | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | Creado |
 | 2 | Configuración | `vehicles`, `vehicle_costs` | `20261101200000_vehicles` | RF-05 | Parcial |
-| 2 | Configuración (pendiente) | `tariffs`, `company_extras`, `company_items` | | RF-06, RF-07, RF-09 | Pendiente. Los extras esperan un análisis |
+| 2 | Configuración (pendiente) | `tariffs`, `company_items` | | RF-06, RF-09 | Pendiente |
+| 2 y 4b | Servicios extra | `catalog_extras`, `catalog_extra_translations`, `company_extras`, `inventory_extras` | `20261118100000_extras` | RF-07, RF-24 | Creado (aplicada a mano y registrada en el historial el 18/11/2026). La app solo lee los tipos |
 | 3 | Catálogo global | `catalog_*` (7 tablas) | `20261103100000_catalog` | RF-10, RF-11, RF-12 | Creado |
-| 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_addresses`, `inventory_lines`, `inventory_extras` | | RF-13 a RF-27, RF-69, RNF-02 | Pendiente |
+| 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_addresses`, `inventory_lines` | 4a: `20261109100000` a `20261109100200` | RF-13 a RF-27, RF-69, RNF-02 | 4a creado y validado (`docs/test-plan-orders-4a.md`). 4b pendiente (líneas y enlace) |
 | 5 | Presupuestos | `quotes`, `quote_lines`, `acceptances` | | RF-30 a RF-46 | Pendiente |
 | 6 | Ejecución | `jobs`, `assignments`, `incidents`, `evidence`, `handover_records` | | RF-47 a RF-62 | Pendiente |
 
@@ -66,6 +67,17 @@ Las fichas de cliente no son un bloque aparte: pertenecen a cada empresa y se cr
 - Notas e historial: tablas nuevas `shipment_notes` (editables, privadas de cada empresa) y `shipment_events` (solo se inserta). No se usa `audit_log`: las empresas no pueden leerlo y es inmutable, lo que impediría corregir una nota con datos personales (RGPD). `note_added` guarda solo el id de la nota.
 - Fechas de actividad: `shipments.status_changed_at` y `last_activity_at`. El segundo lo actualiza un trigger de `shipment_events`; `set_updated_at` no sirve porque un borrador de inventario no cambia la fila del envío.
 
+**Servicios extra (18/11/2026, resuelve B5)**
+
+- Modelo híbrido. Mudaro mantiene el catálogo global de tipos (`catalog_extras`, con traducciones como el resto del catálogo). Cada empresa crea sus servicios en `company_extras`, con nombre, modo de precio y precio propios, colgando de un tipo (`catalog_extra_id`) o sin tipo si es un servicio propio. Un solo nivel: tipo y servicios de la empresa, sin árbol.
+- El cliente, o la empresa que rellena el inventario, marca tipos en `inventory_extras` como referencia, con una nota opcional y **sin cantidad**: cada empresa calcula la cantidad con el inventario que recibe. No marcar nada es válido.
+- Al presupuestar, la empresa ve los tipos marcados y elige qué servicio suyo aplica, con cantidad y precio. Puede añadir servicios aunque el cliente no los marcara. Si el cliente marcó un tipo que la empresa no ofrece, la pantalla lo avisa.
+- Los servicios propios (sin tipo) no se ofrecen en el inventario: solo aparecen en el presupuesto.
+- Los extras forman parte de la versión del inventario: cambiarlos en una versión enviada abre un borrador nuevo, como el resto (A10).
+- El modo de precio incluye `m3_month` para el guarda-muebles.
+- Descubrimiento (fase 3, sin construir): qué empresas ofrecen un tipo sale de `company_extras.catalog_extra_id`.
+- Pendiente para el paso 5: `quote_lines.company_extra_id` (clave compuesta con `company_id`), líneas opcionales que el cliente marca o desmarca al aceptar y cómo guarda `acceptances` la selección y el importe firmado (el cálculo lo hace el servidor).
+
 **Versiones y cambios tras aceptar (pasos 4 y 5)**
 
 - Un cambio de cálculo, de direcciones o de accesos crea una versión nueva del inventario; fotos y notas no. La versión nueva copia los ajustes manuales y marca las líneas cuya base cambió.
@@ -75,16 +87,16 @@ Las fichas de cliente no son un bloque aparte: pertenecen a cada empresa y se cr
 
 La lista completa, con un código por punto, está al final de `docs/diagram/mudaro-model.dbml` (secciones A a D). Resumen para no perderlo:
 
-- **Antes de migrar el paso 4:** comprobar el historial de migraciones en Supabase (D1) y partir el paso en 4a (clientes, pedidos, envíos, notas, historial, direcciones, `inventories` e `inventory_addresses`, `create_order()`, `cancel_order()`, RLS) y 4b (líneas de inventario, extras, enlace) (D2).
+- **Antes de migrar el paso 4:** comprobar el historial de migraciones en Supabase (D1) y partir el paso en 4a (clientes, pedidos, envíos, notas, historial, direcciones, `inventories` e `inventory_addresses`, `create_order()`, `cancel_order()`, RLS) y 4b (líneas de inventario y enlace) (D2). `inventory_extras` va en la migración de servicios extra.
 - **Aplicado el 09/11/2026 (A1):** direcciones y accesos versionados en `inventory_addresses`. Queda por confirmar cuándo nace una versión (A10, el borrador se edita en sitio y la versión se cierra al enviar), cuál es la vigente (A11) y qué pasa con `jobs.quote_id` al aceptar un presupuesto nuevo (A12).
 - **Correcciones de diseño sin aplicar (A2 a A9):** faltan campos en `inventory_lines`; restricciones de coherencia entre `quotes`, `inventories` y `shipments`; índice único temporal por pedido; triggers de inmutabilidad en `shipment_events`; número de presupuesto.
-- **Decisiones abiertas (B1 a B11):** nombre `shipments`, convención de enums (guion o guion bajo), quién lee las notas, extras, borradores de presupuesto ante una versión nueva, caducidad del enlace (7 días en RF-15 y 14 en el código), tabla de notificaciones, dónde se construye la web del cliente, qué reciben las demás empresas cuando una gana (fase 3) y las penalizaciones por cancelar un pedido ganado (fases 2 y 3).
+- **Decisiones abiertas (B1 a B11):** nombre `shipments`, convención de enums (guion o guion bajo), quién lee las notas, extras (resuelto el 18/11/2026), borradores de presupuesto ante una versión nueva, caducidad del enlace (7 días en RF-15 y 14 en el código), tabla de notificaciones, dónde se construye la web del cliente, qué reciben las demás empresas cuando una gana (fase 3) y las penalizaciones por cancelar un pedido ganado (fases 2 y 3).
 - **Documentación por corregir (D3):** solo quedan los DBML antiguos de `docs/diagram/` (`mudaro-model-es_v1.dbml` y `requests-model.dbml`), que hay que borrar o marcar como históricos.
 - **Impacto en `apps/company` (D4):** renombrar `proposals` a `quotes`, `requestId` a `orderId`, mover el estado del pedido al envío con `cancelled` e implementar RF-69.
 
 ## Pendiente de decidir
 
-- **Servicios extra.** `inventory_extras` apunta a los extras de cada empresa, pero el inventario es del pedido. Falta decidir entre un catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea `company_extras` (paso 2) y la parte de extras del paso 4.
+- **Extras opcionales en el presupuesto (paso 5).** Si la empresa puede marcar un extra como obligatorio, y cómo se guarda la selección del cliente al aceptar.
 - Qué hacer si se da de alta una empresa con un NIF que ya existe. Hoy hay `unique` sobre `(country_code, tax_id)`, lo que bloquea el alta.
 - Región: lista cerrada aún por definir. Hoy es texto libre.
 - Caducidad real del convite (depende de la configuración de Supabase Auth).
