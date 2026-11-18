@@ -6,7 +6,7 @@ import { hasLocale } from "@/app/i18n/config";
 import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { getActiveExtras, getCatalog } from "@/features/inventory/infrastructure/inventory.repo";
+import { getCatalog, getExtraTypes } from "@/features/inventory/infrastructure/inventory.repo";
 import { InventoryEditor } from "@/features/inventory/presentation/components/inventory-editor";
 import { getOrder } from "@/features/orders/infrastructure/orders.repo";
 import { OrderBreadcrumb } from "@/features/orders/presentation/components/order-breadcrumb";
@@ -26,7 +26,7 @@ export default async function OrderInventoryPage({ params }: PageProps<"/[lang]/
   const order = await getOrder(id);
   if (!order) notFound();
 
-  const [dict, catalog, extras] = await Promise.all([getDictionary(), getCatalog(), getActiveExtras()]);
+  const [dict, catalog, extras] = await Promise.all([getDictionary(), getCatalog(), getExtraTypes(locale)]);
   const t = dict.app.orders;
   const detailHref = localePath(locale, ROUTES.orders.detail(order.id));
 

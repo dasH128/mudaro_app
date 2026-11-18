@@ -15,7 +15,8 @@ import {
   summarize,
   type AccessPoint,
   type CatalogItem,
-  type ExtraService,
+  type ChosenExtras,
+  type ExtraType,
   type InventoryStep,
   type RoomKey,
 } from "../../domain/types";
@@ -47,7 +48,7 @@ type Props = {
   t: InventoryText;
   order: InventoryOrder;
   catalog: readonly CatalogItem[];
-  extras: readonly ExtraService[];
+  extras: readonly ExtraType[];
   /** Destino de "Guardar e sair" y "Concluir inventário". */
   exitHref: string;
 };
@@ -62,12 +63,12 @@ export function InventoryEditor({ lang, t, order, catalog, extras, exitHref }: P
   // Accesos por punto del recorrido (clave: RoutePoint.id). Lo que falta se trata como vacío.
   const [access, setAccess] = useState<Record<string, AccessPoint>>({});
   const points = buildRoutePoints(order.origin, order.stops, order.destination);
-  const [chosen, setChosen] = useState<Record<string, boolean>>({});
+  const [chosen, setChosen] = useState<ChosenExtras>({});
 
   const totals = summarize(catalog, quantities);
   const counts = Object.fromEntries(ROOM_KEYS.map((key) => [key, countInRoom(catalog, quantities, key)])) as Record<RoomKey, number>;
   const roomsUsed = ROOM_KEYS.filter((key) => counts[key] > 0).length;
-  const chosenCount = extras.filter((extra) => chosen[extra.id]).length;
+  const chosenCount = extras.filter((extra) => extra.id in chosen).length;
 
   const roomCatalog = catalog.filter((item) => item.room === room);
   const search = normalizeSearch(query);
@@ -134,11 +135,13 @@ export function InventoryEditor({ lang, t, order, catalog, extras, exitHref }: P
 
         {step === "extras" ? (
           <ExtrasStep
-            lang={lang}
             t={t}
             extras={extras}
             chosen={chosen}
-            onToggle={(id) => setChosen((current) => ({ ...current, [id]: !current[id] }))}
+            onToggle={(id) =>
+              setChosen(({ [id]: removed, ...rest }) => (removed === undefined ? { ...rest, [id]: "" } : rest))
+            }
+            onNote={(id, note) => setChosen((current) => ({ ...current, [id]: note }))}
           />
         ) : null}
       </div>

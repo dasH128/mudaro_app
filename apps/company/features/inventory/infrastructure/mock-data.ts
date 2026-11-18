@@ -1,4 +1,4 @@
-import type { CatalogItem, ExtraService } from "../domain/types";
+import type { CatalogItem } from "../domain/types";
 
 // Datos de ejemplo del catálogo y de los extras de la empresa.
 // TODO(supabase): sustituir por el catálogo de la empresa y los extras activos de Tarifas y extras.
@@ -35,11 +35,4 @@ export const mockCatalog: readonly CatalogItem[] = [
   { id: "box-medium", room: "boxes", name: "Caixa média", volumeM3: 0.1, flags: [] },
   { id: "box-large", room: "boxes", name: "Caixa grande", volumeM3: 0.15, flags: [] },
   { id: "box-wardrobe", room: "boxes", name: "Caixa-roupeiro", volumeM3: 0.3, flags: [] },
-];
-
-export const mockExtras: readonly ExtraService[] = [
-  { id: "dish-packing", name: "Embalagem de loiça", pricing: { kind: "unit", cents: 800 }, defaultQuantity: { value: 3, unit: "boxes" } },
-  { id: "dismantling", name: "Desmontagem e montagem", pricing: { kind: "hour", cents: 3000 }, defaultQuantity: { value: 2, unit: "hours" } },
-  { id: "storage", name: "Guarda-móveis", pricing: { kind: "m3-month", cents: 1200 }, defaultQuantity: null },
-  { id: "junk-removal", name: "Retirada de monos", pricing: { kind: "fixed", cents: 4500 }, defaultQuantity: null },
 ];

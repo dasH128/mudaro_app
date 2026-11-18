@@ -65,17 +65,23 @@ export const EMPTY_ACCESS: AccessPoint = {
   notes: "",
 };
 
-/** Cómo se cobra un servicio extra. */
-export type ExtraPricing = { kind: "unit" | "hour" | "m3-month" | "fixed"; cents: number };
-
-/** Servicio extra activo en Tarifas y extras. El nombre es un dato de la empresa: no se traduce. */
-export type ExtraService = {
+/**
+ * Tipo de servicio extra del catálogo de Mudaro (`catalog_extras`, RF-24). Nombre y descripción llegan ya en el
+ * idioma de la interfaz. Sin precio ni cantidad: es una referencia para las empresas, y cada una pone su servicio,
+ * la cantidad y el precio en el presupuesto.
+ */
+export type ExtraType = {
+  /** Slug del catálogo (`packing`). */
   id: string;
   name: string;
-  pricing: ExtraPricing;
-  /** Cantidad inicial al elegirlo, si el servicio se cuenta (cajas u horas). */
-  defaultQuantity: { value: number; unit: "boxes" | "hours" } | null;
+  description: string | null;
 };
+
+/** Extras marcados: id del tipo → nota opcional para las empresas ("" = sin nota). */
+export type ChosenExtras = Readonly<Record<string, string>>;
+
+/** Límite de la nota de un extra: el mismo `check` que `inventory_extras.note`. */
+export const EXTRA_NOTE_MAX = 500;
 
 export type InventorySummary = {
   volumeM3: number;

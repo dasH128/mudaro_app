@@ -819,25 +819,11 @@
         },
         "extras": {
           "title": "Servicios extra",
-          "subtitle": "Solo aparecen los extras activos en Tarifas y extras.",
-          "empty": "No hay extras activos.",
-          "pricing": {
-            "unit": "{price} por unidad",
-            "hour": "{price} por hora",
-            "m3-month": "{price} por m³ y mes",
-            "fixed": "{price} precio fijo"
-          },
-          "quantity": "Cantidad: {quantity}",
-          "units": {
-            "boxes": {
-              "one": "{count} caja",
-              "other": "{count} cajas"
-            },
-            "hours": {
-              "one": "{count} h",
-              "other": "{count} h"
-            }
-          }
+          "subtitle": "Marca los servicios que pidió el cliente. Son una referencia: el servicio, la cantidad y el precio van en el presupuesto.",
+          "empty": "No hay tipos de servicio disponibles.",
+          "noteLabel": "Nota (opcional)",
+          "notePlaceholder": "Ej.: piano vertical, 2.º piso sin ascensor",
+          "footnote": "Si el cliente no sabe qué necesita, deja todo sin marcar. Puedes sugerir servicios en el presupuesto."
         },
         "footer": {
           "hint": "puedes volver a cualquier paso",

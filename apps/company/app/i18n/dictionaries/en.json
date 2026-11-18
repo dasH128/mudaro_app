@@ -819,25 +819,11 @@
         },
         "extras": {
           "title": "Extra services",
-          "subtitle": "Only extras that are active in Pricing and extras appear.",
-          "empty": "There are no active extras.",
-          "pricing": {
-            "unit": "{price} per unit",
-            "hour": "{price} per hour",
-            "m3-month": "{price} per m³ and month",
-            "fixed": "{price} fixed price"
-          },
-          "quantity": "Quantity: {quantity}",
-          "units": {
-            "boxes": {
-              "one": "{count} box",
-              "other": "{count} boxes"
-            },
-            "hours": {
-              "one": "{count} h",
-              "other": "{count} h"
-            }
-          }
+          "subtitle": "Tick the services the client asked for. They are a reference: the service, quantity and price go in the quote.",
+          "empty": "There are no service types available.",
+          "noteLabel": "Note (optional)",
+          "notePlaceholder": "E.g. upright piano, 2nd floor without a lift",
+          "footnote": "If the client does not know what they need, leave everything unticked. You can suggest services in the quote."
         },
         "footer": {
           "hint": "you can go back to any step",
