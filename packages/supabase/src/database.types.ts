@@ -138,6 +138,65 @@ export type Database = {
           },
         ]
       }
+      catalog_extra_translations: {
+        Row: {
+          description: string | null
+          extra_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          extra_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Update: {
+          description?: string | null
+          extra_id?: string
+          locale?: Database["public"]["Enums"]["app_locale"]
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_extra_translations_extra_id_fkey"
+            columns: ["extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_extras: {
+        Row: {
+          active: boolean
+          created_at: string
+          icon: string | null
+          id: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_item_rooms: {
         Row: {
           item_id: string
@@ -410,6 +469,57 @@ export type Database = {
         }
         Relationships: []
       }
+      company_extras: {
+        Row: {
+          active: boolean
+          catalog_extra_id: string | null
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+          price_cents: number
+          price_mode: Database["public"]["Enums"]["price_mode"]
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          catalog_extra_id?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          name: string
+          price_cents: number
+          price_mode: Database["public"]["Enums"]["price_mode"]
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          catalog_extra_id?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          price_cents?: number
+          price_mode?: Database["public"]["Enums"]["price_mode"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_extras_catalog_extra_id_fkey"
+            columns: ["catalog_extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_extras_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_internal: {
         Row: {
           company_id: string
@@ -577,6 +687,45 @@ export type Database = {
           },
           {
             foreignKeyName: "inventory_addresses_inventory_id_order_id_fkey"
+            columns: ["inventory_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventories"
+            referencedColumns: ["id", "order_id"]
+          },
+        ]
+      }
+      inventory_extras: {
+        Row: {
+          catalog_extra_id: string
+          created_at: string
+          inventory_id: string
+          note: string | null
+          order_id: string
+        }
+        Insert: {
+          catalog_extra_id: string
+          created_at?: string
+          inventory_id: string
+          note?: string | null
+          order_id: string
+        }
+        Update: {
+          catalog_extra_id?: string
+          created_at?: string
+          inventory_id?: string
+          note?: string | null
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_extras_catalog_extra_id_fkey"
+            columns: ["catalog_extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_extras_inventory_id_order_id_fkey"
             columns: ["inventory_id", "order_id"]
             isOneToOne: false
             referencedRelation: "inventories"
@@ -1079,6 +1228,7 @@ export type Database = {
       filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
       lift_size: "none" | "small" | "large"
+      price_mode: "fixed" | "unit" | "hour" | "m3" | "m3_month"
       shipment_event_kind:
         | "created"
         | "link_shared"
@@ -1239,6 +1389,7 @@ export const Constants = {
       filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],
       lift_size: ["none", "small", "large"],
+      price_mode: ["fixed", "unit", "hour", "m3", "m3_month"],
       shipment_event_kind: [
         "created",
         "link_shared",
