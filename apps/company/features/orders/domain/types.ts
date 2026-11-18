@@ -19,7 +19,7 @@ export type InventoryMode = (typeof INVENTORY_MODES)[number];
 /** Días que el enlace del cliente queda activo (RF-15). */
 export const LINK_VALIDITY_DAYS = [7, 14, 30] as const;
 export type LinkValidityDays = (typeof LINK_VALIDITY_DAYS)[number];
-export const DEFAULT_LINK_VALIDITY_DAYS: LinkValidityDays = 14;
+export const DEFAULT_LINK_VALIDITY_DAYS: LinkValidityDays = 7;
 
 /** Máximo de paradas intermedias entre el origen y el destino. Provisional. */
 export const MAX_STOPS = 3;
