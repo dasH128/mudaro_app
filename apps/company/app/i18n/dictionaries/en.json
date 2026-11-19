@@ -325,8 +325,8 @@
           "titleNone": "{greeting}, {name}. You're all caught up.",
           "bodyNone": "Nothing is waiting for you. A good moment to create a new order.",
           "ready": {
-            "one": "{count} client has sent their inventory and is waiting for a proposal.",
-            "other": "{count} clients have sent their inventory and are waiting for a proposal."
+            "one": "{count} request has its inventory ready to quote.",
+            "other": "{count} requests have their inventory ready to quote."
           },
           "nudge": {
             "one": "{count} needs a little nudge to finish.",
@@ -743,11 +743,13 @@
         "steps": {
           "items": {
             "label": "Items",
-            "hint": "{items} in {rooms}"
+            "hint": "{items} in {rooms}",
+            "missing": "No items yet"
           },
           "access": {
             "label": "Access",
-            "hint": "Origin and destination"
+            "hint": "Origin and destination",
+            "missing": "Required access details missing"
           },
           "extras": {
             "label": "Extra services",

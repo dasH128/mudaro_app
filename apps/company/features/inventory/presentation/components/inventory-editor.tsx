@@ -11,6 +11,7 @@ import {
   EMPTY_ACCESS,
   INVENTORY_STEPS,
   countInRoom,
+  isAccessComplete,
   lineKey,
   normalizeSearch,
   splitLineKey,
@@ -155,6 +156,13 @@ export function InventoryEditor({ lang, t, orderId, order, version, rooms, catal
     extras: pluralize(lang, chosenCount, t.steps.extras.hint),
   };
 
+  // Lo mismo que exige "Concluir": al menos un objeto y los accesos obligatorios de cada punto (RF-23).
+  const missing: Record<InventoryStep, string | null> = {
+    items: totals.items > 0 ? null : t.steps.items.missing,
+    access: points.every((point) => isAccessComplete(access[point.id] ?? EMPTY_ACCESS)) ? null : t.steps.access.missing,
+    extras: null,
+  };
+
   const move = (delta: number) => {
     const next = INVENTORY_STEPS[INVENTORY_STEPS.indexOf(step) + delta];
     if (next) goTo(next);
@@ -163,7 +171,7 @@ export function InventoryEditor({ lang, t, orderId, order, version, rooms, catal
   return (
     <>
       <InventoryHeader t={t} order={order} version={version} pending={pending} onSaveAndExit={saveAndExit} />
-      <InventorySteps t={t} current={step} hints={hints} onPick={goTo} />
+      <InventorySteps t={t} current={step} hints={hints} missing={missing} onPick={goTo} />
 
       <div id={STEP_PANEL_ID} role="tabpanel" aria-labelledby={stepTabId(step)}>
         {step === "items" ? (

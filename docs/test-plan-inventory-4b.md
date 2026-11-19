@@ -78,16 +78,22 @@ Con sesión de administrador y un pedido nuevo creado eligiendo "Eu, agora ou nu
 
 | ID | Prueba | Criterio de aceptación | Quién | Estado |
 | --- | --- | --- | --- | --- |
-| F1 | Catálogo real | Salen 6 divisiones (Sala, Quarto, Cozinha, Casa de banho, Escritório, Caixas) y sus objetos con nombre en el idioma de la interfaz | Persona | Pendiente |
-| F2 | Guardar al cambiar de paso | Añadir objetos y pulsar "Continuar para acessos": el pie dice "Guardado". Recargar la página: las cantidades siguen ahí | Persona | Pendiente |
-| F3 | Mismo objeto en dos divisiones | Añadir 2 cadeiras en Sala y 4 en Cozinha: cada división cuenta las suyas y al recargar se mantienen por separado | Persona | Pendiente |
-| F4 | Accesos | Rellenar los accesos de todos los puntos, ir a Extras y recargar: los accesos siguen ahí | Persona | Pendiente |
-| F5 | Accesos incompletos | Dejar el ascensor sin elegir en un punto y pulsar "Concluir inventário": vuelve a Acessos con el aviso de accesos obligatorios y el pedido no cambia de estado | Persona | Pendiente |
-| F6 | Guardar e sair | Cambiar una cantidad y pulsar "Guardar e sair": vuelve al detalle; al volver a Inventário el cambio está | Persona | Pendiente |
-| F7 | Concluir | Con objetos y accesos completos, "Concluir inventário" lleva al detalle; el pedido está en "Inventário recebido", la pestaña Inventário muestra v1 con sus divisiones, objetos y volumen, y el historial tiene "Inventário enviado" | Persona | Pendiente |
-| F8 | Lista de pedidos | La fila del pedido en "Inventário recebido" muestra el número de objetos y el volumen reales | Persona | Pendiente |
-| F9 | Editar una versión enviada | Abrir Inventário del pedido enviado: sale "Inventário v1 enviado…" con "Editar inventário". Pulsarlo abre el editor con "Nova versão (v2)" y todo lo de la v1. Concluir: el detalle muestra v2 | Persona | Pendiente |
-| F10 | Extras | Marcar un extra con nota, concluir: Resumo del detalle lo lista | Persona | Pendiente |
+| F1 | Catálogo real | Salen 6 divisiones (Sala, Quarto, Cozinha, Casa de banho, Escritório, Caixas) y sus objetos con nombre en el idioma de la interfaz | Persona | OK (19/11/2026) |
+| F2 | Guardar al cambiar de paso | Añadir objetos y pulsar "Continuar para acessos": el pie dice "Guardado". Recargar la página: las cantidades siguen ahí | Persona | OK (19/11/2026) |
+| F3 | Mismo objeto en dos divisiones | Añadir 2 cadeiras en Sala y 4 en Cozinha: cada división cuenta las suyas y al recargar se mantienen por separado | Persona | OK (19/11/2026) |
+| F4 | Accesos | Rellenar los accesos de todos los puntos, ir a Extras y recargar: los accesos siguen ahí | Persona | OK (19/11/2026) |
+| F5 | Accesos incompletos | Dejar el ascensor sin elegir en un punto y pulsar "Concluir inventário": vuelve a Acessos con el aviso de accesos obligatorios y el pedido no cambia de estado | Persona | OK (19/11/2026) |
+| F6 | Guardar e sair | Cambiar una cantidad y pulsar "Guardar e sair": vuelve al detalle; al volver a Inventário el cambio está | Persona | OK (19/11/2026) |
+| F7 | Concluir | Con objetos y accesos completos, "Concluir inventário" lleva al detalle; el pedido está en "Inventário recebido", la pestaña Inventário muestra v1 con sus divisiones, objetos y volumen, y el historial tiene "Inventário enviado" | Persona | OK (19/11/2026) |
+| F8 | Lista de pedidos | La fila del pedido en "Inventário recebido" muestra el número de objetos y el volumen reales | Persona | OK (19/11/2026) |
+| F9 | Editar una versión enviada | Abrir Inventário del pedido enviado: sale "Inventário v1 enviado…" con "Editar inventário". Pulsarlo abre el editor con "Nova versão (v2)" y todo lo de la v1. Concluir: el detalle muestra v2 | Persona | OK (19/11/2026) |
+| F10 | Extras | Marcar un extra con nota, concluir: Resumo del detalle lo lista | Persona | OK (19/11/2026) |
+
+**Ejecución del 19/11/2026.** Hecha en Chrome sobre `localhost:3001`, con un administrador de prueba de "Mudanzas Peru" y el pedido MD-0004 (`Cliente Teste`, ya existía como cliente). Catálogo revisado en ES y en PT. Notas que no son fallos:
+- F7: el historial dice "A empresa preencheu o inventário (v1)". Es el texto previsto para un inventario de la empresa; "Inventário enviado" del criterio era una descripción.
+- F10: el Resumo lista "Embalagem" pero no su nota. La nota se guarda (vuelve al abrir la v2).
+- F5: con un acceso incompleto se puede pasar a Extras y el paso Acessos sale marcado como hecho. El bloqueo llega al concluir, que es lo que pide el criterio.
+- Fuera de la sección F: en "Novo pedido", en la primera ejecución el nombre llegó vacío al servidor, pero al repetirlo el 19/11/2026 el nombre se envía bien; lo más probable es que fuera un efecto de la escritura automática. Lo que sí pasa: un error del servidor se queda bajo el campo aunque lo corrijas, hasta el siguiente envío. En Pedidos, el banner dice "2 clientes já enviaram o inventário" aunque uno lo rellenó la empresa.
 
 ## Criterio de salida del paso 4b (base de datos)
 

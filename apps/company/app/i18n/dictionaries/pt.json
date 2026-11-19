@@ -325,8 +325,8 @@
           "titleNone": "{greeting}, {name}. Está tudo em dia.",
           "bodyNone": "Não há pedidos à espera de ti. Aproveita para criar um novo.",
           "ready": {
-            "one": "{count} cliente já enviou o inventário e espera pela proposta.",
-            "other": "{count} clientes já enviaram o inventário e esperam pela proposta."
+            "one": "{count} pedido tem o inventário pronto para orçamentar.",
+            "other": "{count} pedidos têm o inventário pronto para orçamentar."
           },
           "nudge": {
             "one": "{count} precisa de um empurrãozinho para terminar.",
@@ -743,11 +743,13 @@
         "steps": {
           "items": {
             "label": "Objetos",
-            "hint": "{items} em {rooms}"
+            "hint": "{items} em {rooms}",
+            "missing": "Faltam objetos"
           },
           "access": {
             "label": "Acessos",
-            "hint": "Origem e destino"
+            "hint": "Origem e destino",
+            "missing": "Faltam acessos obrigatórios"
           },
           "extras": {
             "label": "Serviços extra",
