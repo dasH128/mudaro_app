@@ -16,7 +16,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
 | Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL. Pasa a "Orçamentos" y a `/quotes`: renombre pendiente (ver "Estado actual") |
 | Novo pedido | `/[lang]/orders/new` | Conectada a Supabase (RF-13, RF-14, RF-19). Crea el pedido con la función `create_order` |
-| Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. El enlace con token **no se genera** todavía (paso 4b: RF-15, RF-16, RNF-02) |
+| Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. "Gerar link" crea el enlace del cliente (`share_order_link`, RF-15) y lo muestra una sola vez (la base guarda su hash, RNF-02); después sale "Gerar link novo", con confirmación, que anula el anterior. WhatsApp, SMS y Email abren la app del dispositivo con el mensaje escrito (el envío automático, RF-16, sigue pendiente). La dirección del enlace sale de `CLIENT_APP_URL` (19/11/2026) |
 | Pedidos · Lista | `/[lang]/orders` | Conectada a Supabase (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Conectada a Supabase (RF-19 a RF-27, 18/11/2026). Catálogo real, borrador guardado con `save_inventory_draft` al cambiar de paso y con "Guardar e sair", "Concluir" envía la versión (`submit_inventory`). Con el inventario ya enviado muestra "Editar inventário", que abre una versión nueva |
 | Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Presupuestos vacíos hasta el paso 5. Pestaña en la URL (`?tab=`) |
@@ -43,9 +43,9 @@ app/
       page.tsx              ← Início (Operações de hoje)
   components/               ← compartidos por varias vistas de esta app
     app-sidebar.tsx         ← menú lateral (en móvil pasa a barra superior)
-    app-icon.tsx            ← <Icon name="…" />, iconos de trazo decorativos (no se llama icon.tsx: Next lo reserva para el icono de la app)
+    app-icon.tsx            ← reexporta <Icon name="…" /> de @mudaro/ui (lo comparte apps/client); para añadir un icono, edita packages/ui/src/icon.tsx
     app-nav.tsx             ← enlaces del menú (cliente: lee la ruta para marcar el activo)
-    form/                   ← campos compartidos: field.tsx (etiqueta, ayuda, error) y choice-group.tsx (radios en chips o segmentos)
+    form/                   ← field.tsx y choice-group.tsx reexportan Field y ChoiceGroup de @mudaro/ui (los comparte apps/client)
     ../lib/avatar-tone.ts   ← tono del avatar por identificador (Equipa y Clientes)
     copy-button.tsx         ← botón que copia un texto (teléfono) al portapapeles; lo usan Clientes y Agenda
     first-use.tsx           ← estructura del estado de primer uso de una lista (Frota, Equipa): cabecera, invitación, ventajas y pie
@@ -157,8 +157,8 @@ features/
                               day-view, month-view, job-panel y schedule-parts
   inventory/
     domain/
-      types.ts              ← CatalogItem, CatalogRoom, AccessPoint, RoutePoint, ExtraType, InventoryDraft, DraftChanges e InventoryError;
-                              lineKey (objeto por división), isAccessComplete (RF-23), summarize() y normalizeSearch()
+      types.ts              ← reexporta @mudaro/inventory (compartido con apps/client): CatalogItem, CatalogRoom, AccessPoint, RoutePoint,
+                              ExtraType, InventoryDraft, DraftChanges, InventoryError, lineKey, isAccessComplete (RF-23), summarize()…
     application/
       actions/inventory.ts  ← saveInventoryAction, submitInventoryAction (redirige al detalle) y openInventoryDraftAction
       schemas/inventory.ts  ← zod en servidor; en "save" los accesos a medias no se guardan, en "submit" son obligatorios
@@ -222,7 +222,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - Filtros, búsqueda y orden de las listas viajan en la URL (formulario GET con `next/form` y enlaces), no en estado de cliente. El cliente solo se usa para lo mínimo (p. ej. enviar el formulario al cambiar un `<select>`).
 - Precios privados (RNF-03): el margen solo lo devuelve el repo si `includeMargin` es `true`; con `false` ni sale de `infrastructure/`.
 - Componentes de servidor por defecto. `"use client"` solo donde haya estado o eventos.
-- Iconos: añade el path nuevo a `app/components/app-icon.tsx` en lugar de pegar SVG inline. No llames `icon.tsx`, `apple-icon.tsx` ni `favicon.*` a ningún fichero de `app/` que no sea el icono de la app: son nombres reservados de Next.
+- Iconos: añade el path nuevo a `packages/ui/src/icon.tsx` (lo reexporta `app/components/app-icon.tsx`) en lugar de pegar SVG inline. No llames `icon.tsx`, `apple-icon.tsx` ni `favicon.*` a ningún fichero de `app/` que no sea el icono de la app: son nombres reservados de Next.
 - Si un componente se usa también en otra app, muévelo a `packages/ui`.
 
 ## Estado actual y pendientes (29/10/2026)
@@ -249,7 +249,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - Pendiente: revisar el tema oscuro de las vistas.
 - El menú lateral ya está traducido y marca el enlace activo según la ruta. La empresa y el usuario siguen siendo de ejemplo.
 - Propostas · Lista (29/10/2026): datos de `features/proposals/infrastructure/mock-data.ts`. "Nova proposta", "Criar proposta" (`/proposals/new?request=<id>`) y el enlace de cada fila (`/proposals/<id>`) dan 404 hasta crear el editor y el detalle. Los filtros del diseño P1 se resolvieron en servidor. Las versiones de una propuesta comparten número, y el enlace de una versión sustituida lleva a la misma ruta de detalle (pendiente decidir cómo elegir versión). El margen se muestra siempre (`CAN_SEE_MARGIN = true` en `proposals/page.tsx`) hasta que exista el rol; después solo administradores. Los umbrales de "a punto de caducar" (3 días, `EXPIRING_SOON_DAYS`) y la ordenación por defecto son provisionales.
-- **Pendiente (decidido el 29/10/2026): generar el enlace del pedido.** Hoy "Copiar link", WhatsApp, SMS y Email están desactivados y el enlace muestra `[LINK DO PEDIDO]`. Falta la Edge Function que genere el token de al menos 32 bytes con caducidad (el pedido y su envío los crea `create_order()`), guardando solo su hash en `orders.token_hash`, que es nulo hasta compartir el enlace (RF-15, RNF-02: la clave de servicio solo vive en las Edge Functions), las tablas de pedidos, envíos y clientes (paso 4 del plan de BD) y el envío por cada canal (RF-16). El pedido pasa a "À espera de inventário" al copiar o enviar el enlace; hoy se queda en "Nova".
+- ~~Pendiente: generar el enlace del pedido.~~ Hecho el 19/11/2026: ver la fila de "Pedido criado". Al generar el enlace el pedido pasa a "À espera de inventário". En el detalle, "Gerar link novo" y, en la lista, "Reenviar link" y "Gerar link novo" llevan a esa pantalla. "Ver como cliente" sigue desactivado: abrirlo exigiría un token nuevo y anularía el del cliente. El cliente abre el enlace en `apps/client`.
 - ~~Fuente de datos superada el 10/11/2026 (ya en Supabase, ver arriba): lo que sigue sobre almacén en memoria, datos de ejemplo y teléfonos de prueba ya no aplica.~~ Novo pedido (29/10/2026): los pedidos se guardan en `features/orders/infrastructure/store.ts`, en memoria (se pierden al reiniciar). El teléfono `912 345 821` sugiere a Ana Ribeiro y `916 667 777` a Rui Fonseca (RF-14). El máximo de paradas (3) y la validez del enlace (7, 14 o 30 días) son provisionales. "Editar modelo" del mensaje está desactivado: no tiene diseño de flujo. `lookupClientAction` y `createOrderAction` aún no comprueban sesión ni rol (son endpoints públicos): hay que añadirlo con el login de empresa, y limitar la frecuencia de la búsqueda por teléfono. Si el inventario lo rellena la empresa, se redirige a `/orders/<id>/inventory` (Inventário, ya hecha). El mensaje al cliente se redacta en el idioma de la interfaz de la empresa, no en el del cliente.
 - Pendiente: botones sin acción (Novo pedido, Rever incidência, notificações, menú de cuenta) y búsqueda sin conectar.
 - ~~Fuente de datos superada el 10/11/2026 (ya en Supabase, ver arriba): lo que sigue sobre almacén en memoria, datos de ejemplo y teléfonos de prueba ya no aplica.~~ Pedidos · Lista (29/10/2026, solo diseño): datos de `features/orders/infrastructure/mock-data.ts` (24 pedidos, 1 · 5 · 3 · 3 · 10 · 2 por etapa) más los creados en `store.ts`. Filtros por URL: `?stage=` (una etapa o `action`), `?view=cards|list`, `?q=`, `?limit=` ("Ver mais" en cartões) y `?page=` (tabla). El prototipo muestra fechas como "18 nov"; aquí van `dd/mm/aaaa` (RNF-10). La búsqueda solo cubre nombre y nº de pedido (el prototipo decía también teléfono, que la lista no tiene). El número de pedido (MD-0835) enlaza al detalle y la fila entera es clicable (`order-id-link.tsx`, enlace estirado; los botones de acción quedan por encima); "Reenviar link", "Copiar link", "Ver trabalho" y el menú "Mais ações" salen desactivados; "Partilhar link" lleva a `/orders/<id>/created`, que solo existe para pedidos del almacén en memoria. La etiqueta "Pedidos 5" del menú sigue fija.

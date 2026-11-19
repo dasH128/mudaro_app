@@ -1,8 +1,8 @@
 # Mudaro · Plan de pruebas del paso 4b (inventario y enlace)
 
-Fecha: 18/11/2026
-Alcance: tablas, restricciones, RLS y funciones del inventario con líneas, las correcciones de cada empresa y el enlace del cliente (migraciones `20261118200000` a `20261118200300`).
-Fuera de alcance: la conexión con `apps/company` (se probará en su propio bloque), la Edge Function que valida el enlace (B9), las fotos (bucket de Storage) y los presupuestos (paso 5).
+Fecha: 18/11/2026 (sección G añadida el 19/11/2026)
+Alcance: tablas, restricciones, RLS y funciones del inventario con líneas, las correcciones de cada empresa y el enlace del cliente (migraciones `20261118200000` a `20261118200300`). La sección F prueba la pantalla Inventário de `apps/company` y la G, el acceso del cliente por su enlace (migración `20261119100000`, Edge Function `client-order` y `apps/client`).
+Fuera de alcance: las fotos (bucket de Storage), el límite de peticiones de `client-order` (pendiente antes de enviar enlaces a clientes reales, ver `docs/plan-modelo-bd.md`) y los presupuestos (paso 5).
 Fuentes: `docs/plan-modelo-bd.md` ("Inventario por capas y enlace"), `docs/diagram/mudaro-model.dbml` y `docs/test-plan-orders-4a.md` (formato).
 
 ## Cómo usar este documento
@@ -95,14 +95,34 @@ Con sesión de administrador y un pedido nuevo creado eligiendo "Eu, agora ou nu
 - F5: con un acceso incompleto se puede pasar a Extras y el paso Acessos sale marcado como hecho. El bloqueo llega al concluir, que es lo que pide el criterio.
 - Fuera de la sección F: en "Novo pedido", en la primera ejecución el nombre llegó vacío al servidor, pero al repetirlo el 19/11/2026 el nombre se envía bien; lo más probable es que fuera un efecto de la escritura automática. Lo que sí pasa: un error del servidor se queda bajo el campo aunque lo corrijas, hasta el siguiente envío. En Pedidos, el banner dice "2 clientes já enviaram o inventário" aunque uno lo rellenó la empresa.
 
-## Criterio de salida del paso 4b (base de datos)
+## G. Acceso del cliente por su enlace (B9, migración `20261119100000`, Edge Function `client-order`, `apps/client`)
+
+G1 a G9 se ejecutaron en un solo bloque SQL con la sesión simulada del administrador de "Mudanzas Peru" sobre MD-0005: abre un borrador, genera un enlace y llama a las funciones `client_*` con el hash del token. El bloque termina con un error forzado, así que no quedó nada (comprobado después: MD-0005 sigue en v1, sin borrador y sin cancelar). G10 llama a la Edge Function publicada con tokens inventados. G11 se hizo en Chrome.
+
+| ID | Prueba | Criterio de aceptación | Quién | Estado |
+| --- | --- | --- | --- | --- |
+| G1 | Permisos | `anon` y `authenticated` no pueden ejecutar `client_save_inventory_draft` ni `client_submit_inventory` (42501). Solo `service_role` | Claude | OK (19/11/2026) |
+| G2 | Enlace desconocido o mal formado | Un hash que no existe y un texto que no es un hash dan "link not found" | Claude | OK (19/11/2026) |
+| G3 | Guardar con enlace vigente | El borrador guarda la línea con la cantidad enviada | Claude | OK (19/11/2026) |
+| G4 | Objeto que no existe | Un objeto fuera del catálogo da "catalog item not found" y no se guarda | Claude | OK (19/11/2026) |
+| G5 | Enviar desde el enlace | Devuelve la versión (v2), el envío pasa a `inventory_received` y el historial registra `actor_type = 'client'`, sin usuario, con el nombre de contacto | Claude | OK (19/11/2026) |
+| G6 | Sin borrador abierto | Con el inventario ya enviado, guardar da "no draft inventory" | Claude | OK (19/11/2026) |
+| G7 | Enlace caducado | Guardar y enviar dan "link expired" aunque haya borrador | Claude | OK (19/11/2026) |
+| G8 | "Gerar link novo" | El enlace anterior da "link not found"; el nuevo guarda | Claude | OK (19/11/2026) |
+| G9 | Pedido cancelado | El enlace da "link not found" (no revela que el pedido existe) | Claude | OK (19/11/2026) |
+| G10 | Edge Function publicada | Token mal formado: 400 `invalid_input`. Token de 64 caracteres que no existe, al leer y al guardar: 404 `not_found`. GET: 405 | Claude | OK (19/11/2026) |
+| G11 | Flujo completo en el navegador | Desde `apps/company`, "Gerar link" en MD-0005. En `apps/client` se abre el pedido con el catálogo, se añaden objetos y accesos ("Guardado" al cambiar de paso), se marca un extra y "Enviar inventário" muestra "Inventário enviado". En la empresa: "Inventário recebido", "Preenchido pelo cliente" y "O cliente enviou o inventário (v1)" en el historial. Un enlace inventado muestra "Este link não é válido" | Claude (Chrome) | OK (19/11/2026) |
+
+Regresión de la empresa tras la migración (19/11/2026): con MD-0004, guardar el borrador al cambiar de paso ("Guardado") y concluir la v3 siguen funcionando; el historial registra "A empresa preencheu o inventário (v3)".
+
+## Criterio de salida del paso 4b
 
 1. Todos los casos están en `OK`.
 2. Los casos de seguridad (sección D) pasan sin excepción.
 3. Quedan registradas las limitaciones conocidas, que no son fallos:
    - la obligatoriedad de los accesos (RF-23) la valida la app, porque la base tiene valores por defecto;
    - una línea borrada entre versiones no deja marca;
-   - el cliente aún no puede usar el enlace (Edge Function pendiente de B9);
+   - `client-order` aún no limita la frecuencia de peticiones (pendiente antes de enviar enlaces a clientes reales);
    - las fotos no se guardan (sin bucket de Storage);
    - los presupuestos no pasan a `superseded` al enviar una versión nueva (paso 5).
 

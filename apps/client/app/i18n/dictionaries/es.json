@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "title": "Tu mudanza · Mudaro",
+    "description": "Indica qué te vas a llevar en tu mudanza.",
+    "linkTitle": "Inventario de tu mudanza"
+  },
+  "home": {
+    "title": "Abre el enlace que recibiste",
+    "text": "Esta página solo funciona con el enlace de tu pedido. Pídeselo a la empresa de mudanzas si no lo encuentras."
+  },
+  "link": {
+    "invalidTitle": "Este enlace no es válido",
+    "invalidText": "Puede que lo hayan sustituido por uno nuevo o que esté incompleto. Pide a la empresa de mudanzas que te lo envíe otra vez.",
+    "errorTitle": "No se pudo abrir tu pedido",
+    "errorText": "Vuelve a intentarlo en un momento.",
+    "retry": "Intentar otra vez"
+  },
+  "header": {
+    "eyebrow": "Pedido de mudanza · {company}",
+    "greeting": "Hola {name}",
+    "title": "Hola {name}, ¿qué te vas a llevar?",
+    "subtitle": "{company} prepara el presupuesto con lo que indiques aquí. Puedes hacerlo poco a poco: queda guardado.",
+    "validUntil": "Puedes editar hasta el {date}",
+    "expired": "El plazo para editar terminó el {date}"
+  },
+  "expired": {
+    "title": "El plazo para editar terminó",
+    "text": "Ya no se puede cambiar el inventario desde este enlace. Si aún necesitas cambiar algo, habla con {company}."
+  },
+  "submitted": {
+    "title": "Inventario enviado",
+    "text": "{company} recibió tu inventario el {when}. La propuesta aparecerá en este mismo enlace.",
+    "version": "Versión {version}"
+  },
+  "inventory": {
+    "stepsLabel": "Pasos del inventario",
+    "itemsCount": {
+      "one": "{count} objeto",
+      "other": "{count} objetos"
+    },
+    "roomsCount": {
+      "one": "{count} estancia",
+      "other": "{count} estancias"
+    },
+    "steps": {
+      "items": {
+        "label": "Objetos",
+        "hint": "{items} en {rooms}",
+        "missing": "Faltan objetos"
+      },
+      "access": {
+        "label": "Accesos",
+        "hint": "Piso, ascensor y aparcamiento",
+        "missing": "Faltan accesos obligatorios"
+      },
+      "extras": {
+        "label": "Servicios extra",
+        "hint": {
+          "one": "{count} elegido",
+          "other": "{count} elegidos"
+        }
+      }
+    },
+    "rooms": {
+      "label": "Estancias"
+    },
+    "catalog": {
+      "searchLabel": "Buscar objetos",
+      "searchPlaceholder": "Buscar: sofá, cama, caja…",
+      "noResults": "Ningún objeto coincide con la búsqueda.",
+      "perUnit": "{volume} por unidad",
+      "add": "Añadir",
+      "more": "Más",
+      "removeOne": "Quitar {name}",
+      "addOne": "Añadir {name}",
+      "flags": {
+        "fragile": "Frágil",
+        "dismantle": "Desmontar",
+        "extra-crew": "Personal extra"
+      }
+    },
+    "summary": {
+      "title": "Va al camión",
+      "items": "objetos",
+      "fragile": "frágiles",
+      "dismantle": "desmontar",
+      "declared": "Volumen aproximado. La empresa lo confirma en el presupuesto.",
+      "thisRoom": "En esta estancia",
+      "roomEmpty": "Aún sin objetos. Usa el botón Añadir."
+    },
+    "access": {
+      "kinds": {
+        "origin": "Origen",
+        "destination": "Destino",
+        "stop": "Parada {n}"
+      },
+      "floor": "Piso",
+      "parking": "Aparcamiento a",
+      "meters": "metros",
+      "lift": "Ascensor",
+      "liftLabel": "Ascensor en {place}",
+      "lifts": {
+        "none": "No hay",
+        "small": "Pequeño",
+        "normal": "Normal"
+      },
+      "narrowStairs": "Escaleras estrechas",
+      "parkingPermit": "Necesita permiso de aparcamiento",
+      "notes": "Notas para el equipo",
+      "notesPlaceholder": "Ej.: portal estrecho, horario de la comunidad",
+      "floorHint": "0 para planta baja, -1 para sótano"
+    },
+    "extras": {
+      "title": "Servicios extra",
+      "subtitle": "Marca lo que te gustaría que hiciera la empresa. El precio aparece en el presupuesto.",
+      "empty": "No hay servicios disponibles.",
+      "noteLabel": "Nota (opcional)",
+      "notePlaceholder": "Ej.: piano vertical, 2.º piso sin ascensor",
+      "footnote": "Si no sabes qué necesitas, déjalo todo sin marcar."
+    },
+    "footer": {
+      "hint": "puedes volver a cualquier paso",
+      "hintLast": "al enviar, la empresa recibe el inventario",
+      "back": "Volver",
+      "toAccess": "Continuar a accesos",
+      "toExtras": "Continuar a extras",
+      "finish": "Enviar inventario"
+    },
+    "save": {
+      "saving": "Guardando…",
+      "saved": "Guardado"
+    },
+    "errors": {
+      "accessIncomplete": "Faltan accesos obligatorios: piso, aparcamiento y ascensor de cada dirección.",
+      "empty": "Añade al menos un objeto antes de enviar.",
+      "expired": "El plazo para editar terminó. Recarga la página.",
+      "notFound": "Este enlace ya no es válido.",
+      "noDraft": "Este inventario ya se envió. Recarga la página.",
+      "invalid": "Hay datos no válidos. Revisa los campos y vuelve a intentarlo.",
+      "failed": "No se pudo guardar. Vuelve a intentarlo."
+    }
+  }
+}

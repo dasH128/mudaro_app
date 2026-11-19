@@ -95,6 +95,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
             <LinkPanel
               lang={locale}
               t={t}
+              orderId={order.id}
               clientName={order.client.name}
               link={order.link}
               state={linkState(order.link, order.stage, today)}

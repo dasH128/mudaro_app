@@ -342,7 +342,7 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Si un operario puede pertenecer a varias empresas.
 - [ ] Servicio de mapas y su coste por consulta.
 - [ ] Fuente y responsable del catálogo inicial de objetos.
-- [ ] Flutter Web o Angular para la web del cliente.
+- [x] Tecnología de la web del cliente: Next.js (React) en `apps/client`, decidido el 19/11/2026 (ver `docs/architecture-system.md`). Falta el dominio.
 - [ ] Requisitos legales que el IMT exige a las empresas del piloto según el tipo de vehículo (verificar antes de dar de alta empresas).
 - [ ] Precio de la suscripción y modelo de cobro tras el piloto.
 - [ ] Caducidad real del convite al administrador (hoy 7 días como valor provisional): depende de la configuración de Supabase Auth.

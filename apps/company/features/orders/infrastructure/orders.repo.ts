@@ -38,7 +38,7 @@ import {
 // (MD-0836) es `shipments.number`, la secuencia propia de cada empresa. Las escrituras pasan por `create_order()`.
 //
 // Inventario: se muestra la versión vigente, la última enviada (A11). Un borrador no se muestra hasta enviarse.
-// Pendiente: el enlace con token se genera en la base de datos (share_order_link) pero la app aún no lo llama.
+// Enlace del cliente: `shareOrderLink` (share_order_link). El token solo existe en la respuesta; la base guarda su hash.
 // Los envíos cancelados no se muestran: la pantalla de cancelar (RF-69) llega más adelante.
 
 type ShipmentStatus = Database["public"]["Enums"]["shipment_status"];
@@ -49,7 +49,7 @@ const ORDER_ROUTE =
   "addresses(id, role, sort_order), inventories(version, filled_by, submitted_at, inventory_addresses(address_id, address), inventory_lines(quantity, unit_volume_m3))";
 
 const LIST_SELECT = `number, status, lost_reason, status_changed_at, last_activity_at, created_at,
-  client:clients(name),
+  client:clients(name, phone, email),
   order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, ${ORDER_ROUTE})`;
 
 const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, created_at,
@@ -295,7 +295,43 @@ export async function getOrder(id: string): Promise<Order | undefined> {
       : validityDays
         ? addDays(lisbonDay(data.created_at), validityDays)
         : null,
+    linkShared: data.order.token_expires_at !== null,
+    clientPhone: data.client?.phone ?? null,
+    clientEmail: data.client?.email ?? null,
   };
+}
+
+/**
+ * Genera el enlace del cliente con `share_order_link()` (RF-15): 32 bytes aleatorios, de los que la base solo guarda
+ * el hash (RNF-02). Devuelve el token una sola vez; generar otro anula el anterior. El envío pasa de "Nova" a
+ * "À espera de inventário" y el historial registra el envío o reenvío. La función comprueba en la base que el pedido
+ * es de la empresa de la sesión y que no está cancelado.
+ */
+export async function shareOrderLink(id: string): Promise<{ token: string; validUntil: string } | null> {
+  const number = parseOrderNumber(id);
+  if (number === null) return null;
+
+  const supabase = await createSupabaseServerClient();
+  const { data: shipment, error: readError } = await supabase
+    .from("shipments")
+    .select("order_id")
+    .eq("number", number)
+    .neq("status", "cancelled")
+    .maybeSingle();
+  if (readError) throw new Error(`orders: no se pudo leer el pedido (${readError.code})`);
+  if (!shipment) return null;
+
+  const { data: token, error } = await supabase.rpc("share_order_link", { p_order_id: shipment.order_id });
+  if (error || !token) return null;
+
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .select("token_expires_at")
+    .eq("id", shipment.order_id)
+    .single();
+  if (orderError || !order.token_expires_at) return null;
+
+  return { token, validUntil: lisbonDay(order.token_expires_at) };
 }
 
 /** Evento del historial. Los datos del evento son JSON: solo se leen los campos que se conocen. */

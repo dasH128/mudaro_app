@@ -64,7 +64,17 @@ export type Order = {
   /** Último día de validez del enlace, aaaa-mm-dd. `null` si el inventario lo rellena la empresa. */
   linkValidUntil: string | null;
   linkValidityDays: LinkValidityDays | null;
+  /** Ya se generó un enlace. Solo se ve al generarlo (RNF-02): después hay que generar otro, que anula el anterior. */
+  linkShared: boolean;
+  /** Teléfono del cliente con prefijo (+351…), para WhatsApp y SMS. */
+  clientPhone: string | null;
+  clientEmail: string | null;
 };
+
+/** Resultado de generar el enlace del cliente (RF-15). El enlace completo solo existe en esta respuesta. */
+export type ShareLinkResult =
+  | { ok: true; url: string; validUntil: string }
+  | { ok: false; error: "failed" };
 
 /** Cliente que ya existe en la empresa, sugerido al escribir su teléfono (RF-14). */
 export type ClientSuggestion = {

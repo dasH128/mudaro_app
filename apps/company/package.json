@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@mudaro/inventory": "workspace:*",
     "@mudaro/supabase": "workspace:*",
     "@mudaro/ui": "workspace:*",
     "@mudaro/validation": "workspace:*",
