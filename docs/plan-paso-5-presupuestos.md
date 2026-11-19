@@ -73,6 +73,8 @@ Migración `2026112…_quotes.sql` y su RLS:
 
 ### 5.3 · Motor de cálculo (RF-30 a RF-37) · hecho el 19/11/2026
 
+Explicación completa para el equipo: `docs/quote-calculation.md`.
+
 Vive en `packages/quotes` (y no en `apps/company/features/quotes/domain`) para probarlo con `vitest` como se acordó en P10: 20 tests, `pnpm test`. Reglas concretas, provisionales: los minutos de manipulación del catálogo son minutos de una persona para cargar una unidad y otros tantos para descargarla; carga en el origen, descarga en el destino y cada parada suma un cuarto de la carga; el elevador pequeño cuenta la mitad de los pisos; las horas del equipo se redondean hacia arriba a la media hora; el suplemento de estacionamiento se aplica desde 50 m, el mismo umbral que el detalle del pedido.
 
 TypeScript puro, sin base de datos. Vive en `apps/company/features/quotes/domain/calculate.ts` (solo lo usa la empresa; el cliente solo suma las líneas elegidas).
