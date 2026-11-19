@@ -53,7 +53,9 @@ Es lo que falta del paso 2 y el cálculo lo necesita.
 - **`apps/company`**: página `/pricing` (Tarifas) con dos bloques: tarifa (campos de RF-06) y servicios extra (lista, alta, edición, activar o desactivar, con su tipo del catálogo y su modo de precio). `features/pricing/{domain,application,infrastructure,presentation}`.
 - `pnpm db:types`.
 
-### 5.2 · Base de datos de presupuestos
+### 5.2 · Base de datos de presupuestos · hecho el 19/11/2026
+
+Migraciones `20261119300000_quotes` y `20261119300100_fix_save_quote_draft` (aplicadas y registradas). Diferencias con lo previsto: el estado no guarda "caducado" (P9, se calcula con `valid_until`); rechazar pasa el envío a `lost` con el motivo y una versión nueva lo devuelve a `quoted`; el trabajo se programa en la fecha deseada del pedido a las 09:00 de Lisboa. Probado en la base el 19/11/2026 (flujo normal, versiones, rechazo, caducidad, inventario nuevo y permisos); los casos pasan al plan de pruebas en 5.7.
 
 Migración `2026112…_quotes.sql` y su RLS:
 
