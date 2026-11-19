@@ -18,7 +18,8 @@
     "clientsTitle": "Clients · Mudaro",
     "homeTitle": "Today's operations · Mudaro",
     "scheduleTitle": "Schedule · Mudaro",
-    "forgotPasswordTitle": "Reset password · Mudaro"
+    "forgotPasswordTitle": "Reset password · Mudaro",
+    "pricingTitle": "Pricing · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -2351,6 +2352,135 @@
         }
       },
       "clientsAnd": "and"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "The values we use to calculate your quotes. Saving creates a new version: quotes already sent keep the version they were calculated with.",
+      "version": "Version {version} · in effect since {date}",
+      "defaultsNote": "These are Mudaro reference values. Adjust them to your prices before your first quote.",
+      "sections": {
+        "prices": {
+          "title": "Price and cost",
+          "text": "Per crew member and per hour. Only administrators see the cost and margin."
+        },
+        "access": {
+          "title": "Access",
+          "text": "What climbing without a lift or parking far away adds."
+        },
+        "calculation": {
+          "title": "Calculation",
+          "text": "How we turn the inventory into hours and crew."
+        },
+        "quote": {
+          "title": "Quote",
+          "text": "How the customer sees the price and how long it is valid."
+        }
+      },
+      "fields": {
+        "operatorHourPriceCents": "Price per crew hour",
+        "operatorHourCostCents": "Cost per crew hour",
+        "kmPriceCents": "Price per km",
+        "minimumServiceCents": "Minimum per job",
+        "vatPct": "VAT",
+        "noLiftFloorSurchargeCents": "Surcharge per floor without lift",
+        "parkingSurchargeCents": "Surcharge for distant parking",
+        "noLiftFloorExtraPct": "Extra hours per floor without lift",
+        "parkingExtraPctPer25m": "Extra hours per 25 m of parking distance",
+        "stowageFactor": "Stowage factor",
+        "averageSpeedKmh": "Average speed",
+        "crewSmallMaxM3": "Small volume up to",
+        "crewSmall": "Crew",
+        "crewMediumMaxM3": "Medium volume up to",
+        "crewMedium": "Crew",
+        "crewLarge": "Crew above that",
+        "quoteValidityDays": "Quote validity"
+      },
+      "hints": {
+        "stowageFactor": "Multiplies the declared volume: 1.20 = 20% more for the space lost in the truck.",
+        "minimumServiceCents": "If the calculation comes out lower, the quote suggests this amount.",
+        "crew": "Suggested crew by volume. You can change it on each quote."
+      },
+      "crewLegend": "Crew by volume",
+      "units": {
+        "euros": "€",
+        "perHour": "€/h",
+        "perKm": "€/km",
+        "pct": "%",
+        "m3": "m³",
+        "kmh": "km/h",
+        "days": "days"
+      },
+      "margin": "Margin per hour: {pct}",
+      "presentation": {
+        "legend": "Price shown to the customer",
+        "fixed": "Fixed price",
+        "hourly": "Hourly, with an estimate",
+        "fixedHint": "The customer sees a total. If the move takes longer, the difference is on you.",
+        "hourlyHint": "The customer sees the hourly price and the estimated hours, and pays the actual hours."
+      },
+      "save": "Save new version",
+      "saving": "Saving…",
+      "saved": "Version {version} saved.",
+      "errors": {
+        "required": "Required field.",
+        "invalid": "Invalid value. Use numbers, with a comma for decimals.",
+        "outOfRange": "Out of the allowed range.",
+        "crewOrder": "Must be larger than the small volume.",
+        "notAllowed": "Only administrators can change the pricing.",
+        "failed": "Could not save. Please try again.",
+        "review": "Check the highlighted fields."
+      },
+      "extras": {
+        "title": "Extra services",
+        "text": "The services you offer and the price of each. Those linked to a Mudaro type are suggested on the quote when the customer ticks that type in the inventory.",
+        "empty": "You have no extra services yet.",
+        "add": "Add service",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "saveNew": "Add",
+        "saveEdit": "Save changes",
+        "name": "Name",
+        "namePlaceholder": "E.g. Crockery packing",
+        "type": "Mudaro type",
+        "ownType": "Own service (no type)",
+        "ownHint": "An own service does not appear in the customer's inventory: you only add it to the quote.",
+        "priceMode": "How it is charged",
+        "price": "Price",
+        "priceModes": {
+          "fixed": "Fixed price",
+          "unit": "Per unit",
+          "hour": "Per hour",
+          "m3": "Per m³",
+          "m3_month": "Per m³ per month"
+        },
+        "priceSuffix": {
+          "fixed": "",
+          "unit": " / unit",
+          "hour": " / hour",
+          "m3": " / m³",
+          "m3_month": " / m³ / month"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "inactiveHint": "An inactive service does not appear on new quotes.",
+        "columns": {
+          "service": "Service",
+          "type": "Type",
+          "price": "Price",
+          "status": "Status"
+        },
+        "errors": {
+          "nameRequired": "Enter the service name.",
+          "tooLong": "120 characters maximum.",
+          "nameTaken": "You already have a service with this name.",
+          "priceRequired": "Enter the price.",
+          "priceInvalid": "Invalid price.",
+          "invalid": "Some data is invalid. Check the fields.",
+          "failed": "Could not save. Please try again."
+        }
+      }
     }
   }
 }

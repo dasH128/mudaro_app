@@ -25,7 +25,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
 | Agenda | `/[lang]/schedule` | Hecha solo el diseño, con datos de ejemplo. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
-| Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
+| Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -168,6 +169,17 @@ features/
     presentation/
       components/           ← inventory-editor (único cliente), header, steps, rooms-nav, catalog-grid, inventory-summary,
                               access-form, extras-step, inventory-footer (estado del guardado) e inventory-submitted (versión enviada)
+  pricing/
+    domain/
+      types.ts              ← Tariff, TariffInput, CompanyExtra, PRICE_MODES, QUOTE_PRESENTATIONS, TARIFF_LIMITS, crewFor (RF-32) y hourMargin
+    application/
+      actions/pricing.ts    ← saveTariffAction (versión nueva) y saveExtraAction (alta, edición y activar o desactivar)
+      schemas/              ← tariff.ts (TARIFF_FIELDS: tipo, límites y clave de cada campo) y extra.ts, con zod
+    infrastructure/
+      pricing.repo.ts       ← puerta de entrada (Supabase): getCurrentTariff, getCompanyExtras, saveTariff, saveCompanyExtra
+    presentation/
+      pricing-text.ts       ← valores iniciales del formulario (coma decimal)
+      components/           ← tariff-form y extras-panel (clientes)
   quotes/
     domain/
       types.ts              ← Quote, ReadyOrder, QuoteMetrics (importes en céntimos, fechas ISO)

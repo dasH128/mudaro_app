@@ -43,7 +43,9 @@ Sin cambios visibles. Unos 46 ficheros, 25 claves por idioma y la ruta.
 - `requestId` → `orderId` donde aplique.
 - `apps/company/CLAUDE.md`.
 
-### 5.1 · Tarifa y servicios de la empresa (RF-06, RF-07)
+### 5.1 · Tarifa y servicios de la empresa (RF-06, RF-07) · hecho el 19/11/2026
+
+Migración `20261119200000_tariffs` (aplicada y registrada). Valores por defecto de la v1: 15 €/h de precio y 9 €/h de coste por operário, 0,60 €/km, mínimo 120 €, estiba 1,20, 50 km/h, IVA 23 %, +10 % de horas por andar sem elevador, +5 % por cada 25 m, operários 2/3/4 (hasta 15 y 30 m³), preço fechado y 15 días de validez. Provisionales: confirmarlos con empresas del piloto.
 
 Es lo que falta del paso 2 y el cálculo lo necesita.
 

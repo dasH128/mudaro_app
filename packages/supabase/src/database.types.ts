@@ -1192,6 +1192,92 @@ export type Database = {
           },
         ]
       }
+      tariffs: {
+        Row: {
+          average_speed_kmh: number
+          company_id: string
+          created_by: string | null
+          crew_large: number
+          crew_medium: number
+          crew_medium_max_m3: number
+          crew_small: number
+          crew_small_max_m3: number
+          id: string
+          km_price_cents: number
+          minimum_service_cents: number
+          no_lift_floor_extra_pct: number
+          no_lift_floor_surcharge_cents: number
+          operator_hour_cost_cents: number
+          operator_hour_price_cents: number
+          parking_extra_pct_per_25m: number
+          parking_surcharge_cents: number
+          quote_presentation: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days: number
+          stowage_factor: number
+          valid_from: string
+          vat_pct: number
+          version: number
+        }
+        Insert: {
+          average_speed_kmh?: number
+          company_id: string
+          created_by?: string | null
+          crew_large?: number
+          crew_medium?: number
+          crew_medium_max_m3?: number
+          crew_small?: number
+          crew_small_max_m3?: number
+          id?: string
+          km_price_cents: number
+          minimum_service_cents?: number
+          no_lift_floor_extra_pct?: number
+          no_lift_floor_surcharge_cents?: number
+          operator_hour_cost_cents: number
+          operator_hour_price_cents: number
+          parking_extra_pct_per_25m?: number
+          parking_surcharge_cents?: number
+          quote_presentation?: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days?: number
+          stowage_factor?: number
+          valid_from?: string
+          vat_pct?: number
+          version: number
+        }
+        Update: {
+          average_speed_kmh?: number
+          company_id?: string
+          created_by?: string | null
+          crew_large?: number
+          crew_medium?: number
+          crew_medium_max_m3?: number
+          crew_small?: number
+          crew_small_max_m3?: number
+          id?: string
+          km_price_cents?: number
+          minimum_service_cents?: number
+          no_lift_floor_extra_pct?: number
+          no_lift_floor_surcharge_cents?: number
+          operator_hour_cost_cents?: number
+          operator_hour_price_cents?: number
+          parking_extra_pct_per_25m?: number
+          parking_surcharge_cents?: number
+          quote_presentation?: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days?: number
+          stowage_factor?: number
+          valid_from?: string
+          vat_pct?: number
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tariffs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_costs: {
         Row: {
           company_id: string
@@ -1308,6 +1394,28 @@ export type Database = {
         Args: { p_order_id: string; p_reason: string }
         Returns: undefined
       }
+      client_save_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_token_hash: string
+        }
+        Returns: undefined
+      }
+      client_submit_inventory: {
+        Args: { p_token_hash: string }
+        Returns: number
+      }
+      close_inventory_draft: {
+        Args: {
+          p_actor_id: string
+          p_actor_name: string
+          p_actor_type: string
+          p_order_id: string
+        }
+        Returns: number
+      }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
@@ -1346,11 +1454,30 @@ export type Database = {
       current_company_id: { Args: never; Returns: string }
       delete_inventory_line: { Args: { p_line_id: string }; Returns: undefined }
       f_unaccent: { Args: { "": string }; Returns: string }
+      insert_default_tariff: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       is_company_administrator: { Args: never; Returns: boolean }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
+      lock_order_by_link: {
+        Args: { p_token_hash: string; p_write: boolean }
+        Returns: string
+      }
       lock_owned_order: { Args: { p_order_id: string }; Returns: undefined }
       open_inventory_draft: { Args: { p_order_id: string }; Returns: string }
+      save_company_extra: {
+        Args: {
+          p_active: boolean
+          p_catalog_extra_id: string
+          p_id: string
+          p_name: string
+          p_price_cents: number
+          p_price_mode: Database["public"]["Enums"]["price_mode"]
+        }
+        Returns: string
+      }
       save_inventory_address: {
         Args: {
           p_address: string
@@ -1390,6 +1517,7 @@ export type Database = {
         }
         Returns: string
       }
+      save_tariff: { Args: { p_tariff: Json }; Returns: number }
       search_catalog_items: {
         Args: { lang?: Database["public"]["Enums"]["app_locale"]; q: string }
         Returns: {
@@ -1420,6 +1548,15 @@ export type Database = {
       }
       share_order_link: { Args: { p_order_id: string }; Returns: string }
       submit_inventory: { Args: { p_order_id: string }; Returns: number }
+      write_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_order_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       address_role: "origin" | "destination" | "stop"
@@ -1431,6 +1568,7 @@ export type Database = {
       handling_flag: "fragile" | "disassembly" | "extra_crew"
       lift_size: "none" | "small" | "large"
       price_mode: "fixed" | "unit" | "hour" | "m3" | "m3_month"
+      quote_presentation: "fixed" | "hourly"
       shipment_event_kind:
         | "created"
         | "link_shared"
@@ -1592,6 +1730,7 @@ export const Constants = {
       handling_flag: ["fragile", "disassembly", "extra_crew"],
       lift_size: ["none", "small", "large"],
       price_mode: ["fixed", "unit", "hour", "m3", "m3_month"],
+      quote_presentation: ["fixed", "hourly"],
       shipment_event_kind: [
         "created",
         "link_shared",

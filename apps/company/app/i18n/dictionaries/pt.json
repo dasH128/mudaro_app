@@ -18,7 +18,8 @@
     "clientsTitle": "Clientes · Mudaro",
     "homeTitle": "Operações de hoje · Mudaro",
     "scheduleTitle": "Agenda · Mudaro",
-    "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro"
+    "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro",
+    "pricingTitle": "Tarifas · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -2351,6 +2352,135 @@
         }
       },
       "clientsAnd": "e"
+    },
+    "pricing": {
+      "title": "Tarifas",
+      "subtitle": "Os valores com que calculamos os teus orçamentos. Guardar cria uma versão nova: os orçamentos já enviados mantêm a versão com que foram calculados.",
+      "version": "Versão {version} · em vigor desde {date}",
+      "defaultsNote": "Estes são valores de referência da Mudaro. Ajusta-os aos teus preços antes do primeiro orçamento.",
+      "sections": {
+        "prices": {
+          "title": "Preço e custo",
+          "text": "Por operário e por hora. O custo e a margem só os veem os administradores."
+        },
+        "access": {
+          "title": "Acessos",
+          "text": "O que acrescenta subir sem elevador ou estacionar longe."
+        },
+        "calculation": {
+          "title": "Cálculo",
+          "text": "Como passamos do inventário a horas e operários."
+        },
+        "quote": {
+          "title": "Orçamento",
+          "text": "Como o cliente vê o preço e durante quanto tempo é válido."
+        }
+      },
+      "fields": {
+        "operatorHourPriceCents": "Preço por hora de operário",
+        "operatorHourCostCents": "Custo por hora de operário",
+        "kmPriceCents": "Preço por km",
+        "minimumServiceCents": "Mínimo por serviço",
+        "vatPct": "IVA",
+        "noLiftFloorSurchargeCents": "Suplemento por andar sem elevador",
+        "parkingSurchargeCents": "Suplemento por estacionamento longe",
+        "noLiftFloorExtraPct": "Horas a mais por andar sem elevador",
+        "parkingExtraPctPer25m": "Horas a mais por cada 25 m de estacionamento",
+        "stowageFactor": "Fator de estiba",
+        "averageSpeedKmh": "Velocidade média",
+        "crewSmallMaxM3": "Volume pequeno até",
+        "crewSmall": "Operários",
+        "crewMediumMaxM3": "Volume médio até",
+        "crewMedium": "Operários",
+        "crewLarge": "Operários acima disso",
+        "quoteValidityDays": "Validade do orçamento"
+      },
+      "hints": {
+        "stowageFactor": "Multiplica o volume declarado: 1,20 = mais 20 % pelo espaço que se perde no camião.",
+        "minimumServiceCents": "Se o cálculo der menos, o orçamento sugere este valor.",
+        "crew": "Operários sugeridos conforme o volume. Podes mudar o número em cada orçamento."
+      },
+      "crewLegend": "Operários por volume",
+      "units": {
+        "euros": "€",
+        "perHour": "€/h",
+        "perKm": "€/km",
+        "pct": "%",
+        "m3": "m³",
+        "kmh": "km/h",
+        "days": "dias"
+      },
+      "margin": "Margem por hora: {pct}",
+      "presentation": {
+        "legend": "Preço para o cliente",
+        "fixed": "Preço fechado",
+        "hourly": "Por hora, com estimativa",
+        "fixedHint": "O cliente vê um total. Se a mudança demorar mais, a diferença é tua.",
+        "hourlyHint": "O cliente vê o preço por hora e as horas estimadas, e paga as horas reais."
+      },
+      "save": "Guardar nova versão",
+      "saving": "A guardar…",
+      "saved": "Versão {version} guardada.",
+      "errors": {
+        "required": "Campo obrigatório.",
+        "invalid": "Valor inválido. Usa números, com vírgula nos decimais.",
+        "outOfRange": "Fora do intervalo permitido.",
+        "crewOrder": "Tem de ser maior do que o volume pequeno.",
+        "notAllowed": "Só os administradores podem alterar a tarifa.",
+        "failed": "Não foi possível guardar. Tenta de novo.",
+        "review": "Revê os campos assinalados."
+      },
+      "extras": {
+        "title": "Serviços extra",
+        "text": "Os serviços que ofereces e o preço de cada um. Os que pertencem a um tipo da Mudaro são sugeridos no orçamento quando o cliente marca esse tipo no inventário.",
+        "empty": "Ainda não tens serviços extra.",
+        "add": "Adicionar serviço",
+        "edit": "Editar",
+        "cancel": "Cancelar",
+        "saveNew": "Adicionar",
+        "saveEdit": "Guardar alterações",
+        "name": "Nome",
+        "namePlaceholder": "Ex.: Embalagem de loiça",
+        "type": "Tipo da Mudaro",
+        "ownType": "Serviço próprio (sem tipo)",
+        "ownHint": "Um serviço próprio não aparece no inventário do cliente: só o acrescentas ao orçamento.",
+        "priceMode": "Como se cobra",
+        "price": "Preço",
+        "priceModes": {
+          "fixed": "Preço fixo",
+          "unit": "Por unidade",
+          "hour": "Por hora",
+          "m3": "Por m³",
+          "m3_month": "Por m³ e mês"
+        },
+        "priceSuffix": {
+          "fixed": "",
+          "unit": " / unidade",
+          "hour": " / hora",
+          "m3": " / m³",
+          "m3_month": " / m³ / mês"
+        },
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "activate": "Ativar",
+        "deactivate": "Desativar",
+        "inactiveHint": "Um serviço inativo não aparece nos orçamentos novos.",
+        "columns": {
+          "service": "Serviço",
+          "type": "Tipo",
+          "price": "Preço",
+          "status": "Estado"
+        },
+        "errors": {
+          "nameRequired": "Indica o nome do serviço.",
+          "tooLong": "Máximo de 120 caracteres.",
+          "nameTaken": "Já tens um serviço com este nome.",
+          "priceRequired": "Indica o preço.",
+          "priceInvalid": "Preço inválido.",
+          "invalid": "Há dados inválidos. Revê os campos.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        }
+      }
     }
   }
 }
