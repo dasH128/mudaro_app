@@ -1366,6 +1366,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      save_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_order_id: string
+        }
+        Returns: undefined
+      }
       save_inventory_line: {
         Args: {
           p_catalog_item_id: string
