@@ -1013,7 +1013,8 @@
             "link-shared": "Enlace compartido",
             "inventory-submitted": "Inventario recibido",
             "quote-sent": "Presupuesto enviado",
-            "won": "Ganado"
+            "won": "Ganado",
+            "lost": "Perdido"
           }
         },
         "alert": {
@@ -1174,9 +1175,9 @@
             "one": "Queda {count} día.",
             "other": "Quedan {count} días."
           },
-          "canEdit": "{name} puede cambiar el inventario hasta aceptar un presupuesto.",
+          "canEdit": "{name} puede cambiar el inventario hasta recibir el presupuesto.",
           "expiredText": "El enlace caducó: {name} ya no puede cambiar el inventario.",
-          "closedText": "El pedido está cerrado: el enlace ya no da acceso.",
+          "closedText": "Presupuesto aceptado: con el enlace, {name} consulta el presupuesto firmado.",
           "copy": "Generar enlace nuevo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
@@ -1185,7 +1186,9 @@
           "noteMeta": "{author} · {when}",
           "noLink": "Sin enlace",
           "noLinkText": "{name} aún no tiene enlace: sin él no puede ver el presupuesto.",
-          "generate": "Generar enlace"
+          "generate": "Generar enlace",
+          "quoteText": "Con el enlace, {name} ve el presupuesto y puede aceptarlo o rechazarlo.",
+          "lostText": "{name} rechazó el presupuesto. Si creas una versión nueva, aparece en el mismo enlace."
         }
       }
     },

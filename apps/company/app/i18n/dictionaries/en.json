@@ -1013,7 +1013,8 @@
             "link-shared": "Link shared",
             "inventory-submitted": "Inventory received",
             "quote-sent": "Quote sent",
-            "won": "Won"
+            "won": "Won",
+            "lost": "Lost"
           }
         },
         "alert": {
@@ -1174,9 +1175,9 @@
             "one": "{count} day left.",
             "other": "{count} days left."
           },
-          "canEdit": "{name} can change the inventory until a quote is accepted.",
+          "canEdit": "{name} can change the inventory until they get the quote.",
           "expiredText": "The link has expired: {name} can no longer change the inventory.",
-          "closedText": "The order is closed: the link no longer gives access.",
+          "closedText": "Quote accepted: through the link, {name} can view the signed quote.",
           "copy": "Generate new link",
           "viewAsClient": "View as client",
           "notes": "Internal notes",
@@ -1185,7 +1186,9 @@
           "noteMeta": "{author} · {when}",
           "noLink": "No link",
           "noLinkText": "{name} has no link yet: without it they can't see the quote.",
-          "generate": "Generate link"
+          "generate": "Generate link",
+          "quoteText": "Through the link, {name} sees the quote and can accept or reject it.",
+          "lostText": "{name} rejected the quote. If you create a new version, it appears on the same link."
         }
       }
     },

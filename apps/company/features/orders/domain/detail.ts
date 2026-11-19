@@ -140,11 +140,12 @@ export function routeOf(order: Pick<OrderDetail, "origin" | "stops" | "destinati
 
 /** Hitos del pedido, en orden. */
 export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "quote-sent", "won"] as const;
-export type JourneyStep = (typeof JOURNEY_STEPS)[number];
+/** "lost" sustituye a "Ganho" cuando el cliente rechaza el orçamento. */
+export type JourneyStep = (typeof JOURNEY_STEPS)[number] | "lost";
 
 export type JourneyItem = {
   step: JourneyStep;
-  state: "done" | "current" | "todo";
+  state: "done" | "current" | "todo" | "lost";
   /** Cuándo ocurrió, si hay evento. */
   at: string | null;
 };
@@ -166,7 +167,7 @@ function eventTime(events: readonly OrderEvent[], step: JourneyStep): string | n
 
 /**
  * Percurso del pedido: lo alcanzado, el hito actual y lo que falta.
- * Un pedido perdido deja hecho todo hasta el presupuesto y ninguno como actual.
+ * Un pedido perdido deja hecho todo hasta el presupuesto y cambia "Ganho" por "Perdido".
  * Con el inventario rellenado por la empresa no hay paso "Link partilhado": el enlace solo sirve para el orçamento y
  * puede no generarse nunca.
  */
@@ -174,11 +175,14 @@ export function buildJourney(stage: OrderStage, events: readonly OrderEvent[], m
   const steps: readonly JourneyStep[] = mode === "self" ? JOURNEY_STEPS.filter((step) => step !== "link-shared") : JOURNEY_STEPS;
   const reached = stage === "lost" ? "quote-sent" : STEP_OF_STATUS[stage];
   const current = steps.indexOf(reached === "link-shared" && mode === "self" ? "created" : reached);
-  return steps.map((step, index) => ({
-    step,
-    state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
-    at: index <= current ? eventTime(events, step) : null,
-  }));
+  return steps.map((step, index): JourneyItem => {
+    if (stage === "lost" && step === "won") return { step: "lost", state: "lost", at: eventTime(events, "lost") };
+    return {
+      step,
+      state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
+      at: index <= current ? eventTime(events, step) : null,
+    };
+  });
 }
 
 // --- Inventario ---
@@ -262,7 +266,8 @@ function daysBetweenDays(from: string, to: string): number {
 export function linkState(link: DetailLink, stage: OrderStage, today: string): LinkState {
   const daysLeft = Math.max(daysBetweenDays(today, link.validUntil), 0);
   const daysUsed = Math.min(Math.max(link.validityDays - daysLeft, 0), link.validityDays);
-  const status = stage === "won" || stage === "lost" ? "closed" : daysBetweenDays(today, link.validUntil) < 0 ? "expired" : "active";
+  // Solo un orçamento aceite cierra el pedido. Tras un rechazo el enlace sigue abierto: ahí verá el cliente la versión nueva.
+  const status = stage === "won" ? "closed" : daysBetweenDays(today, link.validUntil) < 0 ? "expired" : "active";
   return { status, daysLeft, daysUsed, usedRatio: link.validityDays > 0 ? daysUsed / link.validityDays : 1 };
 }
 

@@ -1013,7 +1013,8 @@
             "link-shared": "Link partilhado",
             "inventory-submitted": "Inventário recebido",
             "quote-sent": "Orçamento enviado",
-            "won": "Ganho"
+            "won": "Ganho",
+            "lost": "Perdido"
           }
         },
         "alert": {
@@ -1174,9 +1175,9 @@
             "one": "Falta {count} dia.",
             "other": "Faltam {count} dias."
           },
-          "canEdit": "{name} pode alterar o inventário até aceitar um orçamento.",
+          "canEdit": "{name} pode alterar o inventário até receber o orçamento.",
           "expiredText": "O link caducou: {name} já não consegue alterar o inventário.",
-          "closedText": "O pedido está fechado: o link já não dá acesso.",
+          "closedText": "Orçamento aceite: pelo link, {name} consulta o orçamento assinado.",
           "copy": "Gerar link novo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
@@ -1185,7 +1186,9 @@
           "noteMeta": "{author} · {when}",
           "noLink": "Sem link",
           "noLinkText": "{name} ainda não tem link: sem ele não consegue ver o orçamento.",
-          "generate": "Gerar link"
+          "generate": "Gerar link",
+          "quoteText": "Pelo link, {name} vê o orçamento e pode aceitá-lo ou recusá-lo.",
+          "lostText": "{name} recusou o orçamento. Se criares uma versão nova, aparece no mesmo link."
         }
       }
     },

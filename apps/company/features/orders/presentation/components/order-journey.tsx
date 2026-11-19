@@ -7,6 +7,7 @@ const DOT = {
   done: "bg-foreground text-background",
   current: "bg-primary text-primary-foreground shadow-[0_0_0_5px_var(--warn-surface)]",
   todo: "border-2 border-dashed border-accent bg-surface text-muted",
+  lost: "border border-danger-border bg-danger-surface text-danger-foreground",
 };
 
 /** Percurso del pedido: de "Pedido criado" a "Ganho". */
@@ -26,7 +27,7 @@ export function OrderJourney({ t, items }: { t: OrderDetailText; items: readonly
                   {item.state === "todo" ? (
                     <span className="text-[13px] font-bold">{index + 1}</span>
                   ) : (
-                    <Icon name="check" size={16} strokeWidth={3} />
+                    <Icon name={item.state === "lost" ? "close" : "check"} size={16} strokeWidth={3} />
                   )}
                 </span>
                 {last ? null : <span className={`h-0.75 flex-1 rounded-full ${item.state === "done" ? "bg-foreground" : "bg-line-soft"}`} />}

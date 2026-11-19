@@ -7,6 +7,7 @@ import { formatDate, formatDateTime, formatPhone } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { firstName } from "../../domain/client-name";
 import type { DetailLink, DetailNote, LinkState, OrderDetail } from "../../domain/detail";
+import type { OrderStage } from "../../domain/types";
 import type { OrdersText } from "../orders-text";
 import { card } from "./order-detail-parts";
 
@@ -78,6 +79,7 @@ export function LinkPanel({
   clientName,
   link,
   state,
+  stage,
 }: {
   lang: Locale;
   t: OrdersText;
@@ -85,6 +87,7 @@ export function LinkPanel({
   clientName: string;
   link: DetailLink;
   state: LinkState;
+  stage: OrderStage;
 }) {
   const d = t.detail.side;
   const name = firstName(clientName);
@@ -94,12 +97,18 @@ export function LinkPanel({
     closed: "bg-line-soft text-muted",
   }[state.status];
   const dot = { active: "bg-success-dot", expired: "bg-danger-dot", closed: "bg-muted" }[state.status];
+  // Con un orçamento enviado el cliente ya no edita el inventario: el texto dice lo que puede hacer en el enlace.
+  // La caducidad solo bloquea editar el inventario, no ver ni aceptar el orçamento.
   const text =
-    state.status === "active"
-      ? `${pluralize(lang, state.daysLeft, d.daysLeft)} ${interpolate(d.canEdit, { name })}`
-      : state.status === "expired"
-        ? interpolate(d.expiredText, { name })
-        : d.closedText;
+    state.status === "closed"
+      ? interpolate(d.closedText, { name })
+      : stage === "lost"
+        ? interpolate(d.lostText, { name })
+        : stage === "quoted"
+          ? interpolate(d.quoteText, { name })
+          : state.status === "active"
+            ? `${pluralize(lang, state.daysLeft, d.daysLeft)} ${interpolate(d.canEdit, { name })}`
+            : interpolate(d.expiredText, { name });
 
   return (
     <section aria-labelledby="link" className={`${panel} gap-3.5`}>

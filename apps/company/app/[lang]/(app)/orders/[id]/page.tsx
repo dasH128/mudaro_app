@@ -99,6 +99,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
               clientName={order.client.name}
               link={order.link}
               state={linkState(order.link, order.stage, today)}
+              stage={order.stage}
             />
           ) : order.inventoryMode === "self" && order.stage === "quoted" ? (
             // Inventario de la empresa y orçamento enviado sin enlace: sin él, el cliente no puede verlo
