@@ -92,7 +92,9 @@ TypeScript puro, sin base de datos. Vive en `apps/company/features/quotes/domain
 - Lista Orçamentos (`/quotes`) conectada a Supabase: se retiran `mock-data.ts` y `CAN_SEE_MARGIN`.
 - Detalle del pedido: pestaña Orçamentos con las versiones y su estado, y el aviso "desactualizado" (decisión 2).
 
-### 5.5 · Orçamento en la web del cliente (`apps/client`)
+### 5.5 · Orçamento en la web del cliente (`apps/client`) · hecho el 19/11/2026
+
+Migración `20261119400000_signatures_bucket` (bucket privado, solo PNG de hasta 256 KB; lo escribe la Edge Function y lo lee el administrador de la empresa). Probado en el navegador con MD-0005: opcional elegido, firma, aceptación (196,80 €), pedido Ganho y trabajo programado. El rechazo está probado en la base (5.2), no aún en el navegador. `formatEuro` y `formatCompact` pasan a `@mudaro/validation`.
 
 - Edge Function `client-order`: acción `get` devuelve también el orçamento vigente (sin coste ni margen, RNF-03); acciones nuevas `accept` y `reject`. La firma se sube al bucket desde la función.
 - Página del enlace: si hay orçamento enviado, se muestra en lugar del inventario (o con una pestaña para ver el inventario anexo, RF-39).

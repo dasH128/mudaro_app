@@ -11,6 +11,8 @@ import { isLinkToken } from "@/features/order/domain/types";
 import { getClientOrder } from "@/features/order/infrastructure/client-order.repo";
 import { ClientInventoryEditor } from "@/features/order/presentation/components/client-inventory-editor";
 import { ClientBrand, OrderHeader, StatusCard } from "@/features/order/presentation/components/order-status";
+import { QuoteView } from "@/features/order/presentation/components/quote-view";
+import { firstName } from "@/features/order/domain/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -37,6 +39,21 @@ export default async function OrderLinkPage({ params }: PageProps<"/[lang]/p/[to
   }
 
   const company = { company: view.order.companyName };
+
+  // Con un orçamento enviado, el cliente ve el orçamento (RF-41) en lugar del inventario
+  if (view.quote) {
+    return (
+      <>
+        <ClientBrand />
+        <header className="flex flex-col gap-2 print:hidden">
+          <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight">
+            {interpolate(t.header.quoteTitle, { name: firstName(view.order.contactName) })}
+          </h1>
+        </header>
+        <QuoteView t={t} token={token} order={view.order} quote={view.quote} />
+      </>
+    );
+  }
 
   return (
     <>

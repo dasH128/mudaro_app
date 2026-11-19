@@ -230,6 +230,9 @@ importers:
       '@mudaro/inventory':
         specifier: workspace:*
         version: link:../../packages/inventory
+      '@mudaro/quotes':
+        specifier: workspace:*
+        version: link:../../packages/quotes
       '@mudaro/ui':
         specifier: workspace:*
         version: link:../../packages/ui

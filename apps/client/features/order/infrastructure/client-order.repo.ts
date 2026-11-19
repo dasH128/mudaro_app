@@ -11,7 +11,7 @@ import {
 } from "@mudaro/inventory";
 
 import type { Locale } from "@/app/i18n/config";
-import type { ClientError, ClientOrder, ClientOrderView, ClientResult } from "../domain/types";
+import type { ClientError, ClientOrder, ClientOrderView, ClientQuote, ClientResult } from "../domain/types";
 
 // Única puerta de entrada a los datos del cliente. La web del cliente no habla con la base de datos: llama a la Edge
 // Function `client-order`, que calcula el hash del token y solo trabaja con el pedido de ese enlace (RNF-02).
@@ -51,6 +51,26 @@ type GetResponse = {
     extras: { catalog_extra_id: string; note: string | null }[];
   } | null;
   submitted: { version: number; submittedAt: string } | null;
+  quote: {
+    id: string;
+    status: ClientQuote["status"];
+    expired: boolean;
+    validUntil: string | null;
+    documentHash: string;
+    snapshot: {
+      number: number;
+      version: number;
+      pricingMode: "fixed" | "hourly";
+      hourlyRateCents: number | null;
+      operatorCount: number | null;
+      estimatedHours: number | null;
+      vatPct: number;
+      conditions: string | null;
+      lines: ClientQuote["lines"];
+      inventory: { version: number; lines: { catalogItemId: string | null; description: string | null; room: string | null; quantity: number }[] };
+    };
+    acceptance: ClientQuote["acceptance"];
+  } | null;
   catalog: {
     rooms: { slug: string; name: string }[];
     items: { id: string; name: string; volumeM3: number; flags: DbFlag[]; rooms: string[] }[];
@@ -92,6 +112,12 @@ function errorOf(data: unknown): ClientError {
       return "noDraft";
     case "invalid_input":
       return "invalid";
+    case "quote_closed":
+      return "quoteClosed";
+    case "quote_expired":
+      return "quoteExpired";
+    case "document_changed":
+      return "documentChanged";
     default:
       return "failed";
   }
@@ -130,12 +156,13 @@ export async function getClientOrder(token: string, locale: Locale): Promise<Cli
     expiresAt: response.order.expiresAt,
   };
 
+  const quote = quoteOf(response);
   const draft = response.draft;
   if (!draft) {
     if (!response.submitted) return null;
-    return { kind: "submitted", order, version: response.submitted.version, submittedAt: response.submitted.submittedAt };
+    return { kind: "submitted", order, quote, version: response.submitted.version, submittedAt: response.submitted.submittedAt };
   }
-  if (response.order.expired) return { kind: "expired", order };
+  if (response.order.expired) return { kind: "expired", order, quote };
 
   // La Edge Function devuelve los huecos en orden de recorrido: origen, paradas y destino.
   let stop = 0;
@@ -168,6 +195,7 @@ export async function getClientOrder(token: string, locale: Locale): Promise<Cli
   return {
     kind: "draft",
     order,
+    quote,
     version: draft.version,
     points,
     draft: { quantities, access, extras },
@@ -175,6 +203,60 @@ export async function getClientOrder(token: string, locale: Locale): Promise<Cli
     catalog: response.catalog.items.map((item) => ({ ...item, flags: item.flags.map((flag) => FLAG_FROM_DB[flag]) })),
     extras: response.catalog.extras,
   };
+}
+
+/** El orçamento vigente, con los nombres del inventario anexo en el idioma de la interfaz (RF-39). */
+function quoteOf(response: GetResponse): ClientQuote | null {
+  const row = response.quote;
+  if (!row) return null;
+  const itemName = new Map(response.catalog.items.map((item) => [item.id, item.name]));
+  const roomName = new Map(response.catalog.rooms.map((room) => [room.slug, room.name]));
+  const snap = row.snapshot;
+  return {
+    id: row.id,
+    status: row.status,
+    expired: row.expired,
+    validUntil: row.validUntil,
+    documentHash: row.documentHash,
+    number: snap.number,
+    version: snap.version,
+    pricingMode: snap.pricingMode,
+    hourlyRateCents: snap.hourlyRateCents,
+    operatorCount: snap.operatorCount,
+    estimatedHours: snap.estimatedHours === null ? null : Number(snap.estimatedHours),
+    vatPct: Number(snap.vatPct),
+    conditions: snap.conditions,
+    lines: snap.lines.map((line) => ({ ...line, quantity: Number(line.quantity) })),
+    inventory: {
+      version: snap.inventory.version,
+      lines: snap.inventory.lines.map((line) => ({
+        name: (line.catalogItemId ? itemName.get(line.catalogItemId) : null) ?? line.description ?? "—",
+        room: (line.room ? roomName.get(line.room) : null) ?? "",
+        quantity: line.quantity,
+      })),
+    },
+    acceptance: row.acceptance,
+  };
+}
+
+/** RF-43: aceptar con nombre y firma. La Edge Function guarda la firma y la base comprueba validez y huella. */
+export async function acceptClientQuote(input: {
+  token: string;
+  quoteId: string;
+  documentHash: string;
+  selectedLineIds: readonly string[];
+  signerName: string;
+  signature: string;
+  ip: string | null;
+}): Promise<ClientResult> {
+  const { status, data } = await call({ action: "accept", ...input });
+  return status === 200 ? { ok: true } : { ok: false, error: errorOf(data) };
+}
+
+/** RF-44: rechazar con motivo opcional. */
+export async function rejectClientQuote(input: { token: string; quoteId: string; reason: string }): Promise<ClientResult> {
+  const { status, data } = await call({ action: "reject", ...input });
+  return status === 200 ? { ok: true } : { ok: false, error: errorOf(data) };
 }
 
 function payloadOf(changes: DraftChanges) {

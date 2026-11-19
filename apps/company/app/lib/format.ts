@@ -1,20 +1,14 @@
 import type { Locale } from "@/app/i18n/config";
 
 // Fecha, decimal y volumen se comparten con la web del cliente (apps/client): viven en @mudaro/validation.
-import { formatDate } from "@mudaro/validation";
+import { formatCompact, formatDate } from "@mudaro/validation";
 
-export { formatDate, formatDecimal, formatVolume } from "@mudaro/validation";
+export { formatCompact, formatDate, formatDecimal, formatEuro, formatVolume } from "@mudaro/validation";
 
 // RNF-10: euros, fechas y números de Portugal, sea cual sea el idioma de la interfaz.
 const NUMBER_LOCALE = "pt-PT";
 const TIME_ZONE = "Europe/Lisbon";
 
-const euro = new Intl.NumberFormat(NUMBER_LOCALE, {
-  style: "currency",
-  currency: "EUR",
-  // pt-PT no agrupa los miles de 4 cifras por defecto; el diseño muestra "1 123,48 €"
-  useGrouping: "always",
-});
 const euroWhole = new Intl.NumberFormat(NUMBER_LOCALE, {
   style: "currency",
   currency: "EUR",
@@ -24,8 +18,6 @@ const euroWhole = new Intl.NumberFormat(NUMBER_LOCALE, {
 const integer = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0 });
 // Enteros con separador de miles (también de 4 cifras): "6 000"
 const grouped = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0, useGrouping: "always" });
-// Hasta un decimal, sin ceros de relleno: 25 → "25", 12.5 → "12,5"
-const compact = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 1 });
 const amount = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const time = new Intl.DateTimeFormat(NUMBER_LOCALE, {
   hour: "2-digit",
@@ -35,11 +27,6 @@ const time = new Intl.DateTimeFormat(NUMBER_LOCALE, {
 });
 // "en-CA" da el formato aaaa-mm-dd, que se puede comparar como texto
 const day = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
-
-/** Importe en céntimos → "1 123,48 €". */
-export function formatEuro(cents: number): string {
-  return euro.format(cents / 100);
-}
 
 /** Importe en céntimos redondeado a euros enteros, para listas y resúmenes: 487000 → "4 870 €". */
 export function formatEuroWhole(cents: number): string {
@@ -51,14 +38,9 @@ export function formatInteger(value: number): string {
   return grouped.format(value);
 }
 
-/** Número con hasta un decimal y sin ceros de relleno: 25 → "25", 12.5 → "12,5". */
-export function formatCompact(value: number): string {
-  return compact.format(value);
-}
-
 /** Metros cúbicos sin decimales de relleno: 25 → "25 m³", 12.5 → "12,5 m³". */
 export function formatCubicMeters(m3: number): string {
-  return `${compact.format(m3)} m³`;
+  return `${formatCompact(m3)} m³`;
 }
 
 /** Importe en céntimos sin símbolo: 45 → "0,45". */

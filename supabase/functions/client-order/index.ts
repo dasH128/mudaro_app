@@ -49,6 +49,20 @@ const PAYLOAD = z.discriminatedUnion("action", [
   // Al enviar, los accesos de todas las direcciones son obligatorios (RF-23): la base tiene valores por defecto que
   // parecerían una respuesta, así que se exigen aquí y la base comprueba que vienen todas.
   z.object({ action: z.literal("submit"), token: TOKEN, lines: LINES.min(1), addresses: ADDRESSES.min(1), extras: EXTRAS }),
+  // RF-43: aceptar con nombre y firma dibujada (PNG en data URL). documentHash = la huella del orçamento que vio.
+  z.object({
+    action: z.literal("accept"),
+    token: TOKEN,
+    quoteId: UUID,
+    documentHash: z.string().regex(/^[0-9a-f]{64}$/),
+    selectedLineIds: z.array(UUID).max(50),
+    signerName: z.string().trim().min(1).max(200),
+    signature: z.string().startsWith("data:image/png;base64,").max(350_000),
+    // IP del navegador del cliente, que pasa la web del cliente (esta función la recibe desde su servidor)
+    ip: z.union([z.ipv4(), z.ipv6()]).nullable(),
+  }),
+  // RF-44: rechazar con motivo opcional
+  z.object({ action: z.literal("reject"), token: TOKEN, quoteId: UUID, reason: z.string().max(500) }),
 ]);
 
 function json(body: unknown, status: number): Response {
@@ -84,6 +98,14 @@ function errorOf(message: string | undefined): { code: string; status: number } 
       return { code: "empty", status: 422 };
     case "missing address":
       return { code: "access_incomplete", status: 422 };
+    case "quote not found":
+      return { code: "not_found", status: 404 };
+    case "quote not open":
+      return { code: "quote_closed", status: 409 };
+    case "quote expired":
+      return { code: "quote_expired", status: 410 };
+    case "document changed":
+      return { code: "document_changed", status: 409 };
     case "invalid payload":
     case "invalid line":
     case "duplicated line":
@@ -111,7 +133,9 @@ async function readOrder(supabase: Supabase, tokenHash: string, locale: Locale):
          inventory_addresses(address_id, address, floor, lift, narrow_stairs, parking_distance_m, needs_permit, notes),
          inventory_lines(catalog_item_id, room, quantity),
          inventory_extras(catalog_extra_id, note)
-       )`,
+       ),
+       shipments(quotes(id, version, status, valid_until, snapshot, document_hash, sent_at, rejected_at,
+         acceptances(accepted_at, signer_name, selected_line_ids, signed_subtotal_cents, signed_vat_cents, signed_total_cents)))`,
     )
     .eq("token_hash", tokenHash)
     .maybeSingle();
@@ -151,6 +175,37 @@ async function readOrder(supabase: Supabase, tokenHash: string, locale: Locale):
   const lastSubmitted = inventories.find((inventory) => inventory.submitted_at !== null) ?? null;
   const company = Array.isArray(order.company) ? order.company[0] : order.company;
 
+  // Orçamento vigente: la versión más alta que no es borrador. Se devuelve lo congelado al enviar (snapshot), que no
+  // lleva coste ni margen (RNF-03).
+  const quoteRow = order.shipments
+    .flatMap((shipment) => shipment.quotes)
+    .filter((quote) => quote.status !== "draft")
+    .sort((a, b) => b.version - a.version)[0];
+  const lisbonToday = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Lisbon" }).format(new Date());
+  const acceptance = quoteRow?.acceptances[0] ?? null;
+  const quote = quoteRow
+    ? {
+        id: quoteRow.id,
+        status: quoteRow.status,
+        expired: quoteRow.status === "sent" && quoteRow.valid_until !== null && quoteRow.valid_until < lisbonToday,
+        validUntil: quoteRow.valid_until,
+        sentAt: quoteRow.sent_at,
+        rejectedAt: quoteRow.rejected_at,
+        documentHash: quoteRow.document_hash,
+        snapshot: quoteRow.snapshot,
+        acceptance: acceptance
+          ? {
+              acceptedAt: acceptance.accepted_at,
+              signerName: acceptance.signer_name,
+              selectedLineIds: acceptance.selected_line_ids,
+              subtotalCents: acceptance.signed_subtotal_cents,
+              vatCents: acceptance.signed_vat_cents,
+              totalCents: acceptance.signed_total_cents,
+            }
+          : null,
+      }
+    : null;
+
   // Solo lo que el cliente necesita: nada de la empresa salvo su nombre, ni ids internos del envío.
   return json(
     {
@@ -172,6 +227,7 @@ async function readOrder(supabase: Supabase, tokenHash: string, locale: Locale):
           }
         : null,
       submitted: lastSubmitted ? { version: lastSubmitted.version, submittedAt: lastSubmitted.submitted_at } : null,
+      quote,
       catalog: {
         rooms: rooms.data.flatMap((row) => {
           const text = pick(row.translations, locale);
@@ -200,6 +256,66 @@ async function readOrder(supabase: Supabase, tokenHash: string, locale: Locale):
   );
 }
 
+type AcceptInput = Extract<z.infer<typeof PAYLOAD>, { action: "accept" }>;
+
+/** PNG válido: firma de 8 bytes al principio del fichero. */
+function isPng(bytes: Uint8Array): boolean {
+  const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  return bytes.length > 8 && signature.every((byte, index) => bytes[index] === byte);
+}
+
+/**
+ * RF-43: guarda la firma en el bucket privado `signatures` (<empresa>/<orçamento>.png, P6) y acepta con
+ * client_accept_quote, que comprueba enlace, estado, validez y huella. Si la base rechaza la aceptación, la firma se
+ * borra: no queda ninguna firma sin aceptación.
+ */
+async function acceptQuote(supabase: Supabase, tokenHash: string, input: AcceptInput): Promise<Response> {
+  let bytes: Uint8Array;
+  try {
+    bytes = Uint8Array.from(atob(input.signature.slice("data:image/png;base64,".length)), (char) => char.charCodeAt(0));
+  } catch {
+    return json({ code: "invalid_input" }, 400);
+  }
+  if (!isPng(bytes)) return json({ code: "invalid_input" }, 400);
+
+  // La empresa del orçamento, solo si es del pedido de este enlace (la ruta empieza por la empresa)
+  const { data: row, error: readError } = await supabase
+    .from("quotes")
+    .select("company_id, shipment:shipments!inner(order:orders!inner(token_hash))")
+    .eq("id", input.quoteId)
+    .eq("shipment.order.token_hash", tokenHash)
+    .maybeSingle();
+  if (readError) {
+    console.error("[client-order] accept read failed:", readError.code);
+    return json({ code: "internal_error" }, 500);
+  }
+  if (!row) return json({ code: "not_found" }, 404);
+
+  const path = `${row.company_id}/${input.quoteId}.png`;
+  const { error: uploadError } = await supabase.storage.from("signatures").upload(path, bytes, { contentType: "image/png", upsert: true });
+  if (uploadError) {
+    console.error("[client-order] signature upload failed:", uploadError.message);
+    return json({ code: "internal_error" }, 500);
+  }
+
+  const { data: jobId, error } = await supabase.rpc("client_accept_quote", {
+    p_token_hash: tokenHash,
+    p_quote_id: input.quoteId,
+    p_document_hash: input.documentHash,
+    p_selected_line_ids: input.selectedLineIds,
+    p_signer_name: input.signerName,
+    p_signature_path: path,
+    p_ip: input.ip,
+  });
+  if (error) {
+    await supabase.storage.from("signatures").remove([path]);
+    const mapped = errorOf(error.message);
+    if (mapped.status === 500) console.error("[client-order] accept failed:", error.code);
+    return json({ code: mapped.code }, mapped.status);
+  }
+  return json({ ok: true, jobId }, 200);
+}
+
 Deno.serve(async (request) => {
   if (request.method !== "POST") return json({ code: "method_not_allowed" }, 405);
 
@@ -211,6 +327,16 @@ Deno.serve(async (request) => {
   const tokenHash = await sha256Hex(input.token);
 
   if (input.action === "get") return readOrder(supabase, tokenHash, input.locale);
+  if (input.action === "accept") return acceptQuote(supabase, tokenHash, input);
+  if (input.action === "reject") {
+    const { error } = await supabase.rpc("client_reject_quote", { p_token_hash: tokenHash, p_quote_id: input.quoteId, p_reason: input.reason });
+    if (error) {
+      const mapped = errorOf(error.message);
+      if (mapped.status === 500) console.error("[client-order] reject failed:", error.code);
+      return json({ code: mapped.code }, mapped.status);
+    }
+    return json({ ok: true }, 200);
+  }
 
   const { error: saveError } = await supabase.rpc("client_save_inventory_draft", {
     p_token_hash: tokenHash,

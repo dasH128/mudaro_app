@@ -9,6 +9,7 @@ Prototipos en `docs/design/customer/<vista>` (hoy vacía). Lee su `README.md` an
 | Pantalla | Ruta | Estado |
 | --- | --- | --- |
 | Inicio sin enlace | `/[lang]` | Solo un aviso: "abra o link que recebeu" |
+| Orçamento del cliente | `/[lang]/p/[token]` (con orçamento enviado) | Paso 5.5, 19/11/2026 (RF-41 a RF-45). Lo congelado al enviar (sin coste ni margen), opcionales con el total al momento, inventario anexo (RF-39), "Imprimir ou guardar em PDF" (P4), aceptar con nombre y firma dibujada (bucket privado `signatures`) o rechazar con motivo. Estados: aceite, recusado, caducado y "a preparar um orçamento novo". Sin diseño propio |
 | Inventario del cliente | `/[lang]/p/[token]` | Adaptación del editor de `apps/company` (19/11/2026), sin diseño propio. Objetos, accesos y extras; guarda al cambiar de paso y "Enviar inventário" lo envía. Muestra también "enlace no válido", "plazo terminado" e "inventario enviado" |
 
 ## Cómo funciona
