@@ -2,7 +2,8 @@
   "metadata": {
     "title": "A sua mudança · Mudaro",
     "description": "Indique o que vai levar na sua mudança.",
-    "linkTitle": "Inventário da sua mudança"
+    "linkTitle": "Inventário da sua mudança",
+    "quoteTitle": "Orçamento da sua mudança"
   },
   "home": {
     "title": "Abra o link que recebeu",
@@ -147,7 +148,7 @@
   "quote": {
     "eyebrow": "Orçamento ORC-{number} · versão {version}",
     "validUntil": "Válido até {date}",
-    "intro": "A {company} preparou este orçamento com o inventário que enviou. Reveja as linhas, escolha os extras opcionais e aceite com a sua assinatura.",
+    "intro": "A {company} preparou este orçamento com base no inventário da sua mudança. Reveja as linhas, escolha os extras opcionais e aceite com a sua assinatura.",
     "description": "Descrição",
     "quantity": "Quantidade",
     "amount": "Valor",

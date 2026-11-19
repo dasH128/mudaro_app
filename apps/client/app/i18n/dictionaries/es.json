@@ -2,7 +2,8 @@
   "metadata": {
     "title": "Tu mudanza · Mudaro",
     "description": "Indica qué te vas a llevar en tu mudanza.",
-    "linkTitle": "Inventario de tu mudanza"
+    "linkTitle": "Inventario de tu mudanza",
+    "quoteTitle": "Presupuesto de tu mudanza"
   },
   "home": {
     "title": "Abre el enlace que recibiste",
@@ -147,7 +148,7 @@
   "quote": {
     "eyebrow": "Presupuesto ORC-{number} · versión {version}",
     "validUntil": "Válido hasta el {date}",
-    "intro": "{company} preparó este presupuesto con el inventario que enviaste. Revisa las líneas, elige los extras opcionales y acéptalo con tu firma.",
+    "intro": "{company} preparó este presupuesto a partir del inventario de tu mudanza. Revisa las líneas, elige los extras opcionales y acéptalo con tu firma.",
     "description": "Descripción",
     "quantity": "Cantidad",
     "amount": "Importe",

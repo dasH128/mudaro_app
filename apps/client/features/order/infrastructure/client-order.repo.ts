@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+
 import {
   EMPTY_ACCESS,
   lineKey,
@@ -143,7 +145,13 @@ function accessOf(row: DbAccess, version: number): AccessPoint {
 }
 
 /** El pedido del enlace, o `null` si el enlace no existe, se sustituyó o el pedido se canceló. */
-export async function getClientOrder(token: string, locale: Locale): Promise<ClientOrderView | null> {
+/**
+ * Lee el pedido del enlace. Con `cache`, el título de la pestaña (generateMetadata) y la página comparten una sola
+ * llamada a la Edge Function en cada petición.
+ */
+export const getClientOrder = cache(readClientOrder);
+
+async function readClientOrder(token: string, locale: Locale): Promise<ClientOrderView | null> {
   const { status, data } = await call({ action: "get", token, locale });
   if (status === 404 || status === 400) return null;
   if (status !== 200 || !data) throw new Error(`client-order: no se pudo leer el pedido (${status})`);

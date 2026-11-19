@@ -14,9 +14,13 @@ import { ClientBrand, OrderHeader, StatusCard } from "@/features/order/presentat
 import { QuoteView } from "@/features/order/presentation/components/quote-view";
 import { firstName } from "@/features/order/domain/types";
 
-export async function generateMetadata(): Promise<Metadata> {
+// Con un orçamento enviado, la página muestra el orçamento: la pestaña lo dice también
+export async function generateMetadata({ params }: PageProps<"/[lang]/p/[token]">): Promise<Metadata> {
+  const locale = await lang();
   const dict = await getDictionary();
-  return { title: dict.metadata.linkTitle };
+  const { token } = await params;
+  const view = hasLocale(locale) && isLinkToken(token) ? await getClientOrder(token, locale) : null;
+  return { title: view?.quote ? dict.metadata.quoteTitle : dict.metadata.linkTitle };
 }
 
 // Enlace del pedido (RF-15): el cliente rellena el inventario sin cuenta. Quién puede ver qué lo decide la Edge

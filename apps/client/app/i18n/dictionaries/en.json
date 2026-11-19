@@ -2,7 +2,8 @@
   "metadata": {
     "title": "Your move · Mudaro",
     "description": "Tell us what you are taking on your move.",
-    "linkTitle": "Your move inventory"
+    "linkTitle": "Your move inventory",
+    "quoteTitle": "Your move quote"
   },
   "home": {
     "title": "Open the link you received",
@@ -147,7 +148,7 @@
   "quote": {
     "eyebrow": "Quote ORC-{number} · version {version}",
     "validUntil": "Valid until {date}",
-    "intro": "{company} prepared this quote from the inventory you sent. Review the lines, choose the optional extras and accept with your signature.",
+    "intro": "{company} prepared this quote from your move inventory. Review the lines, choose the optional extras and accept with your signature.",
     "description": "Description",
     "quantity": "Quantity",
     "amount": "Amount",
