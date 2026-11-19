@@ -110,7 +110,9 @@ Probado en el navegador con MD-0005 (trabajo el 20/12/2026 a las 09:00).
 - La aceptación ya crea el trabajo (5.2). Aquí se muestra: Resumo del pedido con la tarjeta "Trabalho agendado" (fecha, hora y "Ver na agenda"); en la lista, la etapa "Ganhos" y "Ver trabalho", que lleva a ese Resumo (la ficha del trabajo es del paso 6).
 - Agenda: `schedule.repo.ts` lee los trabajos reales (número del pedido, cliente, origen y destino de la versión del inventario del orçamento, operários y volumen) y los orçamentos enviados, y los suma a los de ejemplo. La hora de fin es el inicio más las horas estimadas del orçamento. Sin vehículo ni equipa, se distinguen de los de ejemplo por salir "por atribuir": la vista de día tiene una fila "Por atribuir" para ellos (antes no se veían). Conectarla del todo es el paso 6.
 
-### 5.7 · Plan de pruebas
+### 5.7 · Plan de pruebas · hecho el 19/11/2026
+
+Ejecutado el 19/11/2026: secciones A a F en la base (todo OK) y G y H en Chrome. Quedan G1, H6 y H7 para una persona, y cinco fallos abiertos en el registro; el más importante es que un pedido con el inventario rellenado por la empresa no tiene cómo dar el enlace al cliente.
 
 `docs/test-plan-quotes-5.md`, con el formato del 4a y el 4b: base de datos (restricciones, RLS, privacidad de coste y margen, versiones, superseded, caducidad, aceptación por enlace) y pantallas de la empresa y del cliente.
 
