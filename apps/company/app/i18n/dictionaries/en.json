@@ -759,14 +759,7 @@
         },
         "rooms": {
           "label": "Rooms",
-          "add": "Add room",
-          "names": {
-            "living-room": "Living room",
-            "bedroom": "Bedroom",
-            "kitchen": "Kitchen",
-            "bathroom": "Bathroom",
-            "boxes": "Boxes"
-          }
+          "add": "Add room"
         },
         "catalog": {
           "searchLabel": "Search the catalog",
@@ -779,7 +772,8 @@
           "addOne": "Add {name}",
           "flags": {
             "fragile": "Fragile",
-            "dismantle": "Dismantle"
+            "dismantle": "Dismantle",
+            "extra-crew": "Extra crew"
           },
           "custom": {
             "title": "Not on the list?",
@@ -832,6 +826,25 @@
           "toAccess": "Continue to access",
           "toExtras": "Continue to extras",
           "finish": "Finish inventory"
+        },
+        "newVersion": "New version (v{version})",
+        "save": {
+          "saving": "Saving…",
+          "saved": "Saved"
+        },
+        "errors": {
+          "accessIncomplete": "Required access details are missing: floor, parking and elevator for each address.",
+          "empty": "Add at least one item before finishing.",
+          "notAllowed": "You can't change this order.",
+          "noDraft": "This inventory has already been sent. Reload the page.",
+          "invalid": "Some data is invalid. Check the fields and try again.",
+          "failed": "It couldn't be saved. Try again."
+        },
+        "submitted": {
+          "title": "Inventory v{version} sent on {when}",
+          "text": "A sent version doesn't change. If you need to change something, open a new version: it starts with everything in this one.",
+          "edit": "Edit inventory",
+          "back": "Back to order"
         }
       },
       "detail": {
@@ -917,7 +930,8 @@
           "photo": "Client photo",
           "emptyTitle": "No inventory yet",
           "emptyText": "Once the client sends the inventory through the link, or you fill it in, it shows up here.",
-          "fill": "Fill in inventory"
+          "fill": "Fill in inventory",
+          "noRoom": "No room"
         },
         "addresses": {
           "floor": "Floor",
@@ -966,6 +980,7 @@
           },
           "inventorySubmitted": "The client sent the inventory (v{version})",
           "inventoryMeta": "{when} · team notified",
+          "inventoryFilled": "The company filled in the inventory (v{version})",
           "proposalSent": "Proposal sent (v{version})",
           "won": "Proposal accepted",
           "lost": "Order lost",

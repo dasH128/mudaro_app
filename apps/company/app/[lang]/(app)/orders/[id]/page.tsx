@@ -50,7 +50,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
 
   // Los datos del pedido, la cuenta atrás de la mudança y la validez del enlace dependen de hoy: se piden en cada petición
   await connection();
-  const order = await getOrderDetail(id);
+  const order = await getOrderDetail(id, locale);
   if (!order) notFound();
   const today = todayLisbon();
   const t = (await getDictionary()).app.orders;

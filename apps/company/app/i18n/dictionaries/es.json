@@ -759,14 +759,7 @@
         },
         "rooms": {
           "label": "Estancias",
-          "add": "Añadir estancia",
-          "names": {
-            "living-room": "Salón",
-            "bedroom": "Dormitorio",
-            "kitchen": "Cocina",
-            "bathroom": "Baño",
-            "boxes": "Cajas"
-          }
+          "add": "Añadir estancia"
         },
         "catalog": {
           "searchLabel": "Buscar en el catálogo",
@@ -779,7 +772,8 @@
           "addOne": "Añadir {name}",
           "flags": {
             "fragile": "Frágil",
-            "dismantle": "Desmontar"
+            "dismantle": "Desmontar",
+            "extra-crew": "Personal extra"
           },
           "custom": {
             "title": "¿No está en la lista?",
@@ -832,6 +826,25 @@
           "toAccess": "Continuar a accesos",
           "toExtras": "Continuar a extras",
           "finish": "Concluir inventario"
+        },
+        "newVersion": "Nueva versión (v{version})",
+        "save": {
+          "saving": "Guardando…",
+          "saved": "Guardado"
+        },
+        "errors": {
+          "accessIncomplete": "Faltan accesos obligatorios: planta, aparcamiento y ascensor de cada dirección.",
+          "empty": "Añade al menos un objeto antes de concluir.",
+          "notAllowed": "No puedes cambiar este pedido.",
+          "noDraft": "Este inventario ya se envió. Recarga la página.",
+          "invalid": "Hay datos no válidos. Revisa los campos e inténtalo de nuevo.",
+          "failed": "No se pudo guardar. Inténtalo de nuevo."
+        },
+        "submitted": {
+          "title": "Inventario v{version} enviado el {when}",
+          "text": "Una versión enviada no se cambia. Si necesitas cambiar algo, abre una versión nueva: empieza con todo lo que tiene esta.",
+          "edit": "Editar inventario",
+          "back": "Volver al pedido"
         }
       },
       "detail": {
@@ -917,7 +930,8 @@
           "photo": "Foto del cliente",
           "emptyTitle": "Aún no hay inventario",
           "emptyText": "Cuando el cliente envíe el inventario por el enlace, o lo rellenes tú, aparecerá aquí.",
-          "fill": "Rellenar inventario"
+          "fill": "Rellenar inventario",
+          "noRoom": "Sin estancia"
         },
         "addresses": {
           "floor": "Planta",
@@ -966,6 +980,7 @@
           },
           "inventorySubmitted": "El cliente envió el inventario (v{version})",
           "inventoryMeta": "{when} · aviso enviado al equipo",
+          "inventoryFilled": "La empresa rellenó el inventario (v{version})",
           "proposalSent": "Propuesta enviada (v{version})",
           "won": "Propuesta aceptada",
           "lost": "Pedido perdido",

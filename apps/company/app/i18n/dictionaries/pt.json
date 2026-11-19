@@ -759,14 +759,7 @@
         },
         "rooms": {
           "label": "Divisões",
-          "add": "Adicionar divisão",
-          "names": {
-            "living-room": "Sala",
-            "bedroom": "Quarto",
-            "kitchen": "Cozinha",
-            "bathroom": "Casa de banho",
-            "boxes": "Caixas"
-          }
+          "add": "Adicionar divisão"
         },
         "catalog": {
           "searchLabel": "Procurar no catálogo",
@@ -779,7 +772,8 @@
           "addOne": "Adicionar {name}",
           "flags": {
             "fragile": "Frágil",
-            "dismantle": "Desmontar"
+            "dismantle": "Desmontar",
+            "extra-crew": "Pessoal extra"
           },
           "custom": {
             "title": "Não está na lista?",
@@ -832,6 +826,25 @@
           "toAccess": "Continuar para acessos",
           "toExtras": "Continuar para extras",
           "finish": "Concluir inventário"
+        },
+        "newVersion": "Nova versão (v{version})",
+        "save": {
+          "saving": "A guardar…",
+          "saved": "Guardado"
+        },
+        "errors": {
+          "accessIncomplete": "Faltam acessos obrigatórios: andar, estacionamento e elevador de cada morada.",
+          "empty": "Adiciona pelo menos um objeto antes de concluir.",
+          "notAllowed": "Não podes alterar este pedido.",
+          "noDraft": "Este inventário já foi enviado. Recarrega a página.",
+          "invalid": "Há dados inválidos. Revê os campos e tenta de novo.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        },
+        "submitted": {
+          "title": "Inventário v{version} enviado a {when}",
+          "text": "Uma versão enviada não se altera. Se precisares de mudar alguma coisa, abre uma versão nova: começa com tudo o que está nesta.",
+          "edit": "Editar inventário",
+          "back": "Voltar ao pedido"
         }
       },
       "detail": {
@@ -917,7 +930,8 @@
           "photo": "Foto do cliente",
           "emptyTitle": "Ainda não há inventário",
           "emptyText": "Quando o cliente enviar o inventário pelo link, ou o preencheres tu, aparece aqui.",
-          "fill": "Preencher inventário"
+          "fill": "Preencher inventário",
+          "noRoom": "Sem divisão"
         },
         "addresses": {
           "floor": "Andar",
@@ -966,6 +980,7 @@
           },
           "inventorySubmitted": "O cliente enviou o inventário (v{version})",
           "inventoryMeta": "{when} · notificação enviada à equipa",
+          "inventoryFilled": "A empresa preencheu o inventário (v{version})",
           "proposalSent": "Proposta enviada (v{version})",
           "won": "Proposta aceite",
           "lost": "Pedido perdido",

@@ -88,20 +88,21 @@ export function OrderInventoryTab({ lang, t, order }: Props) {
         </Link>
       </div>
 
-      {inventory.rooms.map(({ room, lines }) => {
+      {inventory.rooms.map(({ slug, name, lines }) => {
         const part = summarizeLines(lines);
         const summary =
           interpolate(d.roomSummary, { items: pluralize(lang, part.items, s.items), volume: formatVolume(part.volumeM3) }) +
           (part.missingMeasures > 0 ? interpolate(d.roomMissing, { count: part.missingMeasures }) : "");
         return (
-          <div key={room} className="overflow-hidden rounded-2xl border border-line-soft">
+          <div key={slug} className="overflow-hidden rounded-2xl border border-line-soft">
             <div className="flex items-center justify-between gap-2.5 bg-surface-head px-4 py-3">
-              <h3 className="font-bold">{t.inventory.rooms.names[room]}</h3>
+              <h3 className="font-bold">{name || d.noRoom}</h3>
               <span className="text-[13px] text-muted">{summary}</span>
             </div>
             <ul>
-              {lines.map((line) => (
-                <LineRow key={line.name} t={t} line={line} />
+              {lines.map((line, index) => (
+                // El mismo nombre puede repetirse (dos objetos libres iguales): la posición desempata
+                <LineRow key={`${line.name}-${index}`} t={t} line={line} />
               ))}
             </ul>
           </div>
