@@ -26,7 +26,7 @@ Fuentes: `docs/plan-modelo-bd.md` ("Inventario por capas y enlace"), `docs/diagr
 | --- | --- | --- | --- | --- |
 | A1 | Generar el enlace (RF-15, RNF-02) | `share_order_link()` devuelve un token de 64 caracteres; `orders.token_hash` es su SHA-256 en hexadecimal; caduca a 7 días si el pedido no tenía validez; el envío pasa a `awaiting_inventory`; hay un evento `link_shared` | Claude | OK (18/11/2026) |
 | A2 | Reenviar el enlace | El token nuevo es distinto; el hash del token anterior ya no coincide con el guardado; hay un evento `link_resent` | Claude | OK (18/11/2026) |
-| A3 | Días de validez en el evento | El evento `link_shared` lleva `linkValidityDays` (lo lee el historial de la app) | Claude | Pendiente: requiere aplicar `20261118200300` |
+| A3 | Días de validez en el evento | El evento `link_shared` lleva `linkValidityDays` (lo lee el historial de la app) | Claude | OK (18/11/2026) |
 
 ## B. Borrador e inventario
 
@@ -60,6 +60,35 @@ Fuentes: `docs/plan-modelo-bd.md` ("Inventario por capas y enlace"), `docs/diagr
 | D5 | Permisos | Las 8 funciones públicas son `security definer` con `search_path` vacío; `authenticated` las ejecuta y `anon` no | Claude | OK (18/11/2026) |
 | D6 | Sin restos | Tras las pruebas, 0 líneas, 0 correcciones y 0 pedidos de prueba en la base de datos | Claude | OK (18/11/2026) |
 
+## E. Guardar el borrador de una vez (`save_inventory_draft`, migración `20261118300100`)
+
+| ID | Prueba | Criterio de aceptación | Quién | Estado |
+| --- | --- | --- | --- | --- |
+| E1 | Guardado completo | Objetos, accesos (piso, ascensor, escaleras, estacionamiento, notas) y extras quedan guardados | Claude | OK (18/11/2026) |
+| E2 | Segundo guardado | Quita la línea que no viene, actualiza la que cambia sin crear otra fila (mismo id) y añade la nueva | Claude | OK (18/11/2026) |
+| E3 | Secciones nulas | Con accesos y extras nulos, no cambian | Claude | OK (18/11/2026) |
+| E4 | Extras vacíos | `[]` desmarca todos los extras | Claude | OK (18/11/2026) |
+| E5 | Datos inválidos | Línea repetida, cantidad 0, objeto inexistente, dirección ajena y JSON que no es lista se rechazan, y el borrador queda como estaba | Claude | OK (18/11/2026) |
+| E6 | Otra empresa | `not allowed` | Claude | OK (18/11/2026) |
+| E7 | Versión nueva | Tras `open_inventory_draft()`, guardar conserva `previous_line_id`; al enviar, `base_changed` es true solo en la línea cambiada | Claude | OK (18/11/2026) |
+
+## F. Pantalla Inventário (`apps/company`)
+
+Con sesión de administrador y un pedido nuevo creado eligiendo "Eu, agora ou numa visita" (la empresa rellena el inventario). Datos de prueba, nunca reales.
+
+| ID | Prueba | Criterio de aceptación | Quién | Estado |
+| --- | --- | --- | --- | --- |
+| F1 | Catálogo real | Salen 6 divisiones (Sala, Quarto, Cozinha, Casa de banho, Escritório, Caixas) y sus objetos con nombre en el idioma de la interfaz | Persona | Pendiente |
+| F2 | Guardar al cambiar de paso | Añadir objetos y pulsar "Continuar para acessos": el pie dice "Guardado". Recargar la página: las cantidades siguen ahí | Persona | Pendiente |
+| F3 | Mismo objeto en dos divisiones | Añadir 2 cadeiras en Sala y 4 en Cozinha: cada división cuenta las suyas y al recargar se mantienen por separado | Persona | Pendiente |
+| F4 | Accesos | Rellenar los accesos de todos los puntos, ir a Extras y recargar: los accesos siguen ahí | Persona | Pendiente |
+| F5 | Accesos incompletos | Dejar el ascensor sin elegir en un punto y pulsar "Concluir inventário": vuelve a Acessos con el aviso de accesos obligatorios y el pedido no cambia de estado | Persona | Pendiente |
+| F6 | Guardar e sair | Cambiar una cantidad y pulsar "Guardar e sair": vuelve al detalle; al volver a Inventário el cambio está | Persona | Pendiente |
+| F7 | Concluir | Con objetos y accesos completos, "Concluir inventário" lleva al detalle; el pedido está en "Inventário recebido", la pestaña Inventário muestra v1 con sus divisiones, objetos y volumen, y el historial tiene "Inventário enviado" | Persona | Pendiente |
+| F8 | Lista de pedidos | La fila del pedido en "Inventário recebido" muestra el número de objetos y el volumen reales | Persona | Pendiente |
+| F9 | Editar una versión enviada | Abrir Inventário del pedido enviado: sale "Inventário v1 enviado…" con "Editar inventário". Pulsarlo abre el editor con "Nova versão (v2)" y todo lo de la v1. Concluir: el detalle muestra v2 | Persona | Pendiente |
+| F10 | Extras | Marcar un extra con nota, concluir: Resumo del detalle lo lista | Persona | Pendiente |
+
 ## Criterio de salida del paso 4b (base de datos)
 
 1. Todos los casos están en `OK`.
@@ -76,4 +105,4 @@ Fuentes: `docs/plan-modelo-bd.md` ("Inventario por capas y enlace"), `docs/diagr
 | Caso | Fecha | Qué se vio | Qué se esperaba | Estado |
 | --- | --- | --- | --- | --- |
 | C4 | 18/11/2026 | En revisión, antes de aplicar: las correcciones se copiaban al abrir el borrador, así que una corrección hecha después se perdía en la versión nueva | La corrección pasa a la versión nueva | Corregido antes de aplicar (se copian al enviar). Probado en C4 |
-| A3 | 18/11/2026 | En revisión: el evento del enlace guardaba `expiresAt` y la app lee `linkValidityDays`; el historial habría mostrado 0 días | El evento lleva los días de validez | Corregido en `20261118200300`, pendiente de aplicar |
+| A3 | 18/11/2026 | En revisión: el evento del enlace guardaba `expiresAt` y la app lee `linkValidityDays`; el historial habría mostrado 0 días | El evento lleva los días de validez | Corregido en `20261118200300`, aplicada el 18/11/2026. Probado en A3 |

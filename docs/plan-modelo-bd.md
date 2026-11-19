@@ -14,8 +14,8 @@ Cada paso es una o más migraciones nuevas en `supabase/migrations/`. Nunca se e
 | 2 | Configuración | `vehicles`, `vehicle_costs` | `20261101200000_vehicles` | RF-05 | Parcial |
 | 2 | Configuración (pendiente) | `tariffs`, `company_items` | | RF-06, RF-09 | Pendiente |
 | 2 y 4b | Servicios extra | `catalog_extras`, `catalog_extra_translations`, `company_extras`, `inventory_extras` | `20261118100000_extras` | RF-07, RF-24 | Creado (aplicada a mano y registrada en el historial el 18/11/2026). La app solo lee los tipos |
-| 3 | Catálogo global | `catalog_*` (7 tablas) | `20261103100000_catalog` | RF-10, RF-11, RF-12 | Creado |
-| 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_addresses`, `inventory_lines`, `inventory_line_adjustments` | 4a: `20261109100000` a `20261109100200`. 4b: `20261118200000` a `20261118200300` | RF-13 a RF-27, RF-37, RF-69, RNF-02 | 4a creado y validado (`docs/test-plan-orders-4a.md`). 4b creado y probado en base de datos (`docs/test-plan-inventory-4b.md`); falta conectarlo en `apps/company` y la Edge Function que valida el enlace (B9) |
+| 3 | Catálogo global | `catalog_*` (7 tablas) | `20261103100000_catalog` y `20261118300000_catalog_pilot_items` (datos del piloto) | RF-10, RF-11, RF-12 | Creado. 27 objetos en 6 divisiones, valores provisionales |
+| 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_addresses`, `inventory_lines`, `inventory_line_adjustments` | 4a: `20261109100000` a `20261109100200`. 4b: `20261118200000` a `20261118200300` y `20261118300100_save_inventory_draft` | RF-13 a RF-27, RF-37, RF-69, RNF-02 | 4a creado y validado (`docs/test-plan-orders-4a.md`). 4b creado y probado en base de datos (`docs/test-plan-inventory-4b.md`). Pantalla Inventário de `apps/company` conectada el 18/11/2026; faltan el botón del enlace y la Edge Function que lo valida (B9) |
 | 5 | Presupuestos | `quotes`, `quote_lines`, `acceptances` | | RF-30 a RF-46 | Pendiente |
 | 6 | Ejecución | `jobs`, `assignments`, `incidents`, `evidence`, `handover_records` | | RF-47 a RF-62 | Pendiente |
 
@@ -87,6 +87,7 @@ Las fichas de cliente no son un bloque aparte: pertenecen a cada empresa y se cr
 - `submit_inventory()` exige al menos una línea y una dirección en cada hueco. Los accesos tienen valores por defecto, así que su obligatoriedad (RF-23) la valida la app. Una línea borrada entre versiones no deja marca: se ve comparando versiones.
 - Enlace (B7: 7 días por defecto): `share_order_link()` genera 32 bytes aleatorios, devuelve el token una sola vez y guarda su hash SHA-256 en hexadecimal. Reenviar genera otro token y el anterior deja de valer. Pasa el envío de `new` a `awaiting_inventory` y registra `link_shared` o `link_resent` con `linkValidityDays`, nunca el token. La Edge Function que valide el enlace (cuando se decida B9) tiene que calcular el hash igual.
 - Escriben solo el administrador de la empresa dueña del pedido (`lock_owned_order()`, interna, que también rechaza pedidos cancelados y bloquea la fila), salvo `set_line_adjustment()`, que vale para cualquier empresa con envío en el pedido.
+- `save_inventory_draft()` (18/11/2026) guarda de una vez, en una transacción, los objetos del catálogo, los accesos y los extras del borrador. Cada sección es opcional (nula = no se toca). Las líneas se reconocen por (objeto, división): las que ya existen se actualizan y conservan `previous_line_id`, así `base_changed` sigue funcionando. Los objetos libres no se tocan.
 - Fuera del 4b: el bucket de Storage para las fotos, las escrituras del cliente desde su enlace (B9) y pasar a `superseded` los presupuestos al enviar una versión nueva (paso 5).
 
 **Versiones y cambios tras aceptar (pasos 4 y 5)**
