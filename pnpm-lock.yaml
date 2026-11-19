@@ -285,6 +285,9 @@ importers:
       '@mudaro/inventory':
         specifier: workspace:*
         version: link:../../packages/inventory
+      '@mudaro/quotes':
+        specifier: workspace:*
+        version: link:../../packages/quotes
       '@mudaro/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase

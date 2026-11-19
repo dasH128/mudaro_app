@@ -19,7 +19,8 @@
     "homeTitle": "Operações de hoje · Mudaro",
     "scheduleTitle": "Agenda · Mudaro",
     "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro",
-    "pricingTitle": "Tarifas · Mudaro"
+    "pricingTitle": "Tarifas · Mudaro",
+    "quoteEditorTitle": "Orçamento · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -279,6 +280,123 @@
         "expiredOn": "Em {date}",
         "superseded": "Substituído",
         "supersededNote": "Substituído por uma versão mais recente"
+      },
+      "editor": {
+        "title": "Orçamento para {name}",
+        "numbered": "ORC-{number} · versão {version}",
+        "numberPending": "Novo orçamento · versão {version}",
+        "basedOn": "Calculado sobre o inventário v{version}",
+        "lastStatus": "A versão {version} está {status}. Ao enviar esta, a anterior deixa de valer.",
+        "statuses": {
+          "sent": "enviada",
+          "accepted": "aceite",
+          "rejected": "recusada",
+          "superseded": "desatualizada"
+        },
+        "noInventory": {
+          "title": "Ainda não há inventário",
+          "text": "O orçamento calcula-se sobre o inventário enviado. Quando chegar, volta aqui."
+        },
+        "won": {
+          "title": "Orçamento aceite",
+          "text": "O cliente já aceitou um orçamento deste pedido."
+        },
+        "back": "Voltar ao pedido",
+        "calc": {
+          "title": "Cálculo",
+          "text": "Sugestão a partir do inventário, da tarifa e da frota. Podes mudar qualquer valor.",
+          "volume": "Volume ajustado",
+          "declared": "{value} declarados",
+          "vehicles": "Veículos",
+          "trips": {
+            "one": "{count} viagem",
+            "other": "{count} viagens"
+          },
+          "noVehicles": "Sem veículos ativos",
+          "km": "Quilómetros",
+          "kmHint": "Da base à base, a passar por todas as moradas.",
+          "operators": "Operários",
+          "hours": "Horas da equipa",
+          "suggested": "Sugerido: {value}",
+          "reset": "Repor valores sugeridos"
+        },
+        "alerts": {
+          "title": "Pede atenção",
+          "no-lift": "{floors} andares sem elevador",
+          "far-parking": "Estacionamento a {meters} m",
+          "special-items": "Objetos especiais: {fragile} frágeis, {dismantle} a desmontar, {extraCrew} de pessoal extra",
+          "unmeasured": "{count} objetos sem medidas",
+          "extra-trips": "Não cabe numa viagem: {trips} viagens",
+          "no-vehicles": "Sem veículos ativos na frota",
+          "no-km": "Falta indicar os quilómetros",
+          "minimum-applied": "Aplica-se o mínimo por serviço ({amount})",
+          "missing-vehicle-cost": "Um veículo sem custo por km: o custo sai mais baixo"
+        },
+        "lines": {
+          "title": "Linhas do orçamento",
+          "description": "Descrição",
+          "quantity": "Qtd.",
+          "unit": "Un.",
+          "price": "Preço",
+          "total": "Total",
+          "included": "Incluído",
+          "optional": "Opcional",
+          "optionalHint": "Os opcionais, o cliente escolhe se os quer ao aceitar.",
+          "remove": "Retirar {name}",
+          "addExtra": "Adicionar serviço",
+          "addExtraPlaceholder": "Escolher serviço…",
+          "addManual": "Adicionar linha",
+          "newLine": "Nova linha",
+          "noExtras": "Ainda não tens serviços extra. Cria-os em Tarifas.",
+          "clientAsked": "O cliente pediu: {list}",
+          "edited": "alterada à mão"
+        },
+        "base": {
+          "labour": "Mão de obra",
+          "transport": "Transporte",
+          "floor-surcharge": "Suplemento por andar sem elevador",
+          "parking-surcharge": "Suplemento de estacionamento",
+          "minimum": "Ajuste ao mínimo por serviço"
+        },
+        "presentation": {
+          "title": "Apresentação",
+          "legend": "Preço para o cliente",
+          "fixed": "Preço fechado",
+          "hourly": "Por hora, com estimativa",
+          "validUntil": "Válido até",
+          "validHint": "dd/mm/aaaa",
+          "conditions": "Condições",
+          "conditionsPlaceholder": "Ex.: inclui seguro de carga. Pagamento no dia da mudança."
+        },
+        "summary": {
+          "title": "Resumo",
+          "subtotal": "Subtotal",
+          "vat": "IVA ({pct})",
+          "total": "Total",
+          "withOptional": "Com todos os opcionais: {amount}",
+          "hourlyRate": "{amount} por hora (equipa de {count})",
+          "cost": "Custo estimado",
+          "margin": "Margem",
+          "adminOnly": "Só os administradores veem o custo e a margem."
+        },
+        "save": "Guardar rascunho",
+        "saving": "A guardar…",
+        "saved": "Rascunho guardado.",
+        "send": "Enviar orçamento",
+        "sending": "A enviar…",
+        "sendNote": "Depois de enviado, o orçamento não se altera: para mudar, crias uma versão nova.",
+        "errors": {
+          "invalid": "Há dados inválidos. Revê as linhas e os valores.",
+          "noInventory": "O pedido ainda não tem inventário.",
+          "shipmentClosed": "Este pedido já foi ganho ou cancelado.",
+          "inventoryChanged": "O cliente enviou um inventário novo. Recarrega a página para recalcular.",
+          "empty": "Adiciona pelo menos uma linha.",
+          "invalidValidity": "Indica uma validade a partir de hoje (dd/mm/aaaa).",
+          "notAllowed": "Não podes alterar este pedido.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        },
+        "sendConfirm": "Sim, enviar ao cliente",
+        "cancel": "Cancelar"
       }
     },
     "orders": {

@@ -26,7 +26,7 @@ export function actionHref(lang: Locale, action: OrderAction, id: string): strin
   switch (action) {
     case "create-quote":
     case "continue-quote":
-      return `${localePath(lang, ROUTES.quotes.new)}?${new URLSearchParams({ order: id })}`;
+      return localePath(lang, ROUTES.orders.quote(id));
     case "share-link":
     case "resend-link":
     case "copy-link":

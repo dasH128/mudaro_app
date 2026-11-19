@@ -93,16 +93,27 @@ export type CalcBaseLine = {
   totalCents: number;
 };
 
+/** Valores que la empresa cambia a mano en el editor (RF-37). Sin ellos se usa lo sugerido. */
+export type CalcOverrides = {
+  operators?: number;
+  /** Horas del equipo. */
+  totalHours?: number;
+};
+
 export type CalcResult = {
   declaredVolumeM3: number;
   adjustedVolumeM3: number;
   vehicles: readonly CalcVehicle[];
   trips: number;
+  /** Operários sugeridos por la tarifa (RF-32), aunque la empresa los cambie. */
+  suggestedOperators: number;
   operators: number;
   /** Minutos de una persona para cargar y descargar, ya con el acceso. */
   handlingPersonMinutes: number;
   travelHours: number;
-  /** Horas del equipo, redondeadas a la media hora. */
+  /** Horas sugeridas, redondeadas a la media hora (RF-33, RF-34). */
+  suggestedHours: number;
+  /** Horas del equipo con las que se calcula: las sugeridas o las que puso la empresa. */
   totalHours: number;
   kmTotal: number;
   /** Precio por hora del equipo (operários × precio por hora), para presentar el orçamento por hora. */
@@ -169,7 +180,7 @@ export function chooseVehicles(vehicles: readonly CalcVehicle[], volumeM3: numbe
 }
 
 /** Calcula el orçamento sugerido a partir del inventario, los accesos, la tarifa, la frota y los km. */
-export function calculateQuote(input: CalcInput): CalcResult {
+export function calculateQuote(input: CalcInput, overrides: CalcOverrides = {}): CalcResult {
   const { tariff } = input;
   const alerts: CalcAlert[] = [];
 
@@ -188,7 +199,8 @@ export function calculateQuote(input: CalcInput): CalcResult {
   if (fleet.vehicles.length === 0) alerts.push({ kind: "no-vehicles" });
   if (fleet.trips > 1) alerts.push({ kind: "extra-trips", trips: fleet.trips });
   const trips = Math.max(fleet.trips, 1);
-  const operators = suggestCrew(tariff, adjustedVolumeM3, special.extraCrew > 0);
+  const suggestedOperators = suggestCrew(tariff, adjustedVolumeM3, special.extraCrew > 0);
+  const operators = overrides.operators && overrides.operators > 0 ? Math.round(overrides.operators) : suggestedOperators;
 
   // Manipulación con acceso (RF-33)
   const baseMinutes = input.lines.reduce((sum, line) => sum + line.quantity * (line.unitMinutes ?? 0), 0);
@@ -209,7 +221,14 @@ export function calculateQuote(input: CalcInput): CalcResult {
   const kmTotal = round2((input.km ?? 0) * trips);
   const travelHours = tariff.averageSpeedKmh > 0 ? round2(kmTotal / tariff.averageSpeedKmh) : 0;
 
-  const totalHours = ceilHalf(handlingPersonMinutes / 60 / operators + travelHours);
+  // Lo sugerido usa los operários sugeridos: cambiar el equipo a mano no cambia la sugerencia, solo el cálculo.
+  const suggestedHours = ceilHalf(handlingPersonMinutes / 60 / suggestedOperators + travelHours);
+  const totalHours =
+    overrides.totalHours && overrides.totalHours > 0
+      ? round2(overrides.totalHours)
+      : overrides.operators
+        ? ceilHalf(handlingPersonMinutes / 60 / operators + travelHours)
+        : suggestedHours;
   const operatorHours = round2(operators * totalHours);
 
   // Precio (RF-35)
@@ -245,9 +264,11 @@ export function calculateQuote(input: CalcInput): CalcResult {
     adjustedVolumeM3,
     vehicles: fleet.vehicles,
     trips,
+    suggestedOperators,
     operators,
     handlingPersonMinutes,
     travelHours,
+    suggestedHours,
     totalHours,
     kmTotal,
     hourlyRateCents: operators * tariff.operatorHourPriceCents,

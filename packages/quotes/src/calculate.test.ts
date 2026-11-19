@@ -165,6 +165,38 @@ describe("calculateQuote", () => {
   });
 });
 
+describe("calculateQuote con valores a mano (RF-37)", () => {
+  const input: CalcInput = {
+    lines: [{ quantity: 1, unitVolumeM3: 1.5, unitMinutes: 30, flags: [] }, { quantity: 3, unitVolumeM3: 0.1, unitMinutes: 5, flags: [] }],
+    points: [
+      { role: "origin", floor: 3, lift: "none", parkingMeters: 20 },
+      { role: "destination", floor: 1, lift: "small", parkingMeters: 60 },
+    ],
+    tariff: TARIFF,
+    vehicles: [vehicle("carrinha", 8, 30)],
+    km: 30,
+  };
+
+  it("con más operários, recalcula las horas y conserva la sugerencia", () => {
+    const result = calculateQuote(input, { operators: 3 });
+    expect(result.suggestedOperators).toBe(2);
+    expect(result.operators).toBe(3);
+    // 110,25 / 60 / 3 + 0,6 = 1,21 h → 1,5 h; la sugerencia sigue en 2 h
+    expect(result.totalHours).toBe(1.5);
+    expect(result.suggestedHours).toBe(2);
+    expect(result.lines[0]).toMatchObject({ code: "labour", quantity: 4.5, totalCents: 8100 });
+  });
+
+  it("con horas a mano, usa esas horas en precio y coste", () => {
+    const result = calculateQuote(input, { totalHours: 5 });
+    expect(result.totalHours).toBe(5);
+    expect(result.lines[0]).toMatchObject({ code: "labour", quantity: 10, totalCents: 18000 });
+    // 10 h × 9 € + 30 km × 0,30 €
+    expect(result.costCents).toBe(9900);
+    expect(result.alerts.map((a) => a.kind)).not.toContain("minimum-applied");
+  });
+});
+
 describe("totalsOf", () => {
   it("suma las incluidas y las opcionales elegidas, con IVA redondeado", () => {
     const lines = [

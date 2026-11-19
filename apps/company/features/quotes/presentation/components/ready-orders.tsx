@@ -49,7 +49,7 @@ export function ReadyOrders({ lang, t, orders }: Props) {
                 </span>
               </div>
               <Link
-                href={`${localePath(lang, ROUTES.quotes.new)}?${new URLSearchParams({ order: order.id })}`}
+                href={localePath(lang, ROUTES.orders.quote(order.id))}
                 className="whitespace-nowrap text-[13px] font-bold text-foreground underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {ready.create}

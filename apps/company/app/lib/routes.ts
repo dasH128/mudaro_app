@@ -21,6 +21,7 @@ export const ROUTES = {
     detail: (id: string) => `/orders/${encodeURIComponent(id)}`,
     created: (id: string) => `/orders/${encodeURIComponent(id)}/created`,
     inventory: (id: string) => `/orders/${encodeURIComponent(id)}/inventory`,
+    quote: (id: string) => `/orders/${encodeURIComponent(id)}/quote`,
   },
   quotes: {
     list: "/quotes",

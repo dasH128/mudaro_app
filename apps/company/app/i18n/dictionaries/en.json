@@ -19,7 +19,8 @@
     "homeTitle": "Today's operations · Mudaro",
     "scheduleTitle": "Schedule · Mudaro",
     "forgotPasswordTitle": "Reset password · Mudaro",
-    "pricingTitle": "Pricing · Mudaro"
+    "pricingTitle": "Pricing · Mudaro",
+    "quoteEditorTitle": "Quote · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -279,6 +280,123 @@
         "expiredOn": "On {date}",
         "superseded": "Superseded",
         "supersededNote": "Replaced by a newer version"
+      },
+      "editor": {
+        "title": "Quote for {name}",
+        "numbered": "ORC-{number} · version {version}",
+        "numberPending": "New quote · version {version}",
+        "basedOn": "Calculated from inventory v{version}",
+        "lastStatus": "Version {version} is {status}. Sending this one replaces it.",
+        "statuses": {
+          "sent": "sent",
+          "accepted": "accepted",
+          "rejected": "declined",
+          "superseded": "out of date"
+        },
+        "noInventory": {
+          "title": "No inventory yet",
+          "text": "The quote is calculated from the submitted inventory. Come back when it arrives."
+        },
+        "won": {
+          "title": "Quote accepted",
+          "text": "The customer has already accepted a quote for this request."
+        },
+        "back": "Back to the request",
+        "calc": {
+          "title": "Calculation",
+          "text": "Suggested from the inventory, pricing and fleet. You can change any value.",
+          "volume": "Adjusted volume",
+          "declared": "{value} declared",
+          "vehicles": "Vehicles",
+          "trips": {
+            "one": "{count} trip",
+            "other": "{count} trips"
+          },
+          "noVehicles": "No active vehicles",
+          "km": "Kilometres",
+          "kmHint": "From the base and back, through every address.",
+          "operators": "Crew",
+          "hours": "Team hours",
+          "suggested": "Suggested: {value}",
+          "reset": "Back to suggested values"
+        },
+        "alerts": {
+          "title": "Needs attention",
+          "no-lift": "{floors} floors without a lift",
+          "far-parking": "Parking {meters} m away",
+          "special-items": "Special items: {fragile} fragile, {dismantle} to dismantle, {extraCrew} needing extra crew",
+          "unmeasured": "{count} items without measurements",
+          "extra-trips": "Does not fit in one trip: {trips} trips",
+          "no-vehicles": "No active vehicles in the fleet",
+          "no-km": "Kilometres missing",
+          "minimum-applied": "The minimum per job applies ({amount})",
+          "missing-vehicle-cost": "A vehicle has no cost per km: the cost comes out low"
+        },
+        "lines": {
+          "title": "Quote lines",
+          "description": "Description",
+          "quantity": "Qty",
+          "unit": "Unit",
+          "price": "Price",
+          "total": "Total",
+          "included": "Included",
+          "optional": "Optional",
+          "optionalHint": "The customer decides on optional lines when accepting.",
+          "remove": "Remove {name}",
+          "addExtra": "Add service",
+          "addExtraPlaceholder": "Choose a service…",
+          "addManual": "Add line",
+          "newLine": "New line",
+          "noExtras": "You have no extra services yet. Create them in Pricing.",
+          "clientAsked": "The customer asked for: {list}",
+          "edited": "edited by hand"
+        },
+        "base": {
+          "labour": "Labour",
+          "transport": "Transport",
+          "floor-surcharge": "Surcharge per floor without lift",
+          "parking-surcharge": "Parking surcharge",
+          "minimum": "Adjustment to the minimum per job"
+        },
+        "presentation": {
+          "title": "Presentation",
+          "legend": "Price shown to the customer",
+          "fixed": "Fixed price",
+          "hourly": "Hourly, with an estimate",
+          "validUntil": "Valid until",
+          "validHint": "dd/mm/yyyy",
+          "conditions": "Conditions",
+          "conditionsPlaceholder": "E.g. includes cargo insurance. Payment on moving day."
+        },
+        "summary": {
+          "title": "Summary",
+          "subtotal": "Subtotal",
+          "vat": "VAT ({pct})",
+          "total": "Total",
+          "withOptional": "With every optional line: {amount}",
+          "hourlyRate": "{amount} per hour (crew of {count})",
+          "cost": "Estimated cost",
+          "margin": "Margin",
+          "adminOnly": "Only administrators see the cost and margin."
+        },
+        "save": "Save draft",
+        "saving": "Saving…",
+        "saved": "Draft saved.",
+        "send": "Send quote",
+        "sending": "Sending…",
+        "sendNote": "Once sent, the quote does not change: to change it, you create a new version.",
+        "errors": {
+          "invalid": "Some data is invalid. Check the lines and values.",
+          "noInventory": "The request has no inventory yet.",
+          "shipmentClosed": "This request is already won or cancelled.",
+          "inventoryChanged": "The customer sent a new inventory. Reload the page to recalculate.",
+          "empty": "Add at least one line.",
+          "invalidValidity": "Enter a validity from today (dd/mm/yyyy).",
+          "notAllowed": "You cannot change this request.",
+          "failed": "Could not save. Please try again."
+        },
+        "sendConfirm": "Yes, send to the customer",
+        "cancel": "Cancel"
       }
     },
     "orders": {
