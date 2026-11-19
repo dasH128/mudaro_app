@@ -85,7 +85,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
           {tab === "summary" ? <OrderSummaryTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "inventory" ? <OrderInventoryTab lang={locale} t={t} order={order} /> : null}
           {tab === "addresses" ? <OrderAddressesTab t={t} addresses={routeOf(order)} /> : null}
-          {tab === "quotes" ? <OrderQuotesTab lang={locale} t={t} order={order} /> : null}
+          {tab === "quotes" ? <OrderQuotesTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "history" ? <OrderHistoryTab lang={locale} t={t} events={order.events} /> : null}
         </div>
 

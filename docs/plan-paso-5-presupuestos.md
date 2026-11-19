@@ -85,7 +85,7 @@ TypeScript puro, sin base de datos. Vive en `apps/company/features/quotes/domain
 
 ### 5.4 · Editor de orçamento y lista en `apps/company`
 
-5.4a (editor) hecho el 19/11/2026: ruta `/[lang]/orders/[id]/quote`. Enviar pide confirmación (no se deshace). El motor acepta operários y horas a mano (`calculateQuote(input, overrides)`, con tests). 5.4b: lista Orçamentos y pestaña del pedido con datos reales.
+5.4a (editor) hecho el 19/11/2026: ruta `/[lang]/orders/[id]/quote`. Enviar pide confirmación (no se deshace). El motor acepta operários y horas a mano (`calculateQuote(input, overrides)`, con tests). 5.4b hecho el 19/11/2026: lista Orçamentos conectada (se retira `mock-data.ts`), pestaña Orçamentos del pedido con las versiones, su estado y el aviso de inventario nuevo, y la nota de la lista de pedidos con la versión y la validez reales. Se quitan las rutas `/quotes/new` y `/quotes/<id>`: un orçamento se crea y se ve desde su pedido.
 
 - Ruta `/[lang]/orders/[id]/quote`: desde "Criar orçamento" del detalle del pedido y de la lista.
 - Editor: datos sugeridos y finales lado a lado, líneas (base, extras propuestos a partir de los tipos que marcó el cliente, líneas manuales), cada extra *incluido* u *opcional*, modo de precio, validez, condiciones (plantilla simple; la plantilla editable de RF-40 es P1), alertas de RF-36, coste y margen solo para administradores (RNF-03). "Guardar rascunho" y "Enviar orçamento".

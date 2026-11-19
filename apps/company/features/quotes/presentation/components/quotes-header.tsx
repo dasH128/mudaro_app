@@ -4,7 +4,7 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { formatDecimal, formatEuro, formatPercent } from "@/app/lib/format";
-import { ROUTES, localePath } from "@/app/lib/routes";
+import { ordersHref } from "@/features/orders/presentation/orders-href";
 import type { QuoteMetrics } from "@/features/quotes/domain/types";
 import type { QuotesText } from "../quotes-text";
 
@@ -50,7 +50,7 @@ export function QuotesHeader({ lang, t, summary, metrics }: Props) {
         </div>
       </div>
       <Link
-        href={localePath(lang, ROUTES.quotes.new)}
+        href={ordersHref(lang, { stage: "inventory-received" })}
         className="flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
       >
         <Icon name="plus" size={18} strokeWidth={2.5} />

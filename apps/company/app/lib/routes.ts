@@ -23,10 +23,9 @@ export const ROUTES = {
     inventory: (id: string) => `/orders/${encodeURIComponent(id)}/inventory`,
     quote: (id: string) => `/orders/${encodeURIComponent(id)}/quote`,
   },
+  // Un orçamento se crea y se ve desde su pedido (orders.quote y la pestaña Orçamentos del detalle)
   quotes: {
     list: "/quotes",
-    new: "/quotes/new",
-    detail: (id: string) => `/quotes/${encodeURIComponent(id)}`,
   },
   schedule: "/schedule",
   clients: "/clients",

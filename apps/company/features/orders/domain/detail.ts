@@ -99,8 +99,27 @@ export type OrderDetail = {
   link: DetailLink | null;
   note: DetailNote | null;
   quoteCount: number;
+  /** Orçamentos del envío, de la versión más reciente a la más antigua (paso 5). */
+  quotes: readonly DetailQuote[];
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
+};
+
+/** Una versión de orçamento en la pestaña Orçamentos del pedido. Importes con IVA, en céntimos. */
+export type DetailQuote = {
+  /** Número compartido por las versiones (1 → ORC-0001). */
+  number: number;
+  version: number;
+  status: "draft" | "sent" | "accepted" | "rejected" | "superseded";
+  /** Total con IVA sin los opcionales; si está aceptado, el importe firmado. */
+  totalCents: number;
+  /** Último día de validez, aaaa-mm-dd. `null` en un borrador. */
+  validUntil: string | null;
+  sentAt: string | null;
+  acceptedAt: string | null;
+  rejectedReason: string | null;
+  /** Versión del inventario sobre la que se calculó. */
+  inventoryVersion: number;
 };
 
 /** Recorrido completo: origen, paradas y destino, en ese orden. */

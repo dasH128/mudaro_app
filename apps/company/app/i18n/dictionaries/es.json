@@ -1101,7 +1101,26 @@
             "one": "Este pedido tiene {count} presupuesto.",
             "other": "Este pedido tiene {count} presupuestos."
           },
-          "view": "Ver presupuestos"
+          "view": "Ver presupuestos",
+          "number": "ORC-{number} · versión {version}",
+          "statuses": {
+            "draft": "Borrador",
+            "sent": "Enviado",
+            "accepted": "Aceptado",
+            "rejected": "Rechazado",
+            "superseded": "Sustituido",
+            "expired": "Caducado"
+          },
+          "sentOn": "Enviado el {date}",
+          "validUntil": "Válido hasta el {date}",
+          "acceptedOn": "Aceptado el {date}",
+          "rejected": "Motivo: {reason}",
+          "inventoryOf": "Inventario v{version}",
+          "outdated": "El cliente envió un inventario nuevo (v{version}). El presupuesto quedó desactualizado: crea una versión nueva.",
+          "create": "Crear presupuesto",
+          "continueDraft": "Continuar borrador",
+          "newVersion": "Crear versión nueva",
+          "total": "{amount} con IVA"
         },
         "history": {
           "title": "Historial",

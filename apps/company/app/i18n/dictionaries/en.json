@@ -1101,7 +1101,26 @@
             "one": "This order has {count} quote.",
             "other": "This order has {count} quotes."
           },
-          "view": "View quotes"
+          "view": "View quotes",
+          "number": "ORC-{number} · version {version}",
+          "statuses": {
+            "draft": "Draft",
+            "sent": "Sent",
+            "accepted": "Accepted",
+            "rejected": "Declined",
+            "superseded": "Superseded",
+            "expired": "Expired"
+          },
+          "sentOn": "Sent on {date}",
+          "validUntil": "Valid until {date}",
+          "acceptedOn": "Accepted on {date}",
+          "rejected": "Reason: {reason}",
+          "inventoryOf": "Inventory v{version}",
+          "outdated": "The customer sent a new inventory (v{version}). The quote is out of date: create a new version.",
+          "create": "Create quote",
+          "continueDraft": "Continue draft",
+          "newVersion": "Create new version",
+          "total": "{amount} incl. VAT"
         },
         "history": {
           "title": "History",

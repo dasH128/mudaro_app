@@ -4,7 +4,7 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatEuro, formatPercent, formatVolume } from "@/app/lib/format";
-import { ROUTES, localePath } from "@/app/lib/routes";
+import { orderDetailHref } from "@/features/orders/presentation/orders-href";
 import { deriveValidity } from "@/features/quotes/domain/status";
 import type { Quote } from "@/features/quotes/domain/types";
 import { describeValidity, type QuotesText } from "../quotes-text";
@@ -67,7 +67,8 @@ export function QuotesTable({ lang, t, rows, total, today, showMargin }: Props) 
         {rows.length === 0 ? <p className="px-3 py-8 text-center text-sm text-muted">{list.empty}</p> : null}
         {rows.map((quote) => {
           const validity = describeValidity(deriveValidity(quote, today), t, lang, today);
-          const href = localePath(lang, ROUTES.quotes.detail(quote.id));
+          // El detalle de cada versión vive en la pestaña Orçamentos del pedido
+          const href = orderDetailHref(lang, quote.orderId, "quotes");
           return (
             // Todas las versiones de un presupuesto comparten número (RF-42)
             <div key={`${quote.id}-v${quote.version}`} role="row" className={`grid min-h-16 items-center rounded-2xl hover:bg-surface-soft ${cols}`}>
