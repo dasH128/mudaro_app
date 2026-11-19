@@ -671,7 +671,12 @@
           "The link is active for {days} days."
         ],
         "namePlaceholder": "[NAME]",
-        "linkPlaceholder": "[ORDER LINK]"
+        "linkPlaceholder": "[ORDER LINK]",
+        "quoteBody": [
+          "Hello {name}! This is {sender}, from {company}.",
+          "The quote for your move is ready. You can view and accept it here, no account needed:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "New order",
@@ -856,6 +861,13 @@
           "fillInventory": "Fill in the inventory myself",
           "createAnother": "Create another order",
           "view": "View order"
+        },
+        "quote": {
+          "title": "Client link · {id}",
+          "shareTitle": "Send the quote to {name}",
+          "shareText": "Through the link, {name} sees the quote and accepts it with a signature.",
+          "emailSubject": "The quote for your move",
+          "notice": "The link only gives access to this order. You'll see {name}'s answer in the Quotes tab."
         }
       },
       "inventory": {
@@ -1170,7 +1182,10 @@
           "notes": "Internal notes",
           "noteLabel": "Internal note",
           "notePlaceholder": "Only your team sees this. E.g. prefers mornings, has a cat.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "No link",
+          "noLinkText": "{name} has no link yet: without it they can't see the quote.",
+          "generate": "Generate link"
         }
       }
     },

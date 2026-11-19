@@ -138,6 +138,35 @@ export function LinkPanel({
   );
 }
 
+/**
+ * Pedido con el inventario rellenado por la empresa y el orçamento enviado, pero sin enlace: el cliente no tiene dónde
+ * verlo. "Gerar link" lleva a la pantalla de compartir, en su versión para el orçamento.
+ */
+export function MissingLinkPanel({ lang, t, orderId, clientName }: { lang: Locale; t: OrdersText; orderId: string; clientName: string }) {
+  const d = t.detail.side;
+  return (
+    <section aria-labelledby="link" className={`${panel} gap-3.5`}>
+      <div className="flex items-center justify-between gap-2.5">
+        <h2 id="link" className={panelTitle}>
+          {d.link}
+        </h2>
+        <span className="inline-flex h-6.5 items-center gap-1.5 rounded-full bg-warn-surface px-2.5 text-xs font-bold text-warn-foreground">
+          <span className="size-1.75 rounded-full bg-primary" />
+          {d.noLink}
+        </span>
+      </div>
+      <span className="text-[13px] text-muted">{interpolate(d.noLinkText, { name: firstName(clientName) })}</span>
+      <Link
+        href={localePath(lang, ROUTES.orders.created(orderId))}
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      >
+        <Icon name="link" size={16} />
+        {d.generate}
+      </Link>
+    </section>
+  );
+}
+
 /** Notas que solo ve la equipa. */
 export function NotesPanel({ t, note }: { t: OrdersText; note: DetailNote | null }) {
   const d = t.detail.side;

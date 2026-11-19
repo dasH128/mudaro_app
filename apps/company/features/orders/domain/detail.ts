@@ -167,10 +167,14 @@ function eventTime(events: readonly OrderEvent[], step: JourneyStep): string | n
 /**
  * Percurso del pedido: lo alcanzado, el hito actual y lo que falta.
  * Un pedido perdido deja hecho todo hasta el presupuesto y ninguno como actual.
+ * Con el inventario rellenado por la empresa no hay paso "Link partilhado": el enlace solo sirve para el orçamento y
+ * puede no generarse nunca.
  */
-export function buildJourney(stage: OrderStage, events: readonly OrderEvent[]): JourneyItem[] {
-  const current = stage === "lost" ? JOURNEY_STEPS.indexOf("quote-sent") : JOURNEY_STEPS.indexOf(STEP_OF_STATUS[stage]);
-  return JOURNEY_STEPS.map((step, index) => ({
+export function buildJourney(stage: OrderStage, events: readonly OrderEvent[], mode: InventoryMode): JourneyItem[] {
+  const steps: readonly JourneyStep[] = mode === "self" ? JOURNEY_STEPS.filter((step) => step !== "link-shared") : JOURNEY_STEPS;
+  const reached = stage === "lost" ? "quote-sent" : STEP_OF_STATUS[stage];
+  const current = steps.indexOf(reached === "link-shared" && mode === "self" ? "created" : reached);
+  return steps.map((step, index) => ({
     step,
     state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
     at: index <= current ? eventTime(events, step) : null,

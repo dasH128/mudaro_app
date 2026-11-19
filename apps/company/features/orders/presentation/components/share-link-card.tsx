@@ -19,6 +19,11 @@ type Props = {
   order: Order;
   sender: string;
   company: string;
+  /**
+   * "inventory": el cliente rellena el inventario por el enlace (caso por defecto).
+   * "quote": la empresa rellenó el inventario y el enlace sirve para que el cliente vea y acepte el orçamento.
+   */
+  purpose?: "inventory" | "quote";
 };
 
 const actionBase =
@@ -46,12 +51,15 @@ const CHANNELS: readonly { key: "sms" | "email"; icon: IconName }[] = [
 
 // RF-15: el enlace solo se ve al generarlo; la base guarda su hash (RNF-02). Por eso se genera al pulsar el botón, no
 // al cargar la página, y volver a generarlo anula el anterior (con confirmación).
-export function ShareLinkCard({ lang, t, order, sender, company }: Props) {
+export function ShareLinkCard({ lang, t, order, sender, company, purpose = "inventory" }: Props) {
   const c = t.created;
+  const forQuote = purpose === "quote";
+  const texts = forQuote ? c.quote : c;
   const router = useRouter();
   const name = firstName(order.clientName);
   const days = order.linkValidityDays ?? 0;
-  const draftMessage = (link: string) => buildMessage(t.message, { name, sender, company, link, days }).join("\n");
+  const body = forQuote ? t.message.quoteBody : t.message.body;
+  const draftMessage = (link: string) => buildMessage({ ...t.message, body }, { name, sender, company, link, days }).join("\n");
 
   const [pending, startTransition] = useTransition();
   const [link, setLink] = useState<string | null>(null);
@@ -92,15 +100,15 @@ export function ShareLinkCard({ lang, t, order, sender, company }: Props) {
   };
 
   const href = (channel: "whatsapp" | "sms" | "email") =>
-    link ? channelHref(channel, message, order.clientPhone, order.clientEmail, c.emailSubject) : null;
+    link ? channelHref(channel, message, order.clientPhone, order.clientEmail, texts.emailSubject) : null;
 
   return (
     <section aria-labelledby="share" className="flex flex-col gap-5 rounded-3xl border border-line bg-surface p-7">
       <div className="flex flex-col gap-1">
         <h2 id="share" className="font-display text-2xl font-extrabold">
-          {interpolate(c.shareTitle, { name })}
+          {interpolate(texts.shareTitle, { name })}
         </h2>
-        <p className="text-[15px] text-muted">{interpolate(c.shareText, { name })}</p>
+        <p className="text-[15px] text-muted">{interpolate(texts.shareText, { name })}</p>
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -192,11 +200,15 @@ export function ShareLinkCard({ lang, t, order, sender, company }: Props) {
 
       <div className="flex items-start gap-2.5 rounded-xl bg-surface-head px-4 py-3.5 text-sm">
         <Icon name="info" size={18} className="mt-px flex-none" />
-        <span>
-          {c.notice.before}
-          <strong>{c.notice.status}</strong>
-          {interpolate(c.notice.after, { name })}
-        </span>
+        {forQuote ? (
+          <span>{interpolate(c.quote.notice, { name })}</span>
+        ) : (
+          <span>
+            {c.notice.before}
+            <strong>{c.notice.status}</strong>
+            {interpolate(c.notice.after, { name })}
+          </span>
+        )}
       </div>
     </section>
   );

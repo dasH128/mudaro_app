@@ -671,7 +671,12 @@
           "O link está ativo durante {days} dias."
         ],
         "namePlaceholder": "[NOME]",
-        "linkPlaceholder": "[LINK DO PEDIDO]"
+        "linkPlaceholder": "[LINK DO PEDIDO]",
+        "quoteBody": [
+          "Olá {name}! Aqui é {sender}, da {company}.",
+          "O orçamento da sua mudança está pronto. Pode vê-lo e aceitá-lo aqui, sem criar conta:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "Novo pedido",
@@ -856,6 +861,13 @@
           "fillInventory": "Preencher eu o inventário",
           "createAnother": "Criar outro pedido",
           "view": "Ver pedido"
+        },
+        "quote": {
+          "title": "Link do cliente · {id}",
+          "shareTitle": "Envia o orçamento a {name}",
+          "shareText": "Pelo link, {name} vê o orçamento e aceita-o com a assinatura.",
+          "emailSubject": "O orçamento da sua mudança",
+          "notice": "O link dá acesso apenas a este pedido. Vês a resposta de {name} no separador Orçamentos."
         }
       },
       "inventory": {
@@ -1170,7 +1182,10 @@
           "notes": "Notas internas",
           "noteLabel": "Nota interna",
           "notePlaceholder": "Só a tua equipa vê isto. Ex.: prefere de manhã, tem um gato.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "Sem link",
+          "noLinkText": "{name} ainda não tem link: sem ele não consegue ver o orçamento.",
+          "generate": "Gerar link"
         }
       }
     },

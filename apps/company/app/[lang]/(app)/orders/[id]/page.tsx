@@ -19,7 +19,7 @@ import {
 import { getOrderDetail } from "@/features/orders/infrastructure/orders.repo";
 import { OrderAddressesTab } from "@/features/orders/presentation/components/order-addresses-tab";
 import { OrderBreadcrumb } from "@/features/orders/presentation/components/order-breadcrumb";
-import { ClientPanel, LinkPanel, NotesPanel } from "@/features/orders/presentation/components/order-detail-side";
+import { ClientPanel, LinkPanel, MissingLinkPanel, NotesPanel } from "@/features/orders/presentation/components/order-detail-side";
 import { OrderDetailHeader } from "@/features/orders/presentation/components/order-detail-header";
 import { OrderDetailTabs } from "@/features/orders/presentation/components/order-detail-tabs";
 import { OrderHistoryTab } from "@/features/orders/presentation/components/order-history-tab";
@@ -64,7 +64,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
     <>
       <OrderBreadcrumb lang={locale} t={t} current={order.id} />
       <OrderDetailHeader lang={locale} t={t} order={order} />
-      <OrderJourney t={t.detail} items={buildJourney(order.stage, order.events)} />
+      <OrderJourney t={t.detail} items={buildJourney(order.stage, order.events, order.inventoryMode)} />
       {blocking ? (
         <OrderMeasureAlert lang={locale} t={t} clientName={order.client.name} missing={blocking.count} first={blocking.first} />
       ) : null}
@@ -100,6 +100,9 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
               link={order.link}
               state={linkState(order.link, order.stage, today)}
             />
+          ) : order.inventoryMode === "self" && order.stage === "quoted" ? (
+            // Inventario de la empresa y orçamento enviado sin enlace: sin él, el cliente no puede verlo
+            <MissingLinkPanel lang={locale} t={t} orderId={order.id} clientName={order.client.name} />
           ) : null}
           <NotesPanel t={t} note={order.note} />
         </div>

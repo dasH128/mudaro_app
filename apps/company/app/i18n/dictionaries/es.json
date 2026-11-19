@@ -671,7 +671,12 @@
           "El enlace está activo durante {days} días."
         ],
         "namePlaceholder": "[NOMBRE]",
-        "linkPlaceholder": "[ENLACE DEL PEDIDO]"
+        "linkPlaceholder": "[ENLACE DEL PEDIDO]",
+        "quoteBody": [
+          "¡Hola {name}! Soy {sender}, de {company}.",
+          "El presupuesto de su mudanza está listo. Puede verlo y aceptarlo aquí, sin crear cuenta:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "Nuevo pedido",
@@ -856,6 +861,13 @@
           "fillInventory": "Rellenar yo el inventario",
           "createAnother": "Crear otro pedido",
           "view": "Ver pedido"
+        },
+        "quote": {
+          "title": "Enlace del cliente · {id}",
+          "shareTitle": "Envía el presupuesto a {name}",
+          "shareText": "Con el enlace, {name} ve el presupuesto y lo acepta con su firma.",
+          "emailSubject": "El presupuesto de su mudanza",
+          "notice": "El enlace solo da acceso a este pedido. Verás la respuesta de {name} en la pestaña Presupuestos."
         }
       },
       "inventory": {
@@ -1170,7 +1182,10 @@
           "notes": "Notas internas",
           "noteLabel": "Nota interna",
           "notePlaceholder": "Solo lo ve tu equipo. Ej.: prefiere por la mañana, tiene un gato.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "Sin enlace",
+          "noLinkText": "{name} aún no tiene enlace: sin él no puede ver el presupuesto.",
+          "generate": "Generar enlace"
         }
       }
     },
