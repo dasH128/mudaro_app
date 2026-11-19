@@ -109,7 +109,7 @@ La lista completa, con un código por punto, está al final de `docs/diagram/mud
 
 ## Pendiente de decidir
 
-- **Extras opcionales en el presupuesto (paso 5).** Si la empresa puede marcar un extra como obligatorio, y cómo se guarda la selección del cliente al aceptar.
+- ~~Extras opcionales en el presupuesto (paso 5).~~ Resuelto el 19/11/2026 con las demás decisiones del paso 5: ver `docs/requirement-mvp.md` (sección 11) y `docs/plan-paso-5-presupuestos.md`.
 - Qué hacer si se da de alta una empresa con un NIF que ya existe. Hoy hay `unique` sobre `(country_code, tax_id)`, lo que bloquea el alta.
 - Región: lista cerrada aún por definir. Hoy es texto libre.
 - Caducidad real del convite (depende de la configuración de Supabase Auth).
