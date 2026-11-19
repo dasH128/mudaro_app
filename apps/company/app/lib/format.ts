@@ -1,5 +1,10 @@
 import type { Locale } from "@/app/i18n/config";
 
+// Fecha, decimal y volumen se comparten con la web del cliente (apps/client): viven en @mudaro/validation.
+import { formatDate } from "@mudaro/validation";
+
+export { formatDate, formatDecimal, formatVolume } from "@mudaro/validation";
+
 // RNF-10: euros, fechas y números de Portugal, sea cual sea el idioma de la interfaz.
 const NUMBER_LOCALE = "pt-PT";
 const TIME_ZONE = "Europe/Lisbon";
@@ -16,19 +21,12 @@ const euroWhole = new Intl.NumberFormat(NUMBER_LOCALE, {
   maximumFractionDigits: 0,
   useGrouping: "always",
 });
-const decimal = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const integer = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0 });
 // Enteros con separador de miles (también de 4 cifras): "6 000"
 const grouped = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 0, useGrouping: "always" });
 // Hasta un decimal, sin ceros de relleno: 25 → "25", 12.5 → "12,5"
 const compact = new Intl.NumberFormat(NUMBER_LOCALE, { maximumFractionDigits: 1 });
 const amount = new Intl.NumberFormat(NUMBER_LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const date = new Intl.DateTimeFormat(NUMBER_LOCALE, {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  timeZone: TIME_ZONE,
-});
 const time = new Intl.DateTimeFormat(NUMBER_LOCALE, {
   hour: "2-digit",
   minute: "2-digit",
@@ -46,16 +44,6 @@ export function formatEuro(cents: number): string {
 /** Importe en céntimos redondeado a euros enteros, para listas y resúmenes: 487000 → "4 870 €". */
 export function formatEuroWhole(cents: number): string {
   return euroWhole.format(cents / 100);
-}
-
-/** Número con un decimal y coma: 38.4 → "38,4". */
-export function formatDecimal(value: number): string {
-  return decimal.format(value);
-}
-
-/** Volumen en metros cúbicos: 38.4 → "38,4 m³". */
-export function formatVolume(m3: number): string {
-  return `${decimal.format(m3)} m³`;
 }
 
 /** Entero con separador de miles: 6000 → "6 000". */
@@ -81,11 +69,6 @@ export function formatAmount(cents: number): string {
 /** Proporción 0..1 → "64 %" (espacio de no separación, como en el diseño). */
 export function formatPercent(ratio: number): string {
   return `${integer.format(ratio * 100)}\u00A0%`;
-}
-
-/** Fecha dd/mm/aaaa. Acepta una fecha ISO con hora o solo el día (aaaa-mm-dd). */
-export function formatDate(value: string): string {
-  return date.format(new Date(value.length === 10 ? `${value}T12:00:00Z` : value));
 }
 
 /** "dd/mm" (sin año) de una fecha ISO. */

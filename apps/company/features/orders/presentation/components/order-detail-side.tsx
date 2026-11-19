@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatDate, formatDateTime, formatPhone } from "@/app/lib/format";
+import { ROUTES, localePath } from "@/app/lib/routes";
 import { firstName } from "../../domain/client-name";
 import type { DetailLink, DetailNote, LinkState, OrderDetail } from "../../domain/detail";
 import type { OrdersText } from "../orders-text";
@@ -64,16 +67,21 @@ export function ClientPanel({ t, client }: { t: OrdersText; client: OrderDetail[
   );
 }
 
-/** Estado del enlace del cliente. El enlace en sí aún no se genera (RF-15), por eso copiar y ver como cliente van desactivados. */
+/**
+ * Estado del enlace del cliente. El enlace solo se ve al generarlo (RNF-02), así que "Gerar link novo" lleva a la
+ * pantalla de compartir. "Ver como cliente" sigue desactivado: abrirlo exigiría un token nuevo y anularía el del cliente.
+ */
 export function LinkPanel({
   lang,
   t,
+  orderId,
   clientName,
   link,
   state,
 }: {
   lang: Locale;
   t: OrdersText;
+  orderId: string;
   clientName: string;
   link: DetailLink;
   state: LinkState;
@@ -118,11 +126,10 @@ export function LinkPanel({
         </div>
         <span className="text-[13px] text-muted">{text}</span>
       </div>
-      {/* TODO(supabase): copiar y ver como cliente dependen de generar el enlace con token (RF-15, RNF-02) */}
       <div className="grid grid-cols-2 gap-2">
-        <button type="button" disabled title={t.list.soon} className={`${pill} bg-surface disabled:cursor-not-allowed disabled:opacity-50`}>
+        <Link href={localePath(lang, ROUTES.orders.created(orderId))} className={`${pill} bg-surface`}>
           {d.copy}
-        </button>
+        </Link>
         <button type="button" disabled title={t.list.soon} className={`${pill} bg-surface disabled:cursor-not-allowed disabled:opacity-50`}>
           {d.viewAsClient}
         </button>

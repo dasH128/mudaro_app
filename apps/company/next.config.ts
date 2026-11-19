@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  // Se compila el código fuente de @mudaro/ui, @mudaro/supabase y @mudaro/validation (exportan .ts/.tsx sin build previo)
-  transpilePackages: ["@mudaro/ui", "@mudaro/supabase", "@mudaro/validation"],
+  // Se compila el código fuente de los paquetes del monorepo (exportan .ts/.tsx sin build previo)
+  transpilePackages: ["@mudaro/ui", "@mudaro/supabase", "@mudaro/validation", "@mudaro/inventory"],
   turbopack: {
     rules: {
       "*.css": {

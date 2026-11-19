@@ -93,7 +93,7 @@ Prioridad:
 | --- | --- | --- | --- |
 | RF-05 | Alta, edición y baja de vehículos con capacidad (m³), carga máxima (kg) y coste por km | P0 | Un vehículo inactivo no se propone en cálculos ni en la agenda |
 | RF-06 | Configurar tarifa: precio y coste por hora de operario, precio por km, suplementos por piso y aparcamiento, mínimo por servicio, factor de estiba, velocidad media, IVA | P0 | Guardar cambios crea una versión nueva; los presupuestos enviados conservan la versión con la que se calcularon |
-| RF-07 | Catálogo de servicios extra con modo de precio (fijo, por unidad, por m³, por hora) | P0 | Los extras activos aparecen en el inventario del cliente. Pendiente de análisis: cómo se eligen los extras cuando un pedido llega a varias empresas (sección 11) |
+| RF-07 | Servicios extra de la empresa con modo de precio (fijo, por unidad, por hora, por m³, por m³ y mes) | P0 | Cada servicio cuelga de un tipo del catálogo de Mudaro ("Embalagem básica" y "Embalagem premium" del tipo Embalagem) o es un servicio propio sin tipo. Los servicios propios no aparecen en el inventario: la empresa solo los añade al presupuestar |
 | RF-08 | Asistente de configuración inicial con valores por defecto | P1 | Una empresa nueva puede crear su primer presupuesto en menos de 10 minutos desde el registro |
 | RF-09 | Ajustar volumen o peso de un objeto del catálogo solo para la empresa | P1 | El ajuste se usa en los cálculos de esa empresa y no afecta a las demás |
 
@@ -134,7 +134,7 @@ Prioridad:
 | RF-21 | Añadir objetos libres con descripción y medidas aproximadas | P0 | El objeto libre pide volumen o medidas; si no se dan, se marca para revisión |
 | RF-22 | Subir fotos por objeto o por habitación | P0 | Las fotos se comprimen en el dispositivo antes de subir |
 | RF-23 | Condiciones de acceso de cada dirección: piso, ascensor y tamaño, escaleras estrechas, distancia al aparcamiento, permiso de aparcamiento | P0 | Campos obligatorios antes de enviar |
-| RF-24 | Selección de servicios extra de la empresa | P0 | Solo aparecen los extras activos. Pendiente de análisis: ver sección 11 |
+| RF-24 | Marcar los tipos de servicio extra que se necesitan | P0 | Aparecen los tipos activos del catálogo de Mudaro, sin precio ni cantidad, con una nota opcional. No marcar nada es válido. Son una referencia: cada empresa pone su servicio, la cantidad y el precio en el presupuesto, haya marcado algo el cliente o no |
 | RF-25 | Guardado automático del borrador | P0 | Cerrar y reabrir el enlace conserva lo introducido |
 | RF-26 | Enviar inventario | P0 | Pasa el envío a Inventario recibido y notifica a la empresa |
 | RF-27 | Modificar el inventario tras recibir presupuesto | P1 | Cualquier cambio que afecte al cálculo (objetos, cantidades, volúmenes, pesos) a las direcciones de origen y destino (texto o ubicación) o a los accesos (piso, ascensor, aparcamiento, escaleras) crea una versión nueva del inventario; los cambios de fotos o notas no. Los presupuestos enviados que usaban la versión anterior pasan a Sustituido, el envío vuelve a Inventario recibido y la empresa debe presupuestar sobre la versión nueva. La versión nueva copia los ajustes manuales de la anterior y marca las líneas cuya base ha cambiado. Si el cambio llega después de aceptar: antes de la mudanza, la empresa genera un presupuesto nuevo que el cliente debe volver a aceptar (el aceptado sigue vigente hasta entonces, el envío no vuelve atrás de Ganada y el trabajo no se recrea); el día de la mudanza, se registra como incidencia con importe y firma del cliente (RF-53, RF-54) |
@@ -342,13 +342,14 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Si un operario puede pertenecer a varias empresas.
 - [ ] Servicio de mapas y su coste por consulta.
 - [ ] Fuente y responsable del catálogo inicial de objetos.
-- [ ] Flutter Web o Angular para la web del cliente.
+- [x] Tecnología de la web del cliente: Next.js (React) en `apps/client`, decidido el 19/11/2026 (ver `docs/architecture-system.md`). Falta el dominio.
 - [ ] Requisitos legales que el IMT exige a las empresas del piloto según el tipo de vehículo (verificar antes de dar de alta empresas).
 - [ ] Precio de la suscripción y modelo de cobro tras el piloto.
 - [ ] Caducidad real del convite al administrador (hoy 7 días como valor provisional): depende de la configuración de Supabase Auth.
 - [ ] Regiones del piloto para el desplegable "Região" (hoy hay un valor de ejemplo).
 - [ ] Diseño de los flujos pendientes del panel: editar empresa, registrar IMT y contrato RGPD, desactivar o ver utilizadores, cerrar sesión.
 - [ ] Qué hacer si se da de alta una empresa con un NIF o un email de administrador que ya existen.
-- [ ] Servicios extra (RF-07, RF-24): `inventory_extras` apunta a los extras de cada empresa, pero el inventario es del pedido. Pendiente de análisis: un catálogo global de tipos de extra con precio por empresa, o elegir los extras al presupuestar. Bloquea la tabla de extras (paso 2 del plan de BD) y la parte de extras del paso 4.
+- [x] Servicios extra (RF-07, RF-24), decidido el 18/11/2026: modelo híbrido. Mudaro mantiene un catálogo global de tipos (`catalog_extras`); cada empresa crea sus servicios colgando de un tipo o sin tipo (`company_extras`); el cliente marca tipos como referencia, sin cantidad (`inventory_extras`); la empresa presupuesta con sus servicios. Detalle en `docs/plan-modelo-bd.md`.
+- [ ] Extras opcionales en el presupuesto (paso 5): el cliente marca o desmarca los extras que la empresa propone y ve el total con y sin cada uno. Falta escribir el requisito, decidir si la empresa puede marcar un extra como obligatorio y cómo guarda la aceptación las líneas elegidas (RF-43).
 - [x] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10): "Orçamento" (decidido el 09/11/2026). En el código el término es `quotes`. Pendiente de aplicar: los diseños de la empresa y la app todavía dicen "Proposta" y `proposals`.
 - [ ] Diseño pendiente tras separar pedido y envío: pantalla de pedido creado con un único enlace, pestaña "Envío" en el detalle del pedido, aviso de inventario alterado (indica si crea versión y qué presupuestos afecta), reenvío del enlace del pedido y "marcar como perdido" sobre el envío.

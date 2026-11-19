@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "title": "Your move · Mudaro",
+    "description": "Tell us what you are taking on your move.",
+    "linkTitle": "Your move inventory"
+  },
+  "home": {
+    "title": "Open the link you received",
+    "text": "This page only works with the link to your request. Ask the moving company for it if you cannot find it."
+  },
+  "link": {
+    "invalidTitle": "This link is not valid",
+    "invalidText": "It may have been replaced by a new link or be incomplete. Ask the moving company to send it again.",
+    "errorTitle": "Your request could not be opened",
+    "errorText": "Please try again in a moment.",
+    "retry": "Try again"
+  },
+  "header": {
+    "eyebrow": "Moving request · {company}",
+    "greeting": "Hi {name}",
+    "title": "Hi {name}, what are you taking?",
+    "subtitle": "{company} prepares the quote from what you list here. You can do it bit by bit: it is saved.",
+    "validUntil": "You can edit until {date}",
+    "expired": "Editing closed on {date}"
+  },
+  "expired": {
+    "title": "Editing has closed",
+    "text": "The inventory can no longer be changed from this link. If you still need to change something, contact {company}."
+  },
+  "submitted": {
+    "title": "Inventory sent",
+    "text": "{company} received your inventory on {when}. The proposal will appear on this same link.",
+    "version": "Version {version}"
+  },
+  "inventory": {
+    "stepsLabel": "Inventory steps",
+    "itemsCount": {
+      "one": "{count} item",
+      "other": "{count} items"
+    },
+    "roomsCount": {
+      "one": "{count} room",
+      "other": "{count} rooms"
+    },
+    "steps": {
+      "items": {
+        "label": "Items",
+        "hint": "{items} in {rooms}",
+        "missing": "No items yet"
+      },
+      "access": {
+        "label": "Access",
+        "hint": "Floor, lift and parking",
+        "missing": "Required access details missing"
+      },
+      "extras": {
+        "label": "Extra services",
+        "hint": {
+          "one": "{count} chosen",
+          "other": "{count} chosen"
+        }
+      }
+    },
+    "rooms": {
+      "label": "Rooms"
+    },
+    "catalog": {
+      "searchLabel": "Search items",
+      "searchPlaceholder": "Search: sofa, bed, box…",
+      "noResults": "No items match your search.",
+      "perUnit": "{volume} per unit",
+      "add": "Add",
+      "more": "More",
+      "removeOne": "Remove {name}",
+      "addOne": "Add {name}",
+      "flags": {
+        "fragile": "Fragile",
+        "dismantle": "Dismantle",
+        "extra-crew": "Extra crew"
+      }
+    },
+    "summary": {
+      "title": "Going in the truck",
+      "items": "items",
+      "fragile": "fragile",
+      "dismantle": "dismantle",
+      "declared": "Approximate volume. The company confirms it in the quote.",
+      "thisRoom": "In this room",
+      "roomEmpty": "No items yet. Use the Add button."
+    },
+    "access": {
+      "kinds": {
+        "origin": "Origin",
+        "destination": "Destination",
+        "stop": "Stop {n}"
+      },
+      "floor": "Floor",
+      "parking": "Parking at",
+      "meters": "metres",
+      "lift": "Lift",
+      "liftLabel": "Lift at {place}",
+      "lifts": {
+        "none": "None",
+        "small": "Small",
+        "normal": "Normal"
+      },
+      "narrowStairs": "Narrow stairs",
+      "parkingPermit": "Needs a parking permit",
+      "notes": "Notes for the team",
+      "notesPlaceholder": "E.g. narrow gate, building hours",
+      "floorHint": "0 for ground floor, -1 for basement"
+    },
+    "extras": {
+      "title": "Extra services",
+      "subtitle": "Tick what you would like the company to do. The price appears in the quote.",
+      "empty": "No services available.",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "E.g. upright piano, 2nd floor without lift",
+      "footnote": "If you are not sure what you need, leave everything unticked."
+    },
+    "footer": {
+      "hint": "you can go back to any step",
+      "hintLast": "when you send it, the company receives the inventory",
+      "back": "Back",
+      "toAccess": "Continue to access",
+      "toExtras": "Continue to extras",
+      "finish": "Send inventory"
+    },
+    "save": {
+      "saving": "Saving…",
+      "saved": "Saved"
+    },
+    "errors": {
+      "accessIncomplete": "Required access details are missing: floor, parking and lift for each address.",
+      "empty": "Add at least one item before sending.",
+      "expired": "Editing has closed. Reload the page.",
+      "notFound": "This link is no longer valid.",
+      "noDraft": "This inventory has already been sent. Reload the page.",
+      "invalid": "Some data is not valid. Check the fields and try again.",
+      "failed": "Could not save. Please try again."
+    }
+  }
+}

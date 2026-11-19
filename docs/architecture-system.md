@@ -10,7 +10,7 @@ Un solo repositorio (pnpm workspaces y Turborepo) con una app de Next.js por pú
 | --- | --- | --- | --- |
 | `apps/landing` | mudaro.pt | Cualquiera | Existe |
 | `apps/admin` | admin.mudaro.pt | Equipo Mudaro | En desarrollo |
-| `apps/client` | por decidir | Cliente final con enlace | Futuro |
+| `apps/client` | por decidir | Cliente final con enlace | En el MVP (decidido el 19/11/2026) |
 | `apps/company` | app.mudaro.pt | Administradores de transportistas | Futuro |
 
 Motivo: cada app se despliega por separado, con sus propias variables de entorno y su dominio. La landing pública no comparte proceso, cookies ni secretos con el panel interno. Lo común vive en `packages/`.
@@ -51,9 +51,16 @@ El pedido (`orders`) es la mudanza y el envío (`shipments`) es el pedido enviad
 
 - El enlace pertenece al pedido. El token se guarda solo como hash (`orders.token_hash`) y solo una Edge Function lo valida. Nunca llega a Next.js la clave de servicio (RNF-02).
 - La caducidad del enlace bloquea editar el inventario. No impide ver ni aceptar un presupuesto vigente.
+- La Edge Function es `client-order` (19/11/2026). Se despliega sin verificación de JWT porque el cliente no tiene sesión: el token del enlace es la autorización. Calcula su hash y llama a `client_save_inventory_draft` y `client_submit_inventory`, que solo puede ejecutar `service_role`. Pendiente antes de abrir el piloto a clientes reales: limitar la frecuencia de peticiones por IP.
+
+## Web del cliente (decidido el 19/11/2026)
+
+- El cliente abre el enlace del pedido en `apps/client`, una app de Next.js (React) del monorepo, igual que las demás. Ahí rellena el inventario y ve y acepta el presupuesto (RF-20 a RF-46).
+- No va dentro de `apps/company`: tiene su propio dominio, así no comparte cookies ni sesión con el panel de las empresas, y el enlace no queda ligado a una empresa (en la fase 3 un pedido puede ir a varias).
+- Lo común con `apps/company` (componentes, tokens, reglas de datos de Portugal) se comparte desde `packages/`.
+- A futuro, cuando el cliente tenga cuenta, también podrá ver sus pedidos desde una app móvil. Queda fuera del MVP.
 
 ## Pendiente de decidir
 
 - Dominio definitivo de `apps/client`.
 - Hosting (Vercel por defecto).
-- Dónde se construye la web del cliente en el MVP. El cliente rellena el inventario y acepta el presupuesto desde el enlace del pedido (RF-20 a RF-46), pero `apps/client` figura como futuro. Los requisitos nombran Next.js en la sección 4 y dejan "Flutter Web o Angular" como decisión abierta en la sección 11. Hay que decidir app, dominio y tecnología.

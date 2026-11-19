@@ -4,7 +4,17 @@ import { createSupabaseServerClient } from "@mudaro/supabase/server";
 import type { Database } from "@mudaro/supabase";
 
 import type { LiftSize } from "@/features/inventory/domain/types";
-import type { DetailAddress, DetailLink, DetailNote, OrderDetail, OrderEvent } from "../domain/detail";
+import { getRoomNames, itemFlagOf } from "@/features/inventory/infrastructure/inventory.repo";
+import type {
+  DetailAddress,
+  DetailInventory,
+  DetailLink,
+  DetailNote,
+  InventoryLine,
+  InventoryRoom,
+  OrderDetail,
+  OrderEvent,
+} from "../domain/detail";
 import { buildOrdersMetrics } from "../domain/metrics";
 import { formatOrderNumber, parseOrderNumber } from "../domain/order-number";
 import {
@@ -27,18 +37,19 @@ import {
 // RLS: una empresa lee un pedido si tiene un envío en él y es administrador (RNF-01). El número visible
 // (MD-0836) es `shipments.number`, la secuencia propia de cada empresa. Las escrituras pasan por `create_order()`.
 //
-// Pendiente (paso 4b): las líneas de inventario y el enlace con token. Hasta entonces el inventario solo tiene
-// direcciones, y el estado de un envío nuevo no cambia a "À espera de inventário".
+// Inventario: se muestra la versión vigente, la última enviada (A11). Un borrador no se muestra hasta enviarse.
+// Enlace del cliente: `shareOrderLink` (share_order_link). El token solo existe en la respuesta; la base guarda su hash.
 // Los envíos cancelados no se muestran: la pantalla de cancelar (RF-69) llega más adelante.
 
 type ShipmentStatus = Database["public"]["Enums"]["shipment_status"];
 type DateFlexibility = Database["public"]["Enums"]["date_flexibility"];
 
 // Un solo literal por consulta: el cliente de Supabase deduce el tipo de las filas del texto del select.
-const ORDER_ROUTE = "addresses(id, role, sort_order), inventories(version, filled_by, submitted_at, inventory_addresses(address_id, address))";
+const ORDER_ROUTE =
+  "addresses(id, role, sort_order), inventories(version, filled_by, submitted_at, inventory_addresses(address_id, address), inventory_lines(quantity, unit_volume_m3))";
 
 const LIST_SELECT = `number, status, lost_reason, status_changed_at, last_activity_at, created_at,
-  client:clients(name),
+  client:clients(name, phone, email),
   order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, ${ORDER_ROUTE})`;
 
 const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, created_at,
@@ -46,10 +57,16 @@ const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, creat
   order:orders!inner(
     contact_name, contact_source, desired_date, date_flexibility, link_validity_days, token_expires_at, created_at,
     addresses(id, role, sort_order),
-    inventories(version, filled_by, submitted_at, inventory_addresses(address_id, address, floor, lift, narrow_stairs, parking_distance_m, needs_permit, notes))
+    inventories(
+      version, filled_by, submitted_at,
+      inventory_addresses(address_id, address, floor, lift, narrow_stairs, parking_distance_m, needs_permit, notes),
+      inventory_lines(description, room, quantity, unit_volume_m3, handling_flags, photos, created_at,
+        catalog_item:catalog_items(sort_order, translations:catalog_item_translations(locale, name))),
+      inventory_extras(catalog_extra:catalog_extras(sort_order, translations:catalog_extra_translations(locale, name)))
+    )
   ),
   shipment_notes(body, created_at, author:company_users(name)),
-  events:shipment_events(kind, occurred_at, data)`;
+  events:shipment_events(kind, occurred_at, actor_type, data)`;
 
 // --- Traducciones entre la base de datos y el dominio ---
 
@@ -121,6 +138,7 @@ type RouteRow = {
     filled_by: Database["public"]["Enums"]["filled_by"];
     submitted_at: string | null;
     inventory_addresses: { address_id: string; address: string }[];
+    inventory_lines: { quantity: number; unit_volume_m3: number | null }[];
   }[];
 };
 
@@ -130,9 +148,24 @@ function inventoryModeOf(order: RouteRow): InventoryMode {
   return first?.filled_by === "company" ? "self" : "link";
 }
 
-/** Versión actual del inventario: la más reciente, sea borrador o enviada. */
-function currentInventory<T extends { version: number }>(inventories: readonly T[]): T | undefined {
-  return [...inventories].sort((a, b) => b.version - a.version)[0];
+/**
+ * Versión vigente del inventario (A11): la última enviada. Sin ninguna enviada, el borrador de la versión 1, que es
+ * donde está el texto de las direcciones del pedido recién creado.
+ */
+function currentInventory<T extends { version: number; submitted_at: string | null }>(inventories: readonly T[]): T | undefined {
+  const sorted = [...inventories].sort((a, b) => b.version - a.version);
+  return sorted.find((inventory) => inventory.submitted_at !== null) ?? sorted.at(-1);
+}
+
+/** Objetos y volumen declarados de una versión. Las líneas sin volumen (objeto libre sin medidas) no suman. */
+function linesTotals(lines: readonly { quantity: number; unit_volume_m3: number | null }[]) {
+  return lines.reduce(
+    (total, line) => ({
+      items: total.items + line.quantity,
+      volumeM3: total.volumeM3 + (line.unit_volume_m3 === null ? 0 : line.quantity * Number(line.unit_volume_m3)),
+    }),
+    { items: 0, volumeM3: 0 },
+  );
 }
 
 /** Origen, paradas y destino con el texto de la versión actual. */
@@ -151,16 +184,24 @@ function routeOf(order: RouteRow) {
 // --- Lista ---
 
 /** Nota de la fila de la lista. Los estados que aún no se alcanzan (4b y paso 5) llevan lo mínimo. */
-function noteOf(stage: OrderStage, row: { mode: InventoryMode; changedAt: string; tokenExpiresAt: string | null; lostReason: string | null }): OrderNote {
+function noteOf(
+  stage: OrderStage,
+  row: {
+    mode: InventoryMode;
+    changedAt: string;
+    tokenExpiresAt: string | null;
+    lostReason: string | null;
+    totals: { items: number; volumeM3: number };
+  },
+): OrderNote {
   switch (stage) {
     case "new":
       return { kind: row.mode === "link" ? "just-created" : "just-created-self" };
     case "awaiting-inventory":
-      // TODO(4b): sin enlace con token no hay validez que mostrar.
+      // Sin enlace con token (la app aún no lo genera) no hay validez que mostrar.
       return row.tokenExpiresAt ? { kind: "filling", validUntil: lisbonDay(row.tokenExpiresAt) } : { kind: "just-created" };
     case "inventory-received":
-      // TODO(4b): los objetos y el volumen salen de `inventory_lines`.
-      return { kind: "inventory-ready", receivedAt: row.changedAt, items: 0, volumeM3: 0 };
+      return { kind: "inventory-ready", receivedAt: row.changedAt, ...row.totals };
     case "quoted":
       // TODO(paso 5): la versión y la validez salen de `quotes`.
       return { kind: "proposal-sent", version: 1, validUntil: lisbonDay(row.changedAt) };
@@ -199,7 +240,13 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
       date: row.order.desired_date,
       flexibility: FLEXIBILITY_FROM_DB[row.order.date_flexibility],
       stage,
-      note: noteOf(stage, { mode, changedAt: row.status_changed_at, tokenExpiresAt: row.order.token_expires_at, lostReason: row.lost_reason }),
+      note: noteOf(stage, {
+        mode,
+        changedAt: row.status_changed_at,
+        tokenExpiresAt: row.order.token_expires_at,
+        lostReason: row.lost_reason,
+        totals: linesTotals(currentInventory(row.order.inventories)?.inventory_lines ?? []),
+      }),
       lastActivityAt: row.last_activity_at,
     });
     counted.push({ status: stage, createdAt: row.created_at, statusChangedAt: row.status_changed_at });
@@ -248,12 +295,48 @@ export async function getOrder(id: string): Promise<Order | undefined> {
       : validityDays
         ? addDays(lisbonDay(data.created_at), validityDays)
         : null,
+    linkShared: data.order.token_expires_at !== null,
+    clientPhone: data.client?.phone ?? null,
+    clientEmail: data.client?.email ?? null,
   };
+}
+
+/**
+ * Genera el enlace del cliente con `share_order_link()` (RF-15): 32 bytes aleatorios, de los que la base solo guarda
+ * el hash (RNF-02). Devuelve el token una sola vez; generar otro anula el anterior. El envío pasa de "Nova" a
+ * "À espera de inventário" y el historial registra el envío o reenvío. La función comprueba en la base que el pedido
+ * es de la empresa de la sesión y que no está cancelado.
+ */
+export async function shareOrderLink(id: string): Promise<{ token: string; validUntil: string } | null> {
+  const number = parseOrderNumber(id);
+  if (number === null) return null;
+
+  const supabase = await createSupabaseServerClient();
+  const { data: shipment, error: readError } = await supabase
+    .from("shipments")
+    .select("order_id")
+    .eq("number", number)
+    .neq("status", "cancelled")
+    .maybeSingle();
+  if (readError) throw new Error(`orders: no se pudo leer el pedido (${readError.code})`);
+  if (!shipment) return null;
+
+  const { data: token, error } = await supabase.rpc("share_order_link", { p_order_id: shipment.order_id });
+  if (error || !token) return null;
+
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .select("token_expires_at")
+    .eq("id", shipment.order_id)
+    .single();
+  if (orderError || !order.token_expires_at) return null;
+
+  return { token, validUntil: lisbonDay(order.token_expires_at) };
 }
 
 /** Evento del historial. Los datos del evento son JSON: solo se leen los campos que se conocen. */
 function eventOf(
-  row: { kind: Database["public"]["Enums"]["shipment_event_kind"]; occurred_at: string; data: unknown },
+  row: { kind: Database["public"]["Enums"]["shipment_event_kind"]; occurred_at: string; actor_type: string; data: unknown },
   source: Source | null,
 ): OrderEvent | null {
   const data = (typeof row.data === "object" && row.data !== null ? row.data : {}) as {
@@ -274,7 +357,13 @@ function eventOf(
     case "link_resent":
       return { kind: "link-shared", at, actor, validityDays: data.linkValidityDays ?? 0 };
     case "inventory_submitted":
-      return { kind: "inventory-submitted", at, version: data.version ?? 1 };
+      return {
+        kind: "inventory-submitted",
+        at,
+        version: data.version ?? 1,
+        by: row.actor_type === "company" ? "company" : "client",
+        actor,
+      };
     case "quote_sent":
       return { kind: "proposal-sent", at, actor, version: data.version ?? 1 };
     case "won":
@@ -287,20 +376,67 @@ function eventOf(
   }
 }
 
+type AppLocale = Database["public"]["Enums"]["app_locale"];
+
+/** Texto en el idioma pedido o, si falta, en portugués (obligatorio en el catálogo). */
+function translated(rows: readonly { locale: AppLocale; name: string }[], locale: AppLocale): string {
+  return (rows.find((row) => row.locale === locale) ?? rows.find((row) => row.locale === "pt"))?.name ?? "";
+}
+
+type DetailLineRow = {
+  description: string | null;
+  room: string | null;
+  quantity: number;
+  unit_volume_m3: number | null;
+  handling_flags: Database["public"]["Enums"]["handling_flag"][];
+  photos: string[];
+  created_at: string;
+  catalog_item: { sort_order: number; translations: { locale: AppLocale; name: string }[] } | null;
+};
+
+/** Líneas de la versión agrupadas por división, en el orden del catálogo; las líneas sin división, al final. */
+function roomsOf(lines: readonly DetailLineRow[], roomNames: ReadonlyMap<string, string>, locale: AppLocale): InventoryRoom[] {
+  const order = [...roomNames.keys()];
+  const position = (slug: string) => (order.includes(slug) ? order.indexOf(slug) : order.length);
+  const groups = new Map<string, InventoryLine[]>();
+  const sorted = [...lines].sort(
+    (a, b) => (a.catalog_item?.sort_order ?? Number.MAX_SAFE_INTEGER) - (b.catalog_item?.sort_order ?? Number.MAX_SAFE_INTEGER) || a.created_at.localeCompare(b.created_at),
+  );
+  for (const line of sorted) {
+    const slug = line.room ?? "";
+    const list = groups.get(slug) ?? [];
+    list.push({
+      quantity: line.quantity,
+      name: line.catalog_item ? translated(line.catalog_item.translations, locale) : (line.description ?? ""),
+      volumeM3: line.unit_volume_m3 === null ? null : line.quantity * Number(line.unit_volume_m3),
+      flags: line.handling_flags.map(itemFlagOf),
+      free: line.catalog_item === null,
+      hasPhoto: line.photos.length > 0,
+    });
+    groups.set(slug, list);
+  }
+  return [...groups.entries()]
+    .sort(([a], [b]) => position(a) - position(b))
+    .map(([slug, roomLines]) => ({ slug, name: roomNames.get(slug) ?? "", lines: roomLines }));
+}
+
 /** Detalle completo de un pedido de la empresa de la sesión, o undefined si no existe o no es suyo (RLS). */
-export async function getOrderDetail(id: string): Promise<OrderDetail | undefined> {
+export async function getOrderDetail(id: string, locale: AppLocale): Promise<OrderDetail | undefined> {
   const number = parseOrderNumber(id);
   if (number === null) return undefined;
 
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from("shipments")
-    .select(DETAIL_SELECT)
-    .eq("number", number)
-    .neq("status", "cancelled")
-    .order("created_at", { ascending: false, referencedTable: "shipment_notes" })
-    .limit(1, { referencedTable: "shipment_notes" })
-    .maybeSingle();
+  const [{ data, error }, roomNames] = await Promise.all([
+    supabase
+      .from("shipments")
+      .select(DETAIL_SELECT)
+      .eq("number", number)
+      .neq("status", "cancelled")
+      .order("created_at", { ascending: false, referencedTable: "shipment_notes" })
+      .limit(1, { referencedTable: "shipment_notes" })
+      .maybeSingle(),
+    getRoomNames(locale),
+  ]);
   if (error) throw new Error(`orders: no se pudo leer el detalle del pedido (${error.code})`);
   if (!data) return undefined;
 
@@ -342,7 +478,7 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | undefine
   const newest = data.shipment_notes[0];
   const note: DetailNote | null = newest ? { text: newest.body, author: newest.author?.name ?? "", at: newest.created_at } : null;
 
-  // TODO(4b): el enlace solo existe cuando hay token. Hasta entonces el panel del enlace no se muestra.
+  // El enlace solo existe cuando hay token. Hasta entonces el panel del enlace no se muestra.
   const link: DetailLink | null = order.token_expires_at
     ? {
         createdAt: events.findLast((event) => event.kind === "link-shared")?.at ?? order.created_at,
@@ -370,13 +506,40 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | undefine
     origin: addressOf(slotsOf("origin")[0], "origin", null),
     stops: slotsOf("stop").map((slot, index) => addressOf(slot, "stop", index + 1)),
     destination: addressOf(slotsOf("destination")[0], "destination", null),
-    // TODO(4b): el inventario con líneas llega con `inventory_lines`.
-    inventory: null,
+    inventory: inventoryOf(inventory, roomNames, locale),
     link,
     note,
     // TODO(paso 5): sale de `quotes`.
     proposalCount: 0,
     events,
+  };
+}
+
+/** Inventario de la versión vigente. Mientras no haya ninguna versión enviada, no hay inventario que mostrar. */
+function inventoryOf(
+  inventory:
+    | {
+        version: number;
+        filled_by: Database["public"]["Enums"]["filled_by"];
+        submitted_at: string | null;
+        inventory_lines: DetailLineRow[];
+        inventory_extras: { catalog_extra: { sort_order: number; translations: { locale: AppLocale; name: string }[] } | null }[];
+      }
+    | undefined,
+  roomNames: ReadonlyMap<string, string>,
+  locale: AppLocale,
+): DetailInventory | null {
+  if (!inventory?.submitted_at) return null;
+  return {
+    version: inventory.version,
+    filledBy: inventory.filled_by === "company" ? "self" : "link",
+    submittedAt: inventory.submitted_at,
+    rooms: roomsOf(inventory.inventory_lines, roomNames, locale),
+    photoCount: inventory.inventory_lines.reduce((sum, line) => sum + line.photos.length, 0),
+    extras: inventory.inventory_extras
+      .flatMap((row) => (row.catalog_extra ? [row.catalog_extra] : []))
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((extra) => translated(extra.translations, locale)),
   };
 }
 

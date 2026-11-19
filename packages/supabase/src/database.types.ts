@@ -138,6 +138,65 @@ export type Database = {
           },
         ]
       }
+      catalog_extra_translations: {
+        Row: {
+          description: string | null
+          extra_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          extra_id: string
+          locale: Database["public"]["Enums"]["app_locale"]
+          name: string
+        }
+        Update: {
+          description?: string | null
+          extra_id?: string
+          locale?: Database["public"]["Enums"]["app_locale"]
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_extra_translations_extra_id_fkey"
+            columns: ["extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_extras: {
+        Row: {
+          active: boolean
+          created_at: string
+          icon: string | null
+          id: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          icon?: string | null
+          id?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_item_rooms: {
         Row: {
           item_id: string
@@ -410,6 +469,57 @@ export type Database = {
         }
         Relationships: []
       }
+      company_extras: {
+        Row: {
+          active: boolean
+          catalog_extra_id: string | null
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+          price_cents: number
+          price_mode: Database["public"]["Enums"]["price_mode"]
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          catalog_extra_id?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          name: string
+          price_cents: number
+          price_mode: Database["public"]["Enums"]["price_mode"]
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          catalog_extra_id?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          price_cents?: number
+          price_mode?: Database["public"]["Enums"]["price_mode"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_extras_catalog_extra_id_fkey"
+            columns: ["catalog_extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_extras_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_internal: {
         Row: {
           company_id: string
@@ -580,6 +690,185 @@ export type Database = {
             columns: ["inventory_id", "order_id"]
             isOneToOne: false
             referencedRelation: "inventories"
+            referencedColumns: ["id", "order_id"]
+          },
+        ]
+      }
+      inventory_extras: {
+        Row: {
+          catalog_extra_id: string
+          created_at: string
+          inventory_id: string
+          note: string | null
+          order_id: string
+        }
+        Insert: {
+          catalog_extra_id: string
+          created_at?: string
+          inventory_id: string
+          note?: string | null
+          order_id: string
+        }
+        Update: {
+          catalog_extra_id?: string
+          created_at?: string
+          inventory_id?: string
+          note?: string | null
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_extras_catalog_extra_id_fkey"
+            columns: ["catalog_extra_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_extras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_extras_inventory_id_order_id_fkey"
+            columns: ["inventory_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventories"
+            referencedColumns: ["id", "order_id"]
+          },
+        ]
+      }
+      inventory_line_adjustments: {
+        Row: {
+          company_id: string
+          created_at: string
+          inventory_line_id: string
+          order_id: string
+          unit_minutes: number | null
+          unit_volume_m3: number | null
+          unit_weight_kg: number | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          inventory_line_id: string
+          order_id: string
+          unit_minutes?: number | null
+          unit_volume_m3?: number | null
+          unit_weight_kg?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          inventory_line_id?: string
+          order_id?: string
+          unit_minutes?: number | null
+          unit_volume_m3?: number | null
+          unit_weight_kg?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_line_adjustments_inventory_line_id_order_id_fkey"
+            columns: ["inventory_line_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventory_lines"
+            referencedColumns: ["id", "order_id"]
+          },
+          {
+            foreignKeyName: "inventory_line_adjustments_order_id_company_id_fkey"
+            columns: ["order_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["order_id", "company_id"]
+          },
+          {
+            foreignKeyName: "inventory_line_adjustments_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_lines: {
+        Row: {
+          base_changed: boolean
+          catalog_item_id: string | null
+          created_at: string
+          description: string | null
+          handling_flags: Database["public"]["Enums"]["handling_flag"][]
+          id: string
+          inventory_id: string
+          needs_review: boolean | null
+          order_id: string
+          photos: string[]
+          previous_line_id: string | null
+          quantity: number
+          room: string | null
+          unit_minutes: number
+          unit_volume_m3: number | null
+          unit_weight_kg: number | null
+          updated_at: string
+        }
+        Insert: {
+          base_changed?: boolean
+          catalog_item_id?: string | null
+          created_at?: string
+          description?: string | null
+          handling_flags?: Database["public"]["Enums"]["handling_flag"][]
+          id?: string
+          inventory_id: string
+          needs_review?: boolean | null
+          order_id: string
+          photos?: string[]
+          previous_line_id?: string | null
+          quantity?: number
+          room?: string | null
+          unit_minutes?: number
+          unit_volume_m3?: number | null
+          unit_weight_kg?: number | null
+          updated_at?: string
+        }
+        Update: {
+          base_changed?: boolean
+          catalog_item_id?: string | null
+          created_at?: string
+          description?: string | null
+          handling_flags?: Database["public"]["Enums"]["handling_flag"][]
+          id?: string
+          inventory_id?: string
+          needs_review?: boolean | null
+          order_id?: string
+          photos?: string[]
+          previous_line_id?: string | null
+          quantity?: number
+          room?: string | null
+          unit_minutes?: number
+          unit_volume_m3?: number | null
+          unit_weight_kg?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_lines_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_lines_inventory_id_order_id_fkey"
+            columns: ["inventory_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventories"
+            referencedColumns: ["id", "order_id"]
+          },
+          {
+            foreignKeyName: "inventory_lines_previous_line_id_order_id_fkey"
+            columns: ["previous_line_id", "order_id"]
+            isOneToOne: false
+            referencedRelation: "inventory_lines"
             referencedColumns: ["id", "order_id"]
           },
         ]
@@ -1055,10 +1344,52 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      delete_inventory_line: { Args: { p_line_id: string }; Returns: undefined }
       f_unaccent: { Args: { "": string }; Returns: string }
       is_company_administrator: { Args: never; Returns: boolean }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
+      lock_owned_order: { Args: { p_order_id: string }; Returns: undefined }
+      open_inventory_draft: { Args: { p_order_id: string }; Returns: string }
+      save_inventory_address: {
+        Args: {
+          p_address: string
+          p_floor: number
+          p_inventory_address_id: string
+          p_lat: number
+          p_lift: Database["public"]["Enums"]["lift_size"]
+          p_lng: number
+          p_narrow_stairs: boolean
+          p_needs_permit: boolean
+          p_notes: string
+          p_parking_distance_m: number
+        }
+        Returns: undefined
+      }
+      save_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_order_id: string
+        }
+        Returns: undefined
+      }
+      save_inventory_line: {
+        Args: {
+          p_catalog_item_id: string
+          p_description: string
+          p_handling_flags: Database["public"]["Enums"]["handling_flag"][]
+          p_line_id: string
+          p_order_id: string
+          p_quantity: number
+          p_room: string
+          p_unit_minutes: number
+          p_unit_volume_m3: number
+          p_unit_weight_kg: number
+        }
+        Returns: string
+      }
       search_catalog_items: {
         Args: { lang?: Database["public"]["Enums"]["app_locale"]; q: string }
         Returns: {
@@ -1069,6 +1400,26 @@ export type Database = {
           volume_m3: number
         }[]
       }
+      set_inventory_extra: {
+        Args: {
+          p_catalog_extra_id: string
+          p_note: string
+          p_order_id: string
+          p_selected: boolean
+        }
+        Returns: undefined
+      }
+      set_line_adjustment: {
+        Args: {
+          p_line_id: string
+          p_unit_minutes: number
+          p_unit_volume_m3: number
+          p_unit_weight_kg: number
+        }
+        Returns: undefined
+      }
+      share_order_link: { Args: { p_order_id: string }; Returns: string }
+      submit_inventory: { Args: { p_order_id: string }; Returns: number }
     }
     Enums: {
       address_role: "origin" | "destination" | "stop"
@@ -1079,6 +1430,7 @@ export type Database = {
       filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
       lift_size: "none" | "small" | "large"
+      price_mode: "fixed" | "unit" | "hour" | "m3" | "m3_month"
       shipment_event_kind:
         | "created"
         | "link_shared"
@@ -1239,6 +1591,7 @@ export const Constants = {
       filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],
       lift_size: ["none", "small", "large"],
+      price_mode: ["fixed", "unit", "hour", "m3", "m3_month"],
       shipment_event_kind: [
         "created",
         "link_shared",

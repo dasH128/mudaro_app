@@ -325,8 +325,8 @@
           "titleNone": "{greeting}, {name}. Está tudo em dia.",
           "bodyNone": "Não há pedidos à espera de ti. Aproveita para criar um novo.",
           "ready": {
-            "one": "{count} cliente já enviou o inventário e espera pela proposta.",
-            "other": "{count} clientes já enviaram o inventário e esperam pela proposta."
+            "one": "{count} pedido tem o inventário pronto para orçamentar.",
+            "other": "{count} pedidos têm o inventário pronto para orçamentar."
           },
           "nudge": {
             "one": "{count} precisa de um empurrãozinho para terminar.",
@@ -472,7 +472,7 @@
           "continue-proposal": "Continuar",
           "resend-link": "Reenviar link",
           "share-link": "Partilhar link",
-          "copy-link": "Copiar link",
+          "copy-link": "Gerar link novo",
           "fill-inventory": "Preencher inventário",
           "view-proposal": "Ver proposta",
           "view-job": "Ver trabalho"
@@ -700,13 +700,27 @@
         "linkLabel": "Link do pedido",
         "copy": "Copiar link",
         "validUntil": "Ativo até {date} · dá acesso apenas a este pedido",
-        "pending": "A geração do link ainda não está disponível nesta versão.",
+        "generate": "Gerar link",
+        "generating": "A gerar…",
+        "regenerate": "Gerar link novo",
+        "regenerateWarning": "O link anterior deixa de funcionar. Queres gerar um novo?",
+        "regenerateConfirm": "Sim, gerar novo",
+        "cancel": "Cancelar",
+        "copied": "Copiado ✓",
+        "linkHidden": "Link já gerado",
+        "hiddenNote": "Por segurança, o link só se vê quando é gerado. Para o enviar outra vez, gera um novo.",
+        "generated": "Link gerado. Copia-o ou envia-o já: só se mostra agora.",
+        "error": "Não foi possível gerar o link. Tenta novamente.",
+        "generateFirst": "Gera o link primeiro",
+        "noPhone": "O cliente não tem telemóvel",
+        "noEmail": "O cliente não tem email",
+        "emailSubject": "O inventário da sua mudança",
         "messageLabel": "Mensagem",
         "whatsapp": "WhatsApp",
         "sms": "SMS",
         "email": "Email",
         "notice": {
-          "before": "Quando copiares ou enviares o link, o pedido passa a ",
+          "before": "Ao gerar o link, o pedido passa a ",
           "status": "À espera de inventário",
           "after": ". Avisamos-te quando {name} enviar o inventário."
         },
@@ -743,11 +757,13 @@
         "steps": {
           "items": {
             "label": "Objetos",
-            "hint": "{items} em {rooms}"
+            "hint": "{items} em {rooms}",
+            "missing": "Faltam objetos"
           },
           "access": {
             "label": "Acessos",
-            "hint": "Origem e destino"
+            "hint": "Origem e destino",
+            "missing": "Faltam acessos obrigatórios"
           },
           "extras": {
             "label": "Serviços extra",
@@ -759,14 +775,7 @@
         },
         "rooms": {
           "label": "Divisões",
-          "add": "Adicionar divisão",
-          "names": {
-            "living-room": "Sala",
-            "bedroom": "Quarto",
-            "kitchen": "Cozinha",
-            "bathroom": "Casa de banho",
-            "boxes": "Caixas"
-          }
+          "add": "Adicionar divisão"
         },
         "catalog": {
           "searchLabel": "Procurar no catálogo",
@@ -779,7 +788,8 @@
           "addOne": "Adicionar {name}",
           "flags": {
             "fragile": "Frágil",
-            "dismantle": "Desmontar"
+            "dismantle": "Desmontar",
+            "extra-crew": "Pessoal extra"
           },
           "custom": {
             "title": "Não está na lista?",
@@ -819,25 +829,11 @@
         },
         "extras": {
           "title": "Serviços extra",
-          "subtitle": "Só aparecem os extras ativos em Tarifas e extras.",
-          "empty": "Não há extras ativos.",
-          "pricing": {
-            "unit": "{price} por unidade",
-            "hour": "{price} por hora",
-            "m3-month": "{price} por m³ e mês",
-            "fixed": "{price} preço fixo"
-          },
-          "quantity": "Quantidade: {quantity}",
-          "units": {
-            "boxes": {
-              "one": "{count} caixa",
-              "other": "{count} caixas"
-            },
-            "hours": {
-              "one": "{count} h",
-              "other": "{count} h"
-            }
-          }
+          "subtitle": "Marca os serviços que o cliente pediu. São uma referência: o serviço, a quantidade e o preço entram no orçamento.",
+          "empty": "Não há tipos de serviço disponíveis.",
+          "noteLabel": "Nota (opcional)",
+          "notePlaceholder": "Ex.: piano vertical, 2.º andar sem elevador",
+          "footnote": "Se o cliente não sabe do que precisa, deixa tudo por marcar. Podes sugerir serviços no orçamento."
         },
         "footer": {
           "hint": "podes voltar a qualquer passo",
@@ -846,6 +842,25 @@
           "toAccess": "Continuar para acessos",
           "toExtras": "Continuar para extras",
           "finish": "Concluir inventário"
+        },
+        "newVersion": "Nova versão (v{version})",
+        "save": {
+          "saving": "A guardar…",
+          "saved": "Guardado"
+        },
+        "errors": {
+          "accessIncomplete": "Faltam acessos obrigatórios: andar, estacionamento e elevador de cada morada.",
+          "empty": "Adiciona pelo menos um objeto antes de concluir.",
+          "notAllowed": "Não podes alterar este pedido.",
+          "noDraft": "Este inventário já foi enviado. Recarrega a página.",
+          "invalid": "Há dados inválidos. Revê os campos e tenta de novo.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        },
+        "submitted": {
+          "title": "Inventário v{version} enviado a {when}",
+          "text": "Uma versão enviada não se altera. Se precisares de mudar alguma coisa, abre uma versão nova: começa com tudo o que está nesta.",
+          "edit": "Editar inventário",
+          "back": "Voltar ao pedido"
         }
       },
       "detail": {
@@ -931,7 +946,8 @@
           "photo": "Foto do cliente",
           "emptyTitle": "Ainda não há inventário",
           "emptyText": "Quando o cliente enviar o inventário pelo link, ou o preencheres tu, aparece aqui.",
-          "fill": "Preencher inventário"
+          "fill": "Preencher inventário",
+          "noRoom": "Sem divisão"
         },
         "addresses": {
           "floor": "Andar",
@@ -980,6 +996,7 @@
           },
           "inventorySubmitted": "O cliente enviou o inventário (v{version})",
           "inventoryMeta": "{when} · notificação enviada à equipa",
+          "inventoryFilled": "A empresa preencheu o inventário (v{version})",
           "proposalSent": "Proposta enviada (v{version})",
           "won": "Proposta aceite",
           "lost": "Pedido perdido",
@@ -1006,7 +1023,7 @@
           "canEdit": "{name} pode alterar o inventário até aceitar uma proposta.",
           "expiredText": "O link caducou: {name} já não consegue alterar o inventário.",
           "closedText": "O pedido está fechado: o link já não dá acesso.",
-          "copy": "Copiar link",
+          "copy": "Gerar link novo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
           "noteLabel": "Nota interna",

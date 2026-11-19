@@ -8,7 +8,8 @@ type Props = {
   t: InventoryText;
   title: string;
   items: readonly CatalogItem[];
-  quantities: Readonly<Record<string, number>>;
+  /** Cantidad del objeto en la división que se está viendo. */
+  quantityOf: (itemId: string) => number;
   query: string;
   onQuery: (query: string) => void;
   onChange: (id: string, quantity: number) => void;
@@ -17,7 +18,7 @@ type Props = {
 const roundButton =
   "inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full text-[13px] font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-export function CatalogGrid({ t, title, items, quantities, query, onQuery, onChange }: Props) {
+export function CatalogGrid({ t, title, items, quantityOf, query, onQuery, onChange }: Props) {
   const c = t.catalog;
 
   return (
@@ -44,7 +45,7 @@ export function CatalogGrid({ t, title, items, quantities, query, onQuery, onCha
 
       <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(170px,1fr))]">
         {items.map((item) => {
-          const quantity = quantities[item.id] ?? 0;
+          const quantity = quantityOf(item.id);
           return (
             <div
               key={item.id}

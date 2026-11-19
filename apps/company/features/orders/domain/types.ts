@@ -19,7 +19,7 @@ export type InventoryMode = (typeof INVENTORY_MODES)[number];
 /** Días que el enlace del cliente queda activo (RF-15). */
 export const LINK_VALIDITY_DAYS = [7, 14, 30] as const;
 export type LinkValidityDays = (typeof LINK_VALIDITY_DAYS)[number];
-export const DEFAULT_LINK_VALIDITY_DAYS: LinkValidityDays = 14;
+export const DEFAULT_LINK_VALIDITY_DAYS: LinkValidityDays = 7;
 
 /** Máximo de paradas intermedias entre el origen y el destino. Provisional. */
 export const MAX_STOPS = 3;
@@ -64,7 +64,17 @@ export type Order = {
   /** Último día de validez del enlace, aaaa-mm-dd. `null` si el inventario lo rellena la empresa. */
   linkValidUntil: string | null;
   linkValidityDays: LinkValidityDays | null;
+  /** Ya se generó un enlace. Solo se ve al generarlo (RNF-02): después hay que generar otro, que anula el anterior. */
+  linkShared: boolean;
+  /** Teléfono del cliente con prefijo (+351…), para WhatsApp y SMS. */
+  clientPhone: string | null;
+  clientEmail: string | null;
 };
+
+/** Resultado de generar el enlace del cliente (RF-15). El enlace completo solo existe en esta respuesta. */
+export type ShareLinkResult =
+  | { ok: true; url: string; validUntil: string }
+  | { ok: false; error: "failed" };
 
 /** Cliente que ya existe en la empresa, sugerido al escribir su teléfono (RF-14). */
 export type ClientSuggestion = {

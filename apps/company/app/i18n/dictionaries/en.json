@@ -325,8 +325,8 @@
           "titleNone": "{greeting}, {name}. You're all caught up.",
           "bodyNone": "Nothing is waiting for you. A good moment to create a new order.",
           "ready": {
-            "one": "{count} client has sent their inventory and is waiting for a proposal.",
-            "other": "{count} clients have sent their inventory and are waiting for a proposal."
+            "one": "{count} request has its inventory ready to quote.",
+            "other": "{count} requests have their inventory ready to quote."
           },
           "nudge": {
             "one": "{count} needs a little nudge to finish.",
@@ -472,7 +472,7 @@
           "continue-proposal": "Continue",
           "resend-link": "Resend link",
           "share-link": "Share link",
-          "copy-link": "Copy link",
+          "copy-link": "Generate new link",
           "fill-inventory": "Fill in inventory",
           "view-proposal": "View proposal",
           "view-job": "View job"
@@ -700,13 +700,27 @@
         "linkLabel": "Order link",
         "copy": "Copy link",
         "validUntil": "Active until {date} · gives access to this order only",
-        "pending": "Link generation is not available yet in this version.",
+        "generate": "Generate link",
+        "generating": "Generating…",
+        "regenerate": "Generate new link",
+        "regenerateWarning": "The previous link will stop working. Generate a new one?",
+        "regenerateConfirm": "Yes, generate new",
+        "cancel": "Cancel",
+        "copied": "Copied ✓",
+        "linkHidden": "Link already generated",
+        "hiddenNote": "For security, the link is only shown when generated. To send it again, generate a new one.",
+        "generated": "Link generated. Copy or send it now: it is only shown this once.",
+        "error": "The link could not be generated. Please try again.",
+        "generateFirst": "Generate the link first",
+        "noPhone": "The client has no mobile number",
+        "noEmail": "The client has no email",
+        "emailSubject": "Your move inventory",
         "messageLabel": "Message",
         "whatsapp": "WhatsApp",
         "sms": "SMS",
         "email": "Email",
         "notice": {
-          "before": "When you copy or send the link, the order moves to ",
+          "before": "When you generate the link, the request moves to ",
           "status": "Awaiting inventory",
           "after": ". We'll let you know when {name} sends the inventory."
         },
@@ -743,11 +757,13 @@
         "steps": {
           "items": {
             "label": "Items",
-            "hint": "{items} in {rooms}"
+            "hint": "{items} in {rooms}",
+            "missing": "No items yet"
           },
           "access": {
             "label": "Access",
-            "hint": "Origin and destination"
+            "hint": "Origin and destination",
+            "missing": "Required access details missing"
           },
           "extras": {
             "label": "Extra services",
@@ -759,14 +775,7 @@
         },
         "rooms": {
           "label": "Rooms",
-          "add": "Add room",
-          "names": {
-            "living-room": "Living room",
-            "bedroom": "Bedroom",
-            "kitchen": "Kitchen",
-            "bathroom": "Bathroom",
-            "boxes": "Boxes"
-          }
+          "add": "Add room"
         },
         "catalog": {
           "searchLabel": "Search the catalog",
@@ -779,7 +788,8 @@
           "addOne": "Add {name}",
           "flags": {
             "fragile": "Fragile",
-            "dismantle": "Dismantle"
+            "dismantle": "Dismantle",
+            "extra-crew": "Extra crew"
           },
           "custom": {
             "title": "Not on the list?",
@@ -819,25 +829,11 @@
         },
         "extras": {
           "title": "Extra services",
-          "subtitle": "Only extras that are active in Pricing and extras appear.",
-          "empty": "There are no active extras.",
-          "pricing": {
-            "unit": "{price} per unit",
-            "hour": "{price} per hour",
-            "m3-month": "{price} per m³ and month",
-            "fixed": "{price} fixed price"
-          },
-          "quantity": "Quantity: {quantity}",
-          "units": {
-            "boxes": {
-              "one": "{count} box",
-              "other": "{count} boxes"
-            },
-            "hours": {
-              "one": "{count} h",
-              "other": "{count} h"
-            }
-          }
+          "subtitle": "Tick the services the client asked for. They are a reference: the service, quantity and price go in the quote.",
+          "empty": "There are no service types available.",
+          "noteLabel": "Note (optional)",
+          "notePlaceholder": "E.g. upright piano, 2nd floor without a lift",
+          "footnote": "If the client does not know what they need, leave everything unticked. You can suggest services in the quote."
         },
         "footer": {
           "hint": "you can go back to any step",
@@ -846,6 +842,25 @@
           "toAccess": "Continue to access",
           "toExtras": "Continue to extras",
           "finish": "Finish inventory"
+        },
+        "newVersion": "New version (v{version})",
+        "save": {
+          "saving": "Saving…",
+          "saved": "Saved"
+        },
+        "errors": {
+          "accessIncomplete": "Required access details are missing: floor, parking and elevator for each address.",
+          "empty": "Add at least one item before finishing.",
+          "notAllowed": "You can't change this order.",
+          "noDraft": "This inventory has already been sent. Reload the page.",
+          "invalid": "Some data is invalid. Check the fields and try again.",
+          "failed": "It couldn't be saved. Try again."
+        },
+        "submitted": {
+          "title": "Inventory v{version} sent on {when}",
+          "text": "A sent version doesn't change. If you need to change something, open a new version: it starts with everything in this one.",
+          "edit": "Edit inventory",
+          "back": "Back to order"
         }
       },
       "detail": {
@@ -931,7 +946,8 @@
           "photo": "Client photo",
           "emptyTitle": "No inventory yet",
           "emptyText": "Once the client sends the inventory through the link, or you fill it in, it shows up here.",
-          "fill": "Fill in inventory"
+          "fill": "Fill in inventory",
+          "noRoom": "No room"
         },
         "addresses": {
           "floor": "Floor",
@@ -980,6 +996,7 @@
           },
           "inventorySubmitted": "The client sent the inventory (v{version})",
           "inventoryMeta": "{when} · team notified",
+          "inventoryFilled": "The company filled in the inventory (v{version})",
           "proposalSent": "Proposal sent (v{version})",
           "won": "Proposal accepted",
           "lost": "Order lost",
@@ -1006,7 +1023,7 @@
           "canEdit": "{name} can change the inventory until a proposal is accepted.",
           "expiredText": "The link has expired: {name} can no longer change the inventory.",
           "closedText": "The order is closed: the link no longer gives access.",
-          "copy": "Copy link",
+          "copy": "Generate new link",
           "viewAsClient": "View as client",
           "notes": "Internal notes",
           "noteLabel": "Internal note",

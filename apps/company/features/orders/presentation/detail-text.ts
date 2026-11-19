@@ -70,11 +70,18 @@ export function describeEvent(event: OrderEvent, t: OrdersText, locale: Locale):
         tone: "ink",
       };
     case "inventory-submitted":
-      return {
-        title: interpolate(h.inventorySubmitted, { version: event.version }),
-        meta: interpolate(h.inventoryMeta, { when }),
-        tone: "primary",
-      };
+      // Rellenado por la empresa (RF-19): se dice quién lo envió, como en el resto de acciones del equipo
+      return event.by === "company"
+        ? {
+            title: interpolate(h.inventoryFilled, { version: event.version }),
+            meta: interpolate(h.meta, { when, actor: event.actor }),
+            tone: "primary",
+          }
+        : {
+            title: interpolate(h.inventorySubmitted, { version: event.version }),
+            meta: interpolate(h.inventoryMeta, { when }),
+            tone: "primary",
+          };
     case "proposal-sent":
       return {
         title: interpolate(h.proposalSent, { version: event.version }),

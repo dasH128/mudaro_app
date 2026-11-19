@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "title": "A sua mudança · Mudaro",
+    "description": "Indique o que vai levar na sua mudança.",
+    "linkTitle": "Inventário da sua mudança"
+  },
+  "home": {
+    "title": "Abra o link que recebeu",
+    "text": "Esta página só funciona com o link do seu pedido. Peça-o à empresa de mudanças se não o encontrar."
+  },
+  "link": {
+    "invalidTitle": "Este link não é válido",
+    "invalidText": "Pode ter sido substituído por um link novo ou estar incompleto. Peça à empresa de mudanças que o envie outra vez.",
+    "errorTitle": "Não foi possível abrir o seu pedido",
+    "errorText": "Tente outra vez dentro de momentos.",
+    "retry": "Tentar outra vez"
+  },
+  "header": {
+    "eyebrow": "Pedido de mudança · {company}",
+    "greeting": "Olá {name}",
+    "title": "Olá {name}, o que vai levar?",
+    "subtitle": "A {company} prepara o orçamento com o que indicar aqui. Pode fazê-lo aos poucos: fica guardado.",
+    "validUntil": "Pode editar até {date}",
+    "expired": "O prazo para editar terminou a {date}"
+  },
+  "expired": {
+    "title": "O prazo para editar terminou",
+    "text": "Já não é possível alterar o inventário por este link. Se ainda precisar de mudar alguma coisa, fale com a {company}."
+  },
+  "submitted": {
+    "title": "Inventário enviado",
+    "text": "A {company} recebeu o seu inventário a {when}. A proposta vai aparecer neste mesmo link.",
+    "version": "Versão {version}"
+  },
+  "inventory": {
+    "stepsLabel": "Passos do inventário",
+    "itemsCount": {
+      "one": "{count} item",
+      "other": "{count} itens"
+    },
+    "roomsCount": {
+      "one": "{count} divisão",
+      "other": "{count} divisões"
+    },
+    "steps": {
+      "items": {
+        "label": "Objetos",
+        "hint": "{items} em {rooms}",
+        "missing": "Faltam objetos"
+      },
+      "access": {
+        "label": "Acessos",
+        "hint": "Andar, elevador e estacionamento",
+        "missing": "Faltam acessos obrigatórios"
+      },
+      "extras": {
+        "label": "Serviços extra",
+        "hint": {
+          "one": "{count} escolhido",
+          "other": "{count} escolhidos"
+        }
+      }
+    },
+    "rooms": {
+      "label": "Divisões"
+    },
+    "catalog": {
+      "searchLabel": "Procurar objetos",
+      "searchPlaceholder": "Procurar: sofá, cama, caixa…",
+      "noResults": "Nenhum objeto corresponde à pesquisa.",
+      "perUnit": "{volume} por unidade",
+      "add": "Adicionar",
+      "more": "Mais",
+      "removeOne": "Retirar {name}",
+      "addOne": "Adicionar {name}",
+      "flags": {
+        "fragile": "Frágil",
+        "dismantle": "Desmontar",
+        "extra-crew": "Pessoal extra"
+      }
+    },
+    "summary": {
+      "title": "Vai para o camião",
+      "items": "itens",
+      "fragile": "frágeis",
+      "dismantle": "desmontar",
+      "declared": "Volume aproximado. A empresa confirma no orçamento.",
+      "thisRoom": "Nesta divisão",
+      "roomEmpty": "Ainda sem objetos. Use o botão Adicionar."
+    },
+    "access": {
+      "kinds": {
+        "origin": "Origem",
+        "destination": "Destino",
+        "stop": "Paragem {n}"
+      },
+      "floor": "Andar",
+      "parking": "Estacionamento a",
+      "meters": "metros",
+      "lift": "Elevador",
+      "liftLabel": "Elevador em {place}",
+      "lifts": {
+        "none": "Não tem",
+        "small": "Pequeno",
+        "normal": "Normal"
+      },
+      "narrowStairs": "Escadas estreitas",
+      "parkingPermit": "Precisa de licença de estacionamento",
+      "notes": "Notas para a equipa",
+      "notesPlaceholder": "Ex.: portão estreito, horário do condomínio",
+      "floorHint": "0 para rés-do-chão, -1 para cave"
+    },
+    "extras": {
+      "title": "Serviços extra",
+      "subtitle": "Marque o que gostaria que a empresa fizesse. O preço aparece no orçamento.",
+      "empty": "Não há serviços disponíveis.",
+      "noteLabel": "Nota (opcional)",
+      "notePlaceholder": "Ex.: piano vertical, 2.º andar sem elevador",
+      "footnote": "Se não sabe do que precisa, deixe tudo por marcar."
+    },
+    "footer": {
+      "hint": "pode voltar a qualquer passo",
+      "hintLast": "ao enviar, a empresa recebe o inventário",
+      "back": "Voltar",
+      "toAccess": "Continuar para acessos",
+      "toExtras": "Continuar para extras",
+      "finish": "Enviar inventário"
+    },
+    "save": {
+      "saving": "A guardar…",
+      "saved": "Guardado"
+    },
+    "errors": {
+      "accessIncomplete": "Faltam acessos obrigatórios: andar, estacionamento e elevador de cada morada.",
+      "empty": "Adicione pelo menos um objeto antes de enviar.",
+      "expired": "O prazo para editar terminou. Recarregue a página.",
+      "notFound": "Este link já não é válido.",
+      "noDraft": "Este inventário já foi enviado. Recarregue a página.",
+      "invalid": "Há dados inválidos. Reveja os campos e tente de novo.",
+      "failed": "Não foi possível guardar. Tente de novo."
+    }
+  }
+}

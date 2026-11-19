@@ -28,13 +28,14 @@ export function actionHref(lang: Locale, action: OrderAction, id: string): strin
     case "continue-proposal":
       return `${localePath(lang, ROUTES.proposals.new)}?${new URLSearchParams({ request: id })}`;
     case "share-link":
+    case "resend-link":
+    case "copy-link":
+      // El enlace solo se ve al generarlo (RNF-02): reenviar o copiar es generar uno nuevo en la pantalla de compartir.
       return localePath(lang, ROUTES.orders.created(id));
     case "fill-inventory":
       return localePath(lang, ROUTES.orders.inventory(id));
     case "view-proposal":
       return localePath(lang, ROUTES.proposals.list);
-    case "resend-link":
-    case "copy-link":
     case "view-job":
       return null;
   }

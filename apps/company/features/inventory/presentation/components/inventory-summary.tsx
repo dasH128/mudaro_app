@@ -7,11 +7,10 @@ type Props = {
   t: InventoryText;
   totals: Totals;
   /** Objetos de la división actual que ya llevan cantidad. */
-  roomItems: readonly CatalogItem[];
-  quantities: Readonly<Record<string, number>>;
+  roomLines: readonly { item: CatalogItem; quantity: number }[];
 };
 
-export function InventorySummary({ t, totals, roomItems, quantities }: Props) {
+export function InventorySummary({ t, totals, roomLines }: Props) {
   const s = t.summary;
   const stats = [
     { label: s.items, value: totals.items },
@@ -40,12 +39,11 @@ export function InventorySummary({ t, totals, roomItems, quantities }: Props) {
 
       <section className="flex flex-col gap-2.5 rounded-[20px] border border-line bg-surface p-4.5">
         <h3 className="text-[15px] font-bold">{s.thisRoom}</h3>
-        {roomItems.length === 0 ? (
+        {roomLines.length === 0 ? (
           <p className="text-sm text-muted">{s.roomEmpty}</p>
         ) : (
           <ul className="flex flex-col gap-2">
-            {roomItems.map((item) => {
-              const quantity = quantities[item.id] ?? 0;
+            {roomLines.map(({ item, quantity }) => {
               return (
                 <li key={item.id} className="flex items-center gap-2.5 text-sm">
                   <span className="min-w-7 font-bold">{quantity}×</span>

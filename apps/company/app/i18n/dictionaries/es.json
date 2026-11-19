@@ -325,8 +325,8 @@
           "titleNone": "{greeting}, {name}. Todo al día.",
           "bodyNone": "No hay pedidos esperándote. Buen momento para crear uno nuevo.",
           "ready": {
-            "one": "{count} cliente ya envió el inventario y espera la propuesta.",
-            "other": "{count} clientes ya enviaron el inventario y esperan la propuesta."
+            "one": "{count} pedido tiene el inventario listo para presupuestar.",
+            "other": "{count} pedidos tienen el inventario listo para presupuestar."
           },
           "nudge": {
             "one": "{count} necesita un empujoncito para terminar.",
@@ -472,7 +472,7 @@
           "continue-proposal": "Continuar",
           "resend-link": "Reenviar enlace",
           "share-link": "Compartir enlace",
-          "copy-link": "Copiar enlace",
+          "copy-link": "Generar enlace nuevo",
           "fill-inventory": "Rellenar inventario",
           "view-proposal": "Ver propuesta",
           "view-job": "Ver trabajo"
@@ -700,13 +700,27 @@
         "linkLabel": "Enlace del pedido",
         "copy": "Copiar enlace",
         "validUntil": "Activo hasta el {date} · da acceso solo a este pedido",
-        "pending": "La generación del enlace aún no está disponible en esta versión.",
+        "generate": "Generar enlace",
+        "generating": "Generando…",
+        "regenerate": "Generar enlace nuevo",
+        "regenerateWarning": "El enlace anterior dejará de funcionar. ¿Quieres generar uno nuevo?",
+        "regenerateConfirm": "Sí, generar nuevo",
+        "cancel": "Cancelar",
+        "copied": "Copiado ✓",
+        "linkHidden": "Enlace ya generado",
+        "hiddenNote": "Por seguridad, el enlace solo se ve al generarlo. Para enviarlo otra vez, genera uno nuevo.",
+        "generated": "Enlace generado. Cópialo o envíalo ya: solo se muestra ahora.",
+        "error": "No se pudo generar el enlace. Inténtalo de nuevo.",
+        "generateFirst": "Genera el enlace primero",
+        "noPhone": "El cliente no tiene móvil",
+        "noEmail": "El cliente no tiene email",
+        "emailSubject": "El inventario de tu mudanza",
         "messageLabel": "Mensaje",
         "whatsapp": "WhatsApp",
         "sms": "SMS",
         "email": "Email",
         "notice": {
-          "before": "Cuando copies o envíes el enlace, el pedido pasa a ",
+          "before": "Al generar el enlace, el pedido pasa a ",
           "status": "A la espera de inventario",
           "after": ". Te avisamos cuando {name} envíe el inventario."
         },
@@ -743,11 +757,13 @@
         "steps": {
           "items": {
             "label": "Objetos",
-            "hint": "{items} en {rooms}"
+            "hint": "{items} en {rooms}",
+            "missing": "Faltan objetos"
           },
           "access": {
             "label": "Accesos",
-            "hint": "Origen y destino"
+            "hint": "Origen y destino",
+            "missing": "Faltan accesos obligatorios"
           },
           "extras": {
             "label": "Servicios extra",
@@ -759,14 +775,7 @@
         },
         "rooms": {
           "label": "Estancias",
-          "add": "Añadir estancia",
-          "names": {
-            "living-room": "Salón",
-            "bedroom": "Dormitorio",
-            "kitchen": "Cocina",
-            "bathroom": "Baño",
-            "boxes": "Cajas"
-          }
+          "add": "Añadir estancia"
         },
         "catalog": {
           "searchLabel": "Buscar en el catálogo",
@@ -779,7 +788,8 @@
           "addOne": "Añadir {name}",
           "flags": {
             "fragile": "Frágil",
-            "dismantle": "Desmontar"
+            "dismantle": "Desmontar",
+            "extra-crew": "Personal extra"
           },
           "custom": {
             "title": "¿No está en la lista?",
@@ -819,25 +829,11 @@
         },
         "extras": {
           "title": "Servicios extra",
-          "subtitle": "Solo aparecen los extras activos en Tarifas y extras.",
-          "empty": "No hay extras activos.",
-          "pricing": {
-            "unit": "{price} por unidad",
-            "hour": "{price} por hora",
-            "m3-month": "{price} por m³ y mes",
-            "fixed": "{price} precio fijo"
-          },
-          "quantity": "Cantidad: {quantity}",
-          "units": {
-            "boxes": {
-              "one": "{count} caja",
-              "other": "{count} cajas"
-            },
-            "hours": {
-              "one": "{count} h",
-              "other": "{count} h"
-            }
-          }
+          "subtitle": "Marca los servicios que pidió el cliente. Son una referencia: el servicio, la cantidad y el precio van en el presupuesto.",
+          "empty": "No hay tipos de servicio disponibles.",
+          "noteLabel": "Nota (opcional)",
+          "notePlaceholder": "Ej.: piano vertical, 2.º piso sin ascensor",
+          "footnote": "Si el cliente no sabe qué necesita, deja todo sin marcar. Puedes sugerir servicios en el presupuesto."
         },
         "footer": {
           "hint": "puedes volver a cualquier paso",
@@ -846,6 +842,25 @@
           "toAccess": "Continuar a accesos",
           "toExtras": "Continuar a extras",
           "finish": "Concluir inventario"
+        },
+        "newVersion": "Nueva versión (v{version})",
+        "save": {
+          "saving": "Guardando…",
+          "saved": "Guardado"
+        },
+        "errors": {
+          "accessIncomplete": "Faltan accesos obligatorios: planta, aparcamiento y ascensor de cada dirección.",
+          "empty": "Añade al menos un objeto antes de concluir.",
+          "notAllowed": "No puedes cambiar este pedido.",
+          "noDraft": "Este inventario ya se envió. Recarga la página.",
+          "invalid": "Hay datos no válidos. Revisa los campos e inténtalo de nuevo.",
+          "failed": "No se pudo guardar. Inténtalo de nuevo."
+        },
+        "submitted": {
+          "title": "Inventario v{version} enviado el {when}",
+          "text": "Una versión enviada no se cambia. Si necesitas cambiar algo, abre una versión nueva: empieza con todo lo que tiene esta.",
+          "edit": "Editar inventario",
+          "back": "Volver al pedido"
         }
       },
       "detail": {
@@ -931,7 +946,8 @@
           "photo": "Foto del cliente",
           "emptyTitle": "Aún no hay inventario",
           "emptyText": "Cuando el cliente envíe el inventario por el enlace, o lo rellenes tú, aparecerá aquí.",
-          "fill": "Rellenar inventario"
+          "fill": "Rellenar inventario",
+          "noRoom": "Sin estancia"
         },
         "addresses": {
           "floor": "Planta",
@@ -980,6 +996,7 @@
           },
           "inventorySubmitted": "El cliente envió el inventario (v{version})",
           "inventoryMeta": "{when} · aviso enviado al equipo",
+          "inventoryFilled": "La empresa rellenó el inventario (v{version})",
           "proposalSent": "Propuesta enviada (v{version})",
           "won": "Propuesta aceptada",
           "lost": "Pedido perdido",
@@ -1006,7 +1023,7 @@
           "canEdit": "{name} puede cambiar el inventario hasta aceptar una propuesta.",
           "expiredText": "El enlace caducó: {name} ya no puede cambiar el inventario.",
           "closedText": "El pedido está cerrado: el enlace ya no da acceso.",
-          "copy": "Copiar enlace",
+          "copy": "Generar enlace nuevo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
           "noteLabel": "Nota interna",

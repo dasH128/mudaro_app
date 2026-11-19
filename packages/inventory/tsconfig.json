@@ -1,0 +1,4 @@
+{
+  "extends": "@mudaro/config/tsconfig.base.json",
+  "include": ["src/**/*.ts"]
+}

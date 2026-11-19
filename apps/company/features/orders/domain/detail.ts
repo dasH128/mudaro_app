@@ -1,7 +1,7 @@
 // Detalle de un pedido (P6). TypeScript puro: sin React, Next ni Supabase.
 // Las fechas van en ISO (aaaa-mm-dd o con hora) y los volúmenes en m³; el formato lo pone la interfaz.
 
-import type { ItemFlag, LiftSize, RoomKey } from "@/features/inventory/domain/types";
+import type { ItemFlag, LiftSize } from "@/features/inventory/domain/types";
 import type { ClientType, Flexibility, InventoryMode, OrderStage, OrderStatus, Source } from "./types";
 
 /** Ficha del cliente del pedido. El teléfono va normalizado (+351XXXXXXXXX). */
@@ -45,7 +45,8 @@ export type InventoryLine = {
   hasPhoto: boolean;
 };
 
-export type InventoryRoom = { room: RoomKey; lines: readonly InventoryLine[] };
+/** División del inventario. `name` llega traducido del catálogo; vacío si la línea no tiene división. */
+export type InventoryRoom = { slug: string; name: string; lines: readonly InventoryLine[] };
 
 export type DetailInventory = {
   version: number;
@@ -72,7 +73,8 @@ export type OrderEvent =
   | { kind: "created"; at: string; actor: string; source: Source | null }
   | { kind: "note-added"; at: string; actor: string }
   | { kind: "link-shared"; at: string; actor: string; validityDays: number }
-  | { kind: "inventory-submitted"; at: string; version: number }
+  /** `by`: quién envió la versión. La empresa la envía cuando rellena ella el inventario (RF-19). */
+  | { kind: "inventory-submitted"; at: string; version: number; by: "client" | "company"; actor: string }
   | { kind: "proposal-sent"; at: string; actor: string; version: number }
   | { kind: "won"; at: string }
   | { kind: "lost"; at: string; reason: string | null };
