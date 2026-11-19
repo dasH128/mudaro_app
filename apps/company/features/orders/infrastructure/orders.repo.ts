@@ -8,6 +8,7 @@ import { getRoomNames, itemFlagOf } from "@/features/inventory/infrastructure/in
 import type {
   DetailAddress,
   DetailInventory,
+  DetailJob,
   DetailLink,
   DetailNote,
   InventoryLine,
@@ -69,6 +70,7 @@ const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, creat
   shipment_notes(body, created_at, author:company_users(name)),
   quotes(number, version, status, valid_until, sent_at, rejected_reason, vat_pct,
     inventory:inventories(version), quote_lines(total_cents, optional), acceptances(accepted_at, signed_total_cents)),
+  jobs(status, scheduled_start),
   events:shipment_events(kind, occurred_at, actor_type, data)`;
 
 // --- Traducciones entre la base de datos y el dominio ---
@@ -540,8 +542,17 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
           inventoryVersion: quote.inventory?.version ?? 0,
         };
       }),
+    job: jobOf(data.jobs),
     events,
   };
+}
+
+/** El trabajo del envío (hay uno como mucho: `jobs.shipment_id` es único). */
+function jobOf(
+  jobs: { status: DetailJob["status"]; scheduled_start: string } | { status: DetailJob["status"]; scheduled_start: string }[] | null,
+): DetailJob | null {
+  const row = Array.isArray(jobs) ? jobs[0] : jobs;
+  return row ? { status: row.status, scheduledStart: row.scheduled_start } : null;
 }
 
 /** Inventario de la versión vigente. Mientras no haya ninguna versión enviada, no hay inventario que mostrar. */

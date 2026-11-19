@@ -103,10 +103,12 @@ Migración `20261119400000_signatures_bucket` (bucket privado, solo PNG de hasta
 - Estados: aceptado (resumen y fecha), rechazado, caducado y "a empresa está a preparar um orçamento novo" (superseded).
 - Vista de impresión para "Guardar como PDF" (P4).
 
-### 5.6 · Ganho y trabajo programado (RF-46)
+### 5.6 · Ganho y trabajo programado (RF-46) · hecho el 19/11/2026
 
-- La aceptación ya crea el trabajo (5.2). Aquí se muestra: detalle del pedido con "Ganho" y el trabajo; lista de pedidos en la etapa "Ganhos".
-- Agenda: lee los trabajos reales (fecha, cliente, dirección) y los añade a los de ejemplo, marcados. Conectarla del todo es el paso 6.
+Probado en el navegador con MD-0005 (trabajo el 20/12/2026 a las 09:00).
+
+- La aceptación ya crea el trabajo (5.2). Aquí se muestra: Resumo del pedido con la tarjeta "Trabalho agendado" (fecha, hora y "Ver na agenda"); en la lista, la etapa "Ganhos" y "Ver trabalho", que lleva a ese Resumo (la ficha del trabajo es del paso 6).
+- Agenda: `schedule.repo.ts` lee los trabajos reales (número del pedido, cliente, origen y destino de la versión del inventario del orçamento, operários y volumen) y los orçamentos enviados, y los suma a los de ejemplo. La hora de fin es el inicio más las horas estimadas del orçamento. Sin vehículo ni equipa, se distinguen de los de ejemplo por salir "por atribuir": la vista de día tiene una fila "Por atribuir" para ellos (antes no se veían). Conectarla del todo es el paso 6.
 
 ### 5.7 · Plan de pruebas
 

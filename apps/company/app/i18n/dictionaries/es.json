@@ -1024,6 +1024,10 @@
         },
         "summary": {
           "moveTitle": "La mudanza",
+          "jobTitle": "Trabajo programado",
+          "jobWhen": "{date} a las {time}",
+          "jobPending": "Equipo y vehículo aún sin asignar.",
+          "viewSchedule": "Ver en la agenda",
           "edit": "Editar",
           "date": "Fecha de la mudanza",
           "volume": "Volumen declarado",
@@ -2291,6 +2295,8 @@
         "label": "Día por recurso",
         "resource": "Recurso",
         "vehicles": "Vehículos",
+        "unassigned": "Por asignar",
+        "unassignedSub": "Sin vehículo ni equipo",
         "people": "Personas",
         "freeAllDay": "Libre todo el día"
       },

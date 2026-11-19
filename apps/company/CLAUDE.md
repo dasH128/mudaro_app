@@ -19,11 +19,11 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. "Gerar link" crea el enlace del cliente (`share_order_link`, RF-15) y lo muestra una sola vez (la base guarda su hash, RNF-02); después sale "Gerar link novo", con confirmación, que anula el anterior. WhatsApp, SMS y Email abren la app del dispositivo con el mensaje escrito (el envío automático, RF-16, sigue pendiente). La dirección del enlace sale de `CLIENT_APP_URL` (19/11/2026) |
 | Pedidos · Lista | `/[lang]/orders` | Conectada a Supabase (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Conectada a Supabase (RF-19 a RF-27, 18/11/2026). Catálogo real, borrador guardado con `save_inventory_draft` al cambiar de paso y con "Guardar e sair", "Concluir" envía la versión (`submit_inventory`). Con el inventario ya enviado muestra "Editar inventário", que abre una versión nueva |
-| Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Presupuestos vacíos hasta el paso 5. Pestaña en la URL (`?tab=`) |
+| Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Pestaña Orçamentos con las versiones (paso 5.4b). Con el envío ganado, Resumo muestra el trabajo programado y enlaza a la agenda (paso 5.6). Pestaña en la URL (`?tab=`) |
 | Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05, solo listar y detalle). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
-| Agenda | `/[lang]/schedule` | Hecha solo el diseño, con datos de ejemplo. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
+| Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
 | Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
@@ -150,7 +150,7 @@ features/
       types.ts              ← ScheduleJob, JobDetail, Vehicle, Person, Access, HistoryEvent, LiveEvent, PendingQuote (horas hh:mm, fechas aaaa-mm-dd)
       schedule.ts           ← semana y mes, carga de cada día, recursos que faltan (missingOf, issuesOf), filtro "Mostrar", avisos y solapes (layoutOverlaps)
     infrastructure/
-      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today })
+      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today }); trabajos y orçamentos enviados reales + ejemplo
       mock-data.ts          ← 11 trabajos con ficha, 17 más ligeros y 3 orçamentos en espera, con fechas relativas a hoy
     presentation/
       schedule-href.ts      ← enlaces con vista, fecha, filtro, día del mes y trabajo en la URL

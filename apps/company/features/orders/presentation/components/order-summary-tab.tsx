@@ -2,7 +2,8 @@ import Link from "next/link";
 
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
-import { formatVolume, formatWeekday } from "@/app/lib/format";
+import { dayLisbon, formatDate, formatTime, formatVolume, formatWeekday } from "@/app/lib/format";
+import { scheduleHref } from "@/features/schedule/presentation/schedule-href";
 import { routeOf, summarizeInventory, type DetailAddress, type OrderDetail } from "../../domain/detail";
 import { accessChips } from "../detail-text";
 import { describeWhen, type OrdersText } from "../orders-text";
@@ -62,6 +63,26 @@ export function OrderSummaryTab({ lang, t, order, today }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
+      {order.job && order.job.status !== "cancelled" ? (
+        <section aria-labelledby="job" className={`${card} gap-3 border-success-border bg-success-surface`}>
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
+            <h2 id="job" className={sectionTitle}>
+              {s.jobTitle}
+            </h2>
+            <Link
+              href={scheduleHref(lang, { view: "day", date: dayLisbon(order.job.scheduledStart) })}
+              className={ghostButton}
+            >
+              {s.viewSchedule}
+            </Link>
+          </div>
+          <p className="font-display text-xl font-extrabold">
+            {interpolate(s.jobWhen, { date: formatDate(order.job.scheduledStart), time: formatTime(order.job.scheduledStart) })}
+          </p>
+          <p className="text-sm text-muted">{s.jobPending}</p>
+        </section>
+      ) : null}
+
       <section aria-labelledby="move" className={`${card} gap-4.5`}>
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <h2 id="move" className={sectionTitle}>

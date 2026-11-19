@@ -1024,6 +1024,10 @@
         },
         "summary": {
           "moveTitle": "The move",
+          "jobTitle": "Scheduled job",
+          "jobWhen": "{date} at {time}",
+          "jobPending": "Crew and vehicle not assigned yet.",
+          "viewSchedule": "View in schedule",
           "edit": "Edit",
           "date": "Move date",
           "volume": "Declared volume",
@@ -2291,6 +2295,8 @@
         "label": "Day by resource",
         "resource": "Resource",
         "vehicles": "Vehicles",
+        "unassigned": "To assign",
+        "unassignedSub": "No vehicle or crew",
         "people": "People",
         "freeAllDay": "Free all day"
       },

@@ -62,6 +62,10 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
     jobs: dayJobs.filter((job) => job.crewIds.includes(person.id)),
   }));
 
+  // Trabajos aceptados que aún no tienen vehículo (paso 5.6: la asignación llega en el paso 6). Sin esta fila no se verían.
+  const unassigned = dayJobs.filter((job) => job.vehicleId === null);
+  const unassignedLane: Lane = { key: "unassigned", name: d.unassigned, sub: d.unassignedSub, icon: "?", round: false, jobs: unassigned };
+
   const renderLane = (lane: Lane) => (
     <div key={lane.key} className={`grid ${COLS} items-center py-1`}>
       <span className="flex min-w-0 items-center gap-2.5">
@@ -122,6 +126,12 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
             ))}
           </span>
         </div>
+        {unassigned.length > 0 ? (
+          <>
+            <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.unassigned}</span>
+            {renderLane(unassignedLane)}
+          </>
+        ) : null}
         <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.vehicles}</span>
         {vehicleLanes.map(renderLane)}
         <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.people}</span>

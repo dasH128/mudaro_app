@@ -1024,6 +1024,10 @@
         },
         "summary": {
           "moveTitle": "A mudança",
+          "jobTitle": "Trabalho agendado",
+          "jobWhen": "{date} às {time}",
+          "jobPending": "Equipa e veículo ainda por atribuir.",
+          "viewSchedule": "Ver na agenda",
           "edit": "Editar",
           "date": "Data da mudança",
           "volume": "Volume declarado",
@@ -2291,6 +2295,8 @@
         "label": "Dia por recurso",
         "resource": "Recurso",
         "vehicles": "Veículos",
+        "unassigned": "Por atribuir",
+        "unassignedSub": "Sem veículo nem equipa",
         "people": "Pessoas",
         "freeAllDay": "Livre o dia todo"
       },

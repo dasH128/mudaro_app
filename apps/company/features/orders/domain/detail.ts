@@ -101,6 +101,8 @@ export type OrderDetail = {
   quoteCount: number;
   /** Orçamentos del envío, de la versión más reciente a la más antigua (paso 5). */
   quotes: readonly DetailQuote[];
+  /** Trabajo creado al aceptar el orçamento (RF-46). `null` mientras no se gane el envío. */
+  job: DetailJob | null;
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
 };
@@ -120,6 +122,13 @@ export type DetailQuote = {
   rejectedReason: string | null;
   /** Versión del inventario sobre la que se calculó. */
   inventoryVersion: number;
+};
+
+/** Trabajo programado del envío. Equipo y vehículo se asignan en el paso 6. */
+export type DetailJob = {
+  status: "scheduled" | "in_progress" | "delivered" | "closed" | "cancelled";
+  /** Inicio previsto, instante ISO. */
+  scheduledStart: string;
 };
 
 /** Recorrido completo: origen, paradas y destino, en ese orden. */
