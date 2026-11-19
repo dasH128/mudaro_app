@@ -7,7 +7,7 @@ import { Icon, type IconName } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { ROUTES, localePath } from "@/app/lib/routes";
 
-export type NavKey = "home" | "orders" | "proposals" | "schedule" | "clients" | "fleet" | "team" | "pricing" | "reports";
+export type NavKey = "home" | "orders" | "quotes" | "schedule" | "clients" | "fleet" | "team" | "pricing" | "reports";
 
 type NavItem = { key: NavKey; icon: IconName; route: string; badge?: number };
 
@@ -15,7 +15,7 @@ type NavItem = { key: NavKey; icon: IconName; route: string; badge?: number };
 const NAV: readonly NavItem[] = [
   { key: "home", icon: "home", route: ROUTES.home },
   { key: "orders", icon: "orders", route: ROUTES.orders.list, badge: 5 },
-  { key: "proposals", icon: "proposals", route: ROUTES.proposals.list },
+  { key: "quotes", icon: "quotes", route: ROUTES.quotes.list },
   { key: "schedule", icon: "calendar", route: ROUTES.schedule },
   { key: "clients", icon: "clients", route: ROUTES.clients },
   { key: "fleet", icon: "truck", route: ROUTES.fleet.list },
@@ -41,7 +41,7 @@ export function AppNav({ lang, label, labels }: Props) {
     >
       {NAV.map((item) => {
         const href = localePath(lang, item.route);
-        // Inicio solo con la ruta exacta; el resto también en sus subrutas (/proposals/PR-0415)
+        // Inicio solo con la ruta exacta; el resto también en sus subrutas (/quotes/ORC-0415)
         const active = item.route === ROUTES.home ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link

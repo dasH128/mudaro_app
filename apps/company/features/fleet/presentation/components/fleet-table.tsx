@@ -42,7 +42,7 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
   const last = describeLastUse(vehicle, t, lang, today);
   const next = describeNextUse(vehicle, t, today);
   const idle = isIdle(vehicle, today);
-  const { proposals30d } = vehicle;
+  const { quotes30d } = vehicle;
   const muted = vehicle.active ? "" : "text-muted";
 
   return (
@@ -104,11 +104,11 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
         {vehicle.active ? (
           <>
             <span className="text-sm">
-              <strong className="font-display text-lg">{proposals30d.total}</strong>{" "}
-              <span className="text-[13px] text-muted">{pluralize(lang, proposals30d.total, t.proposalsWord)}</span>
+              <strong className="font-display text-lg">{quotes30d.total}</strong>{" "}
+              <span className="text-[13px] text-muted">{pluralize(lang, quotes30d.total, t.quotesWord)}</span>
             </span>
             <span className="text-xs font-bold text-success-foreground">
-              {pluralize(lang, proposals30d.accepted, t.acceptedWord)}
+              {pluralize(lang, quotes30d.accepted, t.acceptedWord)}
             </span>
           </>
         ) : (
@@ -140,7 +140,7 @@ function VehicleRow({ lang, t, vehicle, selectedId, params, today, compact }: Ro
 
 export function FleetTable({ active, inactive, emptyMessage, ...props }: Props) {
   const { t, compact } = props;
-  const head = [t.table.vehicle, t.table.status, t.table.capacity, ...(compact ? [] : [t.table.lastUse, t.table.nextUse]), t.table.proposals];
+  const head = [t.table.vehicle, t.table.status, t.table.capacity, ...(compact ? [] : [t.table.lastUse, t.table.nextUse]), t.table.quotes];
 
   return (
     <section aria-labelledby="fleet-table" className="overflow-x-auto rounded-3xl border border-line bg-surface px-2 pt-2 pb-3">

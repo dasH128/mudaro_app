@@ -22,8 +22,8 @@ const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visi
 export function OrderActionButton({ lang, t, id, action, size }: Props) {
   const label = t.actions[action];
   const href = actionHref(lang, action, id);
-  // Solo "Criar proposta" y "Continuar" son el paso principal: van en oscuro
-  const primary = action === "create-proposal" || action === "continue-proposal";
+  // Solo "Criar orçamento" y "Continuar" son el paso principal: van en oscuro
+  const primary = action === "create-quote" || action === "continue-quote";
   const look = primary
     ? "border border-foreground bg-foreground text-background"
     : "border border-field-border bg-surface text-foreground";

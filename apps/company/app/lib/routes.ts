@@ -22,10 +22,10 @@ export const ROUTES = {
     created: (id: string) => `/orders/${encodeURIComponent(id)}/created`,
     inventory: (id: string) => `/orders/${encodeURIComponent(id)}/inventory`,
   },
-  proposals: {
-    list: "/proposals",
-    new: "/proposals/new",
-    detail: (id: string) => `/proposals/${encodeURIComponent(id)}`,
+  quotes: {
+    list: "/quotes",
+    new: "/quotes/new",
+    detail: (id: string) => `/quotes/${encodeURIComponent(id)}`,
   },
   schedule: "/schedule",
   clients: "/clients",

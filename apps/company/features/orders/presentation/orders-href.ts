@@ -24,9 +24,9 @@ export function ordersHref(lang: Locale, { stage, q, view, limit, page }: Filter
  */
 export function actionHref(lang: Locale, action: OrderAction, id: string): string | null {
   switch (action) {
-    case "create-proposal":
-    case "continue-proposal":
-      return `${localePath(lang, ROUTES.proposals.new)}?${new URLSearchParams({ request: id })}`;
+    case "create-quote":
+    case "continue-quote":
+      return `${localePath(lang, ROUTES.quotes.new)}?${new URLSearchParams({ order: id })}`;
     case "share-link":
     case "resend-link":
     case "copy-link":
@@ -34,8 +34,8 @@ export function actionHref(lang: Locale, action: OrderAction, id: string): strin
       return localePath(lang, ROUTES.orders.created(id));
     case "fill-inventory":
       return localePath(lang, ROUTES.orders.inventory(id));
-    case "view-proposal":
-      return localePath(lang, ROUTES.proposals.list);
+    case "view-quote":
+      return localePath(lang, ROUTES.quotes.list);
     case "view-job":
       return null;
   }

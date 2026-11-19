@@ -75,7 +75,7 @@ export type OrderEvent =
   | { kind: "link-shared"; at: string; actor: string; validityDays: number }
   /** `by`: quién envió la versión. La empresa la envía cuando rellena ella el inventario (RF-19). */
   | { kind: "inventory-submitted"; at: string; version: number; by: "client" | "company"; actor: string }
-  | { kind: "proposal-sent"; at: string; actor: string; version: number }
+  | { kind: "quote-sent"; at: string; actor: string; version: number }
   | { kind: "won"; at: string }
   | { kind: "lost"; at: string; reason: string | null };
 
@@ -89,7 +89,7 @@ export type OrderDetail = {
   /** Fecha aproximada de la mudança, aaaa-mm-dd. */
   date: string;
   flexibility: Flexibility;
-  /** Distancia entre origen y destino. `null` hasta calcularla (se calcula en la proposta). */
+  /** Distancia entre origen y destino. `null` hasta calcularla (se calcula en el presupuesto). */
   distanceKm: number | null;
   origin: DetailAddress;
   /** Paradas intermedias, en el orden del recorrido. */
@@ -98,7 +98,7 @@ export type OrderDetail = {
   inventory: DetailInventory | null;
   link: DetailLink | null;
   note: DetailNote | null;
-  proposalCount: number;
+  quoteCount: number;
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
 };
@@ -111,7 +111,7 @@ export function routeOf(order: Pick<OrderDetail, "origin" | "stops" | "destinati
 // --- Percurso ---
 
 /** Hitos del pedido, en orden. */
-export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "proposal-sent", "won"] as const;
+export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "quote-sent", "won"] as const;
 export type JourneyStep = (typeof JOURNEY_STEPS)[number];
 
 export type JourneyItem = {
@@ -126,7 +126,7 @@ const STEP_OF_STATUS: Record<OrderStatus, JourneyStep> = {
   new: "created",
   "awaiting-inventory": "link-shared",
   "inventory-received": "inventory-submitted",
-  quoted: "proposal-sent",
+  quoted: "quote-sent",
   won: "won",
 };
 
@@ -138,10 +138,10 @@ function eventTime(events: readonly OrderEvent[], step: JourneyStep): string | n
 
 /**
  * Percurso del pedido: lo alcanzado, el hito actual y lo que falta.
- * Un pedido perdido deja hecho todo hasta la proposta y ninguno como actual.
+ * Un pedido perdido deja hecho todo hasta el presupuesto y ninguno como actual.
  */
 export function buildJourney(stage: OrderStage, events: readonly OrderEvent[]): JourneyItem[] {
-  const current = stage === "lost" ? JOURNEY_STEPS.indexOf("proposal-sent") : JOURNEY_STEPS.indexOf(STEP_OF_STATUS[stage]);
+  const current = stage === "lost" ? JOURNEY_STEPS.indexOf("quote-sent") : JOURNEY_STEPS.indexOf(STEP_OF_STATUS[stage]);
   return JOURNEY_STEPS.map((step, index) => ({
     step,
     state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
@@ -236,7 +236,7 @@ export function linkState(link: DetailLink, stage: OrderStage, today: string): L
 
 // --- Pestañas ---
 
-export const DETAIL_TABS = ["summary", "inventory", "addresses", "proposals", "history"] as const;
+export const DETAIL_TABS = ["summary", "inventory", "addresses", "quotes", "history"] as const;
 export type DetailTab = (typeof DETAIL_TABS)[number];
 export const DEFAULT_TAB: DetailTab = "summary";
 

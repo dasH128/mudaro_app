@@ -2,7 +2,7 @@ import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { dayLisbon, formatDate, formatMonthName, formatRelativeTime, formatTime, formatVolume } from "@/app/lib/format";
-import { daysBetween } from "@/features/proposals/domain/status";
+import { daysBetween } from "@/features/quotes/domain/status";
 import type { OrderListItem, OrderNote } from "../domain/types";
 
 export type OrdersText = Dictionary["app"]["orders"];
@@ -35,8 +35,8 @@ export function describeNote(note: OrderNote, t: OrdersListText, locale: Locale,
       });
     case "inventory-missing-measures":
       return pluralize(locale, note.missing, n.missingMeasures, { time: formatRelativeTime(locale, note.receivedAt) });
-    case "draft-proposal":
-      return interpolate(n.draftProposal, { time: formatRelativeTime(locale, note.savedAt) });
+    case "draft-quote":
+      return interpolate(n.draftQuote, { time: formatRelativeTime(locale, note.savedAt) });
     case "link-expiring": {
       const days = daysBetween(today, note.validUntil);
       if (days < 0) return n.linkExpired;
@@ -50,12 +50,12 @@ export function describeNote(note: OrderNote, t: OrdersListText, locale: Locale,
       return n.justCreatedSelf;
     case "filling":
       return interpolate(n.filling, { date: formatDate(note.validUntil) });
-    case "proposal-sent": {
+    case "quote-sent": {
       const days = daysBetween(today, note.validUntil);
-      if (days < 0) return interpolate(n.proposalExpired, { version: note.version });
+      if (days < 0) return interpolate(n.quoteExpired, { version: note.version });
       return days === 0
-        ? interpolate(n.proposalSentToday, { version: note.version })
-        : pluralize(locale, days, n.proposalSent, { version: note.version });
+        ? interpolate(n.quoteSentToday, { version: note.version })
+        : pluralize(locale, days, n.quoteSent, { version: note.version });
     }
     case "won":
       return dayLisbon(note.signedAt) === today

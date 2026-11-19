@@ -7,17 +7,17 @@ import { hasLocale } from "@/app/i18n/config";
 import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { todayLisbon } from "@/app/lib/format";
-import { DEFAULT_SORT, countByStatus, filterProposals, isSort, isStatus, sortProposals, summarize } from "@/features/proposals/domain/filters";
-import { applyExpiry } from "@/features/proposals/domain/status";
-import { getProposalsOverview } from "@/features/proposals/infrastructure/proposals.repo";
-import { ProposalsHeader } from "@/features/proposals/presentation/components/proposals-header";
-import { ProposalsTable } from "@/features/proposals/presentation/components/proposals-table";
-import { ProposalsToolbar } from "@/features/proposals/presentation/components/proposals-toolbar";
-import { ReadyRequests } from "@/features/proposals/presentation/components/ready-requests";
+import { DEFAULT_SORT, countByStatus, filterQuotes, isSort, isStatus, sortQuotes, summarize } from "@/features/quotes/domain/filters";
+import { applyExpiry } from "@/features/quotes/domain/status";
+import { getQuotesOverview } from "@/features/quotes/infrastructure/quotes.repo";
+import { QuotesHeader } from "@/features/quotes/presentation/components/quotes-header";
+import { QuotesTable } from "@/features/quotes/presentation/components/quotes-table";
+import { QuotesToolbar } from "@/features/quotes/presentation/components/quotes-toolbar";
+import { ReadyOrders } from "@/features/quotes/presentation/components/ready-orders";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
-  return { title: dict.metadata.proposalsTitle };
+  return { title: dict.metadata.quotesTitle };
 }
 
 function first(value: string | string[] | undefined): string | undefined {
@@ -28,12 +28,12 @@ function first(value: string | string[] | undefined): string | undefined {
 // Si se admite otro rol en el panel, este valor debe salir del rol de la sesión.
 const CAN_SEE_MARGIN = true;
 
-export default async function ProposalsPage({ searchParams }: PageProps<"/[lang]/proposals">) {
+export default async function QuotesPage({ searchParams }: PageProps<"/[lang]/quotes">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
   await requireCompanySession(locale);
 
-  const t = (await getDictionary()).app.proposals;
+  const t = (await getDictionary()).app.quotes;
 
   const params = await searchParams;
   const statusParam = first(params.status);
@@ -45,15 +45,15 @@ export default async function ProposalsPage({ searchParams }: PageProps<"/[lang]
   // La validez depende de la fecha de hoy: se calcula en cada petición, nunca en el prerender.
   await connection();
   const today = todayLisbon();
-  const overview = await getProposalsOverview({ includeMargin: CAN_SEE_MARGIN });
-  const all = applyExpiry(overview.proposals, today);
-  const rows = sortProposals(filterProposals(all, status, q), sort);
+  const overview = await getQuotesOverview({ includeMargin: CAN_SEE_MARGIN });
+  const all = applyExpiry(overview.quotes, today);
+  const rows = sortQuotes(filterQuotes(all, status, q), sort);
 
   return (
     <>
-      <ProposalsHeader lang={locale} t={t} summary={summarize(all)} metrics={overview.metrics} />
-      <ReadyRequests lang={locale} t={t} requests={overview.readyRequests} />
-      <ProposalsToolbar
+      <QuotesHeader lang={locale} t={t} summary={summarize(all)} metrics={overview.metrics} />
+      <ReadyOrders lang={locale} t={t} orders={overview.readyOrders} />
+      <QuotesToolbar
         lang={locale}
         t={t}
         status={status}
@@ -62,7 +62,7 @@ export default async function ProposalsPage({ searchParams }: PageProps<"/[lang]
         total={all.length}
         counts={countByStatus(all)}
       />
-      <ProposalsTable lang={locale} t={t} rows={rows} total={all.length} today={today} showMargin={CAN_SEE_MARGIN} />
+      <QuotesTable lang={locale} t={t} rows={rows} total={all.length} today={today} showMargin={CAN_SEE_MARGIN} />
     </>
   );
 }

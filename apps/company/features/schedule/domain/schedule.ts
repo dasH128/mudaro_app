@@ -1,5 +1,5 @@
 import { addDays, daysBetween } from "@/features/fleet/domain/fleet";
-import type { PendingProposal, Person, ScheduleJob, ScheduleOverview, Vehicle } from "./types";
+import type { PendingQuote, Person, ScheduleJob, ScheduleOverview, Vehicle } from "./types";
 
 // Reglas de la agenda: fechas, semana, mes, carga de cada día, recursos que faltan y avisos. Lógica pura.
 
@@ -105,8 +105,8 @@ export function filterJobs(jobs: readonly ScheduleJob[], show: Show): ScheduleJo
 export const jobsOn = (jobs: readonly ScheduleJob[], day: string): ScheduleJob[] =>
   jobs.filter((job) => job.date === day).sort((a, b) => a.start.localeCompare(b.start));
 
-export const proposalsOn = (proposals: readonly PendingProposal[], day: string): PendingProposal[] =>
-  proposals.filter((p) => p.date === day);
+export const quotesOn = (quotes: readonly PendingQuote[], day: string): PendingQuote[] =>
+  quotes.filter((p) => p.date === day);
 
 // ---- Mes: disponibilidad -------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ export type Level = (typeof LEVELS)[number];
 
 export type DayLoad = {
   jobs: ScheduleJob[];
-  proposals: PendingProposal[];
+  quotes: PendingQuote[];
   /** Personas que piden las mudanças aceptadas del día. */
   people: number;
   /** Proporción de la equipa ocupada (puede pasar de 1). */
@@ -129,10 +129,10 @@ export type DayLoad = {
   freePeople: number;
 };
 
-/** Cuánto pesa un día en recursos: estimado por las propostas aceptadas (las horas exactas están en Semana). */
+/** Cuánto pesa un día en recursos: estimado por los presupuestos aceptados (las horas exactas están en Semana). */
 export function dayLoad(day: string, overview: ScheduleOverview, jobs: readonly ScheduleJob[]): DayLoad {
   const dayJobs = jobsOn(jobs, day);
-  const proposals = proposalsOn(overview.proposals, day);
+  const quotes = quotesOn(overview.quotes, day);
   const total = overview.people.length;
   const people = dayJobs.reduce((sum, job) => sum + Math.max(job.crewNeeded, job.crewIds.length), 0);
   const load = total === 0 ? 0 : people / total;
@@ -141,7 +141,7 @@ export function dayLoad(day: string, overview: ScheduleOverview, jobs: readonly 
   const withIssues = dayJobs.filter((job) => issuesOf(job, overview.vehicles).length > 0).length;
   return {
     jobs: dayJobs,
-    proposals,
+    quotes,
     people,
     load,
     level,

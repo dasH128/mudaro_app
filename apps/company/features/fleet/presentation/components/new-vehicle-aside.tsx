@@ -58,7 +58,7 @@ type AsideProps = {
   checks: { plate: boolean; capacity: boolean; cost: boolean };
 };
 
-/** "Assim aparece na frota", impacto en las propostas y lista de comprobaciones. */
+/** "Assim aparece na frota", impacto en los presupuestos y lista de comprobaciones. */
 export function NewVehicleAside({ t: n, statusLabels, values, fleetCapacityM3, checks }: AsideProps) {
   const type: VehicleType = values.type;
   const active = values.active === "true";

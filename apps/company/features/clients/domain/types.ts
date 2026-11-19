@@ -65,7 +65,7 @@ export type ClientOrder = {
   moveOn: string;
   stage: ClientStage;
   note: OrderNote;
-  /** Importe de la proposta aceptada, con IVA. `null` si aún no hay ninguna. */
+  /** Importe del presupuesto aceptado, con IVA. `null` si aún no hay ninguna. */
   acceptedCents: number | null;
 };
 

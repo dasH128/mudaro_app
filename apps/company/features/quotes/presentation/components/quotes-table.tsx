@@ -5,16 +5,16 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatEuro, formatPercent, formatVolume } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { deriveValidity } from "@/features/proposals/domain/status";
-import type { Proposal } from "@/features/proposals/domain/types";
-import { describeValidity, type ProposalsText } from "../proposals-text";
+import { deriveValidity } from "@/features/quotes/domain/status";
+import type { Quote } from "@/features/quotes/domain/types";
+import { describeValidity, type QuotesText } from "../quotes-text";
 import { StatusPill } from "./status-pill";
 
 type Props = {
   lang: Locale;
-  t: ProposalsText;
-  rows: readonly Proposal[];
-  /** Total de propuestas sin filtrar, para "A mostrar N de M". */
+  t: QuotesText;
+  rows: readonly Quote[];
+  /** Total de presupuestos sin filtrar, para "A mostrar N de M". */
   total: number;
   today: string;
   /** Solo administradores (RNF-03). */
@@ -30,11 +30,11 @@ const COLS_NO_MARGIN =
 const cell = "flex min-w-0 flex-col gap-1 px-2.5";
 const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-export function ProposalsTable({ lang, t, rows, total, today, showMargin }: Props) {
+export function QuotesTable({ lang, t, rows, total, today, showMargin }: Props) {
   const { columns, list } = t;
   const cols = showMargin ? COLS_MARGIN : COLS_NO_MARGIN;
   const head = [
-    columns.proposal,
+    columns.quote,
     columns.clientRoute,
     columns.volume,
     columns.total,
@@ -65,36 +65,36 @@ export function ProposalsTable({ lang, t, rows, total, today, showMargin }: Prop
         </div>
 
         {rows.length === 0 ? <p className="px-3 py-8 text-center text-sm text-muted">{list.empty}</p> : null}
-        {rows.map((proposal) => {
-          const validity = describeValidity(deriveValidity(proposal, today), t, lang, today);
-          const href = localePath(lang, ROUTES.proposals.detail(proposal.id));
+        {rows.map((quote) => {
+          const validity = describeValidity(deriveValidity(quote, today), t, lang, today);
+          const href = localePath(lang, ROUTES.quotes.detail(quote.id));
           return (
-            // Todas las versiones de una propuesta comparten número (RF-42)
-            <div key={`${proposal.id}-v${proposal.version}`} role="row" className={`grid min-h-16 items-center rounded-2xl hover:bg-surface-soft ${cols}`}>
+            // Todas las versiones de un presupuesto comparten número (RF-42)
+            <div key={`${quote.id}-v${quote.version}`} role="row" className={`grid min-h-16 items-center rounded-2xl hover:bg-surface-soft ${cols}`}>
               <div role="cell" className="flex min-w-0 flex-col gap-0.75 px-3 py-2.5">
                 <Link href={href} className={`w-fit text-[15px] font-bold whitespace-nowrap text-foreground hover:underline ${focusRing}`}>
-                  {proposal.id}
+                  {quote.id}
                 </Link>
                 <span className="text-xs text-muted">
-                  v{proposal.version} · {proposal.requestId}
+                  v{quote.version} · {quote.orderId}
                 </span>
               </div>
               <div role="cell" className={cell}>
-                <span className="font-bold">{proposal.client}</span>
+                <span className="font-bold">{quote.client}</span>
                 <span className="text-xs text-muted">
-                  {proposal.from} <span aria-hidden="true">→</span>
-                  <span className="sr-only">{list.routeTo}</span> {proposal.to}
+                  {quote.from} <span aria-hidden="true">→</span>
+                  <span className="sr-only">{list.routeTo}</span> {quote.to}
                 </span>
               </div>
               <div role="cell" className="px-2.5 text-sm whitespace-nowrap">
-                {formatVolume(proposal.volumeM3)}
+                {formatVolume(quote.volumeM3)}
               </div>
               <div role="cell" className="px-2.5 text-sm font-bold whitespace-nowrap">
-                {formatEuro(proposal.totalCents)}
+                {formatEuro(quote.totalCents)}
               </div>
               {showMargin ? (
                 <div role="cell" className="px-2.5 text-sm whitespace-nowrap">
-                  {proposal.marginPercent === null ? "" : formatPercent(proposal.marginPercent / 100)}
+                  {quote.marginPercent === null ? "" : formatPercent(quote.marginPercent / 100)}
                 </div>
               ) : null}
               <div role="cell" className={cell}>
@@ -102,12 +102,12 @@ export function ProposalsTable({ lang, t, rows, total, today, showMargin }: Prop
                 <span className="text-xs text-muted">{validity.note}</span>
               </div>
               <div role="cell" className={cell}>
-                <StatusPill status={proposal.status} label={t.status[proposal.status]} />
+                <StatusPill status={quote.status} label={t.status[quote.status]} />
               </div>
               <div role="cell">
                 <Link
                   href={href}
-                  aria-label={interpolate(list.open, { id: proposal.id })}
+                  aria-label={interpolate(list.open, { id: quote.id })}
                   className={`mx-1 grid size-9 place-items-center rounded-full border border-status-off-border bg-surface text-foreground ${focusRing}`}
                 >
                   <Icon name="chevronRight" size={16} strokeWidth={2.4} />

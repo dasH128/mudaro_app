@@ -29,7 +29,7 @@
   },
   "submitted": {
     "title": "Inventario enviado",
-    "text": "{company} recibió tu inventario el {when}. La propuesta aparecerá en este mismo enlace.",
+    "text": "{company} recibió tu inventario el {when}. El presupuesto aparecerá en este mismo enlace.",
     "version": "Versión {version}"
   },
   "inventory": {

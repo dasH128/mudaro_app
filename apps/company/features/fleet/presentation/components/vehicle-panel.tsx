@@ -45,7 +45,7 @@ const readonlyField =
 const label = "flex flex-col gap-1 text-[13px] font-bold";
 const heading = "text-base font-bold";
 
-/** Panel lateral del vehículo (P7): estado, semana, trabajos, propostas, datos, uso y histórico. */
+/** Panel lateral del vehículo (P7): estado, semana, trabajos, presupuestos, datos, uso y histórico. */
 export function VehiclePanel({
   lang,
   t,
@@ -64,7 +64,7 @@ export function VehiclePanel({
   const busyDays = week.filter((d) => d.hours > 0).length;
   const busyHours = week.reduce((sum, d) => sum + d.hours, 0);
   const rate = acceptanceRate(vehicle);
-  const { proposals30d, usage } = vehicle;
+  const { quotes30d, usage } = vehicle;
   const [nextWarnJob] = vehicle.jobs.filter((job) => job.date > today);
   const showUsageNote = isIdle(vehicle, today);
 
@@ -227,22 +227,22 @@ export function VehiclePanel({
           )}
         </section>
 
-        <section aria-labelledby="vehicle-proposals" className="flex flex-col gap-2.5">
-          <h3 id="vehicle-proposals" className={heading}>
-            {p.proposals.title}
+        <section aria-labelledby="vehicle-quotes" className="flex flex-col gap-2.5">
+          <h3 id="vehicle-quotes" className={heading}>
+            {p.quotes.title}
           </h3>
           <div className="grid grid-cols-3 gap-2">
             <span className={statBox}>
-              <strong className={statValue}>{proposals30d.total}</strong>
-              <span className="text-xs text-muted">{pluralize(lang, proposals30d.total, t.proposalsWord)}</span>
+              <strong className={statValue}>{quotes30d.total}</strong>
+              <span className="text-xs text-muted">{pluralize(lang, quotes30d.total, t.quotesWord)}</span>
             </span>
             <span className="flex flex-col gap-0.5 rounded-[14px] bg-success-surface p-3 text-success-foreground">
-              <strong className={statValue}>{proposals30d.accepted}</strong>
-              <span className="text-xs">{p.proposals.accepted}</span>
+              <strong className={statValue}>{quotes30d.accepted}</strong>
+              <span className="text-xs">{p.quotes.accepted}</span>
             </span>
             <span className={statBox}>
               <strong className={statValue}>{rate === null ? "—" : `${Math.round(rate * 100)} %`}</strong>
-              <span className="text-xs text-muted">{p.proposals.rate}</span>
+              <span className="text-xs text-muted">{p.quotes.rate}</span>
             </span>
           </div>
         </section>

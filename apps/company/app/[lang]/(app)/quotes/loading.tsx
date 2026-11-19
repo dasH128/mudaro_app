@@ -1,8 +1,8 @@
 import { getDictionary } from "@/app/i18n/get-dictionary";
 
 // Esqueleto mientras llegan los datos de la lista (la página es dinámica: filtros en la URL y fecha de hoy).
-export default async function ProposalsLoading() {
-  const t = (await getDictionary()).app.proposals;
+export default async function QuotesLoading() {
+  const t = (await getDictionary()).app.quotes;
 
   return (
     <div role="status" aria-busy="true" className="flex flex-col gap-5">

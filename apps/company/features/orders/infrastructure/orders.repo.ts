@@ -204,7 +204,7 @@ function noteOf(
       return { kind: "inventory-ready", receivedAt: row.changedAt, ...row.totals };
     case "quoted":
       // TODO(paso 5): la versión y la validez salen de `quotes`.
-      return { kind: "proposal-sent", version: 1, validUntil: lisbonDay(row.changedAt) };
+      return { kind: "quote-sent", version: 1, validUntil: lisbonDay(row.changedAt) };
     case "won":
       return { kind: "won", signedAt: row.changedAt };
     case "lost":
@@ -365,7 +365,7 @@ function eventOf(
         actor,
       };
     case "quote_sent":
-      return { kind: "proposal-sent", at, actor, version: data.version ?? 1 };
+      return { kind: "quote-sent", at, actor, version: data.version ?? 1 };
     case "won":
       return { kind: "won", at };
     case "lost":
@@ -510,7 +510,7 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
     link,
     note,
     // TODO(paso 5): sale de `quotes`.
-    proposalCount: 0,
+    quoteCount: 0,
     events,
   };
 }

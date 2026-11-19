@@ -6,7 +6,7 @@ export const FILTERS = ["all", "free", "busy", "idle"] as const;
 export type FleetFilter = (typeof FILTERS)[number];
 export const DEFAULT_FILTER: FleetFilter = "all";
 
-export const SORTS = ["capacity", "lastUse", "nextUse", "proposals"] as const;
+export const SORTS = ["capacity", "lastUse", "nextUse", "quotes"] as const;
 export type FleetSort = (typeof SORTS)[number];
 export const DEFAULT_SORT: FleetSort = "capacity";
 
@@ -106,8 +106,8 @@ function compare(sort: FleetSort, today: string): (a: Vehicle, b: Vehicle) => nu
       return (a, b) => (b.lastUseOn ?? "").localeCompare(a.lastUseOn ?? "");
     case "nextUse":
       return (a, b) => nextOf(a).localeCompare(nextOf(b));
-    case "proposals":
-      return (a, b) => b.proposals30d.total - a.proposals30d.total;
+    case "quotes":
+      return (a, b) => b.quotes30d.total - a.quotes30d.total;
   }
 }
 
@@ -128,7 +128,7 @@ export function arrangeFleet(vehicles: readonly Vehicle[], { filter, q, sort }: 
 }
 
 export type FleetAlerts = {
-  extraTripProposals: number;
+  extraTripQuotes: number;
   /** El vehículo activo que lleva más tiempo parado. */
   idle: { vehicle: Vehicle; days: number } | null;
   /** Vehículos activos sin coste por km. */
@@ -142,14 +142,14 @@ export function fleetAlerts(vehicles: readonly Vehicle[], metrics: FleetMetrics,
     .sort((a, b) => b.days - a.days)[0];
   const missing = vehicles.filter((v) => v.active && v.costMissing);
   return {
-    extraTripProposals: metrics.extraTripProposals,
+    extraTripQuotes: metrics.extraTripQuotes,
     idle: idle ?? null,
     missingCost: missing[0] ? { count: missing.length, first: missing[0] } : null,
   };
 }
 
-/** Porcentaje de propostas aceptadas, o `null` si no hubo ninguna. */
+/** Porcentaje de presupuestos aceptados, o `null` si no hubo ninguna. */
 export function acceptanceRate(vehicle: Vehicle): number | null {
-  const { total, accepted } = vehicle.proposals30d;
+  const { total, accepted } = vehicle.quotes30d;
   return total > 0 ? accepted / total : null;
 }

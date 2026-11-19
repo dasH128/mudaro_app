@@ -26,7 +26,7 @@ import { OrderHistoryTab } from "@/features/orders/presentation/components/order
 import { OrderInventoryTab } from "@/features/orders/presentation/components/order-inventory-tab";
 import { OrderJourney } from "@/features/orders/presentation/components/order-journey";
 import { OrderMeasureAlert } from "@/features/orders/presentation/components/order-measure-alert";
-import { OrderProposalsTab } from "@/features/orders/presentation/components/order-proposals-tab";
+import { OrderQuotesTab } from "@/features/orders/presentation/components/order-quotes-tab";
 import { OrderSummaryTab } from "@/features/orders/presentation/components/order-summary-tab";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,7 +57,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
 
   const totals = order.inventory ? summarizeInventory(order.inventory) : null;
   const missing = order.inventory ? firstMissingMeasure(order.inventory) : null;
-  // Con la proposta ya enviada, las medidas que faltan dejan de bloquear
+  // Con el presupuesto ya enviado, las medidas que faltan dejan de bloquear
   const blocking = order.stage === "inventory-received" && totals && missing ? { count: totals.missingMeasures, first: missing } : null;
 
   return (
@@ -79,13 +79,13 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
             counts={{
               ...(totals ? { inventory: totals.items } : {}),
               addresses: routeOf(order).length,
-              proposals: order.proposalCount,
+              quotes: order.quoteCount,
             }}
           />
           {tab === "summary" ? <OrderSummaryTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "inventory" ? <OrderInventoryTab lang={locale} t={t} order={order} /> : null}
           {tab === "addresses" ? <OrderAddressesTab t={t} addresses={routeOf(order)} /> : null}
-          {tab === "proposals" ? <OrderProposalsTab lang={locale} t={t} order={order} /> : null}
+          {tab === "quotes" ? <OrderQuotesTab lang={locale} t={t} order={order} /> : null}
           {tab === "history" ? <OrderHistoryTab lang={locale} t={t} events={order.events} /> : null}
         </div>
 

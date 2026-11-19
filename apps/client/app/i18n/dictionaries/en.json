@@ -29,7 +29,7 @@
   },
   "submitted": {
     "title": "Inventory sent",
-    "text": "{company} received your inventory on {when}. The proposal will appear on this same link.",
+    "text": "{company} received your inventory on {when}. The quote will appear on this same link.",
     "version": "Version {version}"
   },
   "inventory": {

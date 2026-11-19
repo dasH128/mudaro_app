@@ -158,7 +158,7 @@ export function mockAdmins(today: string): Admin[] {
   ];
 }
 
-/** Amanhã a proposta do MD-0838 conta com 3 operários e só há 2 atribuídos. */
+/** Amanhã a presupuesto do MD-0838 conta com 3 operários e só há 2 atribuídos. */
 export function mockMetrics(today: string): TeamMetrics {
   return { understaffed: { orderId: "MD-0838", date: addDays(today, 1), needed: 3 } };
 }

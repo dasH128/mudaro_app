@@ -5,19 +5,19 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatRelativeTime, formatVolume } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import type { ReadyRequest } from "@/features/proposals/domain/types";
-import type { ProposalsText } from "../proposals-text";
+import type { ReadyOrder } from "@/features/quotes/domain/types";
+import type { QuotesText } from "../quotes-text";
 
-type Props = { lang: Locale; t: ProposalsText; requests: readonly ReadyRequest[] };
+type Props = { lang: Locale; t: QuotesText; orders: readonly ReadyOrder[] };
 
-export function ReadyRequests({ lang, t, requests }: Props) {
-  if (requests.length === 0) return null;
+export function ReadyOrders({ lang, t, orders }: Props) {
+  if (orders.length === 0) return null;
 
   const { ready } = t;
   return (
     <section aria-labelledby="ready" className="flex gap-3.5 rounded-[20px] border border-warn-border bg-warn-surface px-4.5 py-4">
       <span aria-hidden className="grid size-10 flex-none place-items-center rounded-xl bg-warn-border/30 text-warn-foreground">
-        <Icon name="proposals" size={20} />
+        <Icon name="quotes" size={20} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="flex flex-col gap-1 text-sm leading-snug text-warn-foreground">
@@ -27,29 +27,29 @@ export function ReadyRequests({ lang, t, requests }: Props) {
           <span>{ready.subtitle}</span>
         </div>
         <div className="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]">
-          {requests.map((request) => (
+          {orders.map((order) => (
             <div
-              key={request.id}
+              key={order.id}
               className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-warn-border bg-surface px-4 py-3.5"
             >
               <div className="flex min-w-50 flex-1 flex-col gap-0.5 text-sm">
                 <span className="font-bold">
-                  {request.id} · {request.client}
+                  {order.id} · {order.client}
                 </span>
                 <span className="text-xs text-muted">
-                  {request.from} <span aria-hidden="true">→</span>
-                  <span className="sr-only">{t.list.routeTo}</span> {request.to} · {formatVolume(request.volumeM3)} ·{" "}
-                  {request.missingMeasures > 0 ? (
+                  {order.from} <span aria-hidden="true">→</span>
+                  <span className="sr-only">{t.list.routeTo}</span> {order.to} · {formatVolume(order.volumeM3)} ·{" "}
+                  {order.missingMeasures > 0 ? (
                     <strong className="text-warn-foreground">
-                      {pluralize(lang, request.missingMeasures, ready.missingMeasures)}
+                      {pluralize(lang, order.missingMeasures, ready.missingMeasures)}
                     </strong>
                   ) : (
-                    interpolate(ready.received, { time: formatRelativeTime(lang, request.receivedAt) })
+                    interpolate(ready.received, { time: formatRelativeTime(lang, order.receivedAt) })
                   )}
                 </span>
               </div>
               <Link
-                href={`${localePath(lang, ROUTES.proposals.new)}?${new URLSearchParams({ request: request.id })}`}
+                href={`${localePath(lang, ROUTES.quotes.new)}?${new URLSearchParams({ order: order.id })}`}
                 className="whitespace-nowrap text-[13px] font-bold text-foreground underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {ready.create}

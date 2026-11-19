@@ -22,7 +22,7 @@ const STAGE_STYLE: Record<OrderStage, { icon: IconName; box: string }> = {
   new: { icon: "sparkle", box: "bg-line-soft text-foreground" },
   "awaiting-inventory": { icon: "link", box: "bg-info-surface text-foreground" },
   "inventory-received": { icon: "orders", box: "bg-primary text-primary-foreground" },
-  quoted: { icon: "proposals", box: "bg-background text-foreground" },
+  quoted: { icon: "quotes", box: "bg-background text-foreground" },
   won: { icon: "check", box: "bg-success-surface text-success-foreground" },
   lost: { icon: "close", box: "bg-danger-surface text-danger-foreground" },
 };

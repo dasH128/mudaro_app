@@ -7,10 +7,10 @@ import type { OrderDetail } from "../../domain/detail";
 import type { OrdersText } from "../orders-text";
 import { card, ghostButton, sectionTitle } from "./order-detail-parts";
 
-/** Pestaña Propostas. El detalle de cada versión llega con el editor de propostas. */
-export function OrderProposalsTab({ lang, t, order }: { lang: Locale; t: OrdersText; order: OrderDetail }) {
-  const d = t.detail.proposals;
-  const hasProposals = order.proposalCount > 0;
+/** Pestaña Orçamentos. El detalle de cada versión llega con el editor de orçamentos. */
+export function OrderQuotesTab({ lang, t, order }: { lang: Locale; t: OrdersText; order: OrderDetail }) {
+  const d = t.detail.quotes;
+  const hasQuotes = order.quoteCount > 0;
 
   return (
     <div role="status" className={`${card} items-center gap-3 px-6 py-10 text-center`}>
@@ -20,9 +20,9 @@ export function OrderProposalsTab({ lang, t, order }: { lang: Locale; t: OrdersT
         <circle cx="44" cy="44" r="9" className="fill-sidebar" />
         <path d="M70 60 L86 68 L82 74 L66 66 Z" className="fill-primary" />
       </svg>
-      <h2 className={sectionTitle}>{hasProposals ? pluralize(lang, order.proposalCount, d.count) : d.emptyTitle}</h2>
-      {hasProposals ? (
-        <Link href={localePath(lang, ROUTES.proposals.list)} className={`${ghostButton} h-10 px-4 text-sm`}>
+      <h2 className={sectionTitle}>{hasQuotes ? pluralize(lang, order.quoteCount, d.count) : d.emptyTitle}</h2>
+      {hasQuotes ? (
+        <Link href={localePath(lang, ROUTES.quotes.list)} className={`${ghostButton} h-10 px-4 text-sm`}>
           {d.view}
         </Link>
       ) : (

@@ -2,14 +2,14 @@ import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { dayLisbon, formatDate, formatTime } from "@/app/lib/format";
-import type { Validity } from "@/features/proposals/domain/status";
+import type { Validity } from "@/features/quotes/domain/status";
 
-export type ProposalsText = Dictionary["app"]["proposals"];
+export type QuotesText = Dictionary["app"]["quotes"];
 
 export type ValidityText = { title: string; note: string; warn: boolean };
 
 /** Pasa el código de validez del dominio a los textos de la interfaz. */
-export function describeValidity(validity: Validity, t: ProposalsText, locale: Locale, today: string): ValidityText {
+export function describeValidity(validity: Validity, t: QuotesText, locale: Locale, today: string): ValidityText {
   const v = t.validity;
   switch (validity.kind) {
     case "not-sent": {

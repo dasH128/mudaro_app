@@ -5,19 +5,19 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { formatDecimal, formatEuro, formatPercent } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import type { ProposalMetrics } from "@/features/proposals/domain/types";
-import type { ProposalsText } from "../proposals-text";
+import type { QuoteMetrics } from "@/features/quotes/domain/types";
+import type { QuotesText } from "../quotes-text";
 
 type Props = {
   lang: Locale;
-  t: ProposalsText;
+  t: QuotesText;
   summary: { drafts: number; awaitingCount: number; awaitingCents: number };
-  metrics: ProposalMetrics;
+  metrics: QuoteMetrics;
 };
 
 const chip = "inline-flex h-8.5 items-center gap-1.5 rounded-full border border-line bg-surface px-3 text-[13px]";
 
-export function ProposalsHeader({ lang, t, summary, metrics }: Props) {
+export function QuotesHeader({ lang, t, summary, metrics }: Props) {
   const { stats } = t;
 
   return (
@@ -42,15 +42,15 @@ export function ProposalsHeader({ lang, t, summary, metrics }: Props) {
             <span aria-hidden className="size-2 rounded-full bg-primary" />
             <strong>{formatPercent(metrics.acceptanceRate)}</strong> {stats.acceptance.label.toLowerCase()}
           </span>
-          <span className={chip} title={stats.timeToProposal.hint}>
+          <span className={chip} title={stats.timeToQuote.hint}>
             <span aria-hidden className="size-2 rounded-full bg-success-dot" />
-            <strong>{interpolate(stats.timeToProposal.value, { days: formatDecimal(metrics.averageDaysToProposal) })}</strong>{" "}
-            {stats.timeToProposal.label.toLowerCase()}
+            <strong>{interpolate(stats.timeToQuote.value, { days: formatDecimal(metrics.averageDaysToQuote) })}</strong>{" "}
+            {stats.timeToQuote.label.toLowerCase()}
           </span>
         </div>
       </div>
       <Link
-        href={localePath(lang, ROUTES.proposals.new)}
+        href={localePath(lang, ROUTES.quotes.new)}
         className="flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
       >
         <Icon name="plus" size={18} strokeWidth={2.5} />

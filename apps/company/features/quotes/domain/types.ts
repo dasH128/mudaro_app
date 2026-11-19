@@ -1,16 +1,16 @@
-// Entidades de la lista de propuestas (M7). TypeScript puro: sin React, Next ni Supabase.
+// Entidades de la lista de presupuestos (M7). TypeScript puro: sin React, Next ni Supabase.
 // Los importes van en céntimos y las fechas en ISO; el formato (RNF-10) lo pone la interfaz.
 
 export const PROPOSAL_STATUSES = ["draft", "sent", "accepted", "rejected", "expired", "superseded"] as const;
 
-export type ProposalStatus = (typeof PROPOSAL_STATUSES)[number];
+export type QuoteStatus = (typeof PROPOSAL_STATUSES)[number];
 
-export type Proposal = {
-  /** Número de propuesta (PR-0415). Todas sus versiones comparten número (RF-42). */
+export type Quote = {
+  /** Número de presupuesto (ORC-0415). Todas sus versiones comparten número (RF-42). */
   id: string;
   version: number;
   /** Pedido del que sale (MD-0831). */
-  requestId: string;
+  orderId: string;
   client: string;
   from: string;
   to: string;
@@ -20,7 +20,7 @@ export type Proposal = {
   /** Margen en %. `null` si quien consulta no es administrador (RNF-03). */
   marginPercent: number | null;
   /** Estado guardado. El que se muestra sale de `applyExpiry` (RF-45). */
-  status: ProposalStatus;
+  status: QuoteStatus;
   /** Instante de creación, ISO. */
   createdAt: string;
   /** Último día de validez, aaaa-mm-dd. `null` mientras es borrador. */
@@ -29,8 +29,8 @@ export type Proposal = {
   rejectionReason: string | null;
 };
 
-/** Pedido con inventario recibido que aún no tiene propuesta. */
-export type ReadyRequest = {
+/** Pedido con inventario recibido que aún no tiene presupuesto. */
+export type ReadyOrder = {
   id: string;
   client: string;
   from: string;
@@ -43,15 +43,15 @@ export type ReadyRequest = {
 };
 
 /** Indicadores que no salen de la lista visible. */
-export type ProposalMetrics = {
-  /** Propuestas aceptadas / enviadas en los últimos 30 días, de 0 a 1. */
+export type QuoteMetrics = {
+  /** Presupuestos aceptadas / enviadas en los últimos 30 días, de 0 a 1. */
   acceptanceRate: number;
-  /** Días medios desde la creación del pedido hasta enviar la propuesta. */
-  averageDaysToProposal: number;
+  /** Días medios desde la creación del pedido hasta enviar el presupuesto. */
+  averageDaysToQuote: number;
 };
 
-export type ProposalsOverview = {
-  proposals: readonly Proposal[];
-  readyRequests: readonly ReadyRequest[];
-  metrics: ProposalMetrics;
+export type QuotesOverview = {
+  quotes: readonly Quote[];
+  readyOrders: readonly ReadyOrder[];
+  metrics: QuoteMetrics;
 };

@@ -98,13 +98,13 @@ export type OrderStage = (typeof ORDER_STAGES)[number];
 export type OrderNote =
   | { kind: "inventory-ready"; receivedAt: string; items: number; volumeM3: number }
   | { kind: "inventory-missing-measures"; receivedAt: string; missing: number }
-  | { kind: "draft-proposal"; savedAt: string }
+  | { kind: "draft-quote"; savedAt: string }
   | { kind: "link-expiring"; validUntil: string }
   | { kind: "no-news"; days: number }
   | { kind: "just-created" }
   | { kind: "just-created-self" }
   | { kind: "filling"; validUntil: string }
-  | { kind: "proposal-sent"; version: number; validUntil: string }
+  | { kind: "quote-sent"; version: number; validUntil: string }
   | { kind: "won"; signedAt: string }
   | { kind: "lost"; reason: string | null };
 
