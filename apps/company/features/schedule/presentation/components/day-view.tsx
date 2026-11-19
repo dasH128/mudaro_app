@@ -98,7 +98,9 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
               key={job.id}
               href={scheduleHref(lang, { view: "day", date: day, show, job: job.id })}
               scroll={false}
-              className={`absolute top-1.5 bottom-1.5 box-border overflow-hidden rounded-[10px] px-2.5 text-xs leading-8.5 font-bold text-ellipsis whitespace-nowrap ${BAR[job.status]} ${focusRing} ${job.id === selectedJobId ? "shadow-[0_0_0_3px_var(--foreground)]" : ""}`}
+              title={`${job.id} · ${job.client} · ${job.start}–${job.end}`}
+              // Ancho mínimo para que un trabajo corto (1 h) muestre al menos el número del pedido
+              className={`absolute top-1.5 bottom-1.5 box-border min-w-36 overflow-hidden rounded-[10px] px-2.5 text-xs leading-8.5 font-bold text-ellipsis whitespace-nowrap ${BAR[job.status]} ${focusRing} ${job.id === selectedJobId ? "shadow-[0_0_0_3px_var(--foreground)]" : ""}`}
               style={{ left: `${((start - FIRST) / SPAN) * 100}%`, width: `calc(${((end - start) / SPAN) * 100}% - 3px)` }}
             >
               {job.id} · {job.client}
