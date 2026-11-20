@@ -1170,7 +1170,14 @@
           "meta": "{when} · {actor}",
           "jobAssigned": "Equipo y vehículo asignados",
           "jobRescheduled": "Trabajo reprogramado",
-          "jobCancelled": "Trabajo cancelado"
+          "jobCancelled": "Trabajo cancelado",
+          "jobSteps": {
+            "pickup": "Acta de recogida registrada",
+            "delivery": "Acta de entrega registrada",
+            "incident-reported": "Incidencia registrada",
+            "incident-resolved": "Incidencia resuelta",
+            "record-deleted": "Registro del trabajo eliminado"
+          }
         },
         "side": {
           "client": "Cliente",

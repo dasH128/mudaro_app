@@ -1170,7 +1170,14 @@
           "meta": "{when} · {actor}",
           "jobAssigned": "Crew and vehicle assigned",
           "jobRescheduled": "Job rescheduled",
-          "jobCancelled": "Job cancelled"
+          "jobCancelled": "Job cancelled",
+          "jobSteps": {
+            "pickup": "Pickup record added",
+            "delivery": "Delivery record added",
+            "incident-reported": "Incident reported",
+            "incident-resolved": "Incident resolved",
+            "record-deleted": "Job record deleted"
+          }
         },
         "side": {
           "client": "Client",

@@ -395,6 +395,16 @@ function eventOf(
       return { kind: "job-rescheduled", at, actor };
     case "job_cancelled":
       return { kind: "job-cancelled", at, actor, reason: data.reason ?? null };
+    case "pickup_recorded":
+      return { kind: "job-step", step: "pickup", at, actor };
+    case "delivery_recorded":
+      return { kind: "job-step", step: "delivery", at, actor };
+    case "incident_reported":
+      return { kind: "job-step", step: "incident-reported", at, actor };
+    case "incident_resolved":
+      return { kind: "job-step", step: "incident-resolved", at, actor };
+    case "job_record_deleted":
+      return { kind: "job-step", step: "record-deleted", at, actor };
   }
 }
 
