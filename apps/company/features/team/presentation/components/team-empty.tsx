@@ -1,15 +1,17 @@
 import { FirstUse } from "@/app/components/first-use";
+import type { Locale } from "@/app/i18n/config";
+import { ROUTES, localePath } from "@/app/lib/routes";
 import { initials } from "@/features/orders/domain/client-name";
 import type { Admin } from "../../domain/types";
 import type { TeamText } from "../team-text";
 import { PerkIcon, TeamEmptyArt } from "./team-empty-art";
 
-type Props = { t: TeamText; admin: Admin | undefined };
+type Props = { lang: Locale; t: TeamText; admin: Admin | undefined };
 
 const PERKS = ["phone", "photos", "prices"] as const;
 
 /** Primer uso (P8-1): la empresa aún no tiene a nadie en el equipo. */
-export function TeamEmpty({ t, admin }: Props) {
+export function TeamEmpty({ lang, t, admin }: Props) {
   const e = t.empty;
 
   return (
@@ -21,6 +23,7 @@ export function TeamEmpty({ t, admin }: Props) {
         text: e.text,
         cta: e.cta,
         ctaIcon: "userPlus",
+        ctaHref: localePath(lang, ROUTES.team.new),
         hint: e.hint,
         soon: t.soon,
         art: <TeamEmptyArt />,

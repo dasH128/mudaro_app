@@ -46,6 +46,19 @@ Enum vehicle_inactive_reason {
   other
 }
 
+// Función de una persona del equipo. Solo informa al asignar. [EXISTS]
+Enum crew_position {
+  driver
+  loader
+  foreman
+}
+
+// Motivo de una persona del equipo inactiva. [EXISTS]
+Enum crew_inactive_reason {
+  left
+  other
+}
+
 // Idiomas de la interfaz y de las traducciones del catálogo. [EXISTS]
 Enum app_locale {
   pt
@@ -226,6 +239,27 @@ Table company_users {
 }
 
 // Invitaciones a usuarios de empresa. No guarda token: el enlace lo genera Supabase Auth. [EXISTS]
+// Personas del equipo de la empresa (paso 6.0b, 20/11/2026). Sin cuenta en el MVP: las da de alta el administrador
+// y se asignan a los trabajos. user_id se rellena cuando la persona tenga la app del operario. [EXISTS]
+Table crew_members {
+  id uuid [pk, default: `gen_random_uuid()`]
+  company_id uuid [not null]
+  name text [not null]
+  phone text [note: '+351 y 9 cifras. Opcional']
+  position crew_position [not null, note: 'driver, loader, foreman. No da permisos']
+  active boolean [not null, default: true, note: 'Una persona inactiva no se asigna']
+  inactive_reason crew_inactive_reason [note: 'left, other']
+  inactive_since date
+  inactive_by uuid
+  user_id uuid [unique, note: 'Cuenta de la app del operario, cuando exista']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (company_id, id) [unique]
+  }
+}
+
 Table invitations {
   id uuid [pk, default: `gen_random_uuid()`]
   company_id uuid [not null]
@@ -694,11 +728,14 @@ Table jobs {
   quote_id uuid [not null, unique, note: 'Presupuesto aceptado vigente. Se actualiza si el cliente acepta uno nuevo antes de la mudanza']
   status job_status [not null, default: 'scheduled']
   scheduled_start timestamptz [not null]
-  scheduled_end timestamptz
+  scheduled_end timestamptz [not null, note: 'Paso 6.1: inicio más las horas estimadas del orçamento (4 h sin ellas), editable al reprogramar']
   actual_hours numeric(5,2)
   actual_km numeric(7,1)
   notes text
   closed_at timestamptz
+  closed_by uuid
+  cancelled_at timestamptz [note: 'Paso 6.1: cancel_job, con motivo. Libera las asignaciones (RF-50)']
+  cancel_reason text
 }
 
 // Asignación de vehículos y operarios a un trabajo en un periodo. [PROPOSED]
@@ -707,8 +744,9 @@ Table assignments {
   company_id uuid [not null]
   job_id uuid [not null]
   vehicle_id uuid
-  user_id uuid
-  period tstzrange [not null, note: 'Una restriccion exclude impide solapes de vehiculo y de usuario']
+  crew_member_id uuid [note: 'Persona del equipo (crew_members), no usuario: en el MVP el equipo no tiene cuenta']
+  is_lead boolean [not null, default: false, note: 'Jefe de equipo del trabajo: una persona, como mucho una por trabajo']
+  period tstzrange [not null, note: 'Una restriccion exclude impide solapes de vehiculo y de persona']
 }
 
 // Incidencias durante la mudanza. Un cambio de inventario el día de la mudanza se registra aquí, con importe y firma. [PROPOSED]
@@ -824,7 +862,10 @@ Ref: jobs.quote_id - quotes.id
 // Ejecución de la mudanza: asignaciones, incidencias, fotos y actas.
 Ref: assignments.job_id > jobs.id
 Ref: assignments.vehicle_id > vehicles.id
-Ref: assignments.user_id > company_users.id
+Ref: assignments.crew_member_id > crew_members.id
+Ref: crew_members.company_id > companies.id
+Ref: crew_members.user_id - company_users.id
+Ref: crew_members.inactive_by > company_users.id
 Ref: incidents.job_id > jobs.id
 Ref: evidence.job_id > jobs.id
 Ref: evidence.inventory_line_id > inventory_lines.id

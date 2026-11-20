@@ -13,21 +13,24 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Confirmar invitación o recuperación | `/[lang]/auth/confirm` | Hecha (`?type=invite\|recovery`) |
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
 | Acceso bloqueado | `/[lang]/no-access` | Hecha. Motivo calculado en servidor (`blockedReasonOf`): empresa desactivada, cuenta desactivada, operario o cuenta sin empresa. Email de soporte provisional en `app/lib/contact.ts` (pendiente) |
-| Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
+| Início · Operações de hoje | `/[lang]` | Conectada a Supabase (paso 6.8, 20/11/2026): trabajos de hoy (y los que siguen en curso) desde la Agenda, tarjetas de hoy, en curso e incidencias abiertas, aviso con la incidencia abierta más reciente (enlaza a la ficha del trabajo), pedidos por etapa, últimos eventos de los envíos y flota de hoy (en curso, con trabajo hoy, libres). Sin datos para el tipo de mudança ("Mudança integral, T3"), la comparación con ayer ni las notificaciones: no se muestran |
 | Orçamentos · Lista | `/[lang]/quotes` | Conectada a Supabase (paso 5.4b, 19/11/2026): todas las versiones con su estado (caducado se calcula con la validez, RF-45), total con IVA (el firmado si está aceptado) y margen (RNF-03); "Prontos para orçamentar" con los pedidos con inventario recibido sin orçamento enviado; indicadores de los últimos 30 días. Cada fila abre la pestaña Orçamentos del pedido. "Novo orçamento" lleva a los pedidos con inventario recibido. Filtros y orden en la URL |
 | Novo pedido | `/[lang]/orders/new` | Conectada a Supabase (RF-13, RF-14, RF-19). Crea el pedido con la función `create_order` |
 | Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. "Gerar link" crea el enlace del cliente (`share_order_link`, RF-15) y lo muestra una sola vez (la base guarda su hash, RNF-02); después sale "Gerar link novo", con confirmación, que anula el anterior. WhatsApp, SMS y Email abren la app del dispositivo con el mensaje escrito (el envío automático, RF-16, sigue pendiente). La dirección del enlace sale de `CLIENT_APP_URL` (19/11/2026) |
 | Pedidos · Lista | `/[lang]/orders` | Conectada a Supabase (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Conectada a Supabase (RF-19 a RF-27, 18/11/2026). Catálogo real, borrador guardado con `save_inventory_draft` al cambiar de paso y con "Guardar e sair", "Concluir" envía la versión (`submit_inventory`). Con el inventario ya enviado muestra "Editar inventário", que abre una versión nueva |
 | Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Pestaña Orçamentos con las versiones (paso 5.4b). Con el envío ganado, Resumo muestra el trabajo programado y enlaza a la agenda (paso 5.6). Pestaña en la URL (`?tab=`) |
-| Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05, solo listar y detalle). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
+| Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1). Desde el paso 6.0a (20/11/2026) el panel edita tipo, capacidad, carga y coste por km al salir de cada campo (`update_vehicle_data`) y el interruptor activa o desactiva el vehículo, pidiendo antes el motivo (`set_vehicle_active`). Cada cambio queda en el histórico. Matrícula y nombre no se editan |
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
-| Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
-| Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
+| Equipa | `/[lang]/team` | Conectada a Supabase (paso 6.0b, 20/11/2026): personas del equipo sin cuenta (`crew_members`) y administradores reales. El panel edita nombre, telemóvel y función al salir de cada campo (`update_crew_member`) y el interruptor activa o desactiva con motivo (`set_crew_member_active`). Sin app del operario no hay convites, email ni último acceso: el filtro "Convites" desaparece y el contador solo sale si hay alguno. Trabajos, semana y números de 30 días salen vacíos hasta el paso 6.1. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1), con el botón activo |
+| Nova pessoa | `/[lang]/team/new` | Conectada a Supabase (paso 6.0b). Nombre, telemóvel opcional (`@mudaro/validation`) y función; crea con `create_crew_member` y vuelve a Equipa con la persona abierta. Sin prototipo: sigue la línea de Novo veículo |
+| Agenda | `/[lang]/schedule` | Conectada a Supabase (paso 6.2, 20/11/2026): vehículos, personas (`crew_members`), trabajos con sus asignaciones y orçamentos enviados; ya no hay datos de ejemplo. El panel del trabajo asigna un vehículo, el equipo y el jefe de equipo (`set_job_assignments`), reprograma día y horas (`reschedule_job`) y cancela con motivo (`cancel_job`), con avisos de quién está ocupado a esa hora y errores claros cuando la base rechaza un solape (RF-48, RF-50). La base admite varios vehículos por trabajo; la pantalla elige uno. Un trabajo cancelado sale de la agenda. "Exportar fechados" (paso 6.7, RF-60) abre un formulario GET hacia `/[lang]/jobs/export?from=&to=` (dd/mm/aaaa, máximo un año): CSV en UTF-8 con BOM, `;` y coma decimal, una fila por línea del orçamento aceptado (las opcionales solo si el cliente las eligió) y por incidencia con importe (sin IVA, con el IVA del orçamento). Fechas inválidas vuelven a la Agenda con `?exportError=1`. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
 | Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
-| Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Trabalho | `/[lang]/jobs/[id]` | Paso 6.3 (20/11/2026). El id es el número del pedido (MD-0836). Horario y estado, equipo y vehículo con las mismas acciones del panel de la Agenda (`job-actions`), moradas con accesos, estimado del orçamento, cliente, histórico y un resumen sin precios para el equipo ("Copiar resumo" y WhatsApp). Un trabajo cancelado o de otra empresa da "Trabalho não encontrado". Desde el paso 6.5 (20/11/2026): Recolha y Entrega (acta con quién firma, día y hora, observaciones y foto opcional del acta en papel; `record_handover` pasa el trabajo a "em curso" y "entregue"), fotos de cada momento e incidencias (tipo, descripción, importe, hora, fotos, resolver con nota) y eliminar lo registrado por error antes del cierre. Las fotos se comprimen en el navegador (1600 px, JPEG), se suben desde el servidor al bucket privado `job-evidence` y se ven con enlaces firmados de 10 minutos (RNF-05); las Server Actions admiten hasta 6 MB (`next.config.ts`). Desde el paso 6.6, con el trabajo entregado sale "Falta fechar" (también en el panel de la Agenda, mismo `close-job-form`): horas y km reales obligatorios y nota opcional; con incidencias abiertas no deja cerrar (`close_job`, RF-58, RF-59). Cerrado, nada del trabajo se puede cambiar (RF-57) y el estimado muestra el real. Sin prototipo |
+| Ata imprimível | `/[lang]/print/jobs/[id]/[moment]` | Paso 6.5 (P13). Acta de recogida o entrega para imprimir y firmar en papel, sin menú lateral y sin precios. `moment` es `pickup` o `delivery` |
+| Relatórios, Configurações, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -52,6 +55,7 @@ app/
     copy-button.tsx         ← botón que copia un texto (teléfono) al portapapeles; lo usan Clientes y Agenda
     first-use.tsx           ← estructura del estado de primer uso de una lista (Frota, Equipa): cabecera, invitación, ventajas y pie
     panel-escape.tsx        ← cierra un panel lateral con Escape (Frota y Equipa)
+    active-switch.tsx       ← interruptor Ativo/Inativo que pide el motivo antes de desactivar (Frota y Equipa)
     theme-toggle.tsx, language-switcher.tsx, theme-provider.tsx
   i18n/                     ← config, get-dictionary, interpolate (textos con {valores} y plurales) y dictionaries/{en,es,pt}.json
   lib/
@@ -74,8 +78,7 @@ features/
       types.ts              ← entidades: Job, Stat, Stage, ActivityItem, Attention, Dashboard (códigos y números, sin frases)
       jobs.ts               ← filtros de "Trabalhos de hoje" (estado y texto)
     infrastructure/
-      dashboard.repo.ts     ← puerta de entrada: getDashboard()
-      mock-data.ts          ← datos de ejemplo (sustituir por consultas a Supabase)
+      dashboard.repo.ts     ← puerta de entrada (Supabase): getDashboard({ today }); reutiliza getScheduleOverview de schedule
     presentation/
       components/           ← dashboard-header, stat-cards, attention-banner,
                               jobs-table, pipeline, side-panels
@@ -110,15 +113,15 @@ features/
       new-vehicle.ts        ← alta: tipos, valores habituales por tipo (VehiclePreset), límites, NewVehicle, FleetSnapshot y parseDecimal
       plate.ts              ← matrículas de Portugal: normalizePlate (AA-00-AA) y compactPlate
     application/
-      actions/              ← create-vehicle (+ state.ts)
-      schemas/new-vehicle.ts ← zod en servidor; los errores son códigos que traduce el formulario
+      actions/              ← create-vehicle y edit-vehicle (datos y activar o desactivar) (+ state.ts)
+      schemas/              ← new-vehicle.ts y vehicle-data.ts, zod en servidor; los errores son códigos que traduce el formulario
     infrastructure/
-      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ includeCost }) y createVehicle (rpc `create_vehicle`)
+      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ includeCost }), createVehicle, updateVehicleData y setVehicleActive
     presentation/
       fleet-href.ts         ← enlaces con filtro, orden, vista y vehículo en la URL
       fleet-text.ts         ← estado, último/próximo uso y histórico → textos del diccionario
       components/           ← fleet-header (+ capacity-pill, único cliente con la ayuda), fleet-alerts, fleet-toolbar,
-                              fleet-table, fleet-cards, vehicle-panel, fleet-empty (+ fleet-empty-art), fleet-parts;
+                              fleet-table, fleet-cards, vehicle-panel (+ vehicle-data-form, cliente), fleet-empty (+ fleet-empty-art), fleet-parts;
                               alta: new-vehicle-form (único cliente grande), vehicle-type-section, vehicle-details-sections
                               (identificación, capacidad y costes, disponibilidad, próximamente) y new-vehicle-aside (índice y previsualización)
   team/
@@ -126,13 +129,16 @@ features/
       types.ts              ← Member, Invite, Person, Admin, TeamEvent (fechas aaaa-mm-dd, horas hh:mm, teléfono +351…)
       team.ts               ← filtros, orden, "parado" (IDLE_DAYS), convite urgente, resumen y avisos del equipo
     infrastructure/
-      team.repo.ts          ← puerta de entrada: getTeamOverview({ today })
-      mock-data.ts          ← 7 operarios activos, 1 inactivo, 2 convites y 2 administradores, con fechas relativas a hoy
+      team.repo.ts          ← puerta de entrada (Supabase): getTeamOverview({ userId }), createCrewMember, updateCrewMember, setCrewMemberActive
+    application/
+      actions/crew.ts       ← createCrewAction (redirige a Equipa), updateCrewAction y setCrewActiveAction
+      schemas/crew.ts       ← zod en servidor; los errores son códigos que traduce el formulario
     presentation/
       team-href.ts          ← enlaces con filtro, orden, vista y persona en la URL
       team-text.ts          ← estado, último/próximo trabajo, acceso, caducidad y histórico → textos del diccionario
       components/           ← team-header (+ team-help, único cliente con la ayuda), team-alerts, team-toolbar,
-                              team-table, team-cards, team-admins, person-panel, team-empty (+ team-empty-art), team-parts
+                              team-table, team-cards, team-admins, person-panel (+ crew-data-form, cliente), team-empty
+                              (+ team-empty-art), team-parts y new-person-form (alta, cliente)
   clients/
     domain/
       types.ts              ← Client, ClientOrder, ClientSummary, OrderNote, ContactEvent, DuplicateCandidate (céntimos, fechas aaaa-mm-dd)
@@ -150,13 +156,30 @@ features/
       types.ts              ← ScheduleJob, JobDetail, Vehicle, Person, Access, HistoryEvent, LiveEvent, PendingQuote (horas hh:mm, fechas aaaa-mm-dd)
       schedule.ts           ← semana y mes, carga de cada día, recursos que faltan (missingOf, issuesOf), filtro "Mostrar", avisos y solapes (layoutOverlaps)
     infrastructure/
-      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today }); trabajos y orçamentos enviados reales + ejemplo
-      mock-data.ts          ← 11 trabajos con ficha, 17 más ligeros y 3 orçamentos en espera, con fechas relativas a hoy
+      schedule.repo.ts      ← puerta de entrada (Supabase): getScheduleOverview(), setJobAssignments, rescheduleJob, cancelJob
+    application/
+      actions/schedule.ts   ← assignJobAction, rescheduleJobAction y cancelJobAction
+      schemas/schedule.ts   ← zod en servidor; día dd/mm/aaaa y horas de Lisboa → instantes (domain/lisbon-time.ts)
     presentation/
       schedule-href.ts      ← enlaces con vista, fecha, filtro, día del mes y trabajo en la URL
       schedule-text.ts      ← acceso, histórico, hitos en directo y avisos → textos del diccionario
-      components/           ← schedule-header, schedule-alerts, schedule-toolbar (+ show-select, único cliente), week-view,
-                              day-view, month-view, job-panel y schedule-parts
+      job-options.ts        ← vehículos y personas elegibles para un trabajo, con "ocupado a essa hora" (panel y ficha)
+      components/           ← schedule-header, schedule-alerts, schedule-toolbar (+ show-select, cliente), week-view,
+                              day-view, month-view, job-panel (+ job-actions, cliente: equipa, reprogramar y cancelar) y schedule-parts
+  jobs/
+    domain/execution.ts     ← actas, fotos e incidencias (JobExecution) y qué se puede hacer según el estado (executionRules)
+    domain/export.ts        ← CSV para facturar (RF-60): celdas seguras contra fórmulas, coma decimal, IVA por línea y BOM
+    application/
+      actions/execution.ts  ← recordHandover, addPhotos, reportIncident, resolveIncident, deleteRecord y closeJob
+      schemas/execution.ts  ← zod en servidor: día dd/mm/aaaa y hora de Lisboa, importe con coma, ficheros (tipo, 5 MB, 10 por envío)
+    infrastructure/
+      execution.repo.ts     ← puerta de entrada: getJobExecution (con enlaces firmados), subir y borrar ficheros, rpc de la ejecución
+      export.repo.ts        ← getClosedJobsForExport(desde, hasta): trabajos cerrados con líneas aceptadas e incidencias (RLS)
+    presentation/
+      job-summary-text.ts   ← crewSummary: resumen del trabajo para el equipo, sin precios (RNF-03)
+      components/           ← job-sheet (ficha; reutiliza dominio, repo, textos y job-actions de schedule), job-execution,
+                              execution-forms (cliente: actas, fotos comprimidas, incidencias, eliminar en dos pasos), close-job-form
+                              (cliente: cierre, lo usa también el panel de la Agenda) y print-button
   inventory/
     domain/
       types.ts              ← reexporta @mudaro/inventory (compartido con apps/client): CatalogItem, CatalogRoom, AccessPoint, RoutePoint,
@@ -252,7 +275,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
   - **Pantalla Clientes** ya lee las fichas reales (ver su fila en la tabla de pantallas). Las fichas de ejemplo salen siempre detrás de las reales, con cualquier orden.
   - **Ascensor:** la base lo llama `large` y el dominio `normal`. Lo traducen `liftOf` (orders) y `LIFT_FROM_DB`/`LIFT_TO_DB` (inventory). Igual con el desmontaje: `disassembly` en la base y `dismantle` en el dominio (`itemFlagOf`).
 - Pedidos · Primeiro uso (11/11/2026, solo diseño): cuando la empresa no tiene ningún pedido, `/orders` muestra `orders-empty.tsx` (sobre `app/components/first-use.tsx`) en lugar de banner, pipeline y lista. No hay prototipo: se derivó de P7-1. A diferencia de Frota y Equipa, el botón "Criar o primeiro pedido" está activo (lleva a `/orders/new`). El pie solo lleva una nota, sin insignia de asistente. "Tudo arrumado por aqui." (`rows.emptyTitle`) se conserva para cuando hay pedidos pero ninguno cumple el filtro (p. ej. "Precisam de ti" sin urgentes). Las tres ventajas no prometen envío del enlace por canal hasta que exista el paso 4b. Sin revisar en tema oscuro ni en móvil.
-- Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Pendiente: edición, baja y reactivación del vehículo, y los cambios de coste o carga en el histórico. Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
+- Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Edición, baja y reactivación hechas en el paso 6.0a (migración `20261120100000_vehicle_edit.sql`). Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
 - **Pendiente (decidido el 09/11/2026): pedido y envío, y "Orçamentos".** El modelo (`docs/diagram/mudaro-model.dbml`) separa el pedido (`orders`, la mudanza y su enlace) del envío (`shipments`, el pedido enviado a una empresa, con estado y presupuestos). La lista de pedidos pasará a mostrar envíos, con `shipments.number` como número visible. El código aún no lo refleja: `OrderStatus` y `OrderStage` viven en el pedido, `lost` sigue como TODO y no existe `cancelled` (RF-69). El término del presupuesto es `quotes` en el código y "Orçamentos" en la interfaz, y lo que se llamaba `proposals`, `proposta` o `requestId` se renombró el 19/11/2026 (paso 5.0): `features/quotes`, la ruta `/quotes`, `NavKey` y las claves de los diccionarios. Los números de ejemplo pasan de `PR-` a `ORC-`. Lista completa de pendientes en `docs/plan-modelo-bd.md` y al final del DBML.
 
 - `app/[lang]/page.tsx` (plantilla de Next) eliminado; el inicio vive en `app/[lang]/(app)/page.tsx`.

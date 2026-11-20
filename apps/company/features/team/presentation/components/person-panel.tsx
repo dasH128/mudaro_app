@@ -1,14 +1,17 @@
 import Link from "next/link";
 
 import { Icon } from "@/app/components/app-icon";
+import { ActiveSwitch } from "@/app/components/active-switch";
 import { PanelEscape } from "@/app/components/panel-escape";
+import { setCrewActiveAction } from "../../application/actions/crew";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatDayMonthShort, formatInteger, formatPhone, formatWeekdayDay } from "@/app/lib/format";
 import { addDays } from "@/features/fleet/domain/fleet";
 import { stateOf } from "../../domain/team";
-import type { Invite, Member, Person } from "../../domain/types";
-import { describeAccess, describeEvent, describeInviteTimes, describeRole, describeStatus, positionLabel, type TeamText } from "../team-text";
+import { INACTIVE_REASONS, type Invite, type Member, type Person } from "../../domain/types";
+import { describeEvent, describeInviteTimes, describeRole, describeStatus, positionLabel, type TeamText } from "../team-text";
+import { CrewDataForm } from "./crew-data-form";
 import { PersonAvatar, StatusPill, focusRing } from "./team-parts";
 
 type Props = {
@@ -30,9 +33,7 @@ const FULL_DAY_HOURS = 10;
 const iconButton = "grid size-9 place-items-center rounded-full text-foreground " + focusRing;
 const statBox = "flex flex-col gap-0.5 rounded-[14px] bg-surface-head p-3";
 const statValue = "font-display text-[22px] font-bold";
-const label = "flex flex-col gap-1 text-[13px] font-bold";
 const heading = "text-base font-bold";
-const readonlyBox = "h-10.5 rounded-xl border border-field-border bg-transparent px-3 text-[15px] font-normal text-foreground outline-none";
 const secondaryButton =
   "h-10 cursor-not-allowed rounded-full border border-field-border bg-surface px-4 text-sm font-bold text-foreground opacity-60 " + focusRing;
 
@@ -88,7 +89,6 @@ function MemberSections({ lang, t, member, today }: { lang: Locale; t: TeamText;
   const week = member.weekHours.map((hours, index) => ({ hours, day: formatWeekdayDay(lang, addDays(today, index)) }));
   const busyDays = week.filter((d) => d.hours > 0).length;
   const busyHours = week.reduce((sum, d) => sum + d.hours, 0);
-  const missingPhone = member.phone === null;
 
   return (
     <>
@@ -186,42 +186,13 @@ function MemberSections({ lang, t, member, today }: { lang: Locale; t: TeamText;
         </div>
       </section>
 
-      <section aria-labelledby="person-data" className="flex flex-col gap-3">
-        <div className="flex items-baseline justify-between gap-2">
-          <h3 id="person-data" className={heading}>
-            {p.data.title}
-          </h3>
-          <span className="text-xs text-muted">{p.data.readOnly}</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2.5">
-          <label className={label}>
-            {p.data.phone}
-            <input
-              readOnly
-              value={member.phone ? formatPhone(member.phone) : ""}
-              placeholder={p.data.phonePlaceholder}
-              className={`${readonlyBox} ${missingPhone ? "border-2 border-warn-border bg-warn-surface" : ""}`}
-            />
-          </label>
-          <label className={label}>
-            {p.data.position}
-            <input readOnly value={positionLabel(member.position, t)} className={readonlyBox} />
-          </label>
-          <label className={`${label} col-span-2`}>
-            {p.data.role}
-            <input readOnly value={p.data.roleOperator} className={readonlyBox} />
-          </label>
-        </div>
-        {missingPhone ? <span className="text-[13px] font-bold text-warn-foreground">{p.data.phoneMissing}</span> : null}
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-[14px] bg-surface-soft px-3.5 py-3 text-[13px]">
-          <span className="text-muted">
-            {p.data.lastAccess} <strong className="text-foreground">{describeAccess(member.lastAccess, t, lang, today)}</strong>
-          </span>
-          <span title={t.soon} className="cursor-not-allowed font-bold opacity-50">
-            {p.data.sendLink}
-          </span>
-        </div>
-      </section>
+      {/* La clave reinicia el formulario al pasar a otra persona */}
+      <CrewDataForm
+        key={member.id}
+        lang={lang}
+        member={member}
+        t={{ data: p.data, errors: p.errors, positions: t.positions }}
+      />
     </>
   );
 }
@@ -285,10 +256,12 @@ export function PersonPanel({ lang, t, person, today, position, total, previousH
               <Icon name="smartphone" size={14} strokeWidth={2.2} />
               {person.phone ? formatPhone(person.phone) : p.noPhone}
             </span>
-            <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-surface-head px-3 text-[13px]">
-              <Icon name="mail" size={14} strokeWidth={2.2} />
-              {person.email}
-            </span>
+            {person.email ? (
+              <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-surface-head px-3 text-[13px]">
+                <Icon name="mail" size={14} strokeWidth={2.2} />
+                {person.email}
+              </span>
+            ) : null}
           </div>
 
           {member ? (
@@ -297,23 +270,24 @@ export function PersonPanel({ lang, t, person, today, position, total, previousH
                 <StatusPill state={state} label={status.label} />
                 <span className="text-[13px] text-muted">{status.note}</span>
               </span>
-              {/* Activar y desactivar aún no se guarda: el interruptor sale desactivado */}
-              <button
-                type="button"
-                role="switch"
-                aria-checked={member.active}
-                aria-label={interpolate(member.active ? p.deactivate : p.activate, { name: member.name })}
-                disabled
-                title={t.soon}
-                className={`inline-flex h-9 cursor-not-allowed items-center gap-2.5 pr-0.5 pl-2 text-[13px] font-bold text-foreground opacity-60 ${focusRing}`}
-              >
-                {member.active ? p.on : p.off}
-                <span className={`relative h-7 w-11.5 flex-none rounded-full ${member.active ? "bg-foreground" : "bg-status-off-border"}`}>
-                  <span
-                    className={`absolute top-1 size-5 rounded-full ${member.active ? "left-5.5 bg-background" : "left-1 bg-surface"}`}
-                  />
-                </span>
-              </button>
+              <ActiveSwitch
+                key={`${member.id}-${member.active}`}
+                action={setCrewActiveAction}
+                fields={{ lang, crewId: member.id }}
+                active={member.active}
+                reasons={INACTIVE_REASONS.map((value) => ({ value, label: p.deactivation.reasons[value] }))}
+                t={{
+                  on: p.on,
+                  off: p.off,
+                  deactivateLabel: interpolate(p.deactivate, { name: member.name }),
+                  activateLabel: interpolate(p.activate, { name: member.name }),
+                  title: p.deactivation.title,
+                  note: p.deactivation.note,
+                  confirm: p.deactivation.confirm,
+                  cancel: p.deactivation.cancel,
+                  formErrors: p.data.formErrors,
+                }}
+              />
             </div>
           ) : null}
 
@@ -336,7 +310,7 @@ export function PersonPanel({ lang, t, person, today, position, total, previousH
             {person.history.map((event) => {
               const text = describeEvent(event, t);
               return (
-                <li key={`${event.kind}-${event.at}`} className="flex gap-2.5 text-[13px]">
+                <li key={event.id} className="flex gap-2.5 text-[13px]">
                   <span aria-hidden className="mt-1.5 size-2 flex-none rounded-full bg-accent" />
                   <span className="flex flex-col">
                     <strong>{text.title}</strong>

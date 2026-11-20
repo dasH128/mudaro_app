@@ -7,7 +7,7 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatCompact, formatCubicMeters, formatDayMonth, formatEuroWhole, formatPhone, formatWeekdayShort } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { freePeopleOn, jobsOn, missingOf, vehicleOf } from "../../domain/schedule";
+import { missingOf, vehicleOf } from "../../domain/schedule";
 import type { Person, ScheduleJob, ScheduleOverview } from "../../domain/types";
 import {
   describeAccess,
@@ -19,6 +19,10 @@ import {
   type PositionsText,
   type ScheduleText,
 } from "../schedule-text";
+import { jobOptions } from "../job-options";
+import { CloseJobForm } from "@/features/jobs/presentation/components/close-job-form";
+import type { JobsText } from "@/features/jobs/presentation/job-summary-text";
+import { JobActions } from "./job-actions";
 import { JobStatusPill, focusRing, initialsOf } from "./schedule-parts";
 
 type Props = {
@@ -29,6 +33,8 @@ type Props = {
   overview: ScheduleOverview;
   today: string;
   closeHref: string;
+  /** Errores del cierre (los comparte con la ficha del trabajo). */
+  jobErrors: JobsText["execution"]["errors"];
 };
 
 const iconButton = `grid size-9 place-items-center rounded-full text-foreground ${focusRing}`;
@@ -47,7 +53,7 @@ function pctDelta(est: number, real: number): number {
 }
 
 /** Panel lateral del trabajo (P10): qué falta, cómo va, cierre o resultado, vehículo, equipo, cliente e histórico. */
-export function JobPanel({ lang, t, positions, job, overview, today, closeHref }: Props) {
+export function JobPanel({ lang, t, positions, job, overview, today, closeHref, jobErrors }: Props) {
   const p = t.panel;
   const { detail } = job;
   const vehicle = vehicleOf(job, overview.vehicles);
@@ -82,16 +88,9 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
   ];
   const unresolved = checks.filter((check) => check.state === "bad").length;
 
-  // A quién se puede asignar: primero quien está libre ese día
-  const free = freePeopleOn(job.date, overview.people, overview.jobs);
-  const suggestions = overview.people
-    .filter((person) => !job.crewIds.includes(person.id))
-    .map((person) => {
-      const clash = jobsOn(overview.jobs, job.date).find((other) => other.crewIds.includes(person.id));
-      return { person, free: free.some((f) => f.id === person.id), clash };
-    })
-    .sort((a, b) => Number(b.free) - Number(a.free))
-    .slice(0, 4);
+  // Equipo y vehículo se cambian en trabajos programados o en curso; reprogramar y cancelar, solo en programados
+  const actionable = job.status === "scheduled" || job.status === "in-progress";
+  const { vehicles: vehicleOptions, people: peopleOptions } = jobOptions(job, overview, p.edit, positions);
 
   const when = `${formatWeekdayShort(lang, job.date)} ${formatDayMonth(job.date)} · ${job.start}–${job.end}`;
   const tooSmall = vehicle !== undefined && vehicle.capacityM3 < job.volumeM3;
@@ -220,38 +219,14 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               </h3>
               <span className="text-[13px] text-success-foreground">{interpolate(p.close.text, { time: detail.deliveredAt ?? "" })}</span>
             </div>
-            {/* Cerrar el trabajo aún no tiene flujo: los campos y el botón salen desactivados */}
-            <div className="grid grid-cols-2 gap-2.5">
-              {(
-                [
-                  { key: "hours", label: p.close.hours, unit: "h", est: formatCompact(detail.estimate.hours) },
-                  { key: "km", label: p.close.km, unit: "km", est: formatCompact(detail.estimate.km) },
-                ] as const
-              ).map((field) => (
-                <label key={field.key} className="flex flex-col gap-1 text-[13px] font-bold">
-                  {field.label}
-                  <span className="flex h-10.5 items-center overflow-hidden rounded-xl border border-field-border bg-surface font-normal">
-                    <input readOnly disabled placeholder={field.est} className="h-full min-w-0 flex-1 bg-transparent px-3 text-[15px] font-bold outline-none placeholder:text-field-placeholder" />
-                    <span className="px-2.5 text-[13px] text-muted">{field.unit}</span>
-                  </span>
-                  <span className="text-xs font-normal text-muted">{interpolate(p.close.estimated, { value: field.est, unit: field.unit })}</span>
-                </label>
-              ))}
-            </div>
-            <span className="flex items-center gap-2 text-[13px] font-bold text-success-foreground">
-              <span aria-hidden className="grid size-5 place-items-center rounded-full bg-success-dot text-[11px] text-white">
-                ✓
-              </span>
-              {p.close.noIncidents}
-            </span>
-            <button
-              type="button"
-              disabled
-              title={t.soon}
-              className={`h-10.5 w-fit rounded-full bg-foreground px-4.5 text-sm font-bold text-background ${soon} ${focusRing}`}
-            >
-              {p.close.action}
-            </button>
+            <CloseJobForm
+              lang={lang}
+              jobId={job.jobId}
+              orderId={job.id}
+              estimate={{ hours: formatCompact(detail.estimate.hours), km: formatCompact(detail.estimate.km) }}
+              openIncidents={detail.openIncidents}
+              t={{ close: p.close, errors: jobErrors }}
+            />
           </section>
         ) : null}
 
@@ -299,11 +274,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
             <h3 id="job-vehicle" className={heading}>
               {p.vehicle.title}
             </h3>
-            {editable && vehicle ? (
-              <button type="button" disabled title={t.soon} className={`text-[13px] font-bold text-foreground underline ${soon}`}>
-                {p.vehicle.swap}
-              </button>
-            ) : null}
           </div>
           {vehicle ? (
             <div className="flex items-center gap-3 rounded-2xl border border-line p-3">
@@ -322,9 +292,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               <span className="text-[13px] text-warn-foreground">
                 <strong>{p.vehicle.none}</strong> {interpolate(p.vehicle.needed, { volume })}
               </span>
-              <button type="button" disabled title={t.soon} className={`h-9.5 w-fit rounded-full bg-foreground px-4 text-[13px] font-bold text-background ${soon} ${focusRing}`}>
-                {p.vehicle.assign}
-              </button>
             </div>
           )}
         </section>
@@ -348,11 +315,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
                   <strong className="text-sm">{person.name}</strong>
                   <span className="text-xs text-muted">{positions[person.position]}</span>
                 </span>
-                {editable ? (
-                  <button type="button" disabled title={t.soon} aria-label={interpolate(p.crew.remove, { name: person.name })} className={`size-7.5 rounded-full text-muted ${soon}`}>
-                    ✕
-                  </button>
-                ) : null}
               </li>
             ))}
             {Array.from({ length: missing.people }, (_, index) => (
@@ -367,37 +329,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
             ))}
           </ul>
 
-          {editable && missing.people > 0 ? (
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-bold">
-                {interpolate(p.crew.available, { when: `${formatWeekdayShort(lang, job.date).toLowerCase()}, ${job.start}–${job.end}` })}
-              </span>
-              {suggestions.map(({ person, free: isFree, clash }) => (
-                <button
-                  key={person.id}
-                  type="button"
-                  disabled
-                  title={t.soon}
-                  className={`flex w-full items-center gap-2.5 rounded-[14px] border bg-surface px-2.5 py-2 text-left ${isFree ? "border-line" : "border-dashed border-line opacity-70"} ${soon} ${focusRing}`}
-                >
-                  <span
-                    aria-hidden
-                    className={`grid size-8 flex-none place-items-center rounded-full text-[11px] font-bold ${isFree ? "bg-status-config-surface text-foreground" : "bg-line-soft text-field-placeholder"}`}
-                  >
-                    {initialsOf(person.name)}
-                  </span>
-                  <span className="flex flex-1 flex-col text-left">
-                    <strong className="text-sm">{person.name}</strong>
-                    <span className={`text-xs ${isFree ? "text-success-foreground" : "text-muted"}`}>
-                      {isFree || !clash ? p.crew.freeAllDay : interpolate(p.crew.busyOn, { start: clash.start, end: clash.end, id: clash.id })}
-                    </span>
-                  </span>
-                  <span className={`text-[13px] font-bold ${isFree ? "text-foreground underline" : "text-field-placeholder"}`}>{isFree ? p.crew.assign : p.crew.busy}</span>
-                </button>
-              ))}
-            </div>
-          ) : null}
-          {editable ? <p className="text-xs leading-snug text-muted">{p.crew.hint}</p> : null}
         </section>
 
         {detail ? (
@@ -437,10 +368,10 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               {p.history.title}
             </h3>
             <ol className="flex flex-col gap-2.5">
-              {detail.history.map((event) => {
+              {detail.history.map((event, index) => {
                 const text = describeHistory(event, ctx);
                 return (
-                  <li key={`${event.kind}-${event.at.date}-${event.at.time ?? ""}`} className="flex gap-2.5 text-[13px]">
+                  <li key={`${event.kind}-${event.at.date}-${event.at.time ?? ""}-${index}`} className="flex gap-2.5 text-[13px]">
                     <span aria-hidden className="mt-1.5 size-2 flex-none rounded-full bg-accent" />
                     <span className="flex flex-col">
                       <strong>{text.title}</strong>
@@ -453,6 +384,19 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
           </section>
         ) : null}
 
+        {actionable ? (
+          <JobActions
+            // Se reinicia cuando cambian asignaciones u horario: el formulario se cierra y vuelve a leer los datos guardados
+            key={[job.jobId, job.date, job.start, job.end, job.vehicleId, detail?.leadId, ...job.crewIds].join("|")}
+            lang={lang}
+            job={{ jobId: job.jobId, date: job.date, start: job.start, end: job.end, vehicleId: job.vehicleId, crewIds: job.crewIds, leadId: detail?.leadId ?? null }}
+            canReschedule={editable}
+            vehicles={vehicleOptions}
+            people={peopleOptions}
+            t={p.edit}
+          />
+        ) : null}
+
         <div className="flex flex-wrap items-center gap-2 border-t border-line-soft pt-3.5">
           <Link
             href={localePath(lang, ROUTES.jobs.detail(job.id))}
@@ -460,16 +404,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
           >
             {p.actions.open}
           </Link>
-          {editable ? (
-            <>
-              <button type="button" disabled title={t.soon} className={`h-10 rounded-full border border-field-border bg-surface px-4 text-sm font-bold text-foreground ${soon} ${focusRing}`}>
-                {p.actions.reschedule}
-              </button>
-              <button type="button" disabled title={t.soon} className={`h-10 px-1.5 text-[13px] font-bold text-danger-foreground underline ${soon} ${focusRing}`}>
-                {p.actions.cancel}
-              </button>
-            </>
-          ) : null}
         </div>
       </div>
     </aside>

@@ -22,9 +22,9 @@ export function AttentionBanner({ lang, t, attention }: { lang: Locale; t: HomeT
         <h2 id="attention" className="font-bold">
           {a.title}
         </h2>
-        <p>{interpolate(a.text, { incident: attention.incident, job: attention.jobId, reason: attention.reason })}</p>
+        <p>{interpolate(a.text, { job: attention.jobId, reason: attention.reason })}</p>
         <Link
-          href={localePath(lang, ROUTES.incidents.detail(attention.incident.replace("#", "")))}
+          href={localePath(lang, ROUTES.jobs.detail(attention.jobId))}
           className="text-[13px] font-bold underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {a.action}

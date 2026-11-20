@@ -59,7 +59,7 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
   const today = todayLisbon(now);
   const dateParam = first(params.date);
   const date = isIsoDate(dateParam) ? dateParam : today;
-  const overview = await getScheduleOverview({ today });
+  const overview = await getScheduleOverview();
 
   const jobs = filterJobs(overview.jobs, show);
   const weekStart = startOfWeek(date);
@@ -84,7 +84,13 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
 
   return (
     <>
-      <ScheduleHeader lang={locale} t={t} summary={summarize(overview.jobs, weekStart)} />
+      <ScheduleHeader
+        lang={locale}
+        t={t}
+        summary={summarize(overview.jobs, weekStart)}
+        exportRange={{ from: `01/${today.slice(5, 7)}/${today.slice(0, 4)}`, to: `${today.slice(8, 10)}/${today.slice(5, 7)}/${today.slice(0, 4)}` }}
+        exportError={first(params.exportError) === "1"}
+      />
       <ScheduleAlertsSection lang={locale} t={t} alerts={scheduleAlerts(overview, today)} today={today} />
       <ScheduleToolbar
         lang={locale}
@@ -152,6 +158,7 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
             overview={overview}
             today={today}
             closeHref={scheduleHref(locale, { view, date, show, day: view === "month" ? selectedDay : undefined })}
+            jobErrors={dict.app.jobs.execution.errors}
           />
         ) : null}
       </div>

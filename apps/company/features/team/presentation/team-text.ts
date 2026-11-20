@@ -1,7 +1,7 @@
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
-import { formatDate, formatDayMonth } from "@/app/lib/format";
+import { formatDate, formatDayMonth, formatPhone } from "@/app/lib/format";
 import { daysBetween } from "@/features/fleet/domain/fleet";
 import { daysSinceLastWork, daysToExpire, nextJob, stateOf, type PersonState } from "../domain/team";
 import type { Access, Invite, Member, Person, Position, TeamEvent } from "../domain/types";
@@ -79,6 +79,7 @@ export type DateText = { title: string; sub: string };
 /** "Hoje · MD-0821", "28/10 · há 2 dias". */
 export function describeLastWork(member: Member, t: TeamText, locale: Locale, today: string): DateText {
   const days = daysSinceLastWork(member, today);
+  if (days === null || member.lastWorkOn === null) return { title: "—", sub: t.lastWork.never };
   if (days === 0) {
     const { live } = member;
     const sub =
@@ -107,6 +108,16 @@ export function describeEvent(event: TeamEvent, t: TeamText): { title: string; m
   switch (event.kind) {
     case "accepted":
       return { title: event.withoutPhone ? h.acceptedNoPhone : h.accepted, meta };
+    case "added":
+      return { title: event.withoutPhone ? h.addedNoPhone : h.added, meta };
+    case "renamed":
+      return { title: interpolate(h.renamed, { from: event.from, to: event.to }), meta };
+    case "phone-changed":
+      if (event.to === null) return { title: h.phoneRemoved, meta };
+      if (event.from === null) return { title: interpolate(h.phoneAdded, { to: formatPhone(event.to) }), meta };
+      return { title: interpolate(h.phoneChanged, { from: formatPhone(event.from), to: formatPhone(event.to) }), meta };
+    case "reactivated":
+      return { title: h.reactivated, meta };
     case "position-changed":
       return {
         title: interpolate(h.positionChanged, {

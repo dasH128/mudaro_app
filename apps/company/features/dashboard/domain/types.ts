@@ -12,7 +12,8 @@ export type JobKind = "full-move" | "office-transfer" | "private" | "office-mate
 export type Job = {
   id: string;
   client: string;
-  kind: JobKind;
+  /** Tipo de mudança. `null` con datos reales: el pedido aún no guarda el tipo (paso 6.8). */
+  kind: JobKind | null;
   /** "T3": solo en mudanças de vivienda. */
   typology: string | null;
   from: string;
@@ -52,7 +53,17 @@ export type Stage = {
 
 export type ActivityTone = "primary" | "ink" | "success" | "danger";
 
-export type ActivityEvent = "arrived" | "crew-left" | "quote-accepted" | "delivery-done" | "incident-logged";
+export type ActivityEvent =
+  | "arrived"
+  | "crew-left"
+  | "quote-accepted"
+  | "delivery-done"
+  | "incident-logged"
+  // Eventos reales del historial de los envíos (paso 6.8)
+  | "crew-assigned"
+  | "pickup-done"
+  | "incident-resolved"
+  | "job-closed";
 
 export type ActivityDetail =
   | { kind: "place"; place: string }
@@ -62,6 +73,8 @@ export type ActivityDetail =
   | { kind: "text"; text: string };
 
 export type ActivityItem = {
+  /** Único en la lista (el número del pedido se repite entre eventos). */
+  id: string;
   time: string;
   tone: ActivityTone;
   ref: string;
@@ -69,8 +82,11 @@ export type ActivityItem = {
   detail: ActivityDetail;
 };
 
-/** Incidencia que pide la atención de la empresa. `reason` es texto de la empresa. */
-export type Attention = { incident: string; jobId: string; reason: string };
+/** Incidencia abierta que pide la atención de la empresa. `reason` es la descripción escrita por la empresa. */
+export type Attention = { jobId: string; reason: string };
+
+/** Vehículos activos: en un trabajo en curso, con trabajo hoy (aún no en curso) y libres. */
+export type FleetToday = { service: number; loading: number; available: number };
 
 export type Dashboard = {
   stats: readonly Stat[];
@@ -78,4 +94,5 @@ export type Dashboard = {
   jobs: readonly Job[];
   stages: readonly Stage[];
   activity: readonly ActivityItem[];
+  fleet: FleetToday;
 };

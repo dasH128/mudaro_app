@@ -4,8 +4,6 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import {
-  formatAmount,
-  formatCompact,
   formatDate,
   formatDayMonthShort,
   formatInteger,
@@ -13,10 +11,14 @@ import {
   formatWeekdayDay,
 } from "@/app/lib/format";
 import { acceptanceRate, addDays, isIdle } from "../../domain/fleet";
-import type { Vehicle } from "../../domain/types";
+import { INACTIVE_REASONS, type Vehicle } from "../../domain/types";
 import { describeEvent, describeStatus, type FleetText } from "../fleet-text";
+import { ActiveSwitch } from "@/app/components/active-switch";
 import { PanelEscape } from "@/app/components/panel-escape";
+import { setVehicleActiveAction } from "../../application/actions/edit-vehicle";
+import { VEHICLE_TYPES, type VehicleType } from "../../domain/new-vehicle";
 import { StatusPill, VehicleTile, focusRing } from "./fleet-parts";
+import { VehicleDataForm } from "./vehicle-data-form";
 
 type Props = {
   lang: Locale;
@@ -40,9 +42,6 @@ const iconButton =
   "grid size-9 place-items-center rounded-full text-foreground " + focusRing;
 const statBox = "flex flex-col gap-0.5 rounded-[14px] bg-surface-head p-3";
 const statValue = "font-display text-[22px] font-bold";
-const readonlyField =
-  "min-w-0 flex-1 bg-transparent px-3 text-[15px] font-bold text-foreground outline-none";
-const label = "flex flex-col gap-1 text-[13px] font-bold";
 const heading = "text-base font-bold";
 
 /** Panel lateral del vehículo (P7): estado, semana, trabajos, presupuestos, datos, uso y histórico. */
@@ -119,23 +118,24 @@ export function VehiclePanel({
               <StatusPill state={status.state} label={status.label} />
               <span className="text-[13px] text-muted">{status.note}</span>
             </span>
-            {/* Activar y desactivar aún no se guarda: el interruptor sale desactivado */}
-            <button
-              type="button"
-              role="switch"
-              aria-checked={vehicle.active}
-              aria-label={interpolate(vehicle.active ? p.deactivate : p.activate, { name: vehicle.name })}
-              disabled
-              title={t.soon}
-              className={`inline-flex h-9 cursor-not-allowed items-center gap-2.5 pr-0.5 pl-2 text-[13px] font-bold text-foreground opacity-60 ${focusRing}`}
-            >
-              {vehicle.active ? p.on : p.off}
-              <span className={`relative h-7 w-11.5 flex-none rounded-full ${vehicle.active ? "bg-foreground" : "bg-status-off-border"}`}>
-                <span
-                  className={`absolute top-1 size-5 rounded-full ${vehicle.active ? "left-5.5 bg-background" : "left-1 bg-surface"}`}
-                />
-              </span>
-            </button>
+            <ActiveSwitch
+              key={`${vehicle.id}-${vehicle.active}`}
+              action={setVehicleActiveAction}
+              fields={{ lang, vehicleId: vehicle.id }}
+              active={vehicle.active}
+              reasons={INACTIVE_REASONS.map((value) => ({ value, label: p.deactivation.reasons[value] }))}
+              t={{
+                on: p.on,
+                off: p.off,
+                deactivateLabel: interpolate(p.deactivate, { name: vehicle.name }),
+                activateLabel: interpolate(p.activate, { name: vehicle.name }),
+                title: p.deactivation.title,
+                note: p.deactivation.note,
+                confirm: p.deactivation.confirm,
+                cancel: p.deactivation.cancel,
+                formErrors: p.data.formErrors,
+              }}
+            />
           </div>
 
           {!vehicle.active && nextWarnJob ? (
@@ -247,58 +247,19 @@ export function VehiclePanel({
           </div>
         </section>
 
-        <section aria-labelledby="vehicle-data" className="flex flex-col gap-3">
-          <div className="flex items-baseline justify-between gap-2">
-            <h3 id="vehicle-data" className={heading}>
-              {p.data.title}
-            </h3>
-            <span className="text-xs text-muted">{p.data.readOnly}</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2.5">
-            <label className={label}>
-              {p.data.capacity}
-              <span className="flex h-10.5 items-center overflow-hidden rounded-xl border border-field-border font-normal">
-                <input readOnly value={formatCompact(vehicle.capacityM3)} className={readonlyField} />
-                <span className="px-2.5 text-[13px] text-muted">m³</span>
-              </span>
-            </label>
-            <label className={label}>
-              {p.data.maxLoad}
-              <span className="flex h-10.5 items-center overflow-hidden rounded-xl border border-field-border font-normal">
-                <input readOnly value={vehicle.maxLoadKg === null ? "" : formatInteger(vehicle.maxLoadKg)} className={readonlyField} />
-                <span className="px-2.5 text-[13px] text-muted">kg</span>
-              </span>
-            </label>
-            {showCost ? (
-              <label className={label}>
-                {p.data.costPerKm}
-                <span
-                  className={`flex h-10.5 items-center overflow-hidden rounded-xl font-normal ${vehicle.costMissing ? "border-2 border-warn-border bg-warn-surface" : "border border-field-border"}`}
-                >
-                  <input readOnly value={formatAmount(vehicle.costPerKmCents ?? 0)} className={readonlyField} />
-                  <span className="px-2.5 text-[13px] text-muted">€</span>
-                </span>
-              </label>
-            ) : null}
-            <label className={label}>
-              {p.data.type}
-              <input
-                readOnly
-                value={t.new.types[vehicle.type].label}
-                className="h-10.5 rounded-xl border border-field-border bg-transparent px-3 text-[15px] font-normal text-foreground outline-none"
-              />
-            </label>
-          </div>
-          {showCost && vehicle.costMissing ? (
-            <span className="text-[13px] font-bold text-warn-foreground">{p.data.costMissing}</span>
-          ) : null}
-          {showCost ? (
-            <p className="flex gap-2 text-xs leading-snug text-muted">
-              <Icon name="lock" size={14} strokeWidth={2.2} className="mt-px flex-none" />
-              {p.data.privacy}
-            </p>
-          ) : null}
-        </section>
+        {showCost ? (
+          // Editar exige ver el coste por km, que solo ve el administrador (RNF-03); solo él entra en el panel.
+          <VehicleDataForm
+            key={vehicle.id}
+            lang={lang}
+            vehicle={vehicle}
+            t={{
+              data: p.data,
+              errors: t.new.errors,
+              types: Object.fromEntries(VEHICLE_TYPES.map((type) => [type, t.new.types[type].label])) as Record<VehicleType, string>,
+            }}
+          />
+        ) : null}
 
         <section aria-labelledby="vehicle-usage" className="flex flex-col gap-2.5">
           <h3 id="vehicle-usage" className={heading}>
@@ -329,7 +290,7 @@ export function VehiclePanel({
             {vehicle.history.map((event) => {
               const text = describeEvent(event, t);
               return (
-                <li key={`${event.kind}-${event.at}`} className="flex gap-2.5 text-[13px]">
+                <li key={event.id} className="flex gap-2.5 text-[13px]">
                   <span aria-hidden className="mt-1.5 size-2 flex-none rounded-full bg-accent" />
                   <span className="flex flex-col">
                     <strong>{text.title}</strong>

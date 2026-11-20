@@ -96,6 +96,61 @@ export type Database = {
           },
         ]
       }
+      assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          crew_member_id: string | null
+          id: string
+          is_lead: boolean
+          job_id: string
+          period: unknown
+          vehicle_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          is_lead?: boolean
+          job_id: string
+          period: unknown
+          vehicle_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          is_lead?: boolean
+          job_id?: string
+          period?: unknown
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_company_id_crew_member_id_fkey"
+            columns: ["company_id", "crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "assignments_job_id_company_id_fkey"
+            columns: ["job_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "assignments_vehicle_id_company_id_fkey"
+            columns: ["vehicle_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -646,6 +701,279 @@ export type Database = {
           },
         ]
       }
+      crew_members: {
+        Row: {
+          active: boolean
+          company_id: string
+          created_at: string
+          id: string
+          inactive_by: string | null
+          inactive_reason:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since: string | null
+          name: string
+          phone: string | null
+          position: Database["public"]["Enums"]["crew_position"]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          company_id: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          name: string
+          phone?: string | null
+          position: Database["public"]["Enums"]["crew_position"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          company_id?: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          name?: string
+          phone?: string | null
+          position?: Database["public"]["Enums"]["crew_position"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_inactive_by_fkey"
+            columns: ["inactive_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evidence: {
+        Row: {
+          company_id: string
+          file_path: string
+          id: string
+          incident_id: string | null
+          job_id: string
+          lat: number | null
+          lng: number | null
+          moment: Database["public"]["Enums"]["job_moment"]
+          recorded_at: string
+          recorded_by: string | null
+          source: Database["public"]["Enums"]["record_source"]
+          taken_at: string
+        }
+        Insert: {
+          company_id: string
+          file_path: string
+          id?: string
+          incident_id?: string | null
+          job_id: string
+          lat?: number | null
+          lng?: number | null
+          moment: Database["public"]["Enums"]["job_moment"]
+          recorded_at?: string
+          recorded_by?: string | null
+          source: Database["public"]["Enums"]["record_source"]
+          taken_at: string
+        }
+        Update: {
+          company_id?: string
+          file_path?: string
+          id?: string
+          incident_id?: string | null
+          job_id?: string
+          lat?: number | null
+          lng?: number | null
+          moment?: Database["public"]["Enums"]["job_moment"]
+          recorded_at?: string
+          recorded_by?: string | null
+          source?: Database["public"]["Enums"]["record_source"]
+          taken_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evidence_incident_id_company_id_fkey"
+            columns: ["incident_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "evidence_job_id_company_id_fkey"
+            columns: ["job_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "evidence_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      handover_records: {
+        Row: {
+          company_id: string
+          document_path: string | null
+          id: string
+          job_id: string
+          moment: Database["public"]["Enums"]["job_moment"]
+          recorded_at: string
+          recorded_by: string | null
+          remarks: string | null
+          signature_path: string | null
+          signed_at: string
+          signer_name: string
+          source: Database["public"]["Enums"]["record_source"]
+        }
+        Insert: {
+          company_id: string
+          document_path?: string | null
+          id?: string
+          job_id: string
+          moment: Database["public"]["Enums"]["job_moment"]
+          recorded_at?: string
+          recorded_by?: string | null
+          remarks?: string | null
+          signature_path?: string | null
+          signed_at: string
+          signer_name: string
+          source: Database["public"]["Enums"]["record_source"]
+        }
+        Update: {
+          company_id?: string
+          document_path?: string | null
+          id?: string
+          job_id?: string
+          moment?: Database["public"]["Enums"]["job_moment"]
+          recorded_at?: string
+          recorded_by?: string | null
+          remarks?: string | null
+          signature_path?: string | null
+          signed_at?: string
+          signer_name?: string
+          source?: Database["public"]["Enums"]["record_source"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "handover_records_job_id_company_id_fkey"
+            columns: ["job_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "handover_records_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incidents: {
+        Row: {
+          company_id: string
+          description: string
+          extra_amount_cents: number
+          id: string
+          job_id: string
+          occurred_at: string
+          recorded_at: string
+          recorded_by: string | null
+          resolution_note: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          source: Database["public"]["Enums"]["record_source"]
+          status: Database["public"]["Enums"]["incident_status"]
+          type: Database["public"]["Enums"]["incident_type"]
+        }
+        Insert: {
+          company_id: string
+          description: string
+          extra_amount_cents?: number
+          id?: string
+          job_id: string
+          occurred_at: string
+          recorded_at?: string
+          recorded_by?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          source: Database["public"]["Enums"]["record_source"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          type: Database["public"]["Enums"]["incident_type"]
+        }
+        Update: {
+          company_id?: string
+          description?: string
+          extra_amount_cents?: number
+          id?: string
+          job_id?: string
+          occurred_at?: string
+          recorded_at?: string
+          recorded_by?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          source?: Database["public"]["Enums"]["record_source"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          type?: Database["public"]["Enums"]["incident_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incidents_job_id_company_id_fkey"
+            columns: ["job_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "incidents_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incidents_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventories: {
         Row: {
           created_at: string
@@ -984,36 +1312,67 @@ export type Database = {
       }
       jobs: {
         Row: {
+          actual_hours: number | null
+          actual_km: number | null
+          cancel_reason: string | null
+          cancelled_at: string | null
+          closed_at: string | null
+          closed_by: string | null
           company_id: string
           created_at: string
           id: string
+          notes: string | null
           quote_id: string
+          scheduled_end: string
           scheduled_start: string
           shipment_id: string
           status: Database["public"]["Enums"]["job_status"]
           updated_at: string
         }
         Insert: {
+          actual_hours?: number | null
+          actual_km?: number | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
           company_id: string
           created_at?: string
           id?: string
+          notes?: string | null
           quote_id: string
+          scheduled_end: string
           scheduled_start: string
           shipment_id: string
           status?: Database["public"]["Enums"]["job_status"]
           updated_at?: string
         }
         Update: {
+          actual_hours?: number | null
+          actual_km?: number | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
           company_id?: string
           created_at?: string
           id?: string
+          notes?: string | null
           quote_id?: string
+          scheduled_end?: string
           scheduled_start?: string
           shipment_id?: string
           status?: Database["public"]["Enums"]["job_status"]
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "jobs_closed_by_fkey"
+            columns: ["closed_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "jobs_quote_id_company_id_fkey"
             columns: ["quote_id", "company_id"]
@@ -1704,9 +2063,40 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: never; Returns: string }
+      add_evidence: {
+        Args: {
+          p_file_path: string
+          p_incident_id: string
+          p_job_id: string
+          p_moment: Database["public"]["Enums"]["job_moment"]
+          p_taken_at: string
+        }
+        Returns: string
+      }
+      add_job_event: {
+        Args: {
+          p_data: Json
+          p_job: Database["public"]["Tables"]["jobs"]["Row"]
+          p_kind: Database["public"]["Enums"]["shipment_event_kind"]
+        }
+        Returns: undefined
+      }
       can_read_order: { Args: { p_order_id: string }; Returns: boolean }
+      cancel_job: {
+        Args: { p_job_id: string; p_reason: string }
+        Returns: undefined
+      }
       cancel_order: {
         Args: { p_order_id: string; p_reason: string }
+        Returns: undefined
+      }
+      check_assignment_overlaps: {
+        Args: {
+          p_crew_member_ids: string[]
+          p_job_id: string
+          p_period: unknown
+          p_vehicle_ids: string[]
+        }
         Returns: undefined
       }
       client_accept_quote: {
@@ -1747,9 +2137,26 @@ export type Database = {
         }
         Returns: number
       }
+      close_job: {
+        Args: {
+          p_actual_hours: number
+          p_actual_km: number
+          p_job_id: string
+          p_notes: string
+        }
+        Returns: undefined
+      }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
+      }
+      create_crew_member: {
+        Args: {
+          p_name: string
+          p_phone: string
+          p_position: Database["public"]["Enums"]["crew_position"]
+        }
+        Returns: string
       }
       create_order: {
         Args: {
@@ -1783,15 +2190,57 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      default_job_end: {
+        Args: { p_quote_id: string; p_start: string }
+        Returns: string
+      }
       delete_inventory_line: { Args: { p_line_id: string }; Returns: undefined }
+      delete_job_record: {
+        Args: { p_id: string; p_kind: string }
+        Returns: string[]
+      }
       f_unaccent: { Args: { "": string }; Returns: string }
       insert_default_tariff: {
         Args: { p_company_id: string }
         Returns: undefined
       }
       is_company_administrator: { Args: never; Returns: boolean }
+      is_job_file: {
+        Args: {
+          p_job: Database["public"]["Tables"]["jobs"]["Row"]
+          p_path: string
+        }
+        Returns: boolean
+      }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
+      lock_open_job: {
+        Args: { p_job_id: string }
+        Returns: {
+          actual_hours: number | null
+          actual_km: number | null
+          cancel_reason: string | null
+          cancelled_at: string | null
+          closed_at: string | null
+          closed_by: string | null
+          company_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          quote_id: string
+          scheduled_end: string
+          scheduled_start: string
+          shipment_id: string
+          status: Database["public"]["Enums"]["job_status"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "jobs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       lock_order_by_link: {
         Args: { p_token_hash: string; p_write: boolean }
         Returns: string
@@ -1805,6 +2254,35 @@ export type Database = {
           total_cents: number
           vat_cents: number
         }[]
+      }
+      record_handover: {
+        Args: {
+          p_document_path: string
+          p_job_id: string
+          p_moment: Database["public"]["Enums"]["job_moment"]
+          p_remarks: string
+          p_signed_at: string
+          p_signer_name: string
+        }
+        Returns: string
+      }
+      report_incident: {
+        Args: {
+          p_description: string
+          p_extra_amount_cents: number
+          p_job_id: string
+          p_occurred_at: string
+          p_type: Database["public"]["Enums"]["incident_type"]
+        }
+        Returns: string
+      }
+      reschedule_job: {
+        Args: { p_end: string; p_job_id: string; p_start: string }
+        Returns: undefined
+      }
+      resolve_incident: {
+        Args: { p_incident_id: string; p_note: string }
+        Returns: undefined
       }
       save_company_extra: {
         Args: {
@@ -1872,12 +2350,29 @@ export type Database = {
         }[]
       }
       send_quote: { Args: { p_quote_id: string }; Returns: number }
+      set_crew_member_active: {
+        Args: {
+          p_active: boolean
+          p_id: string
+          p_reason: Database["public"]["Enums"]["crew_inactive_reason"]
+        }
+        Returns: undefined
+      }
       set_inventory_extra: {
         Args: {
           p_catalog_extra_id: string
           p_note: string
           p_order_id: string
           p_selected: boolean
+        }
+        Returns: undefined
+      }
+      set_job_assignments: {
+        Args: {
+          p_crew_member_ids: string[]
+          p_job_id: string
+          p_lead_id: string
+          p_vehicle_ids: string[]
         }
         Returns: undefined
       }
@@ -1890,8 +2385,35 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_vehicle_active: {
+        Args: {
+          p_active: boolean
+          p_reason: Database["public"]["Enums"]["vehicle_inactive_reason"]
+          p_vehicle_id: string
+        }
+        Returns: undefined
+      }
       share_order_link: { Args: { p_order_id: string }; Returns: string }
       submit_inventory: { Args: { p_order_id: string }; Returns: number }
+      update_crew_member: {
+        Args: {
+          p_id: string
+          p_name: string
+          p_phone: string
+          p_position: Database["public"]["Enums"]["crew_position"]
+        }
+        Returns: undefined
+      }
+      update_vehicle_data: {
+        Args: {
+          p_capacity_m3: number
+          p_cost_per_km_cents: number
+          p_max_load_kg: number
+          p_type: Database["public"]["Enums"]["vehicle_type"]
+          p_vehicle_id: string
+        }
+        Returns: undefined
+      }
       write_inventory_draft: {
         Args: {
           p_addresses: Json
@@ -1907,9 +2429,14 @@ export type Database = {
       app_locale: "pt" | "es" | "en"
       client_type: "private" | "company"
       company_role: "administrator" | "operator"
+      crew_inactive_reason: "left" | "other"
+      crew_position: "driver" | "loader" | "foreman"
       date_flexibility: "exact" | "two_days" | "one_week" | "month"
       filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
+      incident_status: "open" | "resolved"
+      incident_type: "damage" | "undeclared_item" | "delay" | "access" | "other"
+      job_moment: "pickup" | "delivery" | "incident"
       job_status:
         | "scheduled"
         | "in_progress"
@@ -1922,6 +2449,7 @@ export type Database = {
       quote_line_kind: "base" | "extra" | "manual"
       quote_presentation: "fixed" | "hourly"
       quote_status: "draft" | "sent" | "accepted" | "rejected" | "superseded"
+      record_source: "panel" | "app"
       shipment_event_kind:
         | "created"
         | "link_shared"
@@ -1932,6 +2460,15 @@ export type Database = {
         | "lost"
         | "cancelled"
         | "note_added"
+        | "job_assigned"
+        | "job_rescheduled"
+        | "job_cancelled"
+        | "pickup_recorded"
+        | "delivery_recorded"
+        | "incident_reported"
+        | "incident_resolved"
+        | "job_record_deleted"
+        | "job_closed"
       shipment_status:
         | "new"
         | "awaiting_inventory"
@@ -2078,9 +2615,14 @@ export const Constants = {
       app_locale: ["pt", "es", "en"],
       client_type: ["private", "company"],
       company_role: ["administrator", "operator"],
+      crew_inactive_reason: ["left", "other"],
+      crew_position: ["driver", "loader", "foreman"],
       date_flexibility: ["exact", "two_days", "one_week", "month"],
       filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],
+      incident_status: ["open", "resolved"],
+      incident_type: ["damage", "undeclared_item", "delay", "access", "other"],
+      job_moment: ["pickup", "delivery", "incident"],
       job_status: [
         "scheduled",
         "in_progress",
@@ -2094,6 +2636,7 @@ export const Constants = {
       quote_line_kind: ["base", "extra", "manual"],
       quote_presentation: ["fixed", "hourly"],
       quote_status: ["draft", "sent", "accepted", "rejected", "superseded"],
+      record_source: ["panel", "app"],
       shipment_event_kind: [
         "created",
         "link_shared",
@@ -2104,6 +2647,15 @@ export const Constants = {
         "lost",
         "cancelled",
         "note_added",
+        "job_assigned",
+        "job_rescheduled",
+        "job_cancelled",
+        "pickup_recorded",
+        "delivery_recorded",
+        "incident_reported",
+        "incident_resolved",
+        "job_record_deleted",
+        "job_closed",
       ],
       shipment_status: [
         "new",

@@ -26,12 +26,17 @@ export type VehicleJob = {
 
 export type VehicleChange =
   | { kind: "added"; withoutCost: boolean }
-  | { kind: "cost-changed"; fromCents: number; toCents: number }
-  | { kind: "max-load-changed"; fromKg: number; toKg: number }
-  | { kind: "deactivated"; reason: InactiveReason };
+  | { kind: "type-changed"; from: VehicleType; to: VehicleType }
+  | { kind: "capacity-changed"; fromM3: number; toM3: number }
+  /** `null`: sin carga máxima indicada. */
+  | { kind: "max-load-changed"; fromKg: number | null; toKg: number | null }
+  /** `fromCents` es `null` si el vehículo no tenía coste por km. */
+  | { kind: "cost-changed"; fromCents: number | null; toCents: number }
+  | { kind: "deactivated"; reason: InactiveReason }
+  | { kind: "reactivated" };
 
-/** Una entrada del histórico: qué cambió, cuándo (aaaa-mm-dd) y quién. */
-export type VehicleEvent = { at: string; by: string } & VehicleChange;
+/** Una entrada del histórico: qué cambió, cuándo (aaaa-mm-dd) y quién. `id` es único (sirve de clave en la lista). */
+export type VehicleEvent = { id: string; at: string; by: string } & VehicleChange;
 
 export type Vehicle = {
   id: string;
@@ -63,6 +68,14 @@ export type Vehicle = {
   usage: { jobs: number; km: number; hours: number };
   /** Del más reciente al más antiguo. */
   history: VehicleEvent[];
+};
+
+/** Datos que se editan desde el panel del vehículo (RF-05). La matrícula y el nombre no se editan. */
+export type VehicleData = {
+  type: VehicleType;
+  capacityM3: number;
+  maxLoadKg: number | null;
+  costPerKmCents: number;
 };
 
 export type FleetMetrics = {

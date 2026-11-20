@@ -20,7 +20,10 @@
     "scheduleTitle": "Agenda · Mudaro",
     "forgotPasswordTitle": "Recuperar contraseña · Mudaro",
     "pricingTitle": "Tarifas · Mudaro",
-    "quoteEditorTitle": "Presupuesto · Mudaro"
+    "quoteEditorTitle": "Presupuesto · Mudaro",
+    "teamNewTitle": "Nueva persona · Mudaro",
+    "jobTitle": "Trabajo · Mudaro",
+    "jobPrintTitle": "Acta · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -150,6 +153,11 @@
         "title": "No encontramos este pedido",
         "text": "Comprueba el número. Si el enlace te lo pasó otra persona, puede ser de otra empresa.",
         "cta": "Volver a los pedidos"
+      },
+      "jobNotFound": {
+        "title": "Trabajo no encontrado",
+        "text": "Este trabajo no existe, se canceló o no es de tu empresa.",
+        "cta": "Volver a la agenda"
       }
     },
     "account": {
@@ -1038,7 +1046,7 @@
         "summary": {
           "moveTitle": "La mudanza",
           "jobTitle": "Trabajo programado",
-          "jobWhen": "{date} a las {time}",
+          "jobWhen": "{date} de {time} a {end}",
           "jobPending": "Equipo y vehículo aún sin asignar.",
           "viewSchedule": "Ver en la agenda",
           "edit": "Editar",
@@ -1067,7 +1075,12 @@
           "photos": "fotos del cliente",
           "extras": "Servicios extra pedidos:",
           "noAttention": "Aún no se ha enviado el inventario. Cuando llegue, aquí verás qué requiere atención.",
-          "itemsInRooms": "{items} en {rooms}"
+          "itemsInRooms": "{items} en {rooms}",
+          "jobTeam": "Vehículo: {vehicle} · Equipo: {crew}",
+          "jobNoVehicle": "por asignar",
+          "jobNoCrew": "por asignar",
+          "jobLead": "{name} (jefe)",
+          "viewJob": "Ver trabajo"
         },
         "inventory": {
           "title": "Inventario v{version}",
@@ -1155,7 +1168,18 @@
           "quoteSent": "Presupuesto enviado (v{version})",
           "won": "Presupuesto aceptado",
           "lost": "Pedido perdido",
-          "meta": "{when} · {actor}"
+          "meta": "{when} · {actor}",
+          "jobAssigned": "Equipo y vehículo asignados",
+          "jobRescheduled": "Trabajo reprogramado",
+          "jobCancelled": "Trabajo cancelado",
+          "jobSteps": {
+            "pickup": "Acta de recogida registrada",
+            "delivery": "Acta de entrega registrada",
+            "incident-reported": "Incidencia registrada",
+            "incident-resolved": "Incidencia resuelta",
+            "record-deleted": "Registro del trabajo eliminado",
+            "closed": "Trabajo cerrado"
+          }
         },
         "side": {
           "client": "Cliente",
@@ -1374,13 +1398,19 @@
         },
         "data": {
           "title": "Datos del vehículo",
-          "readOnly": "Edición disponible próximamente",
           "capacity": "Capacidad",
           "maxLoad": "Carga máxima",
           "costPerKm": "Coste por km",
           "type": "Tipo",
           "costMissing": "Sin coste por km, el coste y el margen de los presupuestos salen mal.",
-          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a presupuestos ya enviados."
+          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a presupuestos ya enviados.",
+          "saveOnBlur": "Se guarda al salir del campo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Este vehículo ya no existe en tu flota. Recarga la página.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         },
         "usage": {
           "title": "Uso en {month}",
@@ -1394,7 +1424,21 @@
           "addedNoCost": "Vehículo añadido sin coste por km",
           "costChanged": "Coste por km: {from} → {to}",
           "maxLoadChanged": "Carga máxima: {from} → {to} kg",
-          "deactivated": "Desactivado: {reason}"
+          "deactivated": "Desactivado: {reason}",
+          "typeChanged": "Tipo: {from} → {to}",
+          "capacityChanged": "Capacidad: {from} → {to} m³",
+          "costSet": "Coste por km definido: {to}",
+          "reactivated": "Reactivado"
+        },
+        "deactivation": {
+          "title": "¿Por qué queda inactivo?",
+          "note": "Un vehículo inactivo no aparece en los presupuestos ni en la agenda.",
+          "confirm": "Desactivar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "workshop": "En el taller",
+            "other": "Otro motivo"
+          }
         }
       },
       "empty": {
@@ -1562,7 +1606,6 @@
       "title": "Equipo",
       "loading": "Cargando el equipo…",
       "soon": "Disponible próximamente",
-      "invite": "Invitar persona",
       "resultsCount": {
         "one": "{count} persona",
         "other": "{count} personas"
@@ -1589,7 +1632,7 @@
         "label": "Cómo entra el equipo en los presupuestos",
         "title": "Cómo entra el equipo en los presupuestos",
         "text": "El cálculo estima cuántos operarios necesita cada mudanza y usa el coste por hora de la tarifa, igual para todos. En la agenda solo aparecen las personas activas.",
-        "app": "Los operarios usan la app en el móvil: solo ven los trabajos que les asignas, sin precios ni márgenes."
+        "app": "Por ahora el equipo no usa ninguna app: avisas a cada persona como ya haces. Cuando haya app, cada persona verá solo los trabajos que le asignes, sin precios."
       },
       "status": {
         "busy": "En trabajo",
@@ -1611,7 +1654,7 @@
           "one": "hace {count} día",
           "other": "hace {count} días"
         },
-        "noAccount": "aún sin cuenta"
+        "never": "todavía sin trabajos"
       },
       "nextWork": {
         "none": "Sin fecha",
@@ -1630,8 +1673,8 @@
         "other": "Inactivo"
       },
       "since": "desde {date} · {by}",
-      "inactiveNote": "Sin acceso a la app",
-      "noAccess": "Sin acceso",
+      "inactiveNote": "No aparece en la agenda",
+      "noAccess": "Fuera de la agenda",
       "phoneMissing": "Falta el teléfono",
       "access": {
         "today": "hoy, {time}",
@@ -1680,11 +1723,10 @@
         "filters": {
           "all": "Todos",
           "busy": "En trabajo",
-          "free": "Libres ahora",
-          "invites": "Invitaciones pendientes"
+          "free": "Libres ahora"
         },
         "searchLabel": "Buscar persona",
-        "searchPlaceholder": "Nombre, email o teléfono",
+        "searchPlaceholder": "Nombre o móvil",
         "sortLabel": "Ordenar",
         "sort": {
           "status": "Estado hoy",
@@ -1715,7 +1757,7 @@
         "hoursReal": "{hours} h reales",
         "resend": "Reenviar invitación",
         "inactiveTitle": "Inactivos · {count}",
-        "inactiveHint": "no entran en la app ni en la agenda",
+        "inactiveHint": "no aparecen en la agenda",
         "footnote": "\"Trabajos · 30 d\": trabajos en los que la persona estuvo asignada en los últimos 30 días y horas reales registradas.",
         "openSchedule": "Abrir agenda",
         "emptySearch": "Ninguna persona coincide con la búsqueda.",
@@ -1744,8 +1786,8 @@
         "deactivate": "Desactivar a {name}",
         "activate": "Activar a {name}",
         "pendingJobs": {
-          "one": "Tiene {count} trabajo marcado. Al desactivarla pierde el acceso a la app y ese trabajo necesitará a otra persona en la agenda.",
-          "other": "Tiene {count} trabajos marcados. Al desactivarla pierde el acceso a la app y esos trabajos necesitarán a otra persona en la agenda."
+          "one": "Tiene {count} trabajo programado. Al desactivarla, ese trabajo necesitará otra persona en la agenda.",
+          "other": "Tiene {count} trabajos programados. Al desactivarla, esos trabajos necesitarán otra persona en la agenda."
         },
         "noPhone": "Sin teléfono",
         "invite": {
@@ -1782,16 +1824,19 @@
           "incidents": "incidencias"
         },
         "data": {
-          "title": "Datos y acceso",
-          "readOnly": "Edición disponible próximamente",
+          "title": "Datos",
           "phone": "Teléfono",
           "phonePlaceholder": "9 dígitos",
           "position": "Función",
-          "role": "Rol en Mudaro",
-          "roleOperator": "Operario · solo la app, sin precios",
           "phoneMissing": "Sin teléfono, el equipo no puede hablar con la persona el día de la mudanza.",
-          "lastAccess": "Último acceso a la app:",
-          "sendLink": "Enviar enlace de acceso"
+          "name": "Nombre",
+          "saveOnBlur": "Se guarda al salir del campo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Esta persona ya no está en tu equipo. Recarga la página.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         },
         "history": {
           "title": "Histórico",
@@ -1801,33 +1846,72 @@
           "deactivated": "Desactivado: {reason}",
           "inviteSentEmail": "Invitación enviada por email",
           "inviteSentLink": "Invitación enviada por enlace",
-          "inviteLinkCopied": "Enlace de invitación copiado"
+          "inviteLinkCopied": "Enlace de invitación copiado",
+          "added": "Persona añadida",
+          "addedNoPhone": "Persona añadida sin móvil",
+          "renamed": "Nombre: {from} → {to}",
+          "phoneAdded": "Móvil añadido: {to}",
+          "phoneChanged": "Móvil: {from} → {to}",
+          "phoneRemoved": "Móvil eliminado",
+          "reactivated": "Reactivada"
+        },
+        "errors": {
+          "nameRequired": "Indica el nombre.",
+          "nameTooLong": "Máximo 80 caracteres.",
+          "phoneInvalid": "Móvil no válido. Indica 9 dígitos.",
+          "invalid": "Valor no válido."
+        },
+        "deactivation": {
+          "title": "¿Por qué queda inactiva?",
+          "note": "Una persona inactiva no aparece en la agenda ni se puede asignar a trabajos.",
+          "confirm": "Desactivar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "left": "Ya no trabaja en la empresa",
+            "other": "Otro motivo"
+          }
         }
       },
       "empty": {
         "count": "0 operarios",
         "eyebrow": "Por ahora, solo tú",
         "title": "¿Quién va contigo a las mudanzas?",
-        "text": "Invita a tu equipo. Cada persona ve en el móvil los trabajos que le asignas, hace las fotos y recoge las firmas del cliente.",
-        "cta": "Invitar al primer operario",
-        "hint": "Basta con el nombre y el email o el teléfono.",
-        "perksTitle": "Lo que tendrá tu equipo",
+        "text": "Añade a las personas que van a las mudanzas para asignarlas a los trabajos en la agenda. No tienen que instalar nada.",
+        "cta": "Añadir la primera persona",
+        "hint": "Basta con el nombre y la función. El móvil es opcional.",
+        "perksTitle": "Qué ganas con el equipo en Mudaro",
         "perks": {
           "phone": {
-            "title": "Trabajos en el móvil",
-            "text": "Direcciones, horas e inventario de cada mudanza, incluso sin cobertura."
+            "title": "Contactos a mano",
+            "text": "El móvil de cada persona queda junto a los trabajos a los que va."
           },
           "photos": {
-            "title": "Fotos y firmas",
-            "text": "La recogida y la entrega quedan registradas con hora y lugar."
+            "title": "Fotos y actas en el trabajo",
+            "text": "Las fotos y las actas que te envía el equipo quedan guardadas en cada trabajo."
           },
           "prices": {
-            "title": "Sin precios a la vista",
-            "text": "Los operarios no ven tarifas, costes ni márgenes."
+            "title": "Precios solo para ti",
+            "text": "El equipo no entra en el panel: tarifas, costes y márgenes se quedan contigo."
           }
         },
         "solo": "¿Trabajas sin equipo? No es obligatorio para usar Mudaro.",
         "you": "administración · tú"
+      },
+      "add": "Añadir persona",
+      "newPerson": {
+        "title": "Nueva persona",
+        "intro": "Añade a alguien que va a las mudanzas. No necesita cuenta ni instalar nada: le avisas como ya haces.",
+        "name": "Nombre",
+        "namePlaceholder": "Ej.: Rui Santos",
+        "phone": "Móvil",
+        "phoneHint": "Opcional. Sirve para contactarle el día de la mudanza.",
+        "phonePlaceholder": "9 dígitos",
+        "position": "Función",
+        "positionHint": "Solo informa al asignar el equipo. No da accesos.",
+        "submit": "Añadir al equipo",
+        "cancel": "Cancelar",
+        "saving": "Añadiendo…",
+        "breadcrumb": "Ruta"
       }
     },
     "clients": {
@@ -2069,7 +2153,7 @@
       "stats": {
         "jobsToday": {
           "label": "Trabajos hoy",
-          "hint": "respecto a ayer"
+          "hint": "Programados para hoy"
         },
         "inProgress": {
           "label": "En curso",
@@ -2082,8 +2166,8 @@
       },
       "attention": {
         "title": "Requiere tu atención",
-        "text": "Incidencia {incident} en el trabajo {job}: {reason}.",
-        "action": "Revisar incidencia"
+        "text": "Incidencia sin resolver en el trabajo {job}: {reason}.",
+        "action": "Ver trabajo"
       },
       "filters": {
         "label": "Filtrar por estado",
@@ -2165,7 +2249,7 @@
           },
           "won": {
             "label": "Ganados",
-            "hint": "Esta semana"
+            "hint": "Presupuesto aceptado"
           }
         }
       },
@@ -2173,10 +2257,10 @@
         "title": "Resumen de la flota",
         "viewFleet": "Ver flota",
         "vehicles": "vehículos",
-        "aria": "{total} vehículos: {service} en servicio, {loading} cargando, {available} disponibles",
+        "aria": "{total} vehículos: {service} en servicio, {loading} con trabajo hoy, {available} disponibles",
         "legend": {
           "service": "En servicio",
-          "loading": "Cargando",
+          "loading": "Con trabajo hoy",
           "available": "Disponibles"
         }
       },
@@ -2188,7 +2272,11 @@
           "crew-left": "El equipo salió de la base",
           "quote-accepted": "Presupuesto aceptado",
           "delivery-done": "Entrega concluida",
-          "incident-logged": "Incidencia registrada"
+          "incident-logged": "Incidencia registrada",
+          "crew-assigned": "Equipo asignado",
+          "pickup-done": "Recogida registrada",
+          "incident-resolved": "Incidencia resuelta",
+          "job-closed": "Trabajo cerrado"
         },
         "signed": "Firmada por el cliente",
         "crew": "{vehicle}, {crew}"
@@ -2426,7 +2514,13 @@
           "km": "Km reales",
           "estimated": "Estimado: {value} {unit}",
           "noIncidents": "Sin incidencias abiertas",
-          "action": "Cerrar trabajo"
+          "action": "Cerrar trabajo",
+          "notes": "Nota de cierre (opcional)",
+          "notesPlaceholder": "Ej.: fue bien, 1 h más en el acceso",
+          "openIncidents": "Hay {count} incidencia(s) sin resolver. Resuélvelas en la ficha del trabajo antes de cerrar.",
+          "saving": "Cerrando…",
+          "confirm": "Después de cerrar, fotos, actas e incidencias ya no se pueden cambiar.",
+          "closedHere": "Cerrado. Ya entra en la exportación para facturar."
         },
         "real": {
           "title": "Estimado y real",
@@ -2463,7 +2557,7 @@
           "busy": "Ocupado",
           "freeAllDay": "Libre todo el día",
           "busyOn": "Ocupado {start}–{end} · {id}",
-          "hint": "Cada persona ve el trabajo en la app en cuanto se lo asignas. No dejamos marcar a la misma persona o vehículo en horas solapadas."
+          "hint": "Avisa a cada persona como ya haces. Mudaro no deja poner a la misma persona o vehículo en horas que se solapan."
         },
         "client": {
           "title": "Cliente y direcciones",
@@ -2483,13 +2577,65 @@
             "crew-assigned": "Equipo asignado",
             "crew-named": "Equipo: {names}",
             "permit-granted": "Licencia de estacionamiento concedida",
-            "job-started": "Trabajo empezado"
+            "job-started": "Trabajo empezado",
+            "rescheduled": "Reprogramado",
+            "incident-reported": "Incidencia registrada",
+            "incident-resolved": "Incidencia resuelta"
           }
         },
         "actions": {
           "open": "Abrir trabajo",
           "reschedule": "Reprogramar",
           "cancel": "Cancelar trabajo"
+        },
+        "edit": {
+          "editCrew": "Editar equipo y vehículo",
+          "vehicle": "Vehículo",
+          "noVehicle": "Sin vehículo",
+          "crew": "Equipo",
+          "noPeople": "Todavía no tienes personas en el equipo. Añádelas en Equipo.",
+          "lead": "Jefe de equipo",
+          "noLead": "Sin jefe de equipo",
+          "save": "Guardar equipo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "close": "Cerrar",
+          "crewHint": "Avisa a cada persona como ya haces. Mudaro no deja poner a la misma persona o vehículo en horas que se solapan.",
+          "free": "libre a esa hora",
+          "busyAt": "ocupado {start}–{end} · {id}",
+          "capacity": "{capacity} m³",
+          "someone": "Este recurso",
+          "otherJob": "otro trabajo",
+          "reschedule": {
+            "title": "Reprogramar",
+            "date": "Día",
+            "start": "Inicio",
+            "end": "Fin",
+            "note": "El vehículo y el equipo se mueven con el trabajo. Si alguno está ocupado en el nuevo horario, te avisamos.",
+            "save": "Guardar nuevo horario"
+          },
+          "cancel": {
+            "title": "Cancelar trabajo",
+            "reason": "Motivo",
+            "reasonPlaceholder": "Ej.: el cliente aplazó la mudanza",
+            "note": "El vehículo y el equipo quedan libres. El pedido sigue ganado.",
+            "confirm": "Cancelar trabajo",
+            "back": "Volver"
+          },
+          "errors": {
+            "overlapVehicle": "{name} ya está en el {orderId} a esa hora.",
+            "overlapCrew": "{name} ya está en el {orderId} a esa hora.",
+            "unavailableVehicle": "{name} está inactivo. Elige otro vehículo.",
+            "unavailableCrew": "{name} está inactiva. Elige otra persona.",
+            "leadNotInCrew": "El jefe de equipo tiene que estar en el equipo.",
+            "notFound": "Este trabajo ya no existe. Recarga la página.",
+            "notOpen": "Este trabajo ya no se puede cambiar.",
+            "dateInvalid": "Fecha no válida. Usa dd/mm/aaaa.",
+            "timeInvalid": "Hora no válida.",
+            "endBeforeStart": "El fin tiene que ser después del inicio.",
+            "reasonRequired": "Indica el motivo.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         }
       },
       "access": {
@@ -2512,7 +2658,15 @@
           "walk": "{meters} m hasta la puerta"
         }
       },
-      "clientsAnd": "y"
+      "clientsAnd": "y",
+      "export": {
+        "title": "Exportar cerrados",
+        "text": "CSV de los trabajos cerrados entre estas fechas, para facturar. Se abre en Excel.",
+        "from": "Desde",
+        "to": "Hasta",
+        "download": "Descargar CSV",
+        "error": "Fechas no válidas. Usa dd/mm/aaaa, con 'Hasta' después de 'Desde' y como mucho un año."
+      }
     },
     "pricing": {
       "title": "Tarifas",
@@ -2640,6 +2794,165 @@
           "priceInvalid": "Precio no válido.",
           "invalid": "Hay datos no válidos. Revisa los campos.",
           "failed": "No se pudo guardar. Vuelve a intentarlo."
+        }
+      }
+    },
+    "jobs": {
+      "loading": "Cargando el trabajo…",
+      "eyebrow": "Trabajo",
+      "breadcrumb": "Ruta",
+      "viewOrder": "Ver pedido",
+      "crewTitle": "Equipo y vehículo",
+      "noCrew": "Nadie asignado",
+      "addressesTitle": "Direcciones y accesos",
+      "estimateTitle": "Estimado en el presupuesto",
+      "actualLater": "Las horas y km reales se registran al cerrar el trabajo",
+      "hours": "horas",
+      "people": "personas",
+      "price": "presupuesto aceptado",
+      "shareTitle": "Resumen para el equipo",
+      "shareText": "Sin precios. Cópialo o envíalo por WhatsApp a quien va a la mudanza.",
+      "copy": "Copiar resumen",
+      "copied": "Copiado ✓",
+      "whatsapp": "WhatsApp",
+      "summary": {
+        "client": "Cliente: {name} · {phone}",
+        "pickup": "Recogida: {place} ({access})",
+        "delivery": "Entrega: {place} ({access})",
+        "volume": "Volumen: {volume}",
+        "vehicle": "Vehículo: {vehicle}",
+        "crew": "Equipo: {crew}",
+        "lead": "{name} (jefe)",
+        "none": "por asignar"
+      },
+      "execution": {
+        "pickupTitle": "Recogida",
+        "deliveryTitle": "Entrega",
+        "incidentsTitle": "Incidencias",
+        "printDocument": "Imprimir acta",
+        "signer": "Quién firma",
+        "signedAt": "Firmada el",
+        "date": "Día",
+        "time": "Hora",
+        "remarks": "Observaciones",
+        "remarksPlaceholder": "Ej.: el mueble del salón ya tenía un arañazo",
+        "document": "Foto del acta en papel (opcional)",
+        "documentHint": "Haz una foto al acta firmada. Hasta 5 MB.",
+        "recordPickup": "Registrar recogida",
+        "recordDelivery": "Registrar entrega",
+        "saving": "Guardando…",
+        "saved": "Guardado",
+        "preparing": "Preparando las fotos…",
+        "close": "Cerrar",
+        "addPhotos": "Añadir fotos",
+        "photos": "Fotos",
+        "photosHint": "Hasta 10 fotos. Reducimos el tamaño antes de enviar.",
+        "takenAt": "Hechas el",
+        "upload": "Enviar fotos",
+        "reportIncident": "Registrar incidencia",
+        "incidentType": "Tipo",
+        "amount": "Importe adicional",
+        "description": "Qué pasó",
+        "descriptionPlaceholder": "Ej.: espejo del armario roto al bajar las escaleras",
+        "occurredAt": "Cuándo",
+        "incidentHint": "El importe adicional entra en la exportación para facturar. Deja 0 si no hay.",
+        "saveIncident": "Guardar incidencia",
+        "incidentTypes": {
+          "damage": "Daño",
+          "undeclared_item": "Objeto no declarado",
+          "delay": "Retraso",
+          "access": "Acceso",
+          "other": "Otro"
+        },
+        "resolve": "Resolver",
+        "resolutionNote": "Cómo se resolvió",
+        "resolutionPlaceholder": "Ej.: el cliente aceptó el descuento",
+        "markResolved": "Marcar como resuelta",
+        "resolvedOn": "Resuelta el {when} · {note}",
+        "openCount": "{count} por resolver",
+        "noIncidents": "Sin incidencias.",
+        "noAmount": "sin importe adicional",
+        "incidentsAfterPickup": "Las incidencias se registran después de la recogida.",
+        "signedBy": "Firmada por {name} · {when}",
+        "viewDocument": "Ver acta en papel",
+        "noDocument": "Sin foto del acta",
+        "pickupPending": "",
+        "deliveryPending": "La entrega se registra después de la recogida.",
+        "photoAlt": "Foto del {when}",
+        "photoUnavailable": "Foto no disponible",
+        "delete": "Eliminar",
+        "deleteHandover": "Eliminar acta (registrada por error)",
+        "deleteIncident": "Eliminar incidencia",
+        "confirmDelete": "¿Eliminar?",
+        "yesDelete": "Sí, eliminar",
+        "no": "No",
+        "deleting": "Eliminando…",
+        "errors": {
+          "signerRequired": "Indica quién firma.",
+          "dateInvalid": "Fecha no válida. Usa dd/mm/aaaa.",
+          "timeInvalid": "Hora no válida.",
+          "future": "La fecha no puede ser futura.",
+          "descriptionRequired": "Describe qué pasó.",
+          "amountInvalid": "Importe no válido. Ej.: 25,50",
+          "noteRequired": "Indica cómo se resolvió.",
+          "fileRequired": "Elige al menos una foto.",
+          "fileType": "Solo fotos JPEG, PNG o WebP.",
+          "fileTooBig": "Cada foto puede tener hasta 5 MB.",
+          "tooManyFiles": "Hasta 10 fotos cada vez.",
+          "notFound": "Este registro ya no existe. Recarga la página.",
+          "notOpen": "Este trabajo ya no se puede cambiar.",
+          "wrongStatus": "El trabajo cambió de estado. Recarga la página.",
+          "duplicate": "Esta acta ya está registrada.",
+          "upload": "No se ha podido enviar la foto. Inténtalo otra vez.",
+          "failed": "No se ha podido guardar. Inténtalo otra vez.",
+          "hoursInvalid": "Indica las horas reales (hasta 48). Ej.: 5,5",
+          "kmInvalid": "Indica los km reales (0 a 5000).",
+          "openIncidents": "Hay incidencias sin resolver. Resuélvelas antes de cerrar.",
+          "notDelivered": "Solo se cierra un trabajo entregado. Recarga la página."
+        }
+      },
+      "print": {
+        "print": "Imprimir",
+        "pickupTitle": "Acta de recogida",
+        "deliveryTitle": "Acta de entrega",
+        "client": "Cliente",
+        "crew": "Equipo y vehículo",
+        "vehicle": "Vehículo: {vehicle}",
+        "lead": "{name} (jefe)",
+        "none": "por asignar",
+        "origin": "Recogida",
+        "destination": "Entrega",
+        "volume": "Volumen declarado: {volume}",
+        "remarks": "Observaciones (estado de los bienes, daños previos)",
+        "pickupStatement": "Declaro que los bienes se recogieron en las condiciones indicadas.",
+        "deliveryStatement": "Declaro que recibí los bienes en las condiciones indicadas, salvo las observaciones registradas.",
+        "clientSignature": "Cliente",
+        "crewSignature": "Jefe de equipo",
+        "nameAndDate": "Nombre, firma, fecha y hora"
+      },
+      "actualClosed": "Real: {hours} h y {km} km · cerrado el {when} por {by}",
+      "export": {
+        "headers": [
+          "Pedido",
+          "Presupuesto",
+          "Fecha de cierre",
+          "Fecha de la mudanza",
+          "Cliente",
+          "NIF",
+          "Tipo",
+          "Descripción",
+          "Cantidad",
+          "Precio unitario (€)",
+          "Total sin IVA (€)",
+          "IVA (%)",
+          "IVA (€)",
+          "Total con IVA (€)"
+        ],
+        "kinds": {
+          "base": "Servicio",
+          "extra": "Extra",
+          "manual": "Manual",
+          "incident": "Incidencia"
         }
       }
     }

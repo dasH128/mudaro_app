@@ -77,7 +77,13 @@ export type OrderEvent =
   | { kind: "inventory-submitted"; at: string; version: number; by: "client" | "company"; actor: string }
   | { kind: "quote-sent"; at: string; actor: string; version: number }
   | { kind: "won"; at: string }
-  | { kind: "lost"; at: string; reason: string | null };
+  | { kind: "lost"; at: string; reason: string | null }
+  /** Agenda (paso 6.1): equipo y vehículo atribuidos, trabajo reprogramado o cancelado. */
+  | { kind: "job-assigned"; at: string; actor: string }
+  | { kind: "job-rescheduled"; at: string; actor: string }
+  | { kind: "job-cancelled"; at: string; actor: string; reason: string | null }
+  /** Ejecución (paso 6.4): actas, incidencias y registros eliminados por error. */
+  | { kind: "job-step"; step: "pickup" | "delivery" | "incident-reported" | "incident-resolved" | "record-deleted" | "closed"; at: string; actor: string };
 
 export type OrderDetail = {
   id: string;
@@ -127,8 +133,13 @@ export type DetailQuote = {
 /** Trabajo programado del envío. Equipo y vehículo se asignan en el paso 6. */
 export type DetailJob = {
   status: "scheduled" | "in_progress" | "delivered" | "closed" | "cancelled";
-  /** Inicio previsto, instante ISO. */
+  /** Inicio y fin previstos, instantes ISO. */
   scheduledStart: string;
+  scheduledEnd: string;
+  /** Asignado en la agenda (paso 6.2): nombres de vehículos y personas; `lead`, el jefe de equipo. */
+  vehicles: string[];
+  crew: string[];
+  lead: string | null;
 };
 
 /** Recorrido completo: origen, paradas y destino, en ese orden. */

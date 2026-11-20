@@ -38,10 +38,21 @@ export function TeamAdmins({ lang, t, admins, today }: Props) {
                   <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[11px] text-background">{a.you}</span>
                 ) : null}
               </span>
-              <span className="truncate text-xs text-muted">
-                {admin.email} ·{" "}
-                {admin.you ? a.sessionNow : interpolate(a.lastAccess, { when: describeAccess(admin.lastAccess, t, lang, today) })}
-              </span>
+              {/* Email y último acceso viven en Supabase Auth, que el panel no lee: solo se muestran si existen */}
+              {admin.you || admin.email || admin.lastAccess ? (
+                <span className="truncate text-xs text-muted">
+                  {[
+                    admin.email,
+                    admin.you
+                      ? a.sessionNow
+                      : admin.lastAccess
+                        ? interpolate(a.lastAccess, { when: describeAccess(admin.lastAccess, t, lang, today) })
+                        : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
+              ) : null}
             </span>
             {/* Sin flujo de cambio de papel todavía */}
             {admin.you ? null : (

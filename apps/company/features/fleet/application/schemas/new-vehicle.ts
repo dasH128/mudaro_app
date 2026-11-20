@@ -37,6 +37,29 @@ export type FieldErrors = Partial<Record<FieldName, ErrorCode>>;
 
 export type FormState = { status: "idle" } | { status: "error"; fieldErrors: FieldErrors };
 
+// Reglas de los datos que también se editan desde el panel del vehículo (vehicle-data.ts).
+export const capacityField = z
+  .string()
+  .trim()
+  .min(1, "capacityRequired")
+  .transform(parseDecimal)
+  .refine((value) => value > 0 && value <= LIMITS.capacityM3Max, "capacityInvalid");
+
+export const maxLoadField = z
+  .string()
+  .trim()
+  .transform((value) => (value === "" ? null : parseDecimal(value)))
+  .refine((value) => value === null || (Number.isInteger(value) && value > 0 && value <= LIMITS.maxLoadKgMax), "maxLoadInvalid");
+
+/** En céntimos. */
+export const costField = z
+  .string()
+  .trim()
+  .min(1, "costRequired")
+  .transform(parseDecimal)
+  .refine((value) => value > 0 && value * 100 <= LIMITS.costPerKmCentsMax, "costInvalid")
+  .transform((value) => Math.round(value * 100));
+
 const schema = z.object({
   lang: z.enum(LOCALES),
   type: z.enum(VEHICLE_TYPES, "invalid"),
@@ -47,24 +70,9 @@ const schema = z.object({
     .refine((value) => normalizePlate(value) !== null, "plateInvalid")
     .transform((value) => normalizePlate(value) ?? value),
   name: z.string().trim().max(LIMITS.nameMax, "tooLong"),
-  capacity: z
-    .string()
-    .trim()
-    .min(1, "capacityRequired")
-    .transform(parseDecimal)
-    .refine((value) => value > 0 && value <= LIMITS.capacityM3Max, "capacityInvalid"),
-  maxLoad: z
-    .string()
-    .trim()
-    .transform((value) => (value === "" ? null : parseDecimal(value)))
-    .refine((value) => value === null || (Number.isInteger(value) && value > 0 && value <= LIMITS.maxLoadKgMax), "maxLoadInvalid"),
-  cost: z
-    .string()
-    .trim()
-    .min(1, "costRequired")
-    .transform(parseDecimal)
-    .refine((value) => value > 0 && value * 100 <= LIMITS.costPerKmCentsMax, "costInvalid")
-    .transform((value) => Math.round(value * 100)),
+  capacity: capacityField,
+  maxLoad: maxLoadField,
+  cost: costField,
   active: z.enum(["true", "false"], "invalid").transform((value) => value === "true"),
 });
 
