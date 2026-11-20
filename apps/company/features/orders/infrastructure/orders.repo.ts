@@ -70,7 +70,8 @@ const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, creat
   shipment_notes(body, created_at, author:company_users(name)),
   quotes(number, version, status, valid_until, sent_at, rejected_reason, vat_pct,
     inventory:inventories(version), quote_lines(total_cents, optional), acceptances(accepted_at, signed_total_cents)),
-  jobs(status, scheduled_start),
+  jobs(status, scheduled_start, scheduled_end,
+    assignments(is_lead, vehicle:vehicles(name, plate), crew:crew_members(name))),
   events:shipment_events(kind, occurred_at, actor_type, data)`;
 
 // --- Traducciones entre la base de datos y el dominio ---
@@ -388,6 +389,12 @@ function eventOf(
     case "cancelled":
       // La cancelación (RF-69) aún no tiene pantalla: sus pedidos no se muestran.
       return null;
+    case "job_assigned":
+      return { kind: "job-assigned", at, actor };
+    case "job_rescheduled":
+      return { kind: "job-rescheduled", at, actor };
+    case "job_cancelled":
+      return { kind: "job-cancelled", at, actor, reason: data.reason ?? null };
   }
 }
 
@@ -548,11 +555,24 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
 }
 
 /** El trabajo del envío (hay uno como mucho: `jobs.shipment_id` es único). */
-function jobOf(
-  jobs: { status: DetailJob["status"]; scheduled_start: string } | { status: DetailJob["status"]; scheduled_start: string }[] | null,
-): DetailJob | null {
+type JobRow = {
+  status: DetailJob["status"];
+  scheduled_start: string;
+  scheduled_end: string;
+  assignments: { is_lead: boolean; vehicle: { name: string | null; plate: string } | null; crew: { name: string } | null }[];
+};
+
+function jobOf(jobs: JobRow | JobRow[] | null): DetailJob | null {
   const row = Array.isArray(jobs) ? jobs[0] : jobs;
-  return row ? { status: row.status, scheduledStart: row.scheduled_start } : null;
+  if (!row) return null;
+  return {
+    status: row.status,
+    scheduledStart: row.scheduled_start,
+    scheduledEnd: row.scheduled_end,
+    vehicles: row.assignments.flatMap((a) => (a.vehicle ? [a.vehicle.name ?? a.vehicle.plate] : [])),
+    crew: row.assignments.flatMap((a) => (a.crew ? [a.crew.name] : [])).sort((a, b) => a.localeCompare(b, "pt")),
+    lead: row.assignments.find((a) => a.is_lead)?.crew?.name ?? null,
+  };
 }
 
 /** Inventario de la versión vigente. Mientras no haya ninguna versión enviada, no hay inventario que mostrar. */

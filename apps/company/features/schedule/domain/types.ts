@@ -4,8 +4,9 @@ import type { Position } from "@/features/team/domain/types";
 // Los textos que ve la persona salen de códigos y valores: la interfaz los traduce. Nombres de clientes, direcciones
 // y vehículos son datos de la empresa y no se traducen.
 
-export type Vehicle = { id: string; name: string; capacityM3: number };
-export type Person = { id: string; name: string; position: Position };
+/** `active: false` no se puede asignar (RF-05), pero sigue saliendo donde ya estaba asignado. */
+export type Vehicle = { id: string; name: string; capacityM3: number; active: boolean };
+export type Person = { id: string; name: string; position: Position; active: boolean };
 
 export type JobStatus = "scheduled" | "in-progress" | "delivered" | "closed";
 
@@ -27,6 +28,7 @@ export type HistoryEvent =
   | { kind: "pickup-signed"; at: Moment; by?: string }
   | { kind: "quote-accepted"; at: Moment }
   | { kind: "crew-assigned"; at: Moment; by: string }
+  | { kind: "rescheduled"; at: Moment; by: string }
   | { kind: "crew-named"; at: Moment; by: string; personIds: string[] }
   | { kind: "permit-granted"; at: Moment; by: string }
   | { kind: "job-started"; at: Moment; by: string };
@@ -66,7 +68,10 @@ export type JobDetail = {
 };
 
 export type ScheduleJob = {
+  /** Número del pedido (MD-0836): es lo que ve la persona y lo que viaja en la URL (`?job=`). */
   id: string;
+  /** Id del trabajo en la base de datos, para las acciones de la agenda. */
+  jobId: string;
   client: string;
   date: string;
   start: string;

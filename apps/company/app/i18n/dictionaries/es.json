@@ -1039,7 +1039,7 @@
         "summary": {
           "moveTitle": "La mudanza",
           "jobTitle": "Trabajo programado",
-          "jobWhen": "{date} a las {time}",
+          "jobWhen": "{date} de {time} a {end}",
           "jobPending": "Equipo y vehículo aún sin asignar.",
           "viewSchedule": "Ver en la agenda",
           "edit": "Editar",
@@ -1068,7 +1068,11 @@
           "photos": "fotos del cliente",
           "extras": "Servicios extra pedidos:",
           "noAttention": "Aún no se ha enviado el inventario. Cuando llegue, aquí verás qué requiere atención.",
-          "itemsInRooms": "{items} en {rooms}"
+          "itemsInRooms": "{items} en {rooms}",
+          "jobTeam": "Vehículo: {vehicle} · Equipo: {crew}",
+          "jobNoVehicle": "por asignar",
+          "jobNoCrew": "por asignar",
+          "jobLead": "{name} (jefe)"
         },
         "inventory": {
           "title": "Inventario v{version}",
@@ -1156,7 +1160,10 @@
           "quoteSent": "Presupuesto enviado (v{version})",
           "won": "Presupuesto aceptado",
           "lost": "Pedido perdido",
-          "meta": "{when} · {actor}"
+          "meta": "{when} · {actor}",
+          "jobAssigned": "Equipo y vehículo asignados",
+          "jobRescheduled": "Trabajo reprogramado",
+          "jobCancelled": "Trabajo cancelado"
         },
         "side": {
           "client": "Cliente",
@@ -2524,7 +2531,7 @@
           "busy": "Ocupado",
           "freeAllDay": "Libre todo el día",
           "busyOn": "Ocupado {start}–{end} · {id}",
-          "hint": "Cada persona ve el trabajo en la app en cuanto se lo asignas. No dejamos marcar a la misma persona o vehículo en horas solapadas."
+          "hint": "Avisa a cada persona como ya haces. Mudaro no deja poner a la misma persona o vehículo en horas que se solapan."
         },
         "client": {
           "title": "Cliente y direcciones",
@@ -2544,13 +2551,63 @@
             "crew-assigned": "Equipo asignado",
             "crew-named": "Equipo: {names}",
             "permit-granted": "Licencia de estacionamiento concedida",
-            "job-started": "Trabajo empezado"
+            "job-started": "Trabajo empezado",
+            "rescheduled": "Reprogramado"
           }
         },
         "actions": {
           "open": "Abrir trabajo",
           "reschedule": "Reprogramar",
           "cancel": "Cancelar trabajo"
+        },
+        "edit": {
+          "editCrew": "Editar equipo y vehículo",
+          "vehicle": "Vehículo",
+          "noVehicle": "Sin vehículo",
+          "crew": "Equipo",
+          "noPeople": "Todavía no tienes personas en el equipo. Añádelas en Equipo.",
+          "lead": "Jefe de equipo",
+          "noLead": "Sin jefe de equipo",
+          "save": "Guardar equipo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "close": "Cerrar",
+          "crewHint": "Avisa a cada persona como ya haces. Mudaro no deja poner a la misma persona o vehículo en horas que se solapan.",
+          "free": "libre a esa hora",
+          "busyAt": "ocupado {start}–{end} · {id}",
+          "capacity": "{capacity} m³",
+          "someone": "Este recurso",
+          "otherJob": "otro trabajo",
+          "reschedule": {
+            "title": "Reprogramar",
+            "date": "Día",
+            "start": "Inicio",
+            "end": "Fin",
+            "note": "El vehículo y el equipo se mueven con el trabajo. Si alguno está ocupado en el nuevo horario, te avisamos.",
+            "save": "Guardar nuevo horario"
+          },
+          "cancel": {
+            "title": "Cancelar trabajo",
+            "reason": "Motivo",
+            "reasonPlaceholder": "Ej.: el cliente aplazó la mudanza",
+            "note": "El vehículo y el equipo quedan libres. El pedido sigue ganado.",
+            "confirm": "Cancelar trabajo",
+            "back": "Volver"
+          },
+          "errors": {
+            "overlapVehicle": "{name} ya está en el {orderId} a esa hora.",
+            "overlapCrew": "{name} ya está en el {orderId} a esa hora.",
+            "unavailableVehicle": "{name} está inactivo. Elige otro vehículo.",
+            "unavailableCrew": "{name} está inactiva. Elige otra persona.",
+            "leadNotInCrew": "El jefe de equipo tiene que estar en el equipo.",
+            "notFound": "Este trabajo ya no existe. Recarga la página.",
+            "notOpen": "Este trabajo ya no se puede cambiar.",
+            "dateInvalid": "Fecha no válida. Usa dd/mm/aaaa.",
+            "timeInvalid": "Hora no válida.",
+            "endBeforeStart": "El fin tiene que ser después del inicio.",
+            "reasonRequired": "Indica el motivo.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         }
       },
       "access": {

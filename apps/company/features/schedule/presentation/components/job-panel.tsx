@@ -7,7 +7,7 @@ import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { formatCompact, formatCubicMeters, formatDayMonth, formatEuroWhole, formatPhone, formatWeekdayShort } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import { freePeopleOn, jobsOn, missingOf, vehicleOf } from "../../domain/schedule";
+import { missingOf, vehicleOf } from "../../domain/schedule";
 import type { Person, ScheduleJob, ScheduleOverview } from "../../domain/types";
 import {
   describeAccess,
@@ -19,6 +19,7 @@ import {
   type PositionsText,
   type ScheduleText,
 } from "../schedule-text";
+import { JobActions, type Option } from "./job-actions";
 import { JobStatusPill, focusRing, initialsOf } from "./schedule-parts";
 
 type Props = {
@@ -82,16 +83,27 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
   ];
   const unresolved = checks.filter((check) => check.state === "bad").length;
 
-  // A quién se puede asignar: primero quien está libre ese día
-  const free = freePeopleOn(job.date, overview.people, overview.jobs);
-  const suggestions = overview.people
-    .filter((person) => !job.crewIds.includes(person.id))
+  // Equipo y vehículo se cambian en trabajos programados o en curso; reprogramar y cancelar, solo en programados
+  const actionable = job.status === "scheduled" || job.status === "in-progress";
+  const e = p.edit;
+  // Otro trabajo del mismo día que se solapa con este (inicio < fin del otro y fin > inicio del otro)
+  const clashWith = (uses: (other: ScheduleJob) => boolean) =>
+    overview.jobs.find((other) => other.id !== job.id && other.date === job.date && other.start < job.end && other.end > job.start && uses(other));
+  const describe = (clash: ScheduleJob | undefined, fallback: string) =>
+    clash ? interpolate(e.busyAt, { start: clash.start, end: clash.end, id: clash.id }) : fallback;
+  // Solo lo activo se puede elegir; lo que ya está asignado sale siempre, para no perderlo al guardar
+  const vehicleOptions: Option[] = overview.vehicles
+    .filter((v) => v.active || v.id === job.vehicleId)
+    .map((v) => {
+      const clash = clashWith((other) => other.vehicleId === v.id);
+      return { id: v.id, name: v.name, sub: describe(clash, interpolate(e.capacity, { capacity: formatCompact(v.capacityM3) })), busy: clash !== undefined };
+    });
+  const peopleOptions: Option[] = overview.people
+    .filter((person) => person.active || job.crewIds.includes(person.id))
     .map((person) => {
-      const clash = jobsOn(overview.jobs, job.date).find((other) => other.crewIds.includes(person.id));
-      return { person, free: free.some((f) => f.id === person.id), clash };
-    })
-    .sort((a, b) => Number(b.free) - Number(a.free))
-    .slice(0, 4);
+      const clash = clashWith((other) => other.crewIds.includes(person.id));
+      return { id: person.id, name: person.name, sub: describe(clash, `${positions[person.position]} · ${e.free}`), busy: clash !== undefined };
+    });
 
   const when = `${formatWeekdayShort(lang, job.date)} ${formatDayMonth(job.date)} · ${job.start}–${job.end}`;
   const tooSmall = vehicle !== undefined && vehicle.capacityM3 < job.volumeM3;
@@ -299,11 +311,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
             <h3 id="job-vehicle" className={heading}>
               {p.vehicle.title}
             </h3>
-            {editable && vehicle ? (
-              <button type="button" disabled title={t.soon} className={`text-[13px] font-bold text-foreground underline ${soon}`}>
-                {p.vehicle.swap}
-              </button>
-            ) : null}
           </div>
           {vehicle ? (
             <div className="flex items-center gap-3 rounded-2xl border border-line p-3">
@@ -322,9 +329,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               <span className="text-[13px] text-warn-foreground">
                 <strong>{p.vehicle.none}</strong> {interpolate(p.vehicle.needed, { volume })}
               </span>
-              <button type="button" disabled title={t.soon} className={`h-9.5 w-fit rounded-full bg-foreground px-4 text-[13px] font-bold text-background ${soon} ${focusRing}`}>
-                {p.vehicle.assign}
-              </button>
             </div>
           )}
         </section>
@@ -348,11 +352,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
                   <strong className="text-sm">{person.name}</strong>
                   <span className="text-xs text-muted">{positions[person.position]}</span>
                 </span>
-                {editable ? (
-                  <button type="button" disabled title={t.soon} aria-label={interpolate(p.crew.remove, { name: person.name })} className={`size-7.5 rounded-full text-muted ${soon}`}>
-                    ✕
-                  </button>
-                ) : null}
               </li>
             ))}
             {Array.from({ length: missing.people }, (_, index) => (
@@ -367,37 +366,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
             ))}
           </ul>
 
-          {editable && missing.people > 0 ? (
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-bold">
-                {interpolate(p.crew.available, { when: `${formatWeekdayShort(lang, job.date).toLowerCase()}, ${job.start}–${job.end}` })}
-              </span>
-              {suggestions.map(({ person, free: isFree, clash }) => (
-                <button
-                  key={person.id}
-                  type="button"
-                  disabled
-                  title={t.soon}
-                  className={`flex w-full items-center gap-2.5 rounded-[14px] border bg-surface px-2.5 py-2 text-left ${isFree ? "border-line" : "border-dashed border-line opacity-70"} ${soon} ${focusRing}`}
-                >
-                  <span
-                    aria-hidden
-                    className={`grid size-8 flex-none place-items-center rounded-full text-[11px] font-bold ${isFree ? "bg-status-config-surface text-foreground" : "bg-line-soft text-field-placeholder"}`}
-                  >
-                    {initialsOf(person.name)}
-                  </span>
-                  <span className="flex flex-1 flex-col text-left">
-                    <strong className="text-sm">{person.name}</strong>
-                    <span className={`text-xs ${isFree ? "text-success-foreground" : "text-muted"}`}>
-                      {isFree || !clash ? p.crew.freeAllDay : interpolate(p.crew.busyOn, { start: clash.start, end: clash.end, id: clash.id })}
-                    </span>
-                  </span>
-                  <span className={`text-[13px] font-bold ${isFree ? "text-foreground underline" : "text-field-placeholder"}`}>{isFree ? p.crew.assign : p.crew.busy}</span>
-                </button>
-              ))}
-            </div>
-          ) : null}
-          {editable ? <p className="text-xs leading-snug text-muted">{p.crew.hint}</p> : null}
         </section>
 
         {detail ? (
@@ -453,6 +421,19 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
           </section>
         ) : null}
 
+        {actionable ? (
+          <JobActions
+            // Se reinicia cuando cambian asignaciones u horario: el formulario se cierra y vuelve a leer los datos guardados
+            key={[job.jobId, job.date, job.start, job.end, job.vehicleId, detail?.leadId, ...job.crewIds].join("|")}
+            lang={lang}
+            job={{ jobId: job.jobId, date: job.date, start: job.start, end: job.end, vehicleId: job.vehicleId, crewIds: job.crewIds, leadId: detail?.leadId ?? null }}
+            canReschedule={editable}
+            vehicles={vehicleOptions}
+            people={peopleOptions}
+            t={p.edit}
+          />
+        ) : null}
+
         <div className="flex flex-wrap items-center gap-2 border-t border-line-soft pt-3.5">
           <Link
             href={localePath(lang, ROUTES.jobs.detail(job.id))}
@@ -460,16 +441,6 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
           >
             {p.actions.open}
           </Link>
-          {editable ? (
-            <>
-              <button type="button" disabled title={t.soon} className={`h-10 rounded-full border border-field-border bg-surface px-4 text-sm font-bold text-foreground ${soon} ${focusRing}`}>
-                {p.actions.reschedule}
-              </button>
-              <button type="button" disabled title={t.soon} className={`h-10 px-1.5 text-[13px] font-bold text-danger-foreground underline ${soon} ${focusRing}`}>
-                {p.actions.cancel}
-              </button>
-            </>
-          ) : null}
         </div>
       </div>
     </aside>

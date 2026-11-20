@@ -59,7 +59,7 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
   const today = todayLisbon(now);
   const dateParam = first(params.date);
   const date = isIsoDate(dateParam) ? dateParam : today;
-  const overview = await getScheduleOverview({ today });
+  const overview = await getScheduleOverview();
 
   const jobs = filterJobs(overview.jobs, show);
   const weekStart = startOfWeek(date);

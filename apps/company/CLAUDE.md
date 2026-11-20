@@ -24,7 +24,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Conectada a Supabase (paso 6.0b, 20/11/2026): personas del equipo sin cuenta (`crew_members`) y administradores reales. El panel edita nombre, telemóvel y función al salir de cada campo (`update_crew_member`) y el interruptor activa o desactiva con motivo (`set_crew_member_active`). Sin app del operario no hay convites, email ni último acceso: el filtro "Convites" desaparece y el contador solo sale si hay alguno. Trabajos, semana y números de 30 días salen vacíos hasta el paso 6.1. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1), con el botón activo |
 | Nova pessoa | `/[lang]/team/new` | Conectada a Supabase (paso 6.0b). Nombre, telemóvel opcional (`@mudaro/validation`) y función; crea con `create_crew_member` y vuelve a Equipa con la persona abierta. Sin prototipo: sigue la línea de Novo veículo |
-| Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
+| Agenda | `/[lang]/schedule` | Conectada a Supabase (paso 6.2, 20/11/2026): vehículos, personas (`crew_members`), trabajos con sus asignaciones y orçamentos enviados; ya no hay datos de ejemplo. El panel del trabajo asigna un vehículo, el equipo y el jefe de equipo (`set_job_assignments`), reprograma día y horas (`reschedule_job`) y cancela con motivo (`cancel_job`), con avisos de quién está ocupado a esa hora y errores claros cuando la base rechaza un solape (RF-48, RF-50). La base admite varios vehículos por trabajo; la pantalla elige uno. Un trabajo cancelado sale de la agenda. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
 | Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
@@ -155,13 +155,15 @@ features/
       types.ts              ← ScheduleJob, JobDetail, Vehicle, Person, Access, HistoryEvent, LiveEvent, PendingQuote (horas hh:mm, fechas aaaa-mm-dd)
       schedule.ts           ← semana y mes, carga de cada día, recursos que faltan (missingOf, issuesOf), filtro "Mostrar", avisos y solapes (layoutOverlaps)
     infrastructure/
-      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today }); trabajos y orçamentos enviados reales + ejemplo
-      mock-data.ts          ← 11 trabajos con ficha, 17 más ligeros y 3 orçamentos en espera, con fechas relativas a hoy
+      schedule.repo.ts      ← puerta de entrada (Supabase): getScheduleOverview(), setJobAssignments, rescheduleJob, cancelJob
+    application/
+      actions/schedule.ts   ← assignJobAction, rescheduleJobAction y cancelJobAction
+      schemas/schedule.ts   ← zod en servidor; día dd/mm/aaaa y horas de Lisboa → instantes (domain/lisbon-time.ts)
     presentation/
       schedule-href.ts      ← enlaces con vista, fecha, filtro, día del mes y trabajo en la URL
       schedule-text.ts      ← acceso, histórico, hitos en directo y avisos → textos del diccionario
-      components/           ← schedule-header, schedule-alerts, schedule-toolbar (+ show-select, único cliente), week-view,
-                              day-view, month-view, job-panel y schedule-parts
+      components/           ← schedule-header, schedule-alerts, schedule-toolbar (+ show-select, cliente), week-view,
+                              day-view, month-view, job-panel (+ job-actions, cliente: equipa, reprogramar y cancelar) y schedule-parts
   inventory/
     domain/
       types.ts              ← reexporta @mudaro/inventory (compartido con apps/client): CatalogItem, CatalogRoom, AccessPoint, RoutePoint,

@@ -1039,7 +1039,7 @@
         "summary": {
           "moveTitle": "The move",
           "jobTitle": "Scheduled job",
-          "jobWhen": "{date} at {time}",
+          "jobWhen": "{date} from {time} to {end}",
           "jobPending": "Crew and vehicle not assigned yet.",
           "viewSchedule": "View in schedule",
           "edit": "Edit",
@@ -1068,7 +1068,11 @@
           "photos": "client photos",
           "extras": "Extra services requested:",
           "noAttention": "The inventory has not been sent yet. Once it arrives, what needs attention shows up here.",
-          "itemsInRooms": "{items} in {rooms}"
+          "itemsInRooms": "{items} in {rooms}",
+          "jobTeam": "Vehicle: {vehicle} · Crew: {crew}",
+          "jobNoVehicle": "not assigned",
+          "jobNoCrew": "not assigned",
+          "jobLead": "{name} (lead)"
         },
         "inventory": {
           "title": "Inventory v{version}",
@@ -1156,7 +1160,10 @@
           "quoteSent": "Quote sent (v{version})",
           "won": "Quote accepted",
           "lost": "Order lost",
-          "meta": "{when} · {actor}"
+          "meta": "{when} · {actor}",
+          "jobAssigned": "Crew and vehicle assigned",
+          "jobRescheduled": "Job rescheduled",
+          "jobCancelled": "Job cancelled"
         },
         "side": {
           "client": "Client",
@@ -2524,7 +2531,7 @@
           "busy": "Busy",
           "freeAllDay": "Free all day",
           "busyOn": "Busy {start}–{end} · {id}",
-          "hint": "Each person sees the job in the app as soon as you assign it. We don't let you book the same person or vehicle at overlapping times."
+          "hint": "Let each person know as you already do. Mudaro won't book the same person or vehicle at overlapping times."
         },
         "client": {
           "title": "Client and addresses",
@@ -2544,13 +2551,63 @@
             "crew-assigned": "Crew assigned",
             "crew-named": "Crew: {names}",
             "permit-granted": "Parking permit granted",
-            "job-started": "Job started"
+            "job-started": "Job started",
+            "rescheduled": "Rescheduled"
           }
         },
         "actions": {
           "open": "Open job",
           "reschedule": "Reschedule",
           "cancel": "Cancel job"
+        },
+        "edit": {
+          "editCrew": "Edit crew and vehicle",
+          "vehicle": "Vehicle",
+          "noVehicle": "No vehicle",
+          "crew": "Crew",
+          "noPeople": "You don't have anyone in your crew yet. Add them in Crew.",
+          "lead": "Crew lead",
+          "noLead": "No crew lead",
+          "save": "Save crew",
+          "saving": "Saving…",
+          "saved": "Saved",
+          "close": "Close",
+          "crewHint": "Let each person know as you already do. Mudaro won't book the same person or vehicle at overlapping times.",
+          "free": "free at that time",
+          "busyAt": "busy {start}–{end} · {id}",
+          "capacity": "{capacity} m³",
+          "someone": "This resource",
+          "otherJob": "another job",
+          "reschedule": {
+            "title": "Reschedule",
+            "date": "Day",
+            "start": "Start",
+            "end": "End",
+            "note": "The vehicle and crew move with the job. If any of them is busy at the new time, we'll tell you.",
+            "save": "Save new time"
+          },
+          "cancel": {
+            "title": "Cancel job",
+            "reason": "Reason",
+            "reasonPlaceholder": "E.g. the client postponed the move",
+            "note": "The vehicle and crew become free. The order stays won.",
+            "confirm": "Cancel job",
+            "back": "Back"
+          },
+          "errors": {
+            "overlapVehicle": "{name} is already on {orderId} at that time.",
+            "overlapCrew": "{name} is already on {orderId} at that time.",
+            "unavailableVehicle": "{name} is inactive. Pick another vehicle.",
+            "unavailableCrew": "{name} is inactive. Pick someone else.",
+            "leadNotInCrew": "The crew lead must be in the crew.",
+            "notFound": "This job no longer exists. Reload the page.",
+            "notOpen": "This job can no longer be changed.",
+            "dateInvalid": "Invalid date. Use dd/mm/yyyy.",
+            "timeInvalid": "Invalid time.",
+            "endBeforeStart": "The end must be after the start.",
+            "reasonRequired": "Enter the reason.",
+            "failed": "Could not save. Try again."
+          }
         }
       },
       "access": {

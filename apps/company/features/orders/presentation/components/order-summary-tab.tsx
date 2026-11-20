@@ -70,16 +70,25 @@ export function OrderSummaryTab({ lang, t, order, today }: Props) {
               {s.jobTitle}
             </h2>
             <Link
-              href={scheduleHref(lang, { view: "day", date: dayLisbon(order.job.scheduledStart) })}
+              href={scheduleHref(lang, { view: "day", date: dayLisbon(order.job.scheduledStart), job: order.id })}
               className={ghostButton}
             >
               {s.viewSchedule}
             </Link>
           </div>
           <p className="font-display text-xl font-extrabold">
-            {interpolate(s.jobWhen, { date: formatDate(order.job.scheduledStart), time: formatTime(order.job.scheduledStart) })}
+            {interpolate(s.jobWhen, { date: formatDate(order.job.scheduledStart), time: formatTime(order.job.scheduledStart), end: formatTime(order.job.scheduledEnd) })}
           </p>
-          <p className="text-sm text-muted">{s.jobPending}</p>
+          {order.job.vehicles.length === 0 && order.job.crew.length === 0 ? (
+            <p className="text-sm text-muted">{s.jobPending}</p>
+          ) : (
+            <p className="text-sm">
+              {interpolate(s.jobTeam, {
+                vehicle: order.job.vehicles.join(", ") || s.jobNoVehicle,
+                crew: order.job.crew.map((name) => (name === order.job?.lead ? interpolate(s.jobLead, { name }) : name)).join(", ") || s.jobNoCrew,
+              })}
+            </p>
+          )}
         </section>
       ) : null}
 
