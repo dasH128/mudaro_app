@@ -1,7 +1,7 @@
 # Mudaro · Plan del paso 6 (agenda, ejecución y cierre)
 
 Fecha: 20/11/2026
-Estado: acordado el 20/11/2026 (todo desde el panel del administrador, puntos P1 a P14 confirmados).
+Estado: hecho el 20/11/2026 (6.0 a 6.8 en la rama `feat/jobs`; pruebas en `docs/test-plan-jobs-6.md`, con cuatro casos para la persona).
 Objetivo: que el trabajo nacido al aceptar el orçamento (paso 5.6) se pueda planificar, ejecutar y cerrar. La empresa asigna vehículo y equipo sin solapes, registra recogida, incidencias y entrega, y cierra el trabajo con horas y km reales para exportarlo y facturar (RF-47 a RF-60).
 Rama: `feat/jobs`, creada desde `main` después de mergear `feat/quotes`. Un commit por sub-paso.
 
@@ -115,6 +115,13 @@ La portada (prototipo P0) usa datos de ejemplo. Con el 6.1 a 6.6 hechos ya hay d
 ### 6.9 · Plan de pruebas
 
 `docs/test-plan-jobs-6.md` con el formato del 4a, 4b y 5: solapes (vehículo y persona, en el borde del periodo), vehículo y persona inactivos, aislamiento entre empresas, orden de estados (no hay entrega sin recogida), eliminar antes del cierre y bloqueo después, cierre bloqueado por incidencias abiertas, ficheros de otra empresa inaccesibles, y el CSV abierto en Excel en portugués. Pantallas en Chrome.
+
+## Decisiones tomadas durante el desarrollo
+
+- **IVA de las incidencias (20/11/2026).** El importe adicional de una incidencia es sin IVA; la exportación (RF-60) le aplica el IVA del orçamento.
+- **Un vehículo por trabajo en pantalla.** La base admite varios (`assignments`); el panel elige uno. Si una empresa necesita dos camiones, se amplía.
+- **Cancelar un trabajo no cancela el pedido.** El envío sigue "Ganho"; cancelar el pedido entero es RF-69, pendiente.
+- **Exportación desde la Agenda.** Botón "Exportar fechados" con rango de fechas de cierre (máximo un año), sin pantalla nueva.
 
 ## Para cuando exista la app del operario
 
