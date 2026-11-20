@@ -646,6 +646,79 @@ export type Database = {
           },
         ]
       }
+      crew_members: {
+        Row: {
+          active: boolean
+          company_id: string
+          created_at: string
+          id: string
+          inactive_by: string | null
+          inactive_reason:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since: string | null
+          name: string
+          phone: string | null
+          position: Database["public"]["Enums"]["crew_position"]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          company_id: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          name: string
+          phone?: string | null
+          position: Database["public"]["Enums"]["crew_position"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          company_id?: string
+          created_at?: string
+          id?: string
+          inactive_by?: string | null
+          inactive_reason?:
+            | Database["public"]["Enums"]["crew_inactive_reason"]
+            | null
+          inactive_since?: string | null
+          name?: string
+          phone?: string | null
+          position?: Database["public"]["Enums"]["crew_position"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_inactive_by_fkey"
+            columns: ["inactive_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventories: {
         Row: {
           created_at: string
@@ -1751,6 +1824,14 @@ export type Database = {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
       }
+      create_crew_member: {
+        Args: {
+          p_name: string
+          p_phone: string
+          p_position: Database["public"]["Enums"]["crew_position"]
+        }
+        Returns: string
+      }
       create_order: {
         Args: {
           p_client_email: string
@@ -1872,6 +1953,14 @@ export type Database = {
         }[]
       }
       send_quote: { Args: { p_quote_id: string }; Returns: number }
+      set_crew_member_active: {
+        Args: {
+          p_active: boolean
+          p_id: string
+          p_reason: Database["public"]["Enums"]["crew_inactive_reason"]
+        }
+        Returns: undefined
+      }
       set_inventory_extra: {
         Args: {
           p_catalog_extra_id: string
@@ -1900,6 +1989,15 @@ export type Database = {
       }
       share_order_link: { Args: { p_order_id: string }; Returns: string }
       submit_inventory: { Args: { p_order_id: string }; Returns: number }
+      update_crew_member: {
+        Args: {
+          p_id: string
+          p_name: string
+          p_phone: string
+          p_position: Database["public"]["Enums"]["crew_position"]
+        }
+        Returns: undefined
+      }
       update_vehicle_data: {
         Args: {
           p_capacity_m3: number
@@ -1925,6 +2023,8 @@ export type Database = {
       app_locale: "pt" | "es" | "en"
       client_type: "private" | "company"
       company_role: "administrator" | "operator"
+      crew_inactive_reason: "left" | "other"
+      crew_position: "driver" | "loader" | "foreman"
       date_flexibility: "exact" | "two_days" | "one_week" | "month"
       filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
@@ -2096,6 +2196,8 @@ export const Constants = {
       app_locale: ["pt", "es", "en"],
       client_type: ["private", "company"],
       company_role: ["administrator", "operator"],
+      crew_inactive_reason: ["left", "other"],
+      crew_position: ["driver", "loader", "foreman"],
       date_flexibility: ["exact", "two_days", "one_week", "month"],
       filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],

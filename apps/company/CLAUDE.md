@@ -22,7 +22,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Pestaña Orçamentos con las versiones (paso 5.4b). Con el envío ganado, Resumo muestra el trabajo programado y enlaza a la agenda (paso 5.6). Pestaña en la URL (`?tab=`) |
 | Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1). Desde el paso 6.0a (20/11/2026) el panel edita tipo, capacidad, carga y coste por km al salir de cada campo (`update_vehicle_data`) y el interruptor activa o desactiva el vehículo, pidiendo antes el motivo (`set_vehicle_active`). Cada cambio queda en el histórico. Matrícula y nombre no se editan |
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
-| Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
+| Equipa | `/[lang]/team` | Conectada a Supabase (paso 6.0b, 20/11/2026): personas del equipo sin cuenta (`crew_members`) y administradores reales. El panel edita nombre, telemóvel y función al salir de cada campo (`update_crew_member`) y el interruptor activa o desactiva con motivo (`set_crew_member_active`). Sin app del operario no hay convites, email ni último acceso: el filtro "Convites" desaparece y el contador solo sale si hay alguno. Trabajos, semana y números de 30 días salen vacíos hasta el paso 6.1. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1), con el botón activo |
+| Nova pessoa | `/[lang]/team/new` | Conectada a Supabase (paso 6.0b). Nombre, telemóvel opcional (`@mudaro/validation`) y función; crea con `create_crew_member` y vuelve a Equipa con la persona abierta. Sin prototipo: sigue la línea de Novo veículo |
 | Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
@@ -52,6 +53,7 @@ app/
     copy-button.tsx         ← botón que copia un texto (teléfono) al portapapeles; lo usan Clientes y Agenda
     first-use.tsx           ← estructura del estado de primer uso de una lista (Frota, Equipa): cabecera, invitación, ventajas y pie
     panel-escape.tsx        ← cierra un panel lateral con Escape (Frota y Equipa)
+    active-switch.tsx       ← interruptor Ativo/Inativo que pide el motivo antes de desactivar (Frota y Equipa)
     theme-toggle.tsx, language-switcher.tsx, theme-provider.tsx
   i18n/                     ← config, get-dictionary, interpolate (textos con {valores} y plurales) y dictionaries/{en,es,pt}.json
   lib/
@@ -118,7 +120,7 @@ features/
       fleet-href.ts         ← enlaces con filtro, orden, vista y vehículo en la URL
       fleet-text.ts         ← estado, último/próximo uso y histórico → textos del diccionario
       components/           ← fleet-header (+ capacity-pill, único cliente con la ayuda), fleet-alerts, fleet-toolbar,
-                              fleet-table, fleet-cards, vehicle-panel (+ vehicle-data-form y vehicle-active-switch, clientes), fleet-empty (+ fleet-empty-art), fleet-parts;
+                              fleet-table, fleet-cards, vehicle-panel (+ vehicle-data-form, cliente), fleet-empty (+ fleet-empty-art), fleet-parts;
                               alta: new-vehicle-form (único cliente grande), vehicle-type-section, vehicle-details-sections
                               (identificación, capacidad y costes, disponibilidad, próximamente) y new-vehicle-aside (índice y previsualización)
   team/
@@ -126,13 +128,16 @@ features/
       types.ts              ← Member, Invite, Person, Admin, TeamEvent (fechas aaaa-mm-dd, horas hh:mm, teléfono +351…)
       team.ts               ← filtros, orden, "parado" (IDLE_DAYS), convite urgente, resumen y avisos del equipo
     infrastructure/
-      team.repo.ts          ← puerta de entrada: getTeamOverview({ today })
-      mock-data.ts          ← 7 operarios activos, 1 inactivo, 2 convites y 2 administradores, con fechas relativas a hoy
+      team.repo.ts          ← puerta de entrada (Supabase): getTeamOverview({ userId }), createCrewMember, updateCrewMember, setCrewMemberActive
+    application/
+      actions/crew.ts       ← createCrewAction (redirige a Equipa), updateCrewAction y setCrewActiveAction
+      schemas/crew.ts       ← zod en servidor; los errores son códigos que traduce el formulario
     presentation/
       team-href.ts          ← enlaces con filtro, orden, vista y persona en la URL
       team-text.ts          ← estado, último/próximo trabajo, acceso, caducidad y histórico → textos del diccionario
       components/           ← team-header (+ team-help, único cliente con la ayuda), team-alerts, team-toolbar,
-                              team-table, team-cards, team-admins, person-panel, team-empty (+ team-empty-art), team-parts
+                              team-table, team-cards, team-admins, person-panel (+ crew-data-form, cliente), team-empty
+                              (+ team-empty-art), team-parts y new-person-form (alta, cliente)
   clients/
     domain/
       types.ts              ← Client, ClientOrder, ClientSummary, OrderNote, ContactEvent, DuplicateCandidate (céntimos, fechas aaaa-mm-dd)

@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { pluralize } from "@/app/i18n/interpolate";
+import { ROUTES, localePath } from "@/app/lib/routes";
 import type { TeamSummary } from "../../domain/team";
 import type { TeamText } from "../team-text";
 import { TeamHelp } from "./team-help";
@@ -33,22 +36,22 @@ export function TeamHeader({ lang, t, summary }: Props) {
             <span aria-hidden className="size-2 rounded-full bg-success-dot" />
             <strong>{summary.free}</strong> {t.summary.free}
           </span>
-          <span className={chip}>
-            <span aria-hidden className="box-border size-2 rounded-full border-2 border-foreground" />
-            <strong>{summary.invites}</strong> {pluralize(lang, summary.invites, t.summary.invites)}
-          </span>
+          {/* Convites solo con la app del operario: el contador sale cuando haya alguno */}
+          {summary.invites > 0 ? (
+            <span className={chip}>
+              <span aria-hidden className="box-border size-2 rounded-full border-2 border-foreground" />
+              <strong>{summary.invites}</strong> {pluralize(lang, summary.invites, t.summary.invites)}
+            </span>
+          ) : null}
         </div>
       </div>
-      {/* Sin diseño de flujo para convidar: queda desactivado */}
-      <button
-        type="button"
-        disabled
-        title={t.soon}
-        className={`flex h-12 cursor-not-allowed items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground opacity-50 shadow-md ${focusRing}`}
+      <Link
+        href={localePath(lang, ROUTES.team.new)}
+        className={`flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md ${focusRing}`}
       >
         <Icon name="userPlus" size={18} strokeWidth={2.4} />
-        {t.invite}
-      </button>
+        {t.add}
+      </Link>
     </header>
   );
 }

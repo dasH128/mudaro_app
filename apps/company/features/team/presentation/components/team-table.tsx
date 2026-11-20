@@ -47,7 +47,7 @@ function PersonRow({ lang, t, person, selectedId, params, today, compact }: RowP
   const status = describeStatus(person, t, today);
   const member = person.kind === "member" ? person : null;
   const inactive = member && !member.active ? describeInactive(member, t) : null;
-  const last = member ? describeLastWork(member, t, lang, today) : { title: "—", sub: t.lastWork.noAccount };
+  const last = member ? describeLastWork(member, t, lang, today) : { title: "—", sub: "" };
   const next = member ? describeNextWork(member, t, today) : { title: "—", sub: "" };
   const idle = member ? isIdle(member, today) : false;
   const urgent = person.kind === "invite" && daysToExpire(person, today) <= 1;

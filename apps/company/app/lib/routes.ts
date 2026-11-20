@@ -33,7 +33,10 @@ export const ROUTES = {
     list: "/fleet",
     new: "/fleet/new",
   },
-  team: "/team",
+  team: {
+    list: "/team",
+    new: "/team/new",
+  },
   pricing: "/pricing",
   reports: "/reports",
   settings: "/settings",

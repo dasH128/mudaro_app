@@ -11,12 +11,13 @@ import {
   formatWeekdayDay,
 } from "@/app/lib/format";
 import { acceptanceRate, addDays, isIdle } from "../../domain/fleet";
-import type { Vehicle } from "../../domain/types";
+import { INACTIVE_REASONS, type Vehicle } from "../../domain/types";
 import { describeEvent, describeStatus, type FleetText } from "../fleet-text";
+import { ActiveSwitch } from "@/app/components/active-switch";
 import { PanelEscape } from "@/app/components/panel-escape";
+import { setVehicleActiveAction } from "../../application/actions/edit-vehicle";
 import { VEHICLE_TYPES, type VehicleType } from "../../domain/new-vehicle";
 import { StatusPill, VehicleTile, focusRing } from "./fleet-parts";
-import { VehicleActiveSwitch } from "./vehicle-active-switch";
 import { VehicleDataForm } from "./vehicle-data-form";
 
 type Props = {
@@ -117,14 +118,21 @@ export function VehiclePanel({
               <StatusPill state={status.state} label={status.label} />
               <span className="text-[13px] text-muted">{status.note}</span>
             </span>
-            <VehicleActiveSwitch
+            <ActiveSwitch
               key={`${vehicle.id}-${vehicle.active}`}
-              lang={lang}
-              vehicleId={vehicle.id}
-              name={vehicle.name}
+              action={setVehicleActiveAction}
+              fields={{ lang, vehicleId: vehicle.id }}
               active={vehicle.active}
+              reasons={INACTIVE_REASONS.map((value) => ({ value, label: p.deactivation.reasons[value] }))}
               t={{
-                panel: { on: p.on, off: p.off, activate: p.activate, deactivate: p.deactivate, deactivation: p.deactivation },
+                on: p.on,
+                off: p.off,
+                deactivateLabel: interpolate(p.deactivate, { name: vehicle.name }),
+                activateLabel: interpolate(p.activate, { name: vehicle.name }),
+                title: p.deactivation.title,
+                note: p.deactivation.note,
+                confirm: p.deactivation.confirm,
+                cancel: p.deactivation.cancel,
                 formErrors: p.data.formErrors,
               }}
             />

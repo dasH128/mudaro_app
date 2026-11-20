@@ -3,7 +3,8 @@ import type { Invite, Member, MemberJob, Person, TeamMetrics } from "./types";
 
 // Reglas de la lista del equipo: estado, filtros, orden y avisos. Lógica pura, sin React ni Next.
 
-export const FILTERS = ["all", "busy", "free", "invites"] as const;
+// Sin app del operario no hay convites (plan del paso 6): el filtro "invites" vuelve con ella.
+export const FILTERS = ["all", "busy", "free"] as const;
 export type TeamFilter = (typeof FILTERS)[number];
 export const DEFAULT_FILTER: TeamFilter = "all";
 
@@ -34,12 +35,15 @@ export function stateOf(person: Person): PersonState {
 export const isMember = (person: Person): person is Member => person.kind === "member";
 export const isInvite = (person: Person): person is Invite => person.kind === "invite";
 
-export function daysSinceLastWork(member: Member, today: string): number {
-  return Math.max(daysBetween(member.lastWorkOn, today), 0);
+/** Días desde el último trabajo; `null` si todavía no ha trabajado. */
+export function daysSinceLastWork(member: Member, today: string): number | null {
+  return member.lastWorkOn === null ? null : Math.max(daysBetween(member.lastWorkOn, today), 0);
 }
 
+/** Una persona recién añadida, sin trabajos todavía, no cuenta como parada. */
 export function isIdle(member: Member, today: string): boolean {
-  return member.active && daysSinceLastWork(member, today) >= IDLE_DAYS;
+  const days = daysSinceLastWork(member, today);
+  return member.active && days !== null && days >= IDLE_DAYS;
 }
 
 /** Primer trabajo marcado después de hoy. */
@@ -71,7 +75,7 @@ export function summarize(people: readonly Person[]): TeamSummary {
 
 export function countByFilter(people: readonly Person[]): Record<TeamFilter, number> {
   const s = summarize(people);
-  return { all: s.active + s.invites, busy: s.busy, free: s.free, invites: s.invites };
+  return { all: s.active + s.invites, busy: s.busy, free: s.free };
 }
 
 /** Minúsculas y sin tildes, espacios ni guiones, para buscar por nombre, email o teléfono ("912345"). */
@@ -86,7 +90,6 @@ function normalize(text: string): string {
 function matches(person: Person, filter: TeamFilter): boolean {
   if (filter === "busy") return stateOf(person) === "busy";
   if (filter === "free") return stateOf(person) === "free";
-  if (filter === "invites") return person.kind === "invite";
   return true;
 }
 
@@ -119,7 +122,7 @@ export type TeamQuery = { filter: TeamFilter; q: string; sort: TeamSort };
  */
 export function arrangeTeam(people: readonly Person[], { filter, q, sort }: TeamQuery, today: string) {
   const needle = normalize(q);
-  const found = (p: Person) => needle === "" || normalize(`${p.name}${p.email}${p.phone ?? ""}`).includes(needle);
+  const found = (p: Person) => needle === "" || normalize(`${p.name}${p.email ?? ""}${p.phone ?? ""}`).includes(needle);
   const order = compare(sort, today);
 
   const active = people.filter((p) => stateOf(p) !== "inactive" && found(p) && matches(p, filter)).sort(order);

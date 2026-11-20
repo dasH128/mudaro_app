@@ -20,7 +20,8 @@
     "scheduleTitle": "Agenda · Mudaro",
     "forgotPasswordTitle": "Recuperar contraseña · Mudaro",
     "pricingTitle": "Tarifas · Mudaro",
-    "quoteEditorTitle": "Presupuesto · Mudaro"
+    "quoteEditorTitle": "Presupuesto · Mudaro",
+    "teamNewTitle": "Nueva persona · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -1582,7 +1583,6 @@
       "title": "Equipo",
       "loading": "Cargando el equipo…",
       "soon": "Disponible próximamente",
-      "invite": "Invitar persona",
       "resultsCount": {
         "one": "{count} persona",
         "other": "{count} personas"
@@ -1609,7 +1609,7 @@
         "label": "Cómo entra el equipo en los presupuestos",
         "title": "Cómo entra el equipo en los presupuestos",
         "text": "El cálculo estima cuántos operarios necesita cada mudanza y usa el coste por hora de la tarifa, igual para todos. En la agenda solo aparecen las personas activas.",
-        "app": "Los operarios usan la app en el móvil: solo ven los trabajos que les asignas, sin precios ni márgenes."
+        "app": "Por ahora el equipo no usa ninguna app: avisas a cada persona como ya haces. Cuando haya app, cada persona verá solo los trabajos que le asignes, sin precios."
       },
       "status": {
         "busy": "En trabajo",
@@ -1631,7 +1631,7 @@
           "one": "hace {count} día",
           "other": "hace {count} días"
         },
-        "noAccount": "aún sin cuenta"
+        "never": "todavía sin trabajos"
       },
       "nextWork": {
         "none": "Sin fecha",
@@ -1650,8 +1650,8 @@
         "other": "Inactivo"
       },
       "since": "desde {date} · {by}",
-      "inactiveNote": "Sin acceso a la app",
-      "noAccess": "Sin acceso",
+      "inactiveNote": "No aparece en la agenda",
+      "noAccess": "Fuera de la agenda",
       "phoneMissing": "Falta el teléfono",
       "access": {
         "today": "hoy, {time}",
@@ -1700,11 +1700,10 @@
         "filters": {
           "all": "Todos",
           "busy": "En trabajo",
-          "free": "Libres ahora",
-          "invites": "Invitaciones pendientes"
+          "free": "Libres ahora"
         },
         "searchLabel": "Buscar persona",
-        "searchPlaceholder": "Nombre, email o teléfono",
+        "searchPlaceholder": "Nombre o móvil",
         "sortLabel": "Ordenar",
         "sort": {
           "status": "Estado hoy",
@@ -1735,7 +1734,7 @@
         "hoursReal": "{hours} h reales",
         "resend": "Reenviar invitación",
         "inactiveTitle": "Inactivos · {count}",
-        "inactiveHint": "no entran en la app ni en la agenda",
+        "inactiveHint": "no aparecen en la agenda",
         "footnote": "\"Trabajos · 30 d\": trabajos en los que la persona estuvo asignada en los últimos 30 días y horas reales registradas.",
         "openSchedule": "Abrir agenda",
         "emptySearch": "Ninguna persona coincide con la búsqueda.",
@@ -1764,8 +1763,8 @@
         "deactivate": "Desactivar a {name}",
         "activate": "Activar a {name}",
         "pendingJobs": {
-          "one": "Tiene {count} trabajo marcado. Al desactivarla pierde el acceso a la app y ese trabajo necesitará a otra persona en la agenda.",
-          "other": "Tiene {count} trabajos marcados. Al desactivarla pierde el acceso a la app y esos trabajos necesitarán a otra persona en la agenda."
+          "one": "Tiene {count} trabajo programado. Al desactivarla, ese trabajo necesitará otra persona en la agenda.",
+          "other": "Tiene {count} trabajos programados. Al desactivarla, esos trabajos necesitarán otra persona en la agenda."
         },
         "noPhone": "Sin teléfono",
         "invite": {
@@ -1802,16 +1801,19 @@
           "incidents": "incidencias"
         },
         "data": {
-          "title": "Datos y acceso",
-          "readOnly": "Edición disponible próximamente",
+          "title": "Datos",
           "phone": "Teléfono",
           "phonePlaceholder": "9 dígitos",
           "position": "Función",
-          "role": "Rol en Mudaro",
-          "roleOperator": "Operario · solo la app, sin precios",
           "phoneMissing": "Sin teléfono, el equipo no puede hablar con la persona el día de la mudanza.",
-          "lastAccess": "Último acceso a la app:",
-          "sendLink": "Enviar enlace de acceso"
+          "name": "Nombre",
+          "saveOnBlur": "Se guarda al salir del campo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Esta persona ya no está en tu equipo. Recarga la página.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         },
         "history": {
           "title": "Histórico",
@@ -1821,33 +1823,72 @@
           "deactivated": "Desactivado: {reason}",
           "inviteSentEmail": "Invitación enviada por email",
           "inviteSentLink": "Invitación enviada por enlace",
-          "inviteLinkCopied": "Enlace de invitación copiado"
+          "inviteLinkCopied": "Enlace de invitación copiado",
+          "added": "Persona añadida",
+          "addedNoPhone": "Persona añadida sin móvil",
+          "renamed": "Nombre: {from} → {to}",
+          "phoneAdded": "Móvil añadido: {to}",
+          "phoneChanged": "Móvil: {from} → {to}",
+          "phoneRemoved": "Móvil eliminado",
+          "reactivated": "Reactivada"
+        },
+        "errors": {
+          "nameRequired": "Indica el nombre.",
+          "nameTooLong": "Máximo 80 caracteres.",
+          "phoneInvalid": "Móvil no válido. Indica 9 dígitos.",
+          "invalid": "Valor no válido."
+        },
+        "deactivation": {
+          "title": "¿Por qué queda inactiva?",
+          "note": "Una persona inactiva no aparece en la agenda ni se puede asignar a trabajos.",
+          "confirm": "Desactivar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "left": "Ya no trabaja en la empresa",
+            "other": "Otro motivo"
+          }
         }
       },
       "empty": {
         "count": "0 operarios",
         "eyebrow": "Por ahora, solo tú",
         "title": "¿Quién va contigo a las mudanzas?",
-        "text": "Invita a tu equipo. Cada persona ve en el móvil los trabajos que le asignas, hace las fotos y recoge las firmas del cliente.",
-        "cta": "Invitar al primer operario",
-        "hint": "Basta con el nombre y el email o el teléfono.",
-        "perksTitle": "Lo que tendrá tu equipo",
+        "text": "Añade a las personas que van a las mudanzas para asignarlas a los trabajos en la agenda. No tienen que instalar nada.",
+        "cta": "Añadir la primera persona",
+        "hint": "Basta con el nombre y la función. El móvil es opcional.",
+        "perksTitle": "Qué ganas con el equipo en Mudaro",
         "perks": {
           "phone": {
-            "title": "Trabajos en el móvil",
-            "text": "Direcciones, horas e inventario de cada mudanza, incluso sin cobertura."
+            "title": "Contactos a mano",
+            "text": "El móvil de cada persona queda junto a los trabajos a los que va."
           },
           "photos": {
-            "title": "Fotos y firmas",
-            "text": "La recogida y la entrega quedan registradas con hora y lugar."
+            "title": "Fotos y actas en el trabajo",
+            "text": "Las fotos y las actas que te envía el equipo quedan guardadas en cada trabajo."
           },
           "prices": {
-            "title": "Sin precios a la vista",
-            "text": "Los operarios no ven tarifas, costes ni márgenes."
+            "title": "Precios solo para ti",
+            "text": "El equipo no entra en el panel: tarifas, costes y márgenes se quedan contigo."
           }
         },
         "solo": "¿Trabajas sin equipo? No es obligatorio para usar Mudaro.",
         "you": "administración · tú"
+      },
+      "add": "Añadir persona",
+      "newPerson": {
+        "title": "Nueva persona",
+        "intro": "Añade a alguien que va a las mudanzas. No necesita cuenta ni instalar nada: le avisas como ya haces.",
+        "name": "Nombre",
+        "namePlaceholder": "Ej.: Rui Santos",
+        "phone": "Móvil",
+        "phoneHint": "Opcional. Sirve para contactarle el día de la mudanza.",
+        "phonePlaceholder": "9 dígitos",
+        "position": "Función",
+        "positionHint": "Solo informa al asignar el equipo. No da accesos.",
+        "submit": "Añadir al equipo",
+        "cancel": "Cancelar",
+        "saving": "Añadiendo…",
+        "breadcrumb": "Ruta"
       }
     },
     "clients": {

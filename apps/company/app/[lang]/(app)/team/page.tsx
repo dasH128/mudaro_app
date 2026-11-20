@@ -40,11 +40,11 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-// (solo administradores gestionan el equipo).
+// Solo administradores gestionan el equipo: requireCompanySession, y RLS de crew_members, solo deja leer a administradores.
 export default async function TeamPage({ searchParams }: PageProps<"/[lang]/team">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
-  await requireCompanySession(locale);
+  const session = await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.team;
 
@@ -60,11 +60,10 @@ export default async function TeamPage({ searchParams }: PageProps<"/[lang]/team
   // "Livre agora", "expira amanhã" y los trabajos de la semana dependen de hoy
   await connection();
   const today = todayLisbon();
-  // TODO(supabase): `?empty=1` solo sirve para ver el estado vacío con los datos de ejemplo
-  const { people, admins, metrics } = await getTeamOverview({ today, empty: first(params.empty) === "1" });
+  const { people, admins, metrics } = await getTeamOverview({ userId: session.userId });
 
-  // Primer uso: nadie en el equipo (ni operarios ni convites)
-  if (people.length === 0) return <TeamEmpty t={t} admin={admins.find((a) => a.you) ?? admins[0]} />;
+  // Primer uso: nadie en el equipo
+  if (people.length === 0) return <TeamEmpty lang={locale} t={t} admin={admins.find((a) => a.you) ?? admins[0]} />;
 
   const arranged = arrangeTeam(people, { filter, q, sort }, today);
 

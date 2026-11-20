@@ -27,6 +27,6 @@ export function teamHref(lang: Locale, { filter, q, sort, view, person }: TeamPa
   if (view && view !== DEFAULT_VIEW) params.set("view", view);
   if (person) params.set("person", person);
   const query = params.toString();
-  const path = localePath(lang, ROUTES.team);
+  const path = localePath(lang, ROUTES.team.list);
   return query ? `${path}?${query}` : path;
 }

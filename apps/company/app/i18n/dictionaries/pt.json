@@ -20,7 +20,8 @@
     "scheduleTitle": "Agenda · Mudaro",
     "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro",
     "pricingTitle": "Tarifas · Mudaro",
-    "quoteEditorTitle": "Orçamento · Mudaro"
+    "quoteEditorTitle": "Orçamento · Mudaro",
+    "teamNewTitle": "Nova pessoa · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -1582,7 +1583,6 @@
       "title": "Equipa",
       "loading": "A carregar a equipa…",
       "soon": "Disponível em breve",
-      "invite": "Convidar pessoa",
       "resultsCount": {
         "one": "{count} pessoa",
         "other": "{count} pessoas"
@@ -1609,7 +1609,7 @@
         "label": "Como a equipa entra nos orçamentos",
         "title": "Como a equipa entra nos orçamentos",
         "text": "O cálculo estima quantos operários cada mudança precisa e usa o custo por hora da tarifa, igual para todos. Na agenda, só aparecem as pessoas ativas.",
-        "app": "Os operários usam a app no telemóvel: veem só os trabalhos que lhes atribuis, sem preços nem margens."
+        "app": "Por agora a equipa não usa nenhuma app: avisas cada pessoa como já fazes. Quando houver app, cada pessoa verá só os trabalhos que lhe atribuis, sem preços."
       },
       "status": {
         "busy": "Em trabalho",
@@ -1631,7 +1631,7 @@
           "one": "há {count} dia",
           "other": "há {count} dias"
         },
-        "noAccount": "ainda sem conta"
+        "never": "ainda sem trabalhos"
       },
       "nextWork": {
         "none": "Sem data",
@@ -1650,8 +1650,8 @@
         "other": "Inativo"
       },
       "since": "desde {date} · {by}",
-      "inactiveNote": "Sem acesso à app",
-      "noAccess": "Sem acesso",
+      "inactiveNote": "Não aparece na agenda",
+      "noAccess": "Fora da agenda",
       "phoneMissing": "Telemóvel em falta",
       "access": {
         "today": "hoje, {time}",
@@ -1700,11 +1700,10 @@
         "filters": {
           "all": "Todos",
           "busy": "Em trabalho",
-          "free": "Livres agora",
-          "invites": "Convites pendentes"
+          "free": "Livres agora"
         },
         "searchLabel": "Procurar pessoa",
-        "searchPlaceholder": "Nome, email ou telemóvel",
+        "searchPlaceholder": "Nome ou telemóvel",
         "sortLabel": "Ordenar",
         "sort": {
           "status": "Estado hoje",
@@ -1735,7 +1734,7 @@
         "hoursReal": "{hours} h reais",
         "resend": "Reenviar convite",
         "inactiveTitle": "Inativos · {count}",
-        "inactiveHint": "não entram na app nem na agenda",
+        "inactiveHint": "não aparecem na agenda",
         "footnote": "\"Trabalhos · 30 d\": trabalhos em que a pessoa esteve atribuída nos últimos 30 dias e horas reais registadas.",
         "openSchedule": "Abrir agenda",
         "emptySearch": "Nenhuma pessoa corresponde à pesquisa.",
@@ -1764,8 +1763,8 @@
         "deactivate": "Desativar {name}",
         "activate": "Ativar {name}",
         "pendingJobs": {
-          "one": "Tem {count} trabalho marcado. Ao desativar, perde o acesso à app e esse trabalho fica a precisar de outra pessoa na agenda.",
-          "other": "Tem {count} trabalhos marcados. Ao desativar, perde o acesso à app e esses trabalhos ficam a precisar de outra pessoa na agenda."
+          "one": "Tem {count} trabalho marcado. Ao desativar, esse trabalho fica a precisar de outra pessoa na agenda.",
+          "other": "Tem {count} trabalhos marcados. Ao desativar, esses trabalhos ficam a precisar de outra pessoa na agenda."
         },
         "noPhone": "Sem telemóvel",
         "invite": {
@@ -1802,16 +1801,19 @@
           "incidents": "incidências"
         },
         "data": {
-          "title": "Dados e acesso",
-          "readOnly": "Edição disponível em breve",
+          "title": "Dados",
           "phone": "Telemóvel",
           "phonePlaceholder": "9 dígitos",
           "position": "Função",
-          "role": "Papel na Mudaro",
-          "roleOperator": "Operário · só a app, sem preços",
           "phoneMissing": "Sem telemóvel, a equipa não consegue falar com a pessoa no dia da mudança.",
-          "lastAccess": "Último acesso à app:",
-          "sendLink": "Enviar link de acesso"
+          "name": "Nome",
+          "saveOnBlur": "Guarda ao sair do campo",
+          "saving": "A guardar…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Esta pessoa já não está na tua equipa. Recarrega a página.",
+            "failed": "Não foi possível guardar. Tenta outra vez."
+          }
         },
         "history": {
           "title": "Histórico",
@@ -1821,33 +1823,72 @@
           "deactivated": "Desativado: {reason}",
           "inviteSentEmail": "Convite enviado por email",
           "inviteSentLink": "Convite enviado por link",
-          "inviteLinkCopied": "Link de convite copiado"
+          "inviteLinkCopied": "Link de convite copiado",
+          "added": "Pessoa adicionada",
+          "addedNoPhone": "Pessoa adicionada sem telemóvel",
+          "renamed": "Nome: {from} → {to}",
+          "phoneAdded": "Telemóvel adicionado: {to}",
+          "phoneChanged": "Telemóvel: {from} → {to}",
+          "phoneRemoved": "Telemóvel removido",
+          "reactivated": "Reativada"
+        },
+        "errors": {
+          "nameRequired": "Indica o nome.",
+          "nameTooLong": "Máximo de 80 caracteres.",
+          "phoneInvalid": "Telemóvel inválido. Indica 9 dígitos.",
+          "invalid": "Valor inválido."
+        },
+        "deactivation": {
+          "title": "Porque fica inativa?",
+          "note": "Uma pessoa inativa não aparece na agenda nem pode ser atribuída a trabalhos.",
+          "confirm": "Desativar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "left": "Saiu da empresa",
+            "other": "Outro motivo"
+          }
         }
       },
       "empty": {
         "count": "0 operários",
         "eyebrow": "Por agora, só tu",
         "title": "Quem vai contigo às mudanças?",
-        "text": "Convida a tua equipa. Cada pessoa vê no telemóvel os trabalhos que lhe atribuis, tira as fotos e recolhe as assinaturas do cliente.",
-        "cta": "Convidar o primeiro operário",
-        "hint": "Basta o nome e o email ou o telemóvel.",
-        "perksTitle": "O que a tua equipa vai ter",
+        "text": "Adiciona as pessoas que vão às mudanças para as atribuíres aos trabalhos na agenda. Não precisam de instalar nada.",
+        "cta": "Adicionar a primeira pessoa",
+        "hint": "Basta o nome e a função. O telemóvel é opcional.",
+        "perksTitle": "O que ganhas com a equipa na Mudaro",
         "perks": {
           "phone": {
-            "title": "Trabalhos no telemóvel",
-            "text": "Moradas, horas e inventário de cada mudança, mesmo sem rede."
+            "title": "Contactos à mão",
+            "text": "O telemóvel de cada pessoa fica junto dos trabalhos em que vai."
           },
           "photos": {
-            "title": "Fotos e assinaturas",
-            "text": "Recolha e entrega ficam registadas com hora e local."
+            "title": "Fotos e atas no trabalho",
+            "text": "As fotos e as atas que a equipa te envia ficam guardadas em cada trabalho."
           },
           "prices": {
-            "title": "Sem preços à vista",
-            "text": "Os operários não veem tarifas, custos nem margens."
+            "title": "Preços só para ti",
+            "text": "A equipa não tem acesso ao painel: tarifas, custos e margens ficam contigo."
           }
         },
         "solo": "Trabalhas sem equipa? Não é obrigatória para usar a Mudaro.",
         "you": "administração · tu"
+      },
+      "add": "Adicionar pessoa",
+      "newPerson": {
+        "title": "Nova pessoa",
+        "intro": "Adiciona alguém que vai às mudanças. Não precisa de conta nem de instalar nada: avisas a pessoa como já fazes.",
+        "name": "Nome",
+        "namePlaceholder": "Ex.: Rui Santos",
+        "phone": "Telemóvel",
+        "phoneHint": "Opcional. Serve para a contactares no dia da mudança.",
+        "phonePlaceholder": "9 dígitos",
+        "position": "Função",
+        "positionHint": "Só informa quando atribuis a equipa. Não dá acessos.",
+        "submit": "Adicionar à equipa",
+        "cancel": "Cancelar",
+        "saving": "A adicionar…",
+        "breadcrumb": "Caminho"
       }
     },
     "clients": {

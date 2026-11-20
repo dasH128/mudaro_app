@@ -58,7 +58,7 @@ export function TeamToolbar({ lang, t, filter, q, sort, view, person, counts }: 
 
       <div className="flex flex-wrap items-center gap-2">
         {/* GET a la misma ruta: conserva filtro, vista y persona abierta */}
-        <Form action={localePath(lang, ROUTES.team)} className="flex flex-wrap items-center gap-2">
+        <Form action={localePath(lang, ROUTES.team.list)} className="flex flex-wrap items-center gap-2">
           {filter !== DEFAULT_FILTER ? <input type="hidden" name="filter" value={filter} /> : null}
           {view !== "list" ? <input type="hidden" name="view" value={view} /> : null}
           {person ? <input type="hidden" name="person" value={person} /> : null}
