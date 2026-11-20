@@ -19,7 +19,8 @@ import {
   type PositionsText,
   type ScheduleText,
 } from "../schedule-text";
-import { JobActions, type Option } from "./job-actions";
+import { jobOptions } from "../job-options";
+import { JobActions } from "./job-actions";
 import { JobStatusPill, focusRing, initialsOf } from "./schedule-parts";
 
 type Props = {
@@ -85,25 +86,7 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
 
   // Equipo y vehículo se cambian en trabajos programados o en curso; reprogramar y cancelar, solo en programados
   const actionable = job.status === "scheduled" || job.status === "in-progress";
-  const e = p.edit;
-  // Otro trabajo del mismo día que se solapa con este (inicio < fin del otro y fin > inicio del otro)
-  const clashWith = (uses: (other: ScheduleJob) => boolean) =>
-    overview.jobs.find((other) => other.id !== job.id && other.date === job.date && other.start < job.end && other.end > job.start && uses(other));
-  const describe = (clash: ScheduleJob | undefined, fallback: string) =>
-    clash ? interpolate(e.busyAt, { start: clash.start, end: clash.end, id: clash.id }) : fallback;
-  // Solo lo activo se puede elegir; lo que ya está asignado sale siempre, para no perderlo al guardar
-  const vehicleOptions: Option[] = overview.vehicles
-    .filter((v) => v.active || v.id === job.vehicleId)
-    .map((v) => {
-      const clash = clashWith((other) => other.vehicleId === v.id);
-      return { id: v.id, name: v.name, sub: describe(clash, interpolate(e.capacity, { capacity: formatCompact(v.capacityM3) })), busy: clash !== undefined };
-    });
-  const peopleOptions: Option[] = overview.people
-    .filter((person) => person.active || job.crewIds.includes(person.id))
-    .map((person) => {
-      const clash = clashWith((other) => other.crewIds.includes(person.id));
-      return { id: person.id, name: person.name, sub: describe(clash, `${positions[person.position]} · ${e.free}`), busy: clash !== undefined };
-    });
+  const { vehicles: vehicleOptions, people: peopleOptions } = jobOptions(job, overview, p.edit, positions);
 
   const when = `${formatWeekdayShort(lang, job.date)} ${formatDayMonth(job.date)} · ${job.start}–${job.end}`;
   const tooSmall = vehicle !== undefined && vehicle.capacityM3 < job.volumeM3;
@@ -405,10 +388,10 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               {p.history.title}
             </h3>
             <ol className="flex flex-col gap-2.5">
-              {detail.history.map((event) => {
+              {detail.history.map((event, index) => {
                 const text = describeHistory(event, ctx);
                 return (
-                  <li key={`${event.kind}-${event.at.date}-${event.at.time ?? ""}`} className="flex gap-2.5 text-[13px]">
+                  <li key={`${event.kind}-${event.at.date}-${event.at.time ?? ""}-${index}`} className="flex gap-2.5 text-[13px]">
                     <span aria-hidden className="mt-1.5 size-2 flex-none rounded-full bg-accent" />
                     <span className="flex flex-col">
                       <strong>{text.title}</strong>

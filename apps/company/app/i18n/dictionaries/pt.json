@@ -21,7 +21,8 @@
     "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro",
     "pricingTitle": "Tarifas · Mudaro",
     "quoteEditorTitle": "Orçamento · Mudaro",
-    "teamNewTitle": "Nova pessoa · Mudaro"
+    "teamNewTitle": "Nova pessoa · Mudaro",
+    "jobTitle": "Trabalho · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -151,6 +152,11 @@
         "title": "Não encontrámos este pedido",
         "text": "Confirma o número. Se o link veio de outra pessoa, pode ser de outra empresa.",
         "cta": "Voltar aos pedidos"
+      },
+      "jobNotFound": {
+        "title": "Trabalho não encontrado",
+        "text": "Este trabalho não existe, foi cancelado ou não é da tua empresa.",
+        "cta": "Voltar à agenda"
       }
     },
     "account": {
@@ -1072,7 +1078,8 @@
           "jobTeam": "Veículo: {vehicle} · Equipa: {crew}",
           "jobNoVehicle": "por atribuir",
           "jobNoCrew": "por atribuir",
-          "jobLead": "{name} (chefe)"
+          "jobLead": "{name} (chefe)",
+          "viewJob": "Ver trabalho"
         },
         "inventory": {
           "title": "Inventário v{version}",
@@ -2759,6 +2766,35 @@
           "invalid": "Há dados inválidos. Revê os campos.",
           "failed": "Não foi possível guardar. Tenta de novo."
         }
+      }
+    },
+    "jobs": {
+      "loading": "A carregar o trabalho…",
+      "eyebrow": "Trabalho",
+      "breadcrumb": "Caminho",
+      "viewOrder": "Ver pedido",
+      "crewTitle": "Equipa e veículo",
+      "noCrew": "Ninguém atribuído",
+      "addressesTitle": "Moradas e acessos",
+      "estimateTitle": "Estimado no orçamento",
+      "actualLater": "Horas e km reais registam-se ao fechar o trabalho",
+      "hours": "horas",
+      "people": "pessoas",
+      "price": "orçamento aceite",
+      "shareTitle": "Resumo para a equipa",
+      "shareText": "Sem preços. Copia ou envia por WhatsApp a quem vai à mudança.",
+      "copy": "Copiar resumo",
+      "copied": "Copiado ✓",
+      "whatsapp": "WhatsApp",
+      "summary": {
+        "client": "Cliente: {name} · {phone}",
+        "pickup": "Recolha: {place} ({access})",
+        "delivery": "Entrega: {place} ({access})",
+        "volume": "Volume: {volume}",
+        "vehicle": "Veículo: {vehicle}",
+        "crew": "Equipa: {crew}",
+        "lead": "{name} (chefe)",
+        "none": "por atribuir"
       }
     }
   }

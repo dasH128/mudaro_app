@@ -28,7 +28,8 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
 | Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
 | Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
-| Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Trabalho | `/[lang]/jobs/[id]` | Paso 6.3 (20/11/2026). El id es el número del pedido (MD-0836). Horario y estado, equipo y vehículo con las mismas acciones del panel de la Agenda (`job-actions`), moradas con accesos, estimado del orçamento, cliente, histórico y un resumen sin precios para el equipo ("Copiar resumo" y WhatsApp). Un trabajo cancelado o de otra empresa da "Trabalho não encontrado". Fotos, actas e incidencias llegan en el 6.5 y el cierre en el 6.6. Sin prototipo |
+| Relatórios, Configurações, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -162,8 +163,13 @@ features/
     presentation/
       schedule-href.ts      ← enlaces con vista, fecha, filtro, día del mes y trabajo en la URL
       schedule-text.ts      ← acceso, histórico, hitos en directo y avisos → textos del diccionario
+      job-options.ts        ← vehículos y personas elegibles para un trabajo, con "ocupado a essa hora" (panel y ficha)
       components/           ← schedule-header, schedule-alerts, schedule-toolbar (+ show-select, cliente), week-view,
                               day-view, month-view, job-panel (+ job-actions, cliente: equipa, reprogramar y cancelar) y schedule-parts
+  jobs/
+    presentation/
+      job-summary-text.ts   ← crewSummary: resumen del trabajo para el equipo, sin precios (RNF-03)
+      components/job-sheet.tsx ← ficha del trabajo; reutiliza dominio, repo, textos y job-actions de schedule
   inventory/
     domain/
       types.ts              ← reexporta @mudaro/inventory (compartido con apps/client): CatalogItem, CatalogRoom, AccessPoint, RoutePoint,

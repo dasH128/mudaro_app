@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { ROUTES, localePath } from "@/app/lib/routes";
+
 import type { Locale } from "@/app/i18n/config";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
 import { dayLisbon, formatDate, formatTime, formatVolume, formatWeekday } from "@/app/lib/format";
@@ -69,12 +71,17 @@ export function OrderSummaryTab({ lang, t, order, today }: Props) {
             <h2 id="job" className={sectionTitle}>
               {s.jobTitle}
             </h2>
-            <Link
-              href={scheduleHref(lang, { view: "day", date: dayLisbon(order.job.scheduledStart), job: order.id })}
-              className={ghostButton}
-            >
-              {s.viewSchedule}
-            </Link>
+            <span className="flex flex-wrap gap-2">
+              <Link href={localePath(lang, ROUTES.jobs.detail(order.id))} className={ghostButton}>
+                {s.viewJob}
+              </Link>
+              <Link
+                href={scheduleHref(lang, { view: "day", date: dayLisbon(order.job.scheduledStart), job: order.id })}
+                className={ghostButton}
+              >
+                {s.viewSchedule}
+              </Link>
+            </span>
           </div>
           <p className="font-display text-xl font-extrabold">
             {interpolate(s.jobWhen, { date: formatDate(order.job.scheduledStart), time: formatTime(order.job.scheduledStart), end: formatTime(order.job.scheduledEnd) })}

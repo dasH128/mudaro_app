@@ -21,7 +21,8 @@
     "forgotPasswordTitle": "Recuperar contraseña · Mudaro",
     "pricingTitle": "Tarifas · Mudaro",
     "quoteEditorTitle": "Presupuesto · Mudaro",
-    "teamNewTitle": "Nueva persona · Mudaro"
+    "teamNewTitle": "Nueva persona · Mudaro",
+    "jobTitle": "Trabajo · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -151,6 +152,11 @@
         "title": "No encontramos este pedido",
         "text": "Comprueba el número. Si el enlace te lo pasó otra persona, puede ser de otra empresa.",
         "cta": "Volver a los pedidos"
+      },
+      "jobNotFound": {
+        "title": "Trabajo no encontrado",
+        "text": "Este trabajo no existe, se canceló o no es de tu empresa.",
+        "cta": "Volver a la agenda"
       }
     },
     "account": {
@@ -1072,7 +1078,8 @@
           "jobTeam": "Vehículo: {vehicle} · Equipo: {crew}",
           "jobNoVehicle": "por asignar",
           "jobNoCrew": "por asignar",
-          "jobLead": "{name} (jefe)"
+          "jobLead": "{name} (jefe)",
+          "viewJob": "Ver trabajo"
         },
         "inventory": {
           "title": "Inventario v{version}",
@@ -2759,6 +2766,35 @@
           "invalid": "Hay datos no válidos. Revisa los campos.",
           "failed": "No se pudo guardar. Vuelve a intentarlo."
         }
+      }
+    },
+    "jobs": {
+      "loading": "Cargando el trabajo…",
+      "eyebrow": "Trabajo",
+      "breadcrumb": "Ruta",
+      "viewOrder": "Ver pedido",
+      "crewTitle": "Equipo y vehículo",
+      "noCrew": "Nadie asignado",
+      "addressesTitle": "Direcciones y accesos",
+      "estimateTitle": "Estimado en el presupuesto",
+      "actualLater": "Las horas y km reales se registran al cerrar el trabajo",
+      "hours": "horas",
+      "people": "personas",
+      "price": "presupuesto aceptado",
+      "shareTitle": "Resumen para el equipo",
+      "shareText": "Sin precios. Cópialo o envíalo por WhatsApp a quien va a la mudanza.",
+      "copy": "Copiar resumen",
+      "copied": "Copiado ✓",
+      "whatsapp": "WhatsApp",
+      "summary": {
+        "client": "Cliente: {name} · {phone}",
+        "pickup": "Recogida: {place} ({access})",
+        "delivery": "Entrega: {place} ({access})",
+        "volume": "Volumen: {volume}",
+        "vehicle": "Vehículo: {vehicle}",
+        "crew": "Equipo: {crew}",
+        "lead": "{name} (jefe)",
+        "none": "por asignar"
       }
     }
   }

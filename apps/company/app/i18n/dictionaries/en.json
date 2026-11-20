@@ -21,7 +21,8 @@
     "forgotPasswordTitle": "Reset password · Mudaro",
     "pricingTitle": "Pricing · Mudaro",
     "quoteEditorTitle": "Quote · Mudaro",
-    "teamNewTitle": "New person · Mudaro"
+    "teamNewTitle": "New person · Mudaro",
+    "jobTitle": "Job · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -151,6 +152,11 @@
         "title": "We couldn't find this order",
         "text": "Check the order number. If someone else sent you the link, it may belong to another company.",
         "cta": "Back to orders"
+      },
+      "jobNotFound": {
+        "title": "Job not found",
+        "text": "This job doesn't exist, was cancelled or isn't from your company.",
+        "cta": "Back to schedule"
       }
     },
     "account": {
@@ -1072,7 +1078,8 @@
           "jobTeam": "Vehicle: {vehicle} · Crew: {crew}",
           "jobNoVehicle": "not assigned",
           "jobNoCrew": "not assigned",
-          "jobLead": "{name} (lead)"
+          "jobLead": "{name} (lead)",
+          "viewJob": "View job"
         },
         "inventory": {
           "title": "Inventory v{version}",
@@ -2759,6 +2766,35 @@
           "invalid": "Some data is invalid. Check the fields.",
           "failed": "Could not save. Please try again."
         }
+      }
+    },
+    "jobs": {
+      "loading": "Loading the job…",
+      "eyebrow": "Job",
+      "breadcrumb": "Breadcrumb",
+      "viewOrder": "View order",
+      "crewTitle": "Crew and vehicle",
+      "noCrew": "No one assigned",
+      "addressesTitle": "Addresses and access",
+      "estimateTitle": "Quote estimate",
+      "actualLater": "Actual hours and km are recorded when closing the job",
+      "hours": "hours",
+      "people": "people",
+      "price": "accepted quote",
+      "shareTitle": "Summary for the crew",
+      "shareText": "No prices. Copy it or send it on WhatsApp to whoever goes on the move.",
+      "copy": "Copy summary",
+      "copied": "Copied ✓",
+      "whatsapp": "WhatsApp",
+      "summary": {
+        "client": "Client: {name} · {phone}",
+        "pickup": "Pickup: {place} ({access})",
+        "delivery": "Delivery: {place} ({access})",
+        "volume": "Volume: {volume}",
+        "vehicle": "Vehicle: {vehicle}",
+        "crew": "Crew: {crew}",
+        "lead": "{name} (lead)",
+        "none": "not assigned"
       }
     }
   }
