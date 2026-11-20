@@ -84,7 +84,7 @@ Prioridad:
 | --- | --- | --- | --- |
 | RF-01 | Registro de empresa con email y contraseña | P2 | El primer usuario queda como administrador de la empresa creada. Durante el piloto las empresas no se registran solas: las da de alta el equipo Mudaro (RF-65) |
 | RF-02 | Perfil de empresa: nombre, NIF, logo, contacto | P0 | El logo y los datos aparecen en el presupuesto PDF |
-| RF-03 | Invitar operarios por email o enlace | P0 | El invitado crea su cuenta y queda con rol operario en esa empresa |
+| RF-03 | Invitar operarios por email o enlace | P2 | El invitado crea su cuenta y queda con rol operario en esa empresa. Pasa a la fase de la app del operario (20/11/2026): en el MVP el equipo se da de alta como personas sin cuenta y se le vincula la cuenta después |
 | RF-04 | Cambiar rol y desactivar usuarios | P1 | Un usuario desactivado no puede iniciar sesión |
 
 ### M2 · Configuración
@@ -179,19 +179,19 @@ Prioridad:
 | --- | --- | --- | --- |
 | RF-47 | Calendario de trabajos por día y semana | P0 | Muestra trabajos con vehículos y operarios asignados |
 | RF-48 | Asignar vehículos y operarios a un trabajo | P0 | La base de datos rechaza asignaciones que se solapan |
-| RF-49 | Vista del operario: mis trabajos de hoy | P0 | El operario solo ve sus trabajos, sin precios |
+| RF-49 | Vista del operario: mis trabajos de hoy | P2 | El operario solo ve sus trabajos, sin precios. Pasa a la fase de la app del operario (20/11/2026) |
 | RF-50 | Reprogramar o cancelar un trabajo | P1 | Cancelar libera las asignaciones |
 
 ### M10 · Ejecución de la mudanza
 
 | ID | Requisito | Prioridad | Criterio de aceptación |
 | --- | --- | --- | --- |
-| RF-51 | Iniciar el trabajo y hacer fotos de recogida | P0 | Cada foto guarda fecha, hora, ubicación y autor |
-| RF-52 | Acta de recogida firmada por el cliente en el móvil del operario | P0 | El trabajo pasa a En curso |
-| RF-53 | Registrar incidencias: daño, objeto no declarado, retraso, acceso | P0 | Incluye fotos e importe adicional si aplica |
-| RF-54 | Firma del cliente sobre una incidencia con importe | P1 | La incidencia queda aceptada o en disputa |
-| RF-55 | Fotos y acta de entrega | P0 | El trabajo pasa a Entregado |
-| RF-56 | Funcionamiento sin conexión | P0 | Fotos y firmas se guardan en el dispositivo y se sincronizan al recuperar la conexión |
+| RF-51 | Iniciar el trabajo y hacer fotos de recogida | P0 | Cada foto guarda fecha, hora, ubicación y autor. En el MVP las sube el administrador desde el panel, sin ubicación (20/11/2026) |
+| RF-52 | Acta de recogida firmada por el cliente | P0 | El trabajo pasa a En curso. En el MVP la registra el administrador desde el panel, con foto opcional del acta en papel; la firma en el móvil del operario llega con la app (20/11/2026) |
+| RF-53 | Registrar incidencias: daño, objeto no declarado, retraso, acceso | P0 | Incluye fotos e importe adicional si aplica. En el MVP las registra el administrador desde el panel (20/11/2026) |
+| RF-54 | Firma del cliente sobre una incidencia con importe | P1 | La incidencia queda aceptada o en disputa. Llega con la app del operario (20/11/2026) |
+| RF-55 | Fotos y acta de entrega | P0 | El trabajo pasa a Entregado. En el MVP las registra el administrador desde el panel, igual que RF-52 (20/11/2026) |
+| RF-56 | Funcionamiento sin conexión | P2 | Fotos y firmas se guardan en el dispositivo y se sincronizan al recuperar la conexión. Pasa a la fase de la app del operario (20/11/2026) |
 | RF-57 | Evidencias y actas inmutables tras cerrar el trabajo | P0 | No hay opción de borrar ni editar; la base de datos lo impide |
 
 ### M11 · Cierre y datos
@@ -356,5 +356,6 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
   - Tarifa: se mantiene RF-06 (horas, km, operarios, suplementos, mínimo, estiba). La empresa elige cómo lo presenta al cliente: precio cerrado o precio por hora con estimación.
   - `proposals` pasa a `quotes` en el código al empezar el paso 5 (C5, D4). La interfaz dice "Orçamento".
   - Al aceptar, el pedido pasa a "Ganho" y se crea el trabajo programado con fecha, cliente y dirección (RF-46). Asignar equipo y vehículo queda para el paso 6.
+- [x] Paso 6 · agenda, ejecución y cierre, decidido el 20/11/2026 (plan en `docs/plan-paso-6-trabajos.md`): todo lo hace el administrador desde el panel; el equipo recibe el aviso del trabajo por los canales de la empresa. Fotos, actas e incidencias se guardan en las tablas definitivas, marcando si vienen del panel o de la app. RF-03, RF-49 y RF-56 pasan a la fase de la app del operario.
 - [x] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10): "Orçamento" (decidido el 09/11/2026). En el código el término es `quotes`. Pendiente de aplicar: los diseños de la empresa y la app todavía dicen "Proposta" y `proposals`.
 - [ ] Diseño pendiente tras separar pedido y envío: pantalla de pedido creado con un único enlace, pestaña "Envío" en el detalle del pedido, aviso de inventario alterado (indica si crea versión y qué presupuestos afecta), reenvío del enlace del pedido y "marcar como perdido" sobre el envío.
