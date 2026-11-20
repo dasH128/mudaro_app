@@ -13,7 +13,10 @@ import { jobOptions } from "@/features/schedule/presentation/job-options";
 import { JobStatusPill, focusRing } from "@/features/schedule/presentation/components/schedule-parts";
 import { scheduleHref } from "@/features/schedule/presentation/schedule-href";
 import { describeAccess, describeHistory, isHardAccess, type PositionsText, type ScheduleText } from "@/features/schedule/presentation/schedule-text";
+import type { JobExecution } from "../../domain/execution";
 import { crewSummary, type JobsText } from "../job-summary-text";
+import type { Now } from "./execution-forms";
+import { JobExecutionSection } from "./job-execution";
 
 type Props = {
   lang: Locale;
@@ -23,6 +26,9 @@ type Props = {
   job: ScheduleJob;
   overview: ScheduleOverview;
   today: string;
+  /** Actas, fotos e incidencias (paso 6.5). */
+  execution: JobExecution;
+  now: Now;
 };
 
 const card = "flex flex-col gap-3.5 rounded-3xl border border-line bg-surface p-5.5";
@@ -35,7 +41,7 @@ const ghost = `inline-flex h-10 items-center gap-2 rounded-full border border-fi
  * Ficha del trabajo (paso 6.3). Sin prototipo: sigue la línea del detalle del pedido y del panel de la Agenda.
  * Las fotos, actas e incidencias llegan con el paso 6.5; el cierre, con el 6.6.
  */
-export function JobSheet({ lang, t, schedule, positions, job, overview, today }: Props) {
+export function JobSheet({ lang, t, schedule, positions, job, overview, today, execution, now }: Props) {
   const p = schedule.panel;
   const detail = job.detail;
   const vehicle = vehicleOf(job, overview.vehicles);
@@ -128,6 +134,17 @@ export function JobSheet({ lang, t, schedule, positions, job, overview, today }:
               />
             ) : null}
           </section>
+
+          {job.status !== "closed" || execution.pickup ? (
+            <JobExecutionSection
+              job={{ lang, jobId: job.jobId, orderId: job.id }}
+              status={job.status}
+              execution={execution}
+              now={now}
+              client={job.client}
+              t={t}
+            />
+          ) : null}
 
           {detail ? (
             <section aria-labelledby="sheet-addresses" className={card}>

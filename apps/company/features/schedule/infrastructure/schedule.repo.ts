@@ -73,6 +73,10 @@ function historyOf(events: readonly EventRow[]): HistoryEvent[] {
       if (row.kind === "won") return [{ kind: "quote-accepted", at: moment(row.occurred_at) }];
       if (row.kind === "job_assigned") return [{ kind: "crew-assigned", at: moment(row.occurred_at), by }];
       if (row.kind === "job_rescheduled") return [{ kind: "rescheduled", at: moment(row.occurred_at), by }];
+      if (row.kind === "pickup_recorded") return [{ kind: "pickup-signed", at: moment(row.occurred_at), by }];
+      if (row.kind === "delivery_recorded") return [{ kind: "delivery-signed", at: moment(row.occurred_at), by }];
+      if (row.kind === "incident_reported") return [{ kind: "incident-reported", at: moment(row.occurred_at), by }];
+      if (row.kind === "incident_resolved") return [{ kind: "incident-resolved", at: moment(row.occurred_at), by }];
       return [];
     });
 }

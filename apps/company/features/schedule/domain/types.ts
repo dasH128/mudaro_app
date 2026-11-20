@@ -29,6 +29,8 @@ export type HistoryEvent =
   | { kind: "quote-accepted"; at: Moment }
   | { kind: "crew-assigned"; at: Moment; by: string }
   | { kind: "rescheduled"; at: Moment; by: string }
+  | { kind: "incident-reported"; at: Moment; by: string }
+  | { kind: "incident-resolved"; at: Moment; by: string }
   | { kind: "crew-named"; at: Moment; by: string; personIds: string[] }
   | { kind: "permit-granted"; at: Moment; by: string }
   | { kind: "job-started"; at: Moment; by: string };

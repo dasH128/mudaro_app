@@ -5,8 +5,9 @@ import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
-import { todayLisbon } from "@/app/lib/format";
+import { formatTime, todayLisbon } from "@/app/lib/format";
 import { requireCompanySession } from "@/features/auth/application/require-session";
+import { getJobExecution } from "@/features/jobs/infrastructure/execution.repo";
 import { JobSheet } from "@/features/jobs/presentation/components/job-sheet";
 import { getScheduleOverview } from "@/features/schedule/infrastructure/schedule.repo";
 
@@ -30,7 +31,11 @@ export default async function JobPage({ params }: PageProps<"/[lang]/jobs/[id]">
   const job = overview.jobs.find((item) => item.id === decodeURIComponent(id));
   if (!job) notFound();
 
-  const dict = await getDictionary();
+  const [dict, execution] = await Promise.all([getDictionary(), getJobExecution(job.jobId)]);
+  // Fecha y hora por defecto de los formularios (actas, fotos, incidencias), en servidor para no romper la hidratación
+  const instant = new Date();
+  const today = todayLisbon(instant);
+  const now = { date: `${today.slice(8, 10)}/${today.slice(5, 7)}/${today.slice(0, 4)}`, time: formatTime(instant.toISOString()) };
   return (
     <JobSheet
       lang={locale}
@@ -39,7 +44,9 @@ export default async function JobPage({ params }: PageProps<"/[lang]/jobs/[id]">
       positions={dict.app.team.positions}
       job={job}
       overview={overview}
-      today={todayLisbon()}
+      today={today}
+      execution={execution}
+      now={now}
     />
   );
 }

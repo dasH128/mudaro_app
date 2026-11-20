@@ -43,7 +43,11 @@ export const ROUTES = {
   activity: "/activity",
   tools: { volumeCalculator: "/tools/volume-calculator" },
   // Rutas con parámetro: se usan igual, localePath(lang, ROUTES.jobs.detail(id))
-  jobs: { detail: (id: string) => `/jobs/${encodeURIComponent(id)}` },
+  jobs: {
+    detail: (id: string) => `/jobs/${encodeURIComponent(id)}`,
+    // Acta imprimible de recogida o entrega (P13), fuera del menú lateral
+    print: (id: string, moment: "pickup" | "delivery") => `/print/jobs/${encodeURIComponent(id)}/${moment}`,
+  },
   incidents: { detail: (id: string) => `/incidents/${encodeURIComponent(id)}` },
 } as const;
 
