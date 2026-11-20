@@ -2137,6 +2137,15 @@ export type Database = {
         }
         Returns: number
       }
+      close_job: {
+        Args: {
+          p_actual_hours: number
+          p_actual_km: number
+          p_job_id: string
+          p_notes: string
+        }
+        Returns: undefined
+      }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
@@ -2459,6 +2468,7 @@ export type Database = {
         | "incident_reported"
         | "incident_resolved"
         | "job_record_deleted"
+        | "job_closed"
       shipment_status:
         | "new"
         | "awaiting_inventory"
@@ -2645,6 +2655,7 @@ export const Constants = {
         "incident_reported",
         "incident_resolved",
         "job_record_deleted",
+        "job_closed",
       ],
       shipment_status: [
         "new",

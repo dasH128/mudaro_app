@@ -152,6 +152,7 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
             overview={overview}
             today={today}
             closeHref={scheduleHref(locale, { view, date, show, day: view === "month" ? selectedDay : undefined })}
+            jobErrors={dict.app.jobs.execution.errors}
           />
         ) : null}
       </div>

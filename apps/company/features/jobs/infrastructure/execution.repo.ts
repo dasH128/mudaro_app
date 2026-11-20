@@ -206,3 +206,21 @@ export async function deleteJobRecord(kind: "evidence" | "incident" | "handover"
   await removeJobFiles(data ?? []);
   return { ok: true, value: undefined };
 }
+
+export type CloseResult = ExecutionResult | { ok: false; error: "openIncidents" };
+
+/** RF-58, RF-59: cierra el trabajo entregado con horas y km reales, sin incidencias abiertas. */
+export async function closeJob(input: { jobId: string; actualHours: number; actualKm: number; notes: string | null }): Promise<CloseResult> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("close_job", {
+    p_job_id: input.jobId,
+    p_actual_hours: input.actualHours,
+    p_actual_km: input.actualKm,
+    // Opcional: la función acepta null; el generador de tipos lo marca como no nulo.
+    p_notes: input.notes as string,
+  });
+  if (!error) return { ok: true, value: undefined };
+  // 23514 de close_job: quedan incidencias abiertas (RF-59)
+  if (error.code === "23514" && error.message?.includes("open incidents")) return { ok: false, error: "openIncidents" };
+  return errorOf(error);
+}

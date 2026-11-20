@@ -15,6 +15,7 @@ import { scheduleHref } from "@/features/schedule/presentation/schedule-href";
 import { describeAccess, describeHistory, isHardAccess, type PositionsText, type ScheduleText } from "@/features/schedule/presentation/schedule-text";
 import type { JobExecution } from "../../domain/execution";
 import { crewSummary, type JobsText } from "../job-summary-text";
+import { CloseJobForm } from "./close-job-form";
 import type { Now } from "./execution-forms";
 import { JobExecutionSection } from "./job-execution";
 
@@ -146,6 +147,25 @@ export function JobSheet({ lang, t, schedule, positions, job, overview, today, e
             />
           ) : null}
 
+          {job.status === "delivered" && detail ? (
+            <section aria-labelledby="sheet-close" className={`${card} border-success-border bg-success-surface`}>
+              <div className="flex flex-col gap-0.5">
+                <h2 id="sheet-close" className={heading}>
+                  {p.close.title}
+                </h2>
+                <span className="text-[13px] text-success-foreground">{interpolate(p.close.text, { time: detail.deliveredAt ?? "" })}</span>
+              </div>
+              <CloseJobForm
+                lang={lang}
+                jobId={job.jobId}
+                orderId={job.id}
+                estimate={{ hours: formatCompact(detail.estimate.hours), km: formatCompact(detail.estimate.km) }}
+                openIncidents={detail.openIncidents}
+                t={{ close: p.close, errors: t.execution.errors }}
+              />
+            </section>
+          ) : null}
+
           {detail ? (
             <section aria-labelledby="sheet-addresses" className={card}>
               <h2 id="sheet-addresses" className={heading}>
@@ -176,7 +196,11 @@ export function JobSheet({ lang, t, schedule, positions, job, overview, today, e
                 <h2 id="sheet-estimate" className={heading}>
                   {t.estimateTitle}
                 </h2>
-                <span className="text-xs text-muted">{t.actualLater}</span>
+                <span className="text-xs text-muted">
+                  {detail.actual && detail.closed
+                    ? interpolate(t.actualClosed, { hours: formatCompact(detail.actual.hours), km: formatCompact(detail.actual.km), when: formatDayMonth(detail.closed.date), by: detail.closed.by })
+                    : t.actualLater}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 <span className={statBox}>

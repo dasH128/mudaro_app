@@ -1177,7 +1177,8 @@
             "delivery": "Acta de entrega registrada",
             "incident-reported": "Incidencia registrada",
             "incident-resolved": "Incidencia resuelta",
-            "record-deleted": "Registro del trabajo eliminado"
+            "record-deleted": "Registro del trabajo eliminado",
+            "closed": "Trabajo cerrado"
           }
         },
         "side": {
@@ -2509,7 +2510,13 @@
           "km": "Km reales",
           "estimated": "Estimado: {value} {unit}",
           "noIncidents": "Sin incidencias abiertas",
-          "action": "Cerrar trabajo"
+          "action": "Cerrar trabajo",
+          "notes": "Nota de cierre (opcional)",
+          "notesPlaceholder": "Ej.: fue bien, 1 h más en el acceso",
+          "openIncidents": "Hay {count} incidencia(s) sin resolver. Resuélvelas en la ficha del trabajo antes de cerrar.",
+          "saving": "Cerrando…",
+          "confirm": "Después de cerrar, fotos, actas e incidencias ya no se pueden cambiar.",
+          "closedHere": "Cerrado. Ya entra en la exportación para facturar."
         },
         "real": {
           "title": "Estimado y real",
@@ -2885,7 +2892,11 @@
           "wrongStatus": "El trabajo cambió de estado. Recarga la página.",
           "duplicate": "Esta acta ya está registrada.",
           "upload": "No se ha podido enviar la foto. Inténtalo otra vez.",
-          "failed": "No se ha podido guardar. Inténtalo otra vez."
+          "failed": "No se ha podido guardar. Inténtalo otra vez.",
+          "hoursInvalid": "Indica las horas reales (hasta 48). Ej.: 5,5",
+          "kmInvalid": "Indica los km reales (0 a 5000).",
+          "openIncidents": "Hay incidencias sin resolver. Resuélvelas antes de cerrar.",
+          "notDelivered": "Solo se cierra un trabajo entregado. Recarga la página."
         }
       },
       "print": {
@@ -2906,7 +2917,8 @@
         "clientSignature": "Cliente",
         "crewSignature": "Jefe de equipo",
         "nameAndDate": "Nombre, firma, fecha y hora"
-      }
+      },
+      "actualClosed": "Real: {hours} h y {km} km · cerrado el {when} por {by}"
     }
   }
 }

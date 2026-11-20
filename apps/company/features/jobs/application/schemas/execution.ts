@@ -24,6 +24,10 @@ export type ExecutionError =
   | "wrongStatus"
   | "duplicate"
   | "upload"
+  | "hoursInvalid"
+  | "kmInvalid"
+  | "openIncidents"
+  | "notDelivered"
   | "failed";
 
 export type ExecutionState = { status: "idle" } | { status: "saved"; at: number } | { status: "error"; error: ExecutionError };
@@ -80,6 +84,12 @@ export function parseAmount(value: string): number | null {
   if (!/^\d+(\.\d{1,2})?$/.test(clean)) return null;
   const cents = Math.round(Number(clean) * 100);
   return cents <= 10_000_000 ? cents : null;
+}
+
+/** "5,5" → 5.5. `null` si no es un número decimal con coma o punto. */
+export function parseDecimalPt(value: string): number | null {
+  const clean = value.replace(/[\s\u00A0]/g, "").replace(",", ".");
+  return /^\d+(\.\d+)?$/.test(clean) ? Number(clean) : null;
 }
 
 export { text as readText };

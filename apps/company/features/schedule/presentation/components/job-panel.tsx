@@ -20,6 +20,8 @@ import {
   type ScheduleText,
 } from "../schedule-text";
 import { jobOptions } from "../job-options";
+import { CloseJobForm } from "@/features/jobs/presentation/components/close-job-form";
+import type { JobsText } from "@/features/jobs/presentation/job-summary-text";
 import { JobActions } from "./job-actions";
 import { JobStatusPill, focusRing, initialsOf } from "./schedule-parts";
 
@@ -31,6 +33,8 @@ type Props = {
   overview: ScheduleOverview;
   today: string;
   closeHref: string;
+  /** Errores del cierre (los comparte con la ficha del trabajo). */
+  jobErrors: JobsText["execution"]["errors"];
 };
 
 const iconButton = `grid size-9 place-items-center rounded-full text-foreground ${focusRing}`;
@@ -49,7 +53,7 @@ function pctDelta(est: number, real: number): number {
 }
 
 /** Panel lateral del trabajo (P10): qué falta, cómo va, cierre o resultado, vehículo, equipo, cliente e histórico. */
-export function JobPanel({ lang, t, positions, job, overview, today, closeHref }: Props) {
+export function JobPanel({ lang, t, positions, job, overview, today, closeHref, jobErrors }: Props) {
   const p = t.panel;
   const { detail } = job;
   const vehicle = vehicleOf(job, overview.vehicles);
@@ -215,38 +219,14 @@ export function JobPanel({ lang, t, positions, job, overview, today, closeHref }
               </h3>
               <span className="text-[13px] text-success-foreground">{interpolate(p.close.text, { time: detail.deliveredAt ?? "" })}</span>
             </div>
-            {/* Cerrar el trabajo aún no tiene flujo: los campos y el botón salen desactivados */}
-            <div className="grid grid-cols-2 gap-2.5">
-              {(
-                [
-                  { key: "hours", label: p.close.hours, unit: "h", est: formatCompact(detail.estimate.hours) },
-                  { key: "km", label: p.close.km, unit: "km", est: formatCompact(detail.estimate.km) },
-                ] as const
-              ).map((field) => (
-                <label key={field.key} className="flex flex-col gap-1 text-[13px] font-bold">
-                  {field.label}
-                  <span className="flex h-10.5 items-center overflow-hidden rounded-xl border border-field-border bg-surface font-normal">
-                    <input readOnly disabled placeholder={field.est} className="h-full min-w-0 flex-1 bg-transparent px-3 text-[15px] font-bold outline-none placeholder:text-field-placeholder" />
-                    <span className="px-2.5 text-[13px] text-muted">{field.unit}</span>
-                  </span>
-                  <span className="text-xs font-normal text-muted">{interpolate(p.close.estimated, { value: field.est, unit: field.unit })}</span>
-                </label>
-              ))}
-            </div>
-            <span className="flex items-center gap-2 text-[13px] font-bold text-success-foreground">
-              <span aria-hidden className="grid size-5 place-items-center rounded-full bg-success-dot text-[11px] text-white">
-                ✓
-              </span>
-              {p.close.noIncidents}
-            </span>
-            <button
-              type="button"
-              disabled
-              title={t.soon}
-              className={`h-10.5 w-fit rounded-full bg-foreground px-4.5 text-sm font-bold text-background ${soon} ${focusRing}`}
-            >
-              {p.close.action}
-            </button>
+            <CloseJobForm
+              lang={lang}
+              jobId={job.jobId}
+              orderId={job.id}
+              estimate={{ hours: formatCompact(detail.estimate.hours), km: formatCompact(detail.estimate.km) }}
+              openIncidents={detail.openIncidents}
+              t={{ close: p.close, errors: jobErrors }}
+            />
           </section>
         ) : null}
 

@@ -1177,7 +1177,8 @@
             "delivery": "Ata de entrega registada",
             "incident-reported": "Incidência registada",
             "incident-resolved": "Incidência resolvida",
-            "record-deleted": "Registo do trabalho eliminado"
+            "record-deleted": "Registo do trabalho eliminado",
+            "closed": "Trabalho fechado"
           }
         },
         "side": {
@@ -2509,7 +2510,13 @@
           "km": "Km reais",
           "estimated": "Estimado: {value} {unit}",
           "noIncidents": "Sem incidências abertas",
-          "action": "Fechar trabalho"
+          "action": "Fechar trabalho",
+          "notes": "Nota de fecho (opcional)",
+          "notesPlaceholder": "Ex.: correu bem, mais 1 h no acesso",
+          "openIncidents": "Há {count} incidência(s) por resolver. Resolve-as na ficha do trabalho antes de fechar.",
+          "saving": "A fechar…",
+          "confirm": "Depois de fechar, fotos, atas e incidências deixam de se poder alterar.",
+          "closedHere": "Fechado. Já entra na exportação para faturar."
         },
         "real": {
           "title": "Estimado e real",
@@ -2885,7 +2892,11 @@
           "wrongStatus": "O trabalho mudou de estado. Recarrega a página.",
           "duplicate": "Esta ata já foi registada.",
           "upload": "Não foi possível enviar a foto. Tenta outra vez.",
-          "failed": "Não foi possível guardar. Tenta outra vez."
+          "failed": "Não foi possível guardar. Tenta outra vez.",
+          "hoursInvalid": "Indica as horas reais (até 48). Ex.: 5,5",
+          "kmInvalid": "Indica os km reais (0 a 5000).",
+          "openIncidents": "Há incidências por resolver. Resolve-as antes de fechar.",
+          "notDelivered": "Só se fecha um trabalho entregue. Recarrega a página."
         }
       },
       "print": {
@@ -2906,7 +2917,8 @@
         "clientSignature": "Cliente",
         "crewSignature": "Chefe de equipa",
         "nameAndDate": "Nome, assinatura, data e hora"
-      }
+      },
+      "actualClosed": "Real: {hours} h e {km} km · fechado a {when} por {by}"
     }
   }
 }

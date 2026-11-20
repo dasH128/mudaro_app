@@ -77,6 +77,7 @@ function historyOf(events: readonly EventRow[]): HistoryEvent[] {
       if (row.kind === "delivery_recorded") return [{ kind: "delivery-signed", at: moment(row.occurred_at), by }];
       if (row.kind === "incident_reported") return [{ kind: "incident-reported", at: moment(row.occurred_at), by }];
       if (row.kind === "incident_resolved") return [{ kind: "incident-resolved", at: moment(row.occurred_at), by }];
+      if (row.kind === "job_closed") return [{ kind: "closed", at: moment(row.occurred_at), by }];
       return [];
     });
 }
@@ -88,7 +89,10 @@ export async function getScheduleOverview(): Promise<ScheduleOverview> {
     supabase.from("vehicles").select("id, name, plate, capacity_m3, active").order("created_at"),
     supabase.from("crew_members").select("id, name, position, active").order("name"),
     supabase.from("jobs").select(
-      `id, status, scheduled_start, scheduled_end,
+      `id, status, scheduled_start, scheduled_end, actual_hours, actual_km, closed_at,
+       closer:company_users!jobs_closed_by_fkey(name),
+       handover_records(moment, signed_at),
+       incidents(status),
        shipment:shipments!inner(number,
          client:clients(name, phone),
          order:orders!inner(contact_name, contact_phone, addresses(id, role, sort_order)),
@@ -152,6 +156,13 @@ export async function getScheduleOverview(): Promise<ScheduleOverview> {
           estimate: { hours: Number(row.quote.estimated_hours ?? 0), km: Number(row.quote.km ?? 0) },
           priceCents: acceptance?.signed_total_cents ?? undefined,
           acceptedOn: acceptance ? lisbonParts(acceptance.accepted_at).date : start.date,
+          deliveredAt: (() => {
+            const delivery = row.handover_records.find((h) => h.moment === "delivery");
+            return delivery ? lisbonParts(delivery.signed_at).time : undefined;
+          })(),
+          actual: row.actual_hours !== null && row.actual_km !== null ? { hours: Number(row.actual_hours), km: Number(row.actual_km) } : undefined,
+          closed: row.closed_at ? { ...moment(row.closed_at), by: row.closer?.name ?? "" } : undefined,
+          openIncidents: row.incidents.filter((incident) => incident.status === "open").length,
           clientPhone: row.shipment.client?.phone ?? order.contact_phone,
         },
       },

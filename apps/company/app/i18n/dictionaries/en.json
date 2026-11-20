@@ -1177,7 +1177,8 @@
             "delivery": "Delivery record added",
             "incident-reported": "Incident reported",
             "incident-resolved": "Incident resolved",
-            "record-deleted": "Job record deleted"
+            "record-deleted": "Job record deleted",
+            "closed": "Job closed"
           }
         },
         "side": {
@@ -2509,7 +2510,13 @@
           "km": "Real km",
           "estimated": "Estimated: {value} {unit}",
           "noIncidents": "No open incidents",
-          "action": "Close job"
+          "action": "Close job",
+          "notes": "Closing note (optional)",
+          "notesPlaceholder": "E.g. went well, 1 h extra at the access",
+          "openIncidents": "There are {count} open incident(s). Resolve them on the job sheet before closing.",
+          "saving": "Closing…",
+          "confirm": "After closing, photos, records and incidents can no longer be changed.",
+          "closedHere": "Closed. It now goes into the invoicing export."
         },
         "real": {
           "title": "Estimated and real",
@@ -2885,7 +2892,11 @@
           "wrongStatus": "The job changed status. Reload the page.",
           "duplicate": "This record already exists.",
           "upload": "Could not upload the photo. Try again.",
-          "failed": "Could not save. Try again."
+          "failed": "Could not save. Try again.",
+          "hoursInvalid": "Enter the actual hours (up to 48). E.g. 5,5",
+          "kmInvalid": "Enter the actual km (0 to 5000).",
+          "openIncidents": "There are open incidents. Resolve them before closing.",
+          "notDelivered": "Only a delivered job can be closed. Reload the page."
         }
       },
       "print": {
@@ -2906,7 +2917,8 @@
         "clientSignature": "Client",
         "crewSignature": "Crew lead",
         "nameAndDate": "Name, signature, date and time"
-      }
+      },
+      "actualClosed": "Actual: {hours} h and {km} km · closed on {when} by {by}"
     }
   }
 }

@@ -63,6 +63,8 @@ export type JobDetail = {
   priceCents?: number;
   /** Cierre del trabajo. */
   closed?: Moment & { by: string };
+  /** Incidencias sin resolver: con alguna, no se puede cerrar (RF-59). */
+  openIncidents: number;
   /** Día en que se aceptó el presupuesto, para los avisos ("aceite ontem"). */
   acceptedOn: string;
   /** Teléfono del cliente, normalizado (+351…). */

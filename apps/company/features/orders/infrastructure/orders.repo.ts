@@ -405,6 +405,8 @@ function eventOf(
       return { kind: "job-step", step: "incident-resolved", at, actor };
     case "job_record_deleted":
       return { kind: "job-step", step: "record-deleted", at, actor };
+    case "job_closed":
+      return { kind: "job-step", step: "closed", at, actor };
   }
 }
 

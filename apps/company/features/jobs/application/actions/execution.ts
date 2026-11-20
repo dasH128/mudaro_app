@@ -7,6 +7,7 @@ import { ROUTES, localePath } from "@/app/lib/routes";
 import { requireCompanySession } from "@/features/auth/application/require-session";
 import {
   addEvidence,
+  closeJob,
   deleteJobRecord,
   recordHandover,
   removeJobFiles,
@@ -22,6 +23,7 @@ import {
   noteSchema,
   parseAmount,
   parseBase,
+  parseDecimalPt,
   parseFiles,
   parseMoment,
   photoMomentSchema,
@@ -165,5 +167,27 @@ export async function deleteRecordAction(_previous: ExecutionState, formData: Fo
 
   const result = await deleteJobRecord(kind.data, id.data);
   if (result.ok) refresh(base.data.lang, base.data.orderId);
+  return fromResult(result);
+}
+
+/** "Fechar trabalho" (RF-58, RF-59): horas y km reales obligatorios, nota opcional. Después nada cambia (RF-57). */
+export async function closeJobAction(_previous: ExecutionState, formData: FormData): Promise<ExecutionState> {
+  await requireCompanySession(formData.get("lang"));
+  const base = parseBase(formData);
+  if (!base.success) return failed("failed");
+  const hours = parseDecimalPt(readText(formData, "hours"));
+  if (hours === null || hours <= 0 || hours > 48) return failed("hoursInvalid");
+  const km = parseDecimalPt(readText(formData, "km"));
+  if (km === null || km > 5000) return failed("kmInvalid");
+  const notes = z.string().trim().max(2000).safeParse(readText(formData, "notes"));
+  if (!notes.success) return failed("failed");
+
+  const result = await closeJob({ jobId: base.data.jobId, actualHours: hours, actualKm: km, notes: notes.data === "" ? null : notes.data });
+  if (result.ok) {
+    refresh(base.data.lang, base.data.orderId);
+    return saved();
+  }
+  if (result.error === "openIncidents") return failed("openIncidents");
+  if (result.error === "wrongStatus") return failed("notDelivered");
   return fromResult(result);
 }

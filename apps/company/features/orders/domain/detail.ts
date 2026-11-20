@@ -83,7 +83,7 @@ export type OrderEvent =
   | { kind: "job-rescheduled"; at: string; actor: string }
   | { kind: "job-cancelled"; at: string; actor: string; reason: string | null }
   /** Ejecución (paso 6.4): actas, incidencias y registros eliminados por error. */
-  | { kind: "job-step"; step: "pickup" | "delivery" | "incident-reported" | "incident-resolved" | "record-deleted"; at: string; actor: string };
+  | { kind: "job-step"; step: "pickup" | "delivery" | "incident-reported" | "incident-resolved" | "record-deleted" | "closed"; at: string; actor: string };
 
 export type OrderDetail = {
   id: string;
