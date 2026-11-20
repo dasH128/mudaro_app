@@ -94,7 +94,7 @@ Con sesión de administrador de "Mudanzas Peru" en Chrome sobre `localhost:3001`
 
 | ID | Prueba | Criterio de aceptación | Quién | Estado |
 | --- | --- | --- | --- | --- |
-| G1 | Tarifas | "Guardar nova versão" crea la versión siguiente; un servicio extra se da de alta, se edita y se desactiva | Persona | Pendiente (la base, A1 a A3) |
+| G1 | Tarifas | "Guardar nova versão" crea la versión siguiente; un servicio extra se da de alta, se edita y se desactiva | Claude (Chrome) | OK (19/11/2026: tarifa v3 con los mismos valores; "Teste G1 piano" creado a 80,00 €, editado a 95,00 € y desactivado; tras recargar sale "Inativo" y la base lo confirma) |
 | G2 | Editor: guardar | Abrir "Criar orçamento" de un pedido con inventario recibido: propone líneas base y los extras que pidió el cliente; "Guardar rascunho" dice "Rascunho guardado." y al recargar sigue igual | Claude (Chrome) | OK (19/11/2026, paso 5.4a) |
 | G3 | Editor: enviar | "Enviar orçamento" pide confirmación; "Sim, enviar ao cliente" vuelve al pedido, que pasa a "Orçamentado" | Claude (Chrome) | OK (19/11/2026, con MD-0004) |
 | G4 | Lista Orçamentos | Salen todas las versiones con su estado, total con IVA y margen; "Prontos para orçamentar" lista los pedidos con inventario sin orçamento enviado | Claude (Chrome) | OK (19/11/2026, paso 5.4b) |
@@ -114,12 +114,12 @@ En Chrome sobre `localhost:3003`, con el enlace del pedido. El navegador estaba 
 | H3 | Aceptar | Nombre y firma; "Aceptar y firmar" muestra "aceptado" con el total; la empresa ve "Ganho" y la firma está en el bucket | Claude (Chrome) | OK (19/11/2026, con MD-0005: 196,80 €) |
 | H4 | Rechazar | "Rechazar presupuesto", motivo y "Rechazar": sale "Presupuesto rechazado" con el aviso de que una versión nueva aparecerá en el mismo enlace | Claude (Chrome) | OK (19/11/2026, con MD-0004) |
 | H5 | Versión nueva en el mismo enlace | Tras enviar la empresa la v2, el mismo enlace muestra la v2 con "Aceptar y firmar" y "Rechazar presupuesto" | Claude (Chrome) | OK (19/11/2026, con MD-0004) |
-| H6 | Imprimir | "Imprimir o guardar en PDF" abre el diálogo de impresión con la página sin botones | Persona | Pendiente |
-| H7 | Caducado | Con la validez vencida, el orçamento sale como caducado y no deja aceptar | Persona | Pendiente (la base lo bloquea, D5) |
+| H6 | Imprimir | "Imprimir o guardar en PDF" abre el diálogo de impresión con la página sin botones | Claude (Chrome) y Persona | OK sin el diálogo (19/11/2026: el botón llama a `window.print()`, la regla `print:hidden` está en el CSS y los 6 elementos interactivos de la página quedan ocultos al imprimir). Abrir el diálogo en sí queda para una persona, porque bloquea la extensión de Chrome |
+| H7 | Caducado | Con la validez vencida, el orçamento sale como caducado y no deja aceptar | Claude (Chrome) | OK (19/11/2026, con MD-0004: validez de ORC-0002 v2 puesta a 18/11/2026 por SQL; sale "Este orçamento caducou" sin "Aceitar e assinar" ni "Recusar orçamento"; validez devuelta a 04/12/2026) |
 
 ## Criterio de salida del paso 5
 
-1. Todos los casos están en `OK`, salvo los de *Persona* (G1, H6, H7), que no bloquean.
+1. Todos los casos están en `OK`. Solo falta abrir el diálogo de impresión de H6, que hace una persona y no bloquea.
 2. Las secciones B7, D y E pasan sin excepción.
 3. Quedan registradas las limitaciones conocidas, que no son fallos:
    - los km se escriben a mano (P2);
@@ -136,5 +136,8 @@ En Chrome sobre `localhost:3003`, con el enlace del pedido. El navegador estaba 
 | G6 | 19/11/2026 | El panel del enlace dice "Cliente pode alterar o inventário até aceitar um orçamento." Ya estaba anotado en `docs/plan-modelo-bd.md`: con un orçamento enviado el cliente no edita el inventario desde el enlace | Un texto que describa lo que el cliente puede hacer | Corregido y probado en Chrome (19/11/2026): con orçamento enviado, "Pelo link, Cliente vê o orçamento e pode aceitá-lo ou recusá-lo" (MD-0004); con "Ganho", "Orçamento aceite: pelo link, Cliente consulta o orçamento assinado" (MD-0005); antes del orçamento, "pode alterar o inventário até receber o orçamento" |
 | H1 | 19/11/2026 | La pestaña del navegador del cliente se llama "Inventario de tu mudanza" también cuando muestra el orçamento | "Presupuesto de tu mudanza" (o equivalente) cuando hay orçamento | Corregido y probado en Chrome (19/11/2026, MD-0003) |
 | H2 | 19/11/2026 | Con el inventario rellenado por la empresa (MD-0003), el orçamento en el enlace dice "preparó este presupuesto con el inventario que enviaste", pero el cliente no envió nada | Un texto que no dé por hecho que el cliente envió el inventario | Corregido y probado en Chrome (19/11/2026, MD-0003): "preparó este presupuesto a partir del inventario de tu mudanza" |
+| G1 | 19/11/2026 | En Serviços extra, la tarjeta de "Teste G1 piano" pone el precio a la derecha del nombre y la de "Embalagem de loiça" debajo | Las dos tarjetas con la misma disposición | Abierto, menor |
+| H7 | 19/11/2026 | Para la prueba hubo que generar otro enlace de MD-0004 con `share_order_link` desde SQL (el anterior no estaba guardado y la base solo tiene su hash). Queda un evento `link_resent` en MD-0004 | Mismo problema que el fallo de G3: la empresa no tiene forma de volver a dar el enlace | Resuelto con la corrección de G3 (19/11/2026): la empresa vuelve a dar el enlace desde el detalle del pedido con "Gerar link novo". El evento `link_resent` de MD-0004 se queda como rastro de la prueba |
+| G7 | 19/11/2026 | MD-0005 está ganado y conserva un borrador v2 del orçamento n.º 1 que ya no se puede enviar (D10 bloquea guardar, no los borradores que ya existían) | Al ganar, los borradores abiertos del envío se descartan o dejan de mostrarse | Abierto, a decidir |
 | G5 | 19/11/2026 | El percurso del pedido no marca "Perdido" (sigue "5 · Ganho · Por fazer") y "Link partilhado" sale después de "Inventário recebido" con una hora posterior, porque el enlace se generó tarde | El percurso refleja la pérdida | Corregido (19/11/2026): con "Perdido", el último paso pasa a "Perdido" con una cruz y la hora del rechazo. Lo de "Link partilhado" después de "Inventário recebido" ya no ocurre: MD-0004 tiene inventario de la empresa y su percurso no tiene ese paso. Sin probar en Chrome (no hay pedidos perdidos) |
 | G3 | 19/11/2026 | Con el inventario rellenado por la empresa, el percurso tenía el paso "Link partilhado" y lo marcaba como hecho aunque el enlace no se hubiera generado. (MD-0001 no sirve de ejemplo: es un dato de prueba cargado por SQL, con inventario del cliente y sin enlace, una combinación que la app no produce) | Sin inventario por enlace, el percurso no tiene ese paso | Corregido y probado en Chrome (19/11/2026, MD-0004: Pedido criado, Inventário recebido, Orçamento enviado, Ganho) |
