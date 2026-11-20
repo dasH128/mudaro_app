@@ -75,7 +75,7 @@ Fuentes: `docs/plan-paso-6-trabajos.md` y `docs/test-plan-quotes-5.md` (formato)
 | E6 | Storage (RNF-05) | Otra empresa no sube (`42501`) ni lee ficheros; el administrador sube a un trabajo abierto, no a uno cerrado (`42501`) | Claude | OK (20/11/2026) |
 | E7 | Pantalla | Recogida, foto (comprimida y vista con enlace firmado), incidencia de 25,50 €, resolverla, entrega con foto del acta y eliminar todo, en MD-0005 | Claude | OK (20/11/2026) |
 | E8 | Acta imprimible (P13) | `/pt/print/jobs/MD-0005/delivery` sin menú lateral ni precios, con huecos de firma | Claude | OK (20/11/2026) |
-| E9 | Fotos desde un móvil | Subir fotos desde el navegador de un teléfono (incluida una foto HEIC de iPhone) | Persona | Pendiente |
+| E9 | Fotos desde un móvil | Subir fotos desde el navegador de un teléfono (incluida una foto HEIC de iPhone). Resultado: 3 fotos de Entrega de MD-0005 desde un iPhone, guardadas como JPEG de 300 a 590 KB (comprimidas en el navegador). Requiere `ALLOWED_DEV_ORIGINS` en desarrollo (ver `apps/company/.env.example`) | Persona | OK (20/11/2026) |
 | E10 | Impresión real | Imprimir el acta en papel y comprobar que cabe en una hoja A4 | Persona | Pendiente |
 
 ## F. Cierre (RF-57 a RF-59, paso 6.6)
@@ -116,4 +116,5 @@ Fuentes: `docs/plan-paso-6-trabajos.md` y `docs/test-plan-quotes-5.md` (formato)
 | 20/11/2026 | A3 | La lista del histórico del vehículo repetía claves con dos cambios iguales el mismo día | Clave por id de `audit_log` |
 | 20/11/2026 | E8 | La página del acta avisaba de datos sin `<Suspense>` (cacheComponents) | `loading.tsx` en la ruta |
 | 20/11/2026 | H1 | La actividad reciente repetía claves con varios eventos del mismo pedido | Clave por id del evento |
+| 20/11/2026 | E9 | Desde el móvil (por la IP del Mac) los botones no respondían: Next.js bloqueaba los recursos de desarrollo | `allowedDevOrigins` desde `ALLOWED_DEV_ORIGINS` |
 | 20/11/2026 | — | Turborepo reutilizaba el typecheck de las apps tras cambiar los tipos de Supabase | `typecheck` depende de `^typecheck` en `turbo.json` |
