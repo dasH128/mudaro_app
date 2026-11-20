@@ -728,11 +728,14 @@ Table jobs {
   quote_id uuid [not null, unique, note: 'Presupuesto aceptado vigente. Se actualiza si el cliente acepta uno nuevo antes de la mudanza']
   status job_status [not null, default: 'scheduled']
   scheduled_start timestamptz [not null]
-  scheduled_end timestamptz
+  scheduled_end timestamptz [not null, note: 'Paso 6.1: inicio más las horas estimadas del orçamento (4 h sin ellas), editable al reprogramar']
   actual_hours numeric(5,2)
   actual_km numeric(7,1)
   notes text
   closed_at timestamptz
+  closed_by uuid
+  cancelled_at timestamptz [note: 'Paso 6.1: cancel_job, con motivo. Libera las asignaciones (RF-50)']
+  cancel_reason text
 }
 
 // Asignación de vehículos y operarios a un trabajo en un periodo. [PROPOSED]
@@ -742,6 +745,7 @@ Table assignments {
   job_id uuid [not null]
   vehicle_id uuid
   crew_member_id uuid [note: 'Persona del equipo (crew_members), no usuario: en el MVP el equipo no tiene cuenta']
+  is_lead boolean [not null, default: false, note: 'Jefe de equipo del trabajo: una persona, como mucho una por trabajo']
   period tstzrange [not null, note: 'Una restriccion exclude impide solapes de vehiculo y de persona']
 }
 

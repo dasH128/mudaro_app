@@ -96,6 +96,61 @@ export type Database = {
           },
         ]
       }
+      assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          crew_member_id: string | null
+          id: string
+          is_lead: boolean
+          job_id: string
+          period: unknown
+          vehicle_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          is_lead?: boolean
+          job_id: string
+          period: unknown
+          vehicle_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          is_lead?: boolean
+          job_id?: string
+          period?: unknown
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_company_id_crew_member_id_fkey"
+            columns: ["company_id", "crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "assignments_job_id_company_id_fkey"
+            columns: ["job_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "assignments_vehicle_id_company_id_fkey"
+            columns: ["vehicle_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -1057,36 +1112,67 @@ export type Database = {
       }
       jobs: {
         Row: {
+          actual_hours: number | null
+          actual_km: number | null
+          cancel_reason: string | null
+          cancelled_at: string | null
+          closed_at: string | null
+          closed_by: string | null
           company_id: string
           created_at: string
           id: string
+          notes: string | null
           quote_id: string
+          scheduled_end: string
           scheduled_start: string
           shipment_id: string
           status: Database["public"]["Enums"]["job_status"]
           updated_at: string
         }
         Insert: {
+          actual_hours?: number | null
+          actual_km?: number | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
           company_id: string
           created_at?: string
           id?: string
+          notes?: string | null
           quote_id: string
+          scheduled_end: string
           scheduled_start: string
           shipment_id: string
           status?: Database["public"]["Enums"]["job_status"]
           updated_at?: string
         }
         Update: {
+          actual_hours?: number | null
+          actual_km?: number | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
           company_id?: string
           created_at?: string
           id?: string
+          notes?: string | null
           quote_id?: string
+          scheduled_end?: string
           scheduled_start?: string
           shipment_id?: string
           status?: Database["public"]["Enums"]["job_status"]
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "jobs_closed_by_fkey"
+            columns: ["closed_by"]
+            isOneToOne: false
+            referencedRelation: "company_users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "jobs_quote_id_company_id_fkey"
             columns: ["quote_id", "company_id"]
@@ -1778,8 +1864,21 @@ export type Database = {
     Functions: {
       accept_invitation: { Args: never; Returns: string }
       can_read_order: { Args: { p_order_id: string }; Returns: boolean }
+      cancel_job: {
+        Args: { p_job_id: string; p_reason: string }
+        Returns: undefined
+      }
       cancel_order: {
         Args: { p_order_id: string; p_reason: string }
+        Returns: undefined
+      }
+      check_assignment_overlaps: {
+        Args: {
+          p_crew_member_ids: string[]
+          p_job_id: string
+          p_period: unknown
+          p_vehicle_ids: string[]
+        }
         Returns: undefined
       }
       client_accept_quote: {
@@ -1864,6 +1963,10 @@ export type Database = {
         Returns: string
       }
       current_company_id: { Args: never; Returns: string }
+      default_job_end: {
+        Args: { p_quote_id: string; p_start: string }
+        Returns: string
+      }
       delete_inventory_line: { Args: { p_line_id: string }; Returns: undefined }
       f_unaccent: { Args: { "": string }; Returns: string }
       insert_default_tariff: {
@@ -1886,6 +1989,10 @@ export type Database = {
           total_cents: number
           vat_cents: number
         }[]
+      }
+      reschedule_job: {
+        Args: { p_end: string; p_job_id: string; p_start: string }
+        Returns: undefined
       }
       save_company_extra: {
         Args: {
@@ -1970,6 +2077,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_job_assignments: {
+        Args: {
+          p_crew_member_ids: string[]
+          p_job_id: string
+          p_lead_id: string
+          p_vehicle_ids: string[]
+        }
+        Returns: undefined
+      }
       set_line_adjustment: {
         Args: {
           p_line_id: string
@@ -2050,6 +2166,9 @@ export type Database = {
         | "lost"
         | "cancelled"
         | "note_added"
+        | "job_assigned"
+        | "job_rescheduled"
+        | "job_cancelled"
       shipment_status:
         | "new"
         | "awaiting_inventory"
@@ -2224,6 +2343,9 @@ export const Constants = {
         "lost",
         "cancelled",
         "note_added",
+        "job_assigned",
+        "job_rescheduled",
+        "job_cancelled",
       ],
       shipment_status: [
         "new",
