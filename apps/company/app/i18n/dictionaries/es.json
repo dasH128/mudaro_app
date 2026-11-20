@@ -1374,13 +1374,19 @@
         },
         "data": {
           "title": "Datos del vehículo",
-          "readOnly": "Edición disponible próximamente",
           "capacity": "Capacidad",
           "maxLoad": "Carga máxima",
           "costPerKm": "Coste por km",
           "type": "Tipo",
           "costMissing": "Sin coste por km, el coste y el margen de los presupuestos salen mal.",
-          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a presupuestos ya enviados."
+          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a presupuestos ya enviados.",
+          "saveOnBlur": "Se guarda al salir del campo",
+          "saving": "Guardando…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Este vehículo ya no existe en tu flota. Recarga la página.",
+            "failed": "No se ha podido guardar. Inténtalo otra vez."
+          }
         },
         "usage": {
           "title": "Uso en {month}",
@@ -1394,7 +1400,21 @@
           "addedNoCost": "Vehículo añadido sin coste por km",
           "costChanged": "Coste por km: {from} → {to}",
           "maxLoadChanged": "Carga máxima: {from} → {to} kg",
-          "deactivated": "Desactivado: {reason}"
+          "deactivated": "Desactivado: {reason}",
+          "typeChanged": "Tipo: {from} → {to}",
+          "capacityChanged": "Capacidad: {from} → {to} m³",
+          "costSet": "Coste por km definido: {to}",
+          "reactivated": "Reactivado"
+        },
+        "deactivation": {
+          "title": "¿Por qué queda inactivo?",
+          "note": "Un vehículo inactivo no aparece en los presupuestos ni en la agenda.",
+          "confirm": "Desactivar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "workshop": "En el taller",
+            "other": "Otro motivo"
+          }
         }
       },
       "empty": {

@@ -1890,8 +1890,26 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_vehicle_active: {
+        Args: {
+          p_active: boolean
+          p_reason: Database["public"]["Enums"]["vehicle_inactive_reason"]
+          p_vehicle_id: string
+        }
+        Returns: undefined
+      }
       share_order_link: { Args: { p_order_id: string }; Returns: string }
       submit_inventory: { Args: { p_order_id: string }; Returns: number }
+      update_vehicle_data: {
+        Args: {
+          p_capacity_m3: number
+          p_cost_per_km_cents: number
+          p_max_load_kg: number
+          p_type: Database["public"]["Enums"]["vehicle_type"]
+          p_vehicle_id: string
+        }
+        Returns: undefined
+      }
       write_inventory_draft: {
         Args: {
           p_addresses: Json

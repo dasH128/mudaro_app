@@ -1374,13 +1374,19 @@
         },
         "data": {
           "title": "Dados do veículo",
-          "readOnly": "Edição disponível em breve",
           "capacity": "Capacidade",
           "maxLoad": "Carga máxima",
           "costPerKm": "Custo por km",
           "type": "Tipo",
           "costMissing": "Sem custo por km, o custo e a margem dos orçamentos ficam errados.",
-          "privacy": "O custo por km só é visível para administradores. As alterações não mudam orçamentos já enviados."
+          "privacy": "O custo por km só é visível para administradores. As alterações não mudam orçamentos já enviados.",
+          "saveOnBlur": "Guarda ao sair do campo",
+          "saving": "A guardar…",
+          "saved": "Guardado",
+          "formErrors": {
+            "notFound": "Este veículo já não existe na tua frota. Recarrega a página.",
+            "failed": "Não foi possível guardar. Tenta outra vez."
+          }
         },
         "usage": {
           "title": "Uso em {month}",
@@ -1394,7 +1400,21 @@
           "addedNoCost": "Veículo adicionado sem custo por km",
           "costChanged": "Custo por km: {from} → {to}",
           "maxLoadChanged": "Carga máxima: {from} → {to} kg",
-          "deactivated": "Desativado: {reason}"
+          "deactivated": "Desativado: {reason}",
+          "typeChanged": "Tipo: {from} → {to}",
+          "capacityChanged": "Capacidade: {from} → {to} m³",
+          "costSet": "Custo por km definido: {to}",
+          "reactivated": "Reativado"
+        },
+        "deactivation": {
+          "title": "Porque fica inativo?",
+          "note": "Um veículo inativo não aparece nos orçamentos nem na agenda.",
+          "confirm": "Desativar",
+          "cancel": "Cancelar",
+          "reasons": {
+            "workshop": "Na oficina",
+            "other": "Outro motivo"
+          }
         }
       },
       "empty": {

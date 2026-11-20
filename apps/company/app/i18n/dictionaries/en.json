@@ -1374,13 +1374,19 @@
         },
         "data": {
           "title": "Vehicle details",
-          "readOnly": "Editing coming soon",
           "capacity": "Capacity",
           "maxLoad": "Maximum load",
           "costPerKm": "Cost per km",
           "type": "Type",
           "costMissing": "Without a cost per km, the cost and margin of quotes are wrong.",
-          "privacy": "Cost per km is only visible to administrators. Changes do not affect quotes already sent."
+          "privacy": "Cost per km is only visible to administrators. Changes do not affect quotes already sent.",
+          "saveOnBlur": "Saves when you leave the field",
+          "saving": "Saving…",
+          "saved": "Saved",
+          "formErrors": {
+            "notFound": "This vehicle is no longer in your fleet. Reload the page.",
+            "failed": "Could not save. Try again."
+          }
         },
         "usage": {
           "title": "Use in {month}",
@@ -1394,7 +1400,21 @@
           "addedNoCost": "Vehicle added without cost per km",
           "costChanged": "Cost per km: {from} → {to}",
           "maxLoadChanged": "Maximum load: {from} → {to} kg",
-          "deactivated": "Deactivated: {reason}"
+          "deactivated": "Deactivated: {reason}",
+          "typeChanged": "Type: {from} → {to}",
+          "capacityChanged": "Capacity: {from} → {to} m³",
+          "costSet": "Cost per km set: {to}",
+          "reactivated": "Reactivated"
+        },
+        "deactivation": {
+          "title": "Why is it going inactive?",
+          "note": "An inactive vehicle doesn't appear in quotes or in the schedule.",
+          "confirm": "Deactivate",
+          "cancel": "Cancel",
+          "reasons": {
+            "workshop": "In the workshop",
+            "other": "Other reason"
+          }
         }
       },
       "empty": {

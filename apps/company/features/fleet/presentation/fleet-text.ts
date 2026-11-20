@@ -1,7 +1,7 @@
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { interpolate, pluralize } from "@/app/i18n/interpolate";
-import { formatDate, formatDayMonth, formatEuro, formatInteger } from "@/app/lib/format";
+import { formatCompact, formatDate, formatDayMonth, formatEuro, formatInteger } from "@/app/lib/format";
 import { daysSinceLastUse, nextJob, stateOf, type VehicleState } from "../domain/fleet";
 import type { Vehicle, VehicleEvent } from "../domain/types";
 
@@ -72,14 +72,29 @@ export function describeEvent(event: VehicleEvent, t: FleetText): { title: strin
   switch (event.kind) {
     case "added":
       return { title: event.withoutCost ? h.addedNoCost : h.added, meta };
+    case "type-changed":
+      return { title: interpolate(h.typeChanged, { from: t.new.types[event.from].label, to: t.new.types[event.to].label }), meta };
+    case "capacity-changed":
+      return { title: interpolate(h.capacityChanged, { from: formatCompact(event.fromM3), to: formatCompact(event.toM3) }), meta };
     case "cost-changed":
-      return { title: interpolate(h.costChanged, { from: formatEuro(event.fromCents), to: formatEuro(event.toCents) }), meta };
+      return {
+        title:
+          event.fromCents === null
+            ? interpolate(h.costSet, { to: formatEuro(event.toCents) })
+            : interpolate(h.costChanged, { from: formatEuro(event.fromCents), to: formatEuro(event.toCents) }),
+        meta,
+      };
     case "max-load-changed":
       return {
-        title: interpolate(h.maxLoadChanged, { from: formatInteger(event.fromKg), to: formatInteger(event.toKg) }),
+        title: interpolate(h.maxLoadChanged, {
+          from: event.fromKg === null ? "—" : formatInteger(event.fromKg),
+          to: event.toKg === null ? "—" : formatInteger(event.toKg),
+        }),
         meta,
       };
     case "deactivated":
       return { title: interpolate(h.deactivated, { reason: t.inactiveReasons[event.reason].toLowerCase() }), meta };
+    case "reactivated":
+      return { title: h.reactivated, meta };
   }
 }

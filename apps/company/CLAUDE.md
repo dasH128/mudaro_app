@@ -20,7 +20,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Pedidos · Lista | `/[lang]/orders` | Conectada a Supabase (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Conectada a Supabase (RF-19 a RF-27, 18/11/2026). Catálogo real, borrador guardado con `save_inventory_draft` al cambiar de paso y con "Guardar e sair", "Concluir" envía la versión (`submit_inventory`). Con el inventario ya enviado muestra "Editar inventário", que abre una versión nueva |
 | Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Pestaña Orçamentos con las versiones (paso 5.4b). Con el envío ganado, Resumo muestra el trabajo programado y enlaza a la agenda (paso 5.6). Pestaña en la URL (`?tab=`) |
-| Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05, solo listar y detalle). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
+| Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1). Desde el paso 6.0a (20/11/2026) el panel edita tipo, capacidad, carga y coste por km al salir de cada campo (`update_vehicle_data`) y el interruptor activa o desactiva el vehículo, pidiendo antes el motivo (`set_vehicle_active`). Cada cambio queda en el histórico. Matrícula y nombre no se editan |
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
 | Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
@@ -110,15 +110,15 @@ features/
       new-vehicle.ts        ← alta: tipos, valores habituales por tipo (VehiclePreset), límites, NewVehicle, FleetSnapshot y parseDecimal
       plate.ts              ← matrículas de Portugal: normalizePlate (AA-00-AA) y compactPlate
     application/
-      actions/              ← create-vehicle (+ state.ts)
-      schemas/new-vehicle.ts ← zod en servidor; los errores son códigos que traduce el formulario
+      actions/              ← create-vehicle y edit-vehicle (datos y activar o desactivar) (+ state.ts)
+      schemas/              ← new-vehicle.ts y vehicle-data.ts, zod en servidor; los errores son códigos que traduce el formulario
     infrastructure/
-      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ includeCost }) y createVehicle (rpc `create_vehicle`)
+      fleet.repo.ts         ← puerta de entrada: getFleetOverview({ includeCost }), createVehicle, updateVehicleData y setVehicleActive
     presentation/
       fleet-href.ts         ← enlaces con filtro, orden, vista y vehículo en la URL
       fleet-text.ts         ← estado, último/próximo uso y histórico → textos del diccionario
       components/           ← fleet-header (+ capacity-pill, único cliente con la ayuda), fleet-alerts, fleet-toolbar,
-                              fleet-table, fleet-cards, vehicle-panel, fleet-empty (+ fleet-empty-art), fleet-parts;
+                              fleet-table, fleet-cards, vehicle-panel (+ vehicle-data-form y vehicle-active-switch, clientes), fleet-empty (+ fleet-empty-art), fleet-parts;
                               alta: new-vehicle-form (único cliente grande), vehicle-type-section, vehicle-details-sections
                               (identificación, capacidad y costes, disponibilidad, próximamente) y new-vehicle-aside (índice y previsualización)
   team/
@@ -252,7 +252,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
   - **Pantalla Clientes** ya lee las fichas reales (ver su fila en la tabla de pantallas). Las fichas de ejemplo salen siempre detrás de las reales, con cualquier orden.
   - **Ascensor:** la base lo llama `large` y el dominio `normal`. Lo traducen `liftOf` (orders) y `LIFT_FROM_DB`/`LIFT_TO_DB` (inventory). Igual con el desmontaje: `disassembly` en la base y `dismantle` en el dominio (`itemFlagOf`).
 - Pedidos · Primeiro uso (11/11/2026, solo diseño): cuando la empresa no tiene ningún pedido, `/orders` muestra `orders-empty.tsx` (sobre `app/components/first-use.tsx`) en lugar de banner, pipeline y lista. No hay prototipo: se derivó de P7-1. A diferencia de Frota y Equipa, el botón "Criar o primeiro pedido" está activo (lleva a `/orders/new`). El pie solo lleva una nota, sin insignia de asistente. "Tudo arrumado por aqui." (`rows.emptyTitle`) se conserva para cuando hay pedidos pero ninguno cumple el filtro (p. ej. "Precisam de ti" sin urgentes). Las tres ventajas no prometen envío del enlace por canal hasta que exista el paso 4b. Sin revisar en tema oscuro ni en móvil.
-- Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Pendiente: edición, baja y reactivación del vehículo, y los cambios de coste o carga en el histórico. Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
+- Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Edición, baja y reactivación hechas en el paso 6.0a (migración `20261120100000_vehicle_edit.sql`). Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
 - **Pendiente (decidido el 09/11/2026): pedido y envío, y "Orçamentos".** El modelo (`docs/diagram/mudaro-model.dbml`) separa el pedido (`orders`, la mudanza y su enlace) del envío (`shipments`, el pedido enviado a una empresa, con estado y presupuestos). La lista de pedidos pasará a mostrar envíos, con `shipments.number` como número visible. El código aún no lo refleja: `OrderStatus` y `OrderStage` viven en el pedido, `lost` sigue como TODO y no existe `cancelled` (RF-69). El término del presupuesto es `quotes` en el código y "Orçamentos" en la interfaz, y lo que se llamaba `proposals`, `proposta` o `requestId` se renombró el 19/11/2026 (paso 5.0): `features/quotes`, la ruta `/quotes`, `NavKey` y las claves de los diccionarios. Los números de ejemplo pasan de `PR-` a `ORC-`. Lista completa de pendientes en `docs/plan-modelo-bd.md` y al final del DBML.
 
 - `app/[lang]/page.tsx` (plantilla de Next) eliminado; el inicio vive en `app/[lang]/(app)/page.tsx`.
