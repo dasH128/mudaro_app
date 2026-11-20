@@ -2153,7 +2153,7 @@
       "stats": {
         "jobsToday": {
           "label": "Trabajos hoy",
-          "hint": "respecto a ayer"
+          "hint": "Programados para hoy"
         },
         "inProgress": {
           "label": "En curso",
@@ -2166,8 +2166,8 @@
       },
       "attention": {
         "title": "Requiere tu atención",
-        "text": "Incidencia {incident} en el trabajo {job}: {reason}.",
-        "action": "Revisar incidencia"
+        "text": "Incidencia sin resolver en el trabajo {job}: {reason}.",
+        "action": "Ver trabajo"
       },
       "filters": {
         "label": "Filtrar por estado",
@@ -2249,7 +2249,7 @@
           },
           "won": {
             "label": "Ganados",
-            "hint": "Esta semana"
+            "hint": "Presupuesto aceptado"
           }
         }
       },
@@ -2257,10 +2257,10 @@
         "title": "Resumen de la flota",
         "viewFleet": "Ver flota",
         "vehicles": "vehículos",
-        "aria": "{total} vehículos: {service} en servicio, {loading} cargando, {available} disponibles",
+        "aria": "{total} vehículos: {service} en servicio, {loading} con trabajo hoy, {available} disponibles",
         "legend": {
           "service": "En servicio",
-          "loading": "Cargando",
+          "loading": "Con trabajo hoy",
           "available": "Disponibles"
         }
       },
@@ -2272,7 +2272,11 @@
           "crew-left": "El equipo salió de la base",
           "quote-accepted": "Presupuesto aceptado",
           "delivery-done": "Entrega concluida",
-          "incident-logged": "Incidencia registrada"
+          "incident-logged": "Incidencia registrada",
+          "crew-assigned": "Equipo asignado",
+          "pickup-done": "Recogida registrada",
+          "incident-resolved": "Incidencia resuelta",
+          "job-closed": "Trabajo cerrado"
         },
         "signed": "Firmada por el cliente",
         "crew": "{vehicle}, {crew}"

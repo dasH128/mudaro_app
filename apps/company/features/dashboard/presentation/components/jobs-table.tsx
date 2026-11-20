@@ -68,7 +68,7 @@ export function JobsTable({ lang, t, jobs }: { lang: Locale; t: HomeText; jobs: 
               </div>
               <div role="cell" className={cell}>
                 <span className="font-bold">{job.client}</span>
-                <span className="text-xs text-muted">{describeJobKind(job, t)}</span>
+                {job.kind ? <span className="text-xs text-muted">{describeJobKind(job, t)}</span> : null}
               </div>
               <div role="cell" className={cell}>
                 <span className="text-sm font-medium">

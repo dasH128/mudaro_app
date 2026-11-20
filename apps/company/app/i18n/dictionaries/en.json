@@ -2153,7 +2153,7 @@
       "stats": {
         "jobsToday": {
           "label": "Jobs today",
-          "hint": "vs. yesterday"
+          "hint": "Scheduled for today"
         },
         "inProgress": {
           "label": "In progress",
@@ -2166,8 +2166,8 @@
       },
       "attention": {
         "title": "Needs your attention",
-        "text": "Incident {incident} on job {job}: {reason}.",
-        "action": "Review incident"
+        "text": "Open incident on job {job}: {reason}.",
+        "action": "View job"
       },
       "filters": {
         "label": "Filter by status",
@@ -2249,7 +2249,7 @@
           },
           "won": {
             "label": "Won",
-            "hint": "This week"
+            "hint": "Quote accepted"
           }
         }
       },
@@ -2257,10 +2257,10 @@
         "title": "Fleet summary",
         "viewFleet": "View fleet",
         "vehicles": "vehicles",
-        "aria": "{total} vehicles: {service} in service, {loading} loading, {available} available",
+        "aria": "{total} vehicles: {service} in service, {loading} booked today, {available} available",
         "legend": {
           "service": "In service",
-          "loading": "Loading",
+          "loading": "Booked today",
           "available": "Available"
         }
       },
@@ -2272,7 +2272,11 @@
           "crew-left": "Crew left the base",
           "quote-accepted": "Quote accepted",
           "delivery-done": "Delivery completed",
-          "incident-logged": "Incident logged"
+          "incident-logged": "Incident logged",
+          "crew-assigned": "Crew assigned",
+          "pickup-done": "Pickup recorded",
+          "incident-resolved": "Incident resolved",
+          "job-closed": "Job closed"
         },
         "signed": "Signed by the client",
         "crew": "{vehicle}, {crew}"

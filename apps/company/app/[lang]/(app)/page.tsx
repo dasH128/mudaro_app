@@ -6,6 +6,7 @@ import { connection } from "next/server";
 import { hasLocale } from "@/app/i18n/config";
 import { requireCompanySession } from "@/features/auth/application/require-session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
+import { todayLisbon } from "@/app/lib/format";
 import { DEFAULT_JOB_FILTER, countJobsByFilter, filterJobs, isJobFilter } from "@/features/dashboard/domain/jobs";
 
 import { getDashboard } from "@/features/dashboard/infrastructure/dashboard.repo";
@@ -36,11 +37,11 @@ export default async function DashboardPage({ searchParams }: PageProps<"/[lang]
   // La cabecera muestra la fecha de hoy: se calcula en cada petición, nunca en el prerender
   await connection();
   const today = new Date();
-  const dashboard = await getDashboard();
+  const dashboard = await getDashboard({ today: todayLisbon(today) });
 
   return (
     <>
-      <DashboardHeader lang={locale} t={t} today={today} unreadNotifications={2} />
+      <DashboardHeader lang={locale} t={t} today={today} unreadNotifications={0} />
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-w-0 flex-col gap-5">
           <StatCards t={t} stats={dashboard.stats} />
@@ -50,7 +51,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/[lang]
           <Pipeline lang={locale} t={t} stages={dashboard.stages} />
         </div>
         <div className="flex min-w-0 flex-col gap-5">
-          <FleetSummary lang={locale} t={t} />
+          <FleetSummary lang={locale} t={t} fleet={dashboard.fleet} />
           <RecentActivity lang={locale} t={t} activity={dashboard.activity} />
           <Shortcuts lang={locale} t={t} />
         </div>

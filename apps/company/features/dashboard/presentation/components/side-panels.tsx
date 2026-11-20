@@ -4,7 +4,7 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { ROUTES, localePath } from "@/app/lib/routes";
-import type { ActivityItem, ActivityTone } from "@/features/dashboard/domain/types";
+import type { ActivityItem, ActivityTone, FleetToday } from "@/features/dashboard/domain/types";
 import { describeActivityDetail, type HomeText } from "../home-text";
 
 const card = "flex flex-col rounded-3xl border border-line bg-surface p-5.5";
@@ -18,16 +18,29 @@ const SHORTCUTS = [
   { key: "sendLink", icon: "link", route: ROUTES.orders.new },
 ] as const;
 
-// Datos de ejemplo de la flota (12 vehículos); saldrán de la frota real.
+// Colores de la leyenda de la flota; los números salen de la Agenda (paso 6.8).
 const LEGEND = [
-  { key: "service", value: 8, swatch: "bg-foreground" },
-  { key: "loading", value: 2, swatch: "bg-primary" },
-  { key: "available", value: 2, swatch: "bg-accent" },
+  { key: "service", swatch: "bg-foreground", stroke: "stroke-foreground" },
+  { key: "loading", swatch: "bg-primary", stroke: "stroke-primary" },
+  { key: "available", swatch: "bg-accent", stroke: "stroke-accent" },
 ] as const;
 
-export function FleetSummary({ lang, t }: { lang: Locale; t: HomeText }) {
+/** 2π · 52, el radio del donut. */
+const CIRCUMFERENCE = 2 * Math.PI * 52;
+
+export function FleetSummary({ lang, t, fleet }: { lang: Locale; t: HomeText; fleet: FleetToday }) {
   const f = t.fleet;
-  const total = LEGEND.reduce((sum, item) => sum + item.value, 0);
+  const legend = LEGEND.map((item) => ({ ...item, value: fleet[item.key] }));
+  const total = legend.reduce((sum, item) => sum + item.value, 0);
+  // Arcos del donut proporcionales a cada estado, con un hueco de 2 px entre ellos
+  const arcs = legend
+    .reduce<{ key: string; stroke: string; start: number; share: number }[]>((acc, item) => {
+      const previous = acc[acc.length - 1];
+      const start = previous ? previous.start + previous.share : 0;
+      return [...acc, { key: item.key, stroke: item.stroke, start, share: total === 0 ? 0 : (item.value / total) * CIRCUMFERENCE }];
+    }, [])
+    .filter((arc) => arc.share > 0)
+    .map((arc) => ({ ...arc, length: Math.max(arc.share - (arc.share >= CIRCUMFERENCE ? 0 : 2), 0) }));
   return (
     <section aria-labelledby="fleet" className={`${card} gap-[18px]`}>
       <div className="flex items-center justify-between gap-3">
@@ -40,18 +53,29 @@ export function FleetSummary({ lang, t }: { lang: Locale; t: HomeText }) {
         </Link>
       </div>
       <div className="flex flex-wrap items-center gap-6">
-        {/* Donut: circunferencia 2π·52 ≈ 326,7; cada arco deja un hueco de 2 px */}
+        {/* Donut: un arco por estado, proporcional a su número */}
         <svg
           width="128"
           height="128"
           viewBox="0 0 128 128"
           role="img"
-          aria-label={interpolate(f.aria, { total, service: LEGEND[0].value, loading: LEGEND[1].value, available: LEGEND[2].value })}
+          aria-label={interpolate(f.aria, { total, service: fleet.service, loading: fleet.loading, available: fleet.available })}
         >
           <circle cx="64" cy="64" r="52" fill="none" strokeWidth="14" className="stroke-line-soft" />
-          <circle cx="64" cy="64" r="52" fill="none" strokeWidth="14" strokeDasharray="215.8 110.9" strokeDashoffset="0" transform="rotate(-90 64 64)" className="stroke-foreground" />
-          <circle cx="64" cy="64" r="52" fill="none" strokeWidth="14" strokeDasharray="52.5 274.2" strokeDashoffset="-217.8" transform="rotate(-90 64 64)" className="stroke-primary" />
-          <circle cx="64" cy="64" r="52" fill="none" strokeWidth="14" strokeDasharray="52.5 274.2" strokeDashoffset="-272.2" transform="rotate(-90 64 64)" className="stroke-accent" />
+          {arcs.map((arc) => (
+            <circle
+              key={arc.key}
+              cx="64"
+              cy="64"
+              r="52"
+              fill="none"
+              strokeWidth="14"
+              strokeDasharray={`${arc.length} ${CIRCUMFERENCE - arc.length}`}
+              strokeDashoffset={-arc.start}
+              transform="rotate(-90 64 64)"
+              className={arc.stroke}
+            />
+          ))}
           <text x="64" y="64" textAnchor="middle" fontSize="30" fontWeight="800" className="fill-foreground font-display">
             {total}
           </text>
@@ -60,7 +84,7 @@ export function FleetSummary({ lang, t }: { lang: Locale; t: HomeText }) {
           </text>
         </svg>
         <ul className="flex min-w-35 flex-1 flex-col gap-3 text-sm">
-          {LEGEND.map((item) => (
+          {legend.map((item) => (
             <li key={item.key} className="flex items-center gap-2.5">
               <span className={`size-2.5 rounded-[3px] ${item.swatch}`} />
               <span className="flex-1">{f.legend[item.key]}</span>
@@ -89,7 +113,7 @@ export function RecentActivity({ lang, t, activity }: { lang: Locale; t: HomeTex
       </h2>
       <ol className="flex flex-col gap-4">
         {activity.map((item) => (
-          <li key={item.ref} className="flex items-start gap-3">
+          <li key={item.id} className="flex items-start gap-3">
             <span className={`mt-1.5 size-[9px] flex-none rounded-full ${DOT[item.tone]}`} />
             <span className="w-10 flex-none pt-px text-[13px] text-muted">{item.time}</span>
             <span className="flex flex-col gap-0.5 text-sm">

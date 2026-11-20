@@ -8,7 +8,8 @@ export type HomeText = Dictionary["app"]["home"];
 
 /** "Mudança integral, T3", "Transferência de escritório". */
 export function describeJobKind(job: Job, t: HomeText): string {
-  return interpolate(t.jobs.kinds[job.kind], { typology: job.typology ?? "" });
+  // Sin tipo (datos reales, paso 6.8) no hay línea
+  return job.kind ? interpolate(t.jobs.kinds[job.kind], { typology: job.typology ?? "" }) : "";
 }
 
 /** "64 m³ · 2 viagens". */

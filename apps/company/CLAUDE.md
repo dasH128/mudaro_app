@@ -13,7 +13,7 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Confirmar invitación o recuperación | `/[lang]/auth/confirm` | Hecha (`?type=invite\|recovery`) |
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
 | Acceso bloqueado | `/[lang]/no-access` | Hecha. Motivo calculado en servidor (`blockedReasonOf`): empresa desactivada, cuenta desactivada, operario o cuenta sin empresa. Email de soporte provisional en `app/lib/contact.ts` (pendiente) |
-| Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
+| Início · Operações de hoje | `/[lang]` | Conectada a Supabase (paso 6.8, 20/11/2026): trabajos de hoy (y los que siguen en curso) desde la Agenda, tarjetas de hoy, en curso e incidencias abiertas, aviso con la incidencia abierta más reciente (enlaza a la ficha del trabajo), pedidos por etapa, últimos eventos de los envíos y flota de hoy (en curso, con trabajo hoy, libres). Sin datos para el tipo de mudança ("Mudança integral, T3"), la comparación con ayer ni las notificaciones: no se muestran |
 | Orçamentos · Lista | `/[lang]/quotes` | Conectada a Supabase (paso 5.4b, 19/11/2026): todas las versiones con su estado (caducado se calcula con la validez, RF-45), total con IVA (el firmado si está aceptado) y margen (RNF-03); "Prontos para orçamentar" con los pedidos con inventario recibido sin orçamento enviado; indicadores de los últimos 30 días. Cada fila abre la pestaña Orçamentos del pedido. "Novo orçamento" lleva a los pedidos con inventario recibido. Filtros y orden en la URL |
 | Novo pedido | `/[lang]/orders/new` | Conectada a Supabase (RF-13, RF-14, RF-19). Crea el pedido con la función `create_order` |
 | Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. "Gerar link" crea el enlace del cliente (`share_order_link`, RF-15) y lo muestra una sola vez (la base guarda su hash, RNF-02); después sale "Gerar link novo", con confirmación, que anula el anterior. WhatsApp, SMS y Email abren la app del dispositivo con el mensaje escrito (el envío automático, RF-16, sigue pendiente). La dirección del enlace sale de `CLIENT_APP_URL` (19/11/2026) |
@@ -78,8 +78,7 @@ features/
       types.ts              ← entidades: Job, Stat, Stage, ActivityItem, Attention, Dashboard (códigos y números, sin frases)
       jobs.ts               ← filtros de "Trabalhos de hoje" (estado y texto)
     infrastructure/
-      dashboard.repo.ts     ← puerta de entrada: getDashboard()
-      mock-data.ts          ← datos de ejemplo (sustituir por consultas a Supabase)
+      dashboard.repo.ts     ← puerta de entrada (Supabase): getDashboard({ today }); reutiliza getScheduleOverview de schedule
     presentation/
       components/           ← dashboard-header, stat-cards, attention-banner,
                               jobs-table, pipeline, side-panels
