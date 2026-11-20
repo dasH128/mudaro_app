@@ -89,7 +89,7 @@ export type Admin = {
 };
 
 export type TeamMetrics = {
-  /** Mudança con menos personas asignadas de las que la proposta cuenta. */
+  /** Mudança con menos personas asignadas de las que el presupuesto cuenta. */
   understaffed: { orderId: string; date: string; needed: number } | null;
 };
 

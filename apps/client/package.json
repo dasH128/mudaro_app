@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mudaro/inventory": "workspace:*",
+    "@mudaro/quotes": "workspace:*",
     "@mudaro/ui": "workspace:*",
     "@mudaro/validation": "workspace:*",
     "next": "16.4.6",

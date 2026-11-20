@@ -42,7 +42,7 @@ export type Stat = {
   delta?: number;
 };
 
-export type StageKey = "new" | "link-sent" | "inventory-received" | "proposal-sent" | "won";
+export type StageKey = "new" | "link-sent" | "inventory-received" | "quote-sent" | "won";
 
 export type Stage = {
   key: StageKey;
@@ -52,7 +52,7 @@ export type Stage = {
 
 export type ActivityTone = "primary" | "ink" | "success" | "danger";
 
-export type ActivityEvent = "arrived" | "crew-left" | "proposal-accepted" | "delivery-done" | "incident-logged";
+export type ActivityEvent = "arrived" | "crew-left" | "quote-accepted" | "delivery-done" | "incident-logged";
 
 export type ActivityDetail =
   | { kind: "place"; place: string }

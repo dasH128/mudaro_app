@@ -6,7 +6,7 @@
     "loginTitle": "Entrar · Mudaro",
     "confirmTitle": "Invitación · Mudaro",
     "setPasswordTitle": "Define tu contraseña · Mudaro",
-    "proposalsTitle": "Propuestas · Mudaro",
+    "quotesTitle": "Presupuestos · Mudaro",
     "ordersTitle": "Pedidos · Mudaro",
     "newOrderTitle": "Nuevo pedido · Mudaro",
     "orderCreatedTitle": "Pedido creado · Mudaro",
@@ -18,7 +18,9 @@
     "clientsTitle": "Clientes · Mudaro",
     "homeTitle": "Operaciones de hoy · Mudaro",
     "scheduleTitle": "Agenda · Mudaro",
-    "forgotPasswordTitle": "Recuperar contraseña · Mudaro"
+    "forgotPasswordTitle": "Recuperar contraseña · Mudaro",
+    "pricingTitle": "Tarifas · Mudaro",
+    "quoteEditorTitle": "Presupuesto · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -165,7 +167,7 @@
       "nav": {
         "home": "Inicio",
         "orders": "Pedidos",
-        "proposals": "Propuestas",
+        "quotes": "Presupuestos",
         "schedule": "Agenda",
         "clients": "Clientes",
         "fleet": "Flota",
@@ -174,12 +176,12 @@
         "reports": "Informes"
       }
     },
-    "proposals": {
+    "quotes": {
       "eyebrow": "Operación",
-      "title": "Propuestas",
+      "title": "Presupuestos",
       "subtitle": "Calcula, ajusta y envía presupuestos a partir del inventario del cliente.",
-      "new": "Nueva propuesta",
-      "loading": "Cargando propuestas…",
+      "new": "Nuevo presupuesto",
+      "loading": "Cargando presupuestos…",
       "stats": {
         "toSend": {
           "label": "Por enviar",
@@ -187,22 +189,22 @@
         },
         "awaiting": {
           "label": "A la espera del cliente",
-          "hint": "{amount} en propuestas enviadas"
+          "hint": "{amount} en presupuestos enviados"
         },
         "acceptance": {
           "label": "Tasa de aceptación",
           "hint": "Últimos 30 días"
         },
-        "timeToProposal": {
-          "label": "Tiempo hasta propuesta",
+        "timeToQuote": {
+          "label": "Tiempo hasta presupuesto",
           "value": "{days} días",
           "hint": "Media desde la creación del pedido"
         }
       },
       "ready": {
         "title": "Listos para presupuestar",
-        "subtitle": "Pedidos con inventario recibido y sin propuesta",
-        "create": "Crear propuesta",
+        "subtitle": "Pedidos con inventario recibido y sin presupuesto",
+        "create": "Crear presupuesto",
         "received": "recibido {time}",
         "missingMeasures": {
           "one": "{count} objeto sin medidas",
@@ -210,36 +212,36 @@
         }
       },
       "list": {
-        "title": "Lista de propuestas",
+        "title": "Lista de presupuestos",
         "filterLabel": "Filtrar por estado",
         "tabs": {
-          "all": "Todas",
+          "all": "Todos",
           "draft": "Borradores",
-          "sent": "Enviadas",
-          "accepted": "Aceptadas",
-          "rejected": "Rechazadas",
-          "expired": "Caducadas",
-          "superseded": "Sustituidas"
+          "sent": "Enviados",
+          "accepted": "Aceptados",
+          "rejected": "Rechazados",
+          "expired": "Caducados",
+          "superseded": "Sustituidos"
         },
-        "searchLabel": "Buscar propuestas",
-        "searchPlaceholder": "Cliente, n.º de propuesta o pedido",
+        "searchLabel": "Buscar presupuestos",
+        "searchPlaceholder": "Cliente, n.º de presupuesto o pedido",
         "sortLabel": "Ordenar",
         "sort": {
           "expiry": "Validez más próxima",
           "newest": "Más recientes",
           "value": "Mayor importe"
         },
-        "empty": "Ninguna propuesta coincide con esta búsqueda.",
+        "empty": "Ningún presupuesto coincide con esta búsqueda.",
         "showing": {
-          "one": "Mostrando {shown} de {count} propuesta",
-          "other": "Mostrando {shown} de {count} propuestas"
+          "one": "Mostrando {shown} de {count} presupuesto",
+          "other": "Mostrando {shown} de {count} presupuestos"
         },
         "marginNote": "El margen solo es visible para administradores",
-        "open": "Abrir propuesta {id}",
+        "open": "Abrir presupuesto {id}",
         "routeTo": "a"
       },
       "columns": {
-        "proposal": "Propuesta",
+        "quote": "Presupuesto",
         "clientRoute": "Cliente y ruta",
         "volume": "Volumen",
         "total": "Total con IVA",
@@ -250,16 +252,16 @@
       },
       "status": {
         "draft": "Borrador",
-        "sent": "Enviada",
-        "accepted": "Aceptada",
-        "rejected": "Rechazada",
-        "expired": "Caducada",
-        "superseded": "Sustituida"
+        "sent": "Enviado",
+        "accepted": "Aceptado",
+        "rejected": "Rechazado",
+        "expired": "Caducado",
+        "superseded": "Sustituido"
       },
       "validity": {
-        "notSent": "No enviada",
-        "createdToday": "Creada hoy, {time}",
-        "createdOn": "Creada el {date}",
+        "notSent": "No enviado",
+        "createdToday": "Creado hoy, {time}",
+        "createdOn": "Creado el {date}",
         "expiresToday": "Caduca hoy",
         "expiresIn": {
           "one": "Caduca en {count} día",
@@ -267,17 +269,134 @@
         },
         "valid": "Vigente",
         "until": "Hasta el {date}",
-        "accepted": "Aceptada",
-        "acceptedToday": "Aceptada hoy",
-        "signedAt": "Firmada a las {time}",
-        "signedOn": "Firmada el {date}",
-        "rejected": "Rechazada",
+        "accepted": "Aceptado",
+        "acceptedToday": "Aceptado hoy",
+        "signedAt": "Firmado a las {time}",
+        "signedOn": "Firmado el {date}",
+        "rejected": "Rechazado",
         "reason": "Motivo: {reason}",
         "noReason": "Sin motivo indicado",
         "expired": "Caducó",
         "expiredOn": "El {date}",
-        "superseded": "Sustituida",
+        "superseded": "Sustituido",
         "supersededNote": "Reemplazada por una versión más reciente"
+      },
+      "editor": {
+        "title": "Presupuesto para {name}",
+        "numbered": "ORC-{number} · versión {version}",
+        "numberPending": "Nuevo presupuesto · versión {version}",
+        "basedOn": "Calculado sobre el inventario v{version}",
+        "lastStatus": "La versión {version} está {status}. Al enviar esta, la anterior deja de valer.",
+        "statuses": {
+          "sent": "enviada",
+          "accepted": "aceptada",
+          "rejected": "rechazada",
+          "superseded": "desactualizada"
+        },
+        "noInventory": {
+          "title": "Aún no hay inventario",
+          "text": "El presupuesto se calcula sobre el inventario enviado. Cuando llegue, vuelve aquí."
+        },
+        "won": {
+          "title": "Presupuesto aceptado",
+          "text": "El cliente ya aceptó un presupuesto de este pedido."
+        },
+        "back": "Volver al pedido",
+        "calc": {
+          "title": "Cálculo",
+          "text": "Sugerencia a partir del inventario, la tarifa y la flota. Puedes cambiar cualquier valor.",
+          "volume": "Volumen ajustado",
+          "declared": "{value} declarados",
+          "vehicles": "Vehículos",
+          "trips": {
+            "one": "{count} viaje",
+            "other": "{count} viajes"
+          },
+          "noVehicles": "Sin vehículos activos",
+          "km": "Kilómetros",
+          "kmHint": "De la base a la base, pasando por todas las direcciones.",
+          "operators": "Operarios",
+          "hours": "Horas del equipo",
+          "suggested": "Sugerido: {value}",
+          "reset": "Volver a lo sugerido"
+        },
+        "alerts": {
+          "title": "Pide atención",
+          "no-lift": "{floors} pisos sin ascensor",
+          "far-parking": "Aparcamiento a {meters} m",
+          "special-items": "Objetos especiales: {fragile} frágiles, {dismantle} a desmontar, {extraCrew} de personal extra",
+          "unmeasured": "{count} objetos sin medidas",
+          "extra-trips": "No cabe en un viaje: {trips} viajes",
+          "no-vehicles": "Sin vehículos activos en la flota",
+          "no-km": "Faltan los kilómetros",
+          "minimum-applied": "Se aplica el mínimo por servicio ({amount})",
+          "missing-vehicle-cost": "Un vehículo sin coste por km: el coste sale más bajo"
+        },
+        "lines": {
+          "title": "Líneas del presupuesto",
+          "description": "Descripción",
+          "quantity": "Cant.",
+          "unit": "Ud.",
+          "price": "Precio",
+          "total": "Total",
+          "included": "Incluido",
+          "optional": "Opcional",
+          "optionalHint": "Los opcionales, el cliente elige si los quiere al aceptar.",
+          "remove": "Quitar {name}",
+          "addExtra": "Añadir servicio",
+          "addExtraPlaceholder": "Elegir servicio…",
+          "addManual": "Añadir línea",
+          "newLine": "Nueva línea",
+          "noExtras": "Aún no tienes servicios extra. Créalos en Tarifas.",
+          "clientAsked": "El cliente pidió: {list}",
+          "edited": "cambiada a mano"
+        },
+        "base": {
+          "labour": "Mano de obra",
+          "transport": "Transporte",
+          "floor-surcharge": "Suplemento por piso sin ascensor",
+          "parking-surcharge": "Suplemento de aparcamiento",
+          "minimum": "Ajuste al mínimo por servicio"
+        },
+        "presentation": {
+          "title": "Presentación",
+          "legend": "Precio para el cliente",
+          "fixed": "Precio cerrado",
+          "hourly": "Por hora, con estimación",
+          "validUntil": "Válido hasta",
+          "validHint": "dd/mm/aaaa",
+          "conditions": "Condiciones",
+          "conditionsPlaceholder": "Ej.: incluye seguro de carga. Pago el día de la mudanza."
+        },
+        "summary": {
+          "title": "Resumen",
+          "subtotal": "Subtotal",
+          "vat": "IVA ({pct})",
+          "total": "Total",
+          "withOptional": "Con todos los opcionales: {amount}",
+          "hourlyRate": "{amount} por hora (equipo de {count})",
+          "cost": "Coste estimado",
+          "margin": "Margen",
+          "adminOnly": "Solo los administradores ven el coste y el margen."
+        },
+        "save": "Guardar borrador",
+        "saving": "Guardando…",
+        "saved": "Borrador guardado.",
+        "send": "Enviar presupuesto",
+        "sending": "Enviando…",
+        "sendNote": "Una vez enviado, el presupuesto no se cambia: para cambiarlo, creas una versión nueva.",
+        "errors": {
+          "invalid": "Hay datos no válidos. Revisa las líneas y los valores.",
+          "noInventory": "El pedido aún no tiene inventario.",
+          "shipmentClosed": "Este pedido ya se ganó o se canceló.",
+          "inventoryChanged": "El cliente envió un inventario nuevo. Recarga la página para recalcular.",
+          "empty": "Añade al menos una línea.",
+          "invalidValidity": "Indica una validez a partir de hoy (dd/mm/aaaa).",
+          "notAllowed": "No puedes cambiar este pedido.",
+          "failed": "No se pudo guardar. Vuelve a intentarlo."
+        },
+        "sendConfirm": "Sí, enviar al cliente",
+        "cancel": "Cancelar"
       }
     },
     "orders": {
@@ -468,13 +587,13 @@
           }
         },
         "actions": {
-          "create-proposal": "Crear propuesta",
-          "continue-proposal": "Continuar",
+          "create-quote": "Crear presupuesto",
+          "continue-quote": "Continuar",
           "resend-link": "Reenviar enlace",
           "share-link": "Compartir enlace",
           "copy-link": "Generar enlace nuevo",
           "fill-inventory": "Rellenar inventario",
-          "view-proposal": "Ver propuesta",
+          "view-quote": "Ver presupuesto",
           "view-job": "Ver trabajo"
         },
         "soon": "Disponible próximamente",
@@ -484,7 +603,7 @@
             "one": "Envió el inventario {time}. Faltan las medidas de {count} objeto antes de cerrar el precio.",
             "other": "Envió el inventario {time}. Faltan las medidas de {count} objetos antes de cerrar el precio."
           },
-          "draftProposal": "Ya empezaste la propuesta. Está guardada como borrador {time}.",
+          "draftQuote": "Ya empezaste el presupuesto. Está guardado como borrador {time}.",
           "linkExpiresToday": "El enlace caduca hoy y el inventario aún no ha llegado. Vale la pena un recordatorio.",
           "linkExpiresIn": {
             "one": "El enlace caduca en {count} día y el inventario aún no ha llegado. Vale la pena un recordatorio.",
@@ -498,15 +617,15 @@
           "justCreated": "Creado ahora. Falta compartir el enlace.",
           "justCreatedSelf": "Creado ahora. Falta rellenar el inventario.",
           "filling": "Rellenándolo con calma. Enlace activo hasta el {date}.",
-          "proposalSentToday": "Propuesta v{version} enviada. Caduca hoy.",
-          "proposalSent": {
-            "one": "Propuesta v{version} enviada. Caduca en {count} día.",
-            "other": "Propuesta v{version} enviada. Caduca en {count} días."
+          "quoteSentToday": "Presupuesto v{version} enviado. Caduca hoy.",
+          "quoteSent": {
+            "one": "Presupuesto v{version} enviado. Caduca en {count} día.",
+            "other": "Presupuesto v{version} enviado. Caduca en {count} días."
           },
-          "proposalExpired": "Propuesta v{version} enviada. Ya caducó.",
+          "quoteExpired": "Presupuesto v{version} enviado. Ya caducó.",
           "wonToday": "Aceptó y firmó hoy a las {time}.",
           "wonOn": "Aceptó y firmó el {date}.",
-          "lostReason": "Rechazó la propuesta. Motivo: {reason}.",
+          "lostReason": "Rechazó el presupuesto. Motivo: {reason}.",
           "lostNoReason": "Perdido sin motivo indicado."
         },
         "side": {
@@ -552,7 +671,12 @@
           "El enlace está activo durante {days} días."
         ],
         "namePlaceholder": "[NOMBRE]",
-        "linkPlaceholder": "[ENLACE DEL PEDIDO]"
+        "linkPlaceholder": "[ENLACE DEL PEDIDO]",
+        "quoteBody": [
+          "¡Hola {name}! Soy {sender}, de {company}.",
+          "El presupuesto de su mudanza está listo. Puede verlo y aceptarlo aquí, sin crear cuenta:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "Nuevo pedido",
@@ -573,7 +697,7 @@
           "email": "Email",
           "optional": "(opcional)",
           "emailPlaceholder": "nombre@ejemplo.pt",
-          "emailHint": "Con email, el cliente recibe copia de la propuesta aceptada y de las actas.",
+          "emailHint": "Con email, el cliente recibe copia del presupuesto aceptado y de las actas.",
           "addTaxId": "Añadir NIF",
           "taxId": "NIF",
           "taxIdHint": "9 dígitos.",
@@ -658,7 +782,7 @@
             },
             {
               "title": "Recibes un aviso",
-              "text": "Con el inventario recibido, preparas la propuesta."
+              "text": "Con el inventario recibido, preparas el presupuesto."
             }
           ],
           "afterSelf": [
@@ -671,7 +795,7 @@
               "text": "Piso, ascensor, escaleras y aparcamiento."
             },
             {
-              "title": "Preparas la propuesta",
+              "title": "Preparas el presupuesto",
               "text": "El cálculo usa el inventario que has rellenado."
             }
           ]
@@ -696,7 +820,7 @@
         "routeTo": "a",
         "stops": "Paradas: {list}",
         "shareTitle": "Ahora envía el enlace a {name}",
-        "shareText": "Por aquí indica {name} qué se va a llevar. Más adelante verá la propuesta en el mismo enlace.",
+        "shareText": "Por aquí indica {name} qué se va a llevar. Más adelante verá el presupuesto en el mismo enlace.",
         "linkLabel": "Enlace del pedido",
         "copy": "Copiar enlace",
         "validUntil": "Activo hasta el {date} · da acceso solo a este pedido",
@@ -737,6 +861,13 @@
           "fillInventory": "Rellenar yo el inventario",
           "createAnother": "Crear otro pedido",
           "view": "Ver pedido"
+        },
+        "quote": {
+          "title": "Enlace del cliente · {id}",
+          "shareTitle": "Envía el presupuesto a {name}",
+          "shareText": "Con el enlace, {name} ve el presupuesto y lo acepta con su firma.",
+          "emailSubject": "El presupuesto de su mudanza",
+          "notice": "El enlace solo da acceso a este pedido. Verás la respuesta de {name} en la pestaña Presupuestos."
         }
       },
       "inventory": {
@@ -871,7 +1002,7 @@
         },
         "actions": {
           "more": "Más acciones",
-          "createProposal": "Crear propuesta",
+          "createQuote": "Crear presupuesto",
           "shareLink": "Compartir enlace"
         },
         "journey": {
@@ -881,8 +1012,9 @@
             "created": "Pedido creado",
             "link-shared": "Enlace compartido",
             "inventory-submitted": "Inventario recibido",
-            "proposal-sent": "Propuesta enviada",
-            "won": "Ganado"
+            "quote-sent": "Presupuesto enviado",
+            "won": "Ganado",
+            "lost": "Perdido"
           }
         },
         "alert": {
@@ -900,11 +1032,15 @@
           "summary": "Resumen",
           "inventory": "Inventario",
           "addresses": "Direcciones",
-          "proposals": "Propuestas",
+          "quotes": "Presupuestos",
           "history": "Historial"
         },
         "summary": {
           "moveTitle": "La mudanza",
+          "jobTitle": "Trabajo programado",
+          "jobWhen": "{date} a las {time}",
+          "jobPending": "Equipo y vehículo aún sin asignar.",
+          "viewSchedule": "Ver en la agenda",
           "edit": "Editar",
           "date": "Fecha de la mudanza",
           "volume": "Volumen declarado",
@@ -918,7 +1054,7 @@
           },
           "noInventory": "Aún sin inventario",
           "distance": "Distancia entre direcciones",
-          "distanceSub": "Se calcula en la propuesta",
+          "distanceSub": "Se calcula en el presupuesto",
           "distanceUnknown": "Por calcular",
           "origin": "Origen",
           "destination": "Destino",
@@ -974,15 +1110,34 @@
             "permit": "Necesita licencia"
           }
         },
-        "proposals": {
-          "emptyTitle": "Aún no hay propuestas",
-          "emptyReady": "El inventario está listo. Cuando crees la propuesta, sus versiones y su estado aparecerán aquí.",
-          "emptyWaiting": "Cuando el inventario esté listo podrás crear la propuesta. Sus versiones y su estado aparecerán aquí.",
+        "quotes": {
+          "emptyTitle": "Aún no hay presupuestos",
+          "emptyReady": "El inventario está listo. Cuando crees el presupuesto, sus versiones y su estado aparecerán aquí.",
+          "emptyWaiting": "Cuando el inventario esté listo podrás crear el presupuesto. Sus versiones y su estado aparecerán aquí.",
           "count": {
-            "one": "Este pedido tiene {count} propuesta.",
-            "other": "Este pedido tiene {count} propuestas."
+            "one": "Este pedido tiene {count} presupuesto.",
+            "other": "Este pedido tiene {count} presupuestos."
           },
-          "view": "Ver propuestas"
+          "view": "Ver presupuestos",
+          "number": "ORC-{number} · versión {version}",
+          "statuses": {
+            "draft": "Borrador",
+            "sent": "Enviado",
+            "accepted": "Aceptado",
+            "rejected": "Rechazado",
+            "superseded": "Sustituido",
+            "expired": "Caducado"
+          },
+          "sentOn": "Enviado el {date}",
+          "validUntil": "Válido hasta el {date}",
+          "acceptedOn": "Aceptado el {date}",
+          "rejected": "Motivo: {reason}",
+          "inventoryOf": "Inventario v{version}",
+          "outdated": "El cliente envió un inventario nuevo (v{version}). El presupuesto quedó desactualizado: crea una versión nueva.",
+          "create": "Crear presupuesto",
+          "continueDraft": "Continuar borrador",
+          "newVersion": "Crear versión nueva",
+          "total": "{amount} con IVA"
         },
         "history": {
           "title": "Historial",
@@ -997,8 +1152,8 @@
           "inventorySubmitted": "El cliente envió el inventario (v{version})",
           "inventoryMeta": "{when} · aviso enviado al equipo",
           "inventoryFilled": "La empresa rellenó el inventario (v{version})",
-          "proposalSent": "Propuesta enviada (v{version})",
-          "won": "Propuesta aceptada",
+          "quoteSent": "Presupuesto enviado (v{version})",
+          "won": "Presupuesto aceptado",
           "lost": "Pedido perdido",
           "meta": "{when} · {actor}"
         },
@@ -1020,15 +1175,20 @@
             "one": "Queda {count} día.",
             "other": "Quedan {count} días."
           },
-          "canEdit": "{name} puede cambiar el inventario hasta aceptar una propuesta.",
+          "canEdit": "{name} puede cambiar el inventario hasta recibir el presupuesto.",
           "expiredText": "El enlace caducó: {name} ya no puede cambiar el inventario.",
-          "closedText": "El pedido está cerrado: el enlace ya no da acceso.",
+          "closedText": "Presupuesto aceptado: con el enlace, {name} consulta el presupuesto firmado.",
           "copy": "Generar enlace nuevo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
           "noteLabel": "Nota interna",
           "notePlaceholder": "Solo lo ve tu equipo. Ej.: prefiere por la mañana, tiene un gato.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "Sin enlace",
+          "noLinkText": "{name} aún no tiene enlace: sin él no puede ver el presupuesto.",
+          "generate": "Generar enlace",
+          "quoteText": "Con el enlace, {name} ve el presupuesto y puede aceptarlo o rechazarlo.",
+          "lostText": "{name} rechazó el presupuesto. Si creas una versión nueva, aparece en el mismo enlace."
         }
       }
     },
@@ -1042,16 +1202,16 @@
         "one": "{count} vehículo",
         "other": "{count} vehículos"
       },
-      "proposalsWord": {
-        "one": "propuesta",
-        "other": "propuestas"
+      "quotesWord": {
+        "one": "presupuesto",
+        "other": "presupuestos"
       },
       "acceptedWord": {
         "one": "{count} aceptada",
         "other": "{count} aceptadas"
       },
       "since": "desde {date} · {by}",
-      "inactiveNote": "No entra en las propuestas ni en la agenda",
+      "inactiveNote": "No entra en los presupuestos ni en la agenda",
       "inactiveReasons": {
         "workshop": "En el taller",
         "other": "Inactivo"
@@ -1081,11 +1241,11 @@
         "nothing": "nada marcado"
       },
       "capacity": {
-        "suffix": "disponibles para propuestas",
+        "suffix": "disponibles para presupuestos",
         "help": {
-          "label": "Cómo entra la flota en las propuestas",
-          "title": "Cómo entra la flota en las propuestas",
-          "text": "El cálculo elige la combinación más pequeña de vehículos activos que lleva el volumen ajustado. Si no llega, propone viajes extra. Un vehículo inactivo no aparece en las propuestas ni en la agenda.",
+          "label": "Cómo entra la flota en los presupuestos",
+          "title": "Cómo entra la flota en los presupuestos",
+          "text": "El cálculo elige la combinación más pequeña de vehículos activos que lleva el volumen ajustado. Si no llega, propone viajes extra. Un vehículo inactivo no aparece en los presupuestos ni en la agenda.",
           "exampleVolume": "38,4 m³",
           "exampleResult": "Camión grande + Furgón V-02"
         }
@@ -1102,11 +1262,11 @@
         "label": "Avisos de la flota",
         "capacity": {
           "title": {
-            "one": "Faltó capacidad en {count} propuesta",
-            "other": "Faltó capacidad en {count} propuestas"
+            "one": "Faltó capacidad en {count} presupuesto",
+            "other": "Faltó capacidad en {count} presupuestos"
           },
           "text": "Este mes necesitaron un viaje extra. Un vehículo más grande podría bajar el precio.",
-          "action": "Ver propuestas"
+          "action": "Ver presupuestos"
         },
         "idle": {
           "title": {
@@ -1114,8 +1274,8 @@
             "other": "{name} parado hace {count} días"
           },
           "text": {
-            "one": "Solo entró en {count} propuesta este mes. Confirma si aún hace falta.",
-            "other": "Solo entró en {count} propuestas este mes. Confirma si aún hace falta."
+            "one": "Solo entró en {count} presupuesto este mes. Confirma si aún hace falta.",
+            "other": "Solo entró en {count} presupuestos este mes. Confirma si aún hace falta."
           },
           "action": "Ver vehículo"
         },
@@ -1124,7 +1284,7 @@
             "one": "{count} vehículo sin coste por km",
             "other": "{count} vehículos sin coste por km"
           },
-          "text": "Sin él, el coste y el margen de las propuestas salen mal.",
+          "text": "Sin él, el coste y el margen de los presupuestos salen mal.",
           "action": "Completar datos"
         }
       },
@@ -1143,7 +1303,7 @@
           "capacity": "Capacidad",
           "lastUse": "Último uso",
           "nextUse": "Próximo uso",
-          "proposals": "En propuestas"
+          "quotes": "En presupuestos"
         },
         "view": {
           "label": "Modo de visualización",
@@ -1158,15 +1318,15 @@
         "capacity": "Capacidad",
         "lastUse": "Último uso",
         "nextUse": "Próximo uso",
-        "proposals": "En propuestas · 30 d",
+        "quotes": "En presupuestos · 30 d",
         "actions": "Acciones",
         "viewDetail": "Ver detalle de {name}",
         "open": "Abrir {name}",
         "costMissing": "Falta el coste por km",
         "notIncluded": "No entra",
         "inactiveTitle": "Inactivos · {count}",
-        "inactiveHint": "no entran en las propuestas ni en la agenda",
-        "footnote": "\"En propuestas\": propuestas de los últimos 30 días en las que el cálculo eligió el vehículo, y cuántas se aceptaron.",
+        "inactiveHint": "no entran en los presupuestos ni en la agenda",
+        "footnote": "\"En presupuestos\": presupuestos de los últimos 30 días en los que el cálculo eligió el vehículo, y cuántos se aceptaron.",
         "openSchedule": "Abrir agenda",
         "emptySearch": "Ningún vehículo coincide con la búsqueda.",
         "emptyFilter": "Ningún vehículo en este filtro."
@@ -1207,8 +1367,8 @@
           "viewSchedule": "Ver en la agenda",
           "none": "Sin trabajos marcados."
         },
-        "proposals": {
-          "title": "En propuestas · últimos 30 días",
+        "quotes": {
+          "title": "En presupuestos · últimos 30 días",
           "accepted": "aceptadas",
           "rate": "aceptación"
         },
@@ -1219,8 +1379,8 @@
           "maxLoad": "Carga máxima",
           "costPerKm": "Coste por km",
           "type": "Tipo",
-          "costMissing": "Sin coste por km, el coste y el margen de las propuestas salen mal.",
-          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a propuestas ya enviadas."
+          "costMissing": "Sin coste por km, el coste y el margen de los presupuestos salen mal.",
+          "privacy": "El coste por km solo lo ven los administradores. Los cambios no afectan a presupuestos ya enviados."
         },
         "usage": {
           "title": "Uso en {month}",
@@ -1252,7 +1412,7 @@
           },
           "costs": {
             "title": "Costes más claros",
-            "text": "El coste por km entra en tus propuestas y muestra el margen real."
+            "text": "El coste por km entra en tus presupuestos y muestra el margen real."
           },
           "schedule": {
             "title": "Agenda organizada",
@@ -1323,7 +1483,7 @@
           "plateFormat": "Formato: AA-00-AA o 00-AA-00",
           "name": "Nombre corto",
           "optional": "(opcional)",
-          "nameHint": "Cómo lo llama el equipo. Aparece en la agenda y en las propuestas internas."
+          "nameHint": "Cómo lo llama el equipo. Aparece en la agenda y en los presupuestos internos."
         },
         "capacity": {
           "title": "Capacidad y costes",
@@ -1333,13 +1493,13 @@
           "maxLoad": "Carga máxima",
           "cost": "Coste por km",
           "suggested": "Valor sugerido",
-          "privacy": "Coste por km: combustible, peajes y desgaste. Entra en el coste y el margen de las propuestas y solo lo ven los administradores."
+          "privacy": "Coste por km: combustible, peajes y desgaste. Entra en el coste y el margen de los presupuestos y solo lo ven los administradores."
         },
         "availability": {
           "title": "Disponibilidad",
-          "label": "Disponible para propuestas y agenda",
+          "label": "Disponible para presupuestos y agenda",
           "on": "Entra en el cálculo y en la agenda en cuanto guardes.",
-          "off": "Queda guardado, pero no entra en propuestas ni en la agenda hasta que lo actives."
+          "off": "Queda guardado, pero no entra en presupuestos ni en la agenda hasta que lo actives."
         },
         "upcoming": {
           "badge": "Pronto",
@@ -1364,11 +1524,11 @@
           "noPlate": "matrícula por indicar"
         },
         "impact": {
-          "title": "Qué cambia en las propuestas",
+          "title": "Qué cambia en los presupuestos",
           "fleet": "Flota disponible",
-          "needCapacity": "Indica la capacidad para ver cómo entra este vehículo en las propuestas.",
+          "needCapacity": "Indica la capacidad para ver cómo entra este vehículo en los presupuestos.",
           "active": "Las mudanzas de hasta {capacity} m³ pueden ir solo en este vehículo, y las mayores ganan más combinaciones posibles.",
-          "inactive": "Mientras esté inactivo, no cuenta para las propuestas."
+          "inactive": "Mientras esté inactivo, no cuenta para los presupuestos."
         },
         "checks": {
           "title": "Antes de guardar",
@@ -1426,8 +1586,8 @@
         }
       },
       "help": {
-        "label": "Cómo entra el equipo en las propuestas",
-        "title": "Cómo entra el equipo en las propuestas",
+        "label": "Cómo entra el equipo en los presupuestos",
+        "title": "Cómo entra el equipo en los presupuestos",
         "text": "El cálculo estima cuántos operarios necesita cada mudanza y usa el coste por hora de la tarifa, igual para todos. En la agenda solo aparecen las personas activas.",
         "app": "Los operarios usan la app en el móvil: solo ven los trabajos que les asignas, sin precios ni márgenes."
       },
@@ -1490,8 +1650,8 @@
             "other": "{when} faltan {count} personas en {orderId}"
           },
           "text": {
-            "one": "La propuesta cuenta con {needed} operarios y solo hay {assigned} asignado.",
-            "other": "La propuesta cuenta con {needed} operarios y solo hay {assigned} asignados."
+            "one": "El presupuesto cuenta con {needed} operarios y solo hay {assigned} asignado.",
+            "other": "El presupuesto cuenta con {needed} operarios y solo hay {assigned} asignados."
           },
           "free": "Libres {when}: {names}.",
           "tomorrow": "mañana",
@@ -1714,7 +1874,7 @@
       "tomorrow": "Mañana",
       "line": {
         "inProgress": "{orderId} en curso",
-        "inProgressQuote": "{orderId} en curso · y propuesta a punto de caducar",
+        "inProgressQuote": "{orderId} en curso · y presupuesto a punto de caducar",
         "todayDraft": "{orderId} hoy · nuevo pedido en borrador",
         "inventoryArrived": "{orderId} · el inventario llegó hace {hours} h",
         "missingMeasure": {
@@ -1745,8 +1905,8 @@
           "move-in-progress": "mudanza en curso",
           "pickup-signed": "acta de recogida firmada",
           "sent-inventory": "envió el inventario",
-          "accepted-quote": "aceptó la propuesta",
-          "declined-quote": "rechazó la propuesta",
+          "accepted-quote": "aceptó el presupuesto",
+          "declined-quote": "rechazó el presupuesto",
           "accepted-signed": "aceptó y firmó",
           "signed-delivery": "firmó la entrega",
           "order-created": "pedido creado"
@@ -1815,7 +1975,7 @@
           "one": "{count} hecha",
           "other": "{count} hechas"
         },
-        "footnote": "\"Aceptado\": suma de las propuestas aceptadas, con IVA. Solo los administradores ven los importes.",
+        "footnote": "\"Aceptado\": suma de los presupuestos aceptados, con IVA. Solo los administradores ven los importes.",
         "footnoteNoValues": "Solo los administradores ven los importes.",
         "showing": "Mostrando {shown} de {total}",
         "emptySearch": "Ningún cliente coincide con la búsqueda.",
@@ -1851,12 +2011,12 @@
           "viewAll": "Ver en Pedidos",
           "notes": {
             "quoteSent": {
-              "one": "Propuesta v{version} enviada · caduca en {count} día",
-              "other": "Propuesta v{version} enviada · caduca en {count} días"
+              "one": "Presupuesto v{version} enviado · caduca en {count} día",
+              "other": "Presupuesto v{version} enviado · caduca en {count} días"
             },
             "inProgress": "En curso · {vehicle} · {crew}",
             "closed": "Cerrado · {amount}",
-            "draft": "Propuesta en borrador desde las {time}",
+            "draft": "Presupuesto en borrador desde las {time}",
             "shortStaffed": {
               "one": "{when} · falta {count} persona en el equipo",
               "other": "{when} · faltan {count} personas en el equipo"
@@ -1877,7 +2037,7 @@
           "taxId": "NIF",
           "taxIdPlaceholder": "9 dígitos",
           "taxIdMissing": "Sin NIF, la exportación para facturar queda incompleta.",
-          "emailMissing": "Sin email, no recibe copia de la propuesta aceptada ni de las actas."
+          "emailMissing": "Sin email, no recibe copia del presupuesto aceptado ni de las actas."
         },
         "addresses": {
           "title": "Direcciones usadas",
@@ -1982,8 +2142,8 @@
       "pipeline": {
         "title": "Pedidos en curso",
         "subtitle": {
-          "one": "Del primer contacto a la propuesta aceptada. {count} inventario a la espera de presupuesto.",
-          "other": "Del primer contacto a la propuesta aceptada. {count} inventarios a la espera de presupuesto."
+          "one": "Del primer contacto al presupuesto aceptado. {count} inventario a la espera de presupuesto.",
+          "other": "Del primer contacto al presupuesto aceptado. {count} inventarios a la espera de presupuesto."
         },
         "viewOrders": "Ver pedidos",
         "stages": {
@@ -1999,8 +2159,8 @@
             "label": "Inventario recibido",
             "hint": "Listos para presupuestar"
           },
-          "proposal-sent": {
-            "label": "Propuesta enviada",
+          "quote-sent": {
+            "label": "Presupuesto enviado",
             "hint": "A la espera de respuesta"
           },
           "won": {
@@ -2026,7 +2186,7 @@
         "events": {
           "arrived": "Llegó al destino",
           "crew-left": "El equipo salió de la base",
-          "proposal-accepted": "Propuesta aceptada",
+          "quote-accepted": "Presupuesto aceptado",
           "delivery-done": "Entrega concluida",
           "incident-logged": "Incidencia registrada"
         },
@@ -2036,7 +2196,7 @@
       "shortcuts": {
         "title": "Atajos",
         "volumeCalculator": "Calculadora de volumen",
-        "newProposal": "Nueva propuesta",
+        "newQuote": "Nuevo presupuesto",
         "pricing": "Tarifas y extras",
         "sendLink": "Enviar enlace al cliente"
       }
@@ -2153,6 +2313,8 @@
         "label": "Día por recurso",
         "resource": "Recurso",
         "vehicles": "Vehículos",
+        "unassigned": "Por asignar",
+        "unassignedSub": "Sin vehículo ni equipo",
         "people": "Personas",
         "freeAllDay": "Libre todo el día"
       },
@@ -2176,7 +2338,7 @@
           "almost-full": "Casi lleno",
           "full": "Lleno"
         },
-        "pending": "Propuesta en espera",
+        "pending": "Presupuesto en espera",
         "cellAria": "{day}: {text}",
         "cellJobs": {
           "one": "{count} mudanza",
@@ -2192,8 +2354,8 @@
         "freeTitle": "Aún libre este día",
         "ofVehicles": "de {count} vehículos",
         "ofPeople": "de {count} personas",
-        "hintProposals": "Si se acepta la propuesta en espera, cuenta {count} personas más este día.",
-        "hintJobs": "Estimado por las propuestas aceptadas. Las horas exactas están en la vista Semana.",
+        "hintQuotes": "Si se acepta el presupuesto en espera, cuenta {count} personas más este día.",
+        "hintJobs": "Estimado por los presupuestos aceptados. Las horas exactas están en la vista Semana.",
         "hintFree": "Buen día para proponer a quien pide fechas cercanas.",
         "viewWeek": "Ver en la semana",
         "tagAccepted": "Aceptada"
@@ -2218,9 +2380,9 @@
           "inventory": "Inventario",
           "vehicleOk": "{capacity} m³ para {volume}",
           "vehicleNone": "por asignar",
-          "vehicleNoneSub": "la propuesta contaba con un vehículo para {volume}",
+          "vehicleNoneSub": "el presupuesto contaba con un vehículo para {volume}",
           "crewValue": "{have} de {need} personas",
-          "crewOk": "como en la propuesta",
+          "crewOk": "como en el presupuesto",
           "crewMissing": {
             "one": "falta {count} persona",
             "other": "faltan {count} personas"
@@ -2230,7 +2392,7 @@
           "noParking": "no hace falta",
           "noParkingSub": "según el cliente",
           "inventoryValue": "sin cambios",
-          "inventorySub": "igual a la versión de la propuesta"
+          "inventorySub": "igual a la versión del presupuesto"
         },
         "live": {
           "title": "Cómo va",
@@ -2282,7 +2444,7 @@
           "title": "Vehículo",
           "swap": "Cambiar",
           "none": "Sin vehículo.",
-          "needed": "La propuesta contaba con un vehículo para {volume}.",
+          "needed": "El presupuesto contaba con un vehículo para {volume}.",
           "assign": "Asignar vehículo",
           "fits": "{capacity} m³ para {volume} · cabe en un viaje",
           "tooSmall": "{capacity} m³ para {volume} · no cabe en un viaje"
@@ -2292,8 +2454,8 @@
           "count": "{have} de {need} operarios",
           "remove": "Quitar a {name}",
           "missing": {
-            "one": "Falta {count} persona (la propuesta cuenta con {need})",
-            "other": "Faltan {count} personas (la propuesta cuenta con {need})"
+            "one": "Falta {count} persona (el presupuesto cuenta con {need})",
+            "other": "Faltan {count} personas (el presupuesto cuenta con {need})"
           },
           "freeSlot": "Plaza libre",
           "available": "Disponibles {when}",
@@ -2317,7 +2479,7 @@
             "closed": "Cerrado",
             "delivery-signed": "Acta de entrega firmada",
             "pickup-signed": "Acta de recogida firmada",
-            "quote-accepted": "Propuesta aceptada",
+            "quote-accepted": "Presupuesto aceptado",
             "crew-assigned": "Equipo asignado",
             "crew-named": "Equipo: {names}",
             "permit-granted": "Licencia de estacionamiento concedida",
@@ -2351,6 +2513,135 @@
         }
       },
       "clientsAnd": "y"
+    },
+    "pricing": {
+      "title": "Tarifas",
+      "subtitle": "Los valores con los que calculamos tus presupuestos. Guardar crea una versión nueva: los presupuestos ya enviados mantienen la versión con la que se calcularon.",
+      "version": "Versión {version} · vigente desde el {date}",
+      "defaultsNote": "Son valores de referencia de Mudaro. Ajústalos a tus precios antes del primer presupuesto.",
+      "sections": {
+        "prices": {
+          "title": "Precio y coste",
+          "text": "Por operario y por hora. El coste y el margen solo los ven los administradores."
+        },
+        "access": {
+          "title": "Accesos",
+          "text": "Lo que añade subir sin ascensor o aparcar lejos."
+        },
+        "calculation": {
+          "title": "Cálculo",
+          "text": "Cómo pasamos del inventario a horas y operarios."
+        },
+        "quote": {
+          "title": "Presupuesto",
+          "text": "Cómo ve el cliente el precio y durante cuánto tiempo es válido."
+        }
+      },
+      "fields": {
+        "operatorHourPriceCents": "Precio por hora de operario",
+        "operatorHourCostCents": "Coste por hora de operario",
+        "kmPriceCents": "Precio por km",
+        "minimumServiceCents": "Mínimo por servicio",
+        "vatPct": "IVA",
+        "noLiftFloorSurchargeCents": "Suplemento por piso sin ascensor",
+        "parkingSurchargeCents": "Suplemento por aparcamiento lejano",
+        "noLiftFloorExtraPct": "Horas de más por piso sin ascensor",
+        "parkingExtraPctPer25m": "Horas de más por cada 25 m de aparcamiento",
+        "stowageFactor": "Factor de estiba",
+        "averageSpeedKmh": "Velocidad media",
+        "crewSmallMaxM3": "Volumen pequeño hasta",
+        "crewSmall": "Operarios",
+        "crewMediumMaxM3": "Volumen medio hasta",
+        "crewMedium": "Operarios",
+        "crewLarge": "Operarios por encima",
+        "quoteValidityDays": "Validez del presupuesto"
+      },
+      "hints": {
+        "stowageFactor": "Multiplica el volumen declarado: 1,20 = un 20 % más por el espacio que se pierde en el camión.",
+        "minimumServiceCents": "Si el cálculo da menos, el presupuesto sugiere este valor.",
+        "crew": "Operarios sugeridos según el volumen. Puedes cambiar el número en cada presupuesto."
+      },
+      "crewLegend": "Operarios por volumen",
+      "units": {
+        "euros": "€",
+        "perHour": "€/h",
+        "perKm": "€/km",
+        "pct": "%",
+        "m3": "m³",
+        "kmh": "km/h",
+        "days": "días"
+      },
+      "margin": "Margen por hora: {pct}",
+      "presentation": {
+        "legend": "Precio para el cliente",
+        "fixed": "Precio cerrado",
+        "hourly": "Por hora, con estimación",
+        "fixedHint": "El cliente ve un total. Si la mudanza dura más, la diferencia corre de tu cuenta.",
+        "hourlyHint": "El cliente ve el precio por hora y las horas estimadas, y paga las horas reales."
+      },
+      "save": "Guardar nueva versión",
+      "saving": "Guardando…",
+      "saved": "Versión {version} guardada.",
+      "errors": {
+        "required": "Campo obligatorio.",
+        "invalid": "Valor no válido. Usa números, con coma en los decimales.",
+        "outOfRange": "Fuera del rango permitido.",
+        "crewOrder": "Tiene que ser mayor que el volumen pequeño.",
+        "notAllowed": "Solo los administradores pueden cambiar la tarifa.",
+        "failed": "No se pudo guardar. Vuelve a intentarlo.",
+        "review": "Revisa los campos marcados."
+      },
+      "extras": {
+        "title": "Servicios extra",
+        "text": "Los servicios que ofreces y el precio de cada uno. Los que pertenecen a un tipo de Mudaro se sugieren en el presupuesto cuando el cliente marca ese tipo en el inventario.",
+        "empty": "Aún no tienes servicios extra.",
+        "add": "Añadir servicio",
+        "edit": "Editar",
+        "cancel": "Cancelar",
+        "saveNew": "Añadir",
+        "saveEdit": "Guardar cambios",
+        "name": "Nombre",
+        "namePlaceholder": "Ej.: Embalaje de vajilla",
+        "type": "Tipo de Mudaro",
+        "ownType": "Servicio propio (sin tipo)",
+        "ownHint": "Un servicio propio no aparece en el inventario del cliente: solo lo añades al presupuesto.",
+        "priceMode": "Cómo se cobra",
+        "price": "Precio",
+        "priceModes": {
+          "fixed": "Precio fijo",
+          "unit": "Por unidad",
+          "hour": "Por hora",
+          "m3": "Por m³",
+          "m3_month": "Por m³ y mes"
+        },
+        "priceSuffix": {
+          "fixed": "",
+          "unit": " / unidad",
+          "hour": " / hora",
+          "m3": " / m³",
+          "m3_month": " / m³ / mes"
+        },
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "activate": "Activar",
+        "deactivate": "Desactivar",
+        "inactiveHint": "Un servicio inactivo no aparece en los presupuestos nuevos.",
+        "columns": {
+          "service": "Servicio",
+          "type": "Tipo",
+          "price": "Precio",
+          "status": "Estado"
+        },
+        "errors": {
+          "nameRequired": "Indica el nombre del servicio.",
+          "tooLong": "Máximo de 120 caracteres.",
+          "nameTaken": "Ya tienes un servicio con este nombre.",
+          "priceRequired": "Indica el precio.",
+          "priceInvalid": "Precio no válido.",
+          "invalid": "Hay datos no válidos. Revisa los campos.",
+          "failed": "No se pudo guardar. Vuelve a intentarlo."
+        }
+      }
     }
   }
 }

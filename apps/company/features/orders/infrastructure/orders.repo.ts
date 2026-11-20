@@ -8,6 +8,7 @@ import { getRoomNames, itemFlagOf } from "@/features/inventory/infrastructure/in
 import type {
   DetailAddress,
   DetailInventory,
+  DetailJob,
   DetailLink,
   DetailNote,
   InventoryLine,
@@ -50,7 +51,8 @@ const ORDER_ROUTE =
 
 const LIST_SELECT = `number, status, lost_reason, status_changed_at, last_activity_at, created_at,
   client:clients(name, phone, email),
-  order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, ${ORDER_ROUTE})`;
+  order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, ${ORDER_ROUTE}),
+  quotes(version, status, valid_until)`;
 
 const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, created_at,
   client:clients(name, type, phone, email),
@@ -66,6 +68,9 @@ const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, creat
     )
   ),
   shipment_notes(body, created_at, author:company_users(name)),
+  quotes(number, version, status, valid_until, sent_at, rejected_reason, vat_pct,
+    inventory:inventories(version), quote_lines(total_cents, optional), acceptances(accepted_at, signed_total_cents)),
+  jobs(status, scheduled_start),
   events:shipment_events(kind, occurred_at, actor_type, data)`;
 
 // --- Traducciones entre la base de datos y el dominio ---
@@ -183,6 +188,12 @@ function routeOf(order: RouteRow) {
 
 // --- Lista ---
 
+/** El orçamento enviado de versión más alta (el que puede aceptar el cliente). */
+function latestSent(quotes: readonly { version: number; status: string; valid_until: string | null }[]): { version: number; validUntil: string } | null {
+  const sent = quotes.filter((quote) => quote.status === "sent" && quote.valid_until).sort((a, b) => b.version - a.version)[0];
+  return sent ? { version: sent.version, validUntil: sent.valid_until as string } : null;
+}
+
 /** Nota de la fila de la lista. Los estados que aún no se alcanzan (4b y paso 5) llevan lo mínimo. */
 function noteOf(
   stage: OrderStage,
@@ -192,6 +203,8 @@ function noteOf(
     tokenExpiresAt: string | null;
     lostReason: string | null;
     totals: { items: number; volumeM3: number };
+    /** Último orçamento enviado. */
+    sentQuote: { version: number; validUntil: string } | null;
   },
 ): OrderNote {
   switch (stage) {
@@ -203,8 +216,9 @@ function noteOf(
     case "inventory-received":
       return { kind: "inventory-ready", receivedAt: row.changedAt, ...row.totals };
     case "quoted":
-      // TODO(paso 5): la versión y la validez salen de `quotes`.
-      return { kind: "proposal-sent", version: 1, validUntil: lisbonDay(row.changedAt) };
+      return row.sentQuote
+        ? { kind: "quote-sent", version: row.sentQuote.version, validUntil: row.sentQuote.validUntil }
+        : { kind: "quote-sent", version: 1, validUntil: lisbonDay(row.changedAt) };
     case "won":
       return { kind: "won", signedAt: row.changedAt };
     case "lost":
@@ -246,6 +260,7 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
         tokenExpiresAt: row.order.token_expires_at,
         lostReason: row.lost_reason,
         totals: linesTotals(currentInventory(row.order.inventories)?.inventory_lines ?? []),
+        sentQuote: latestSent(row.quotes),
       }),
       lastActivityAt: row.last_activity_at,
     });
@@ -365,7 +380,7 @@ function eventOf(
         actor,
       };
     case "quote_sent":
-      return { kind: "proposal-sent", at, actor, version: data.version ?? 1 };
+      return { kind: "quote-sent", at, actor, version: data.version ?? 1 };
     case "won":
       return { kind: "won", at };
     case "lost":
@@ -509,10 +524,35 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
     inventory: inventoryOf(inventory, roomNames, locale),
     link,
     note,
-    // TODO(paso 5): sale de `quotes`.
-    proposalCount: 0,
+    quoteCount: data.quotes.length,
+    quotes: [...data.quotes]
+      .sort((a, b) => b.version - a.version)
+      .map((quote) => {
+        const acceptance = quote.acceptances[0] ?? null;
+        const subtotal = quote.quote_lines.reduce((sum, line) => sum + (line.optional ? 0 : line.total_cents), 0);
+        return {
+          number: quote.number,
+          version: quote.version,
+          status: quote.status,
+          totalCents: acceptance ? acceptance.signed_total_cents : subtotal + Math.round((subtotal * Number(quote.vat_pct)) / 100),
+          validUntil: quote.valid_until,
+          sentAt: quote.sent_at,
+          acceptedAt: acceptance?.accepted_at ?? null,
+          rejectedReason: quote.rejected_reason,
+          inventoryVersion: quote.inventory?.version ?? 0,
+        };
+      }),
+    job: jobOf(data.jobs),
     events,
   };
+}
+
+/** El trabajo del envío (hay uno como mucho: `jobs.shipment_id` es único). */
+function jobOf(
+  jobs: { status: DetailJob["status"]; scheduled_start: string } | { status: DetailJob["status"]; scheduled_start: string }[] | null,
+): DetailJob | null {
+  const row = Array.isArray(jobs) ? jobs[0] : jobs;
+  return row ? { status: row.status, scheduledStart: row.scheduled_start } : null;
 }
 
 /** Inventario de la versión vigente. Mientras no haya ninguna versión enviada, no hay inventario que mostrar. */

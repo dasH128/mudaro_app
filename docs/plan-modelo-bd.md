@@ -12,11 +12,12 @@ Cada paso es una o más migraciones nuevas en `supabase/migrations/`. Nunca se e
 | --- | --- | --- | --- | --- | --- |
 | 1 | Base | `platform_users`, `companies`, `company_internal`, `company_users`, `invitations`, `audit_log` | `20261025100000` a `20261025100600` y `20261101100000` (8 archivos) | RF-03, RF-65 a RF-68, RNF-01, RNF-08 | Creado |
 | 2 | Configuración | `vehicles`, `vehicle_costs` | `20261101200000_vehicles` | RF-05 | Parcial |
-| 2 | Configuración (pendiente) | `tariffs`, `company_items` | | RF-06, RF-09 | Pendiente |
+| 2 | Configuración: tarifa | `tariffs` (y escrituras de `company_extras`) | `20261119200000_tariffs` | RF-06, RF-07 | Creado el 19/11/2026 (paso 5.1). Versionada; v1 por defecto para cada empresa, también las nuevas (trigger) |
+| 2 | Configuración (pendiente) | `company_items` | | RF-09 (P1) | Pendiente |
 | 2 y 4b | Servicios extra | `catalog_extras`, `catalog_extra_translations`, `company_extras`, `inventory_extras` | `20261118100000_extras` | RF-07, RF-24 | Creado (aplicada a mano y registrada en el historial el 18/11/2026). La app solo lee los tipos |
 | 3 | Catálogo global | `catalog_*` (7 tablas) | `20261103100000_catalog` y `20261118300000_catalog_pilot_items` (datos del piloto) | RF-10, RF-11, RF-12 | Creado. 27 objetos en 6 divisiones, valores provisionales |
 | 4 | Pedidos | `clients`, `orders`, `shipments`, `addresses`, `inventories`, `inventory_addresses`, `inventory_lines`, `inventory_line_adjustments` | 4a: `20261109100000` a `20261109100200`. 4b: `20261118200000` a `20261118200300` y `20261118300100_save_inventory_draft` | RF-13 a RF-27, RF-37, RF-69, RNF-02 | 4a creado y validado (`docs/test-plan-orders-4a.md`). 4b creado y probado en base de datos (`docs/test-plan-inventory-4b.md`). Pantalla Inventário de `apps/company` conectada el 18/11/2026. Botón del enlace en `apps/company` y escrituras del cliente (B9: `20261119100000_client_link_writes` y Edge Function `client-order`) aplicados y probados el 19/11/2026 (secciones F y G de `docs/test-plan-inventory-4b.md`). **4b cerrado el 19/11/2026** |
-| 5 | Presupuestos | `quotes`, `quote_lines`, `acceptances` | | RF-30 a RF-46 | Pendiente |
+| 5 | Presupuestos | `quotes`, `quote_lines`, `acceptances`, `quote_counters` y `jobs` mínimo | `20261119300000_quotes` y `20261119300100_fix_save_quote_draft` | RF-30 a RF-46 | Base de datos creada y probada el 19/11/2026 (paso 5.2). Pantallas en 5.4 y 5.5. Resuelve A9 (número `ORC-` por empresa), A12 (el trabajo apunta al último aceptado) y la parte de A6 de presupuestos y trabajos |
 | 6 | Ejecución | `jobs`, `assignments`, `incidents`, `evidence`, `handover_records` | | RF-47 a RF-62 | Pendiente |
 
 La autenticación no es un bloque de tablas. Supabase Auth gestiona las cuentas y el esquema solo modela los vínculos: qué cuenta es de plataforma, a qué empresa pertenece cada usuario y qué invitaciones están pendientes.
@@ -109,7 +110,7 @@ La lista completa, con un código por punto, está al final de `docs/diagram/mud
 
 ## Pendiente de decidir
 
-- **Extras opcionales en el presupuesto (paso 5).** Si la empresa puede marcar un extra como obligatorio, y cómo se guarda la selección del cliente al aceptar.
+- ~~Extras opcionales en el presupuesto (paso 5).~~ Resuelto el 19/11/2026 con las demás decisiones del paso 5: ver `docs/requirement-mvp.md` (sección 11) y `docs/plan-paso-5-presupuestos.md`.
 - Qué hacer si se da de alta una empresa con un NIF que ya existe. Hoy hay `unique` sobre `(country_code, tax_id)`, lo que bloquea el alta.
 - Región: lista cerrada aún por definir. Hoy es texto libre.
 - Caducidad real del convite (depende de la configuración de Supabase Auth).

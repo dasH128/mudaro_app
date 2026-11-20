@@ -14,18 +14,20 @@ Prototipos de cada pantalla en `docs/design/company/<vista>`. Lee su `README.md`
 | Definir contraseña | `/[lang]/auth/set-password` | Hecha |
 | Acceso bloqueado | `/[lang]/no-access` | Hecha. Motivo calculado en servidor (`blockedReasonOf`): empresa desactivada, cuenta desactivada, operario o cuenta sin empresa. Email de soporte provisional en `app/lib/contact.ts` (pendiente) |
 | Início · Operações de hoje | `/[lang]` | Hecha solo el diseño, con datos de ejemplo |
-| Propostas · Lista | `/[lang]/proposals` | Hecha con datos de ejemplo (RF-38, RF-42, RF-45). Filtros y orden en la URL. Pasa a "Orçamentos" y a `/quotes`: renombre pendiente (ver "Estado actual") |
+| Orçamentos · Lista | `/[lang]/quotes` | Conectada a Supabase (paso 5.4b, 19/11/2026): todas las versiones con su estado (caducado se calcula con la validez, RF-45), total con IVA (el firmado si está aceptado) y margen (RNF-03); "Prontos para orçamentar" con los pedidos con inventario recibido sin orçamento enviado; indicadores de los últimos 30 días. Cada fila abre la pestaña Orçamentos del pedido. "Novo orçamento" lleva a los pedidos con inventario recibido. Filtros y orden en la URL |
 | Novo pedido | `/[lang]/orders/new` | Conectada a Supabase (RF-13, RF-14, RF-19). Crea el pedido con la función `create_order` |
 | Pedido criado | `/[lang]/orders/[id]/created` | Datos reales de Supabase. "Gerar link" crea el enlace del cliente (`share_order_link`, RF-15) y lo muestra una sola vez (la base guarda su hash, RNF-02); después sale "Gerar link novo", con confirmación, que anula el anterior. WhatsApp, SMS y Email abren la app del dispositivo con el mensaje escrito (el envío automático, RF-16, sigue pendiente). La dirección del enlace sale de `CLIENT_APP_URL` (19/11/2026) |
 | Pedidos · Lista | `/[lang]/orders` | Conectada a Supabase (RF-17). Etapa, vista, búsqueda y paginación en la URL |
 | Inventário (empresa) | `/[lang]/orders/[id]/inventory` | Conectada a Supabase (RF-19 a RF-27, 18/11/2026). Catálogo real, borrador guardado con `save_inventory_draft` al cambiar de paso y con "Guardar e sair", "Concluir" envía la versión (`submit_inventory`). Con el inventario ya enviado muestra "Editar inventário", que abre una versión nueva |
-| Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Presupuestos vacíos hasta el paso 5. Pestaña en la URL (`?tab=`) |
+| Detalhe do pedido | `/[lang]/orders/[id]` | Conectada a Supabase en resumen, direcciones, inventario (versión vigente: la última enviada), historial y notas. Pestaña Orçamentos con las versiones (paso 5.4b). Con el envío ganado, Resumo muestra el trabajo programado y enlaza a la agenda (paso 5.6). Pestaña en la URL (`?tab=`) |
 | Frota | `/[lang]/fleet` | Conectada a Supabase (RF-05, solo listar y detalle). Filtro, búsqueda, orden, vista y vehículo abierto en la URL. Sin ningún vehículo muestra el estado de primer uso (P7-1) |
 | Novo veículo | `/[lang]/fleet/new` | Conectada a Supabase (RF-05). Crea el vehículo con la función `create_vehicle` |
 | Equipa | `/[lang]/team` | Hecha solo el diseño, con datos de ejemplo. Filtro, búsqueda, orden, vista y persona abierta en la URL. Sin ninguna persona muestra el estado de primer uso (P8-1) |
-| Agenda | `/[lang]/schedule` | Hecha solo el diseño, con datos de ejemplo. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
+| Agenda | `/[lang]/schedule` | Diseño con datos de ejemplo, más los trabajos reales (RF-46) y los orçamentos enviados de Supabase (paso 5.6, 19/11/2026). Los reales salen sin vehículo ni equipa (paso 6), en la fila "Por atribuir" de la vista de día. Vista (día, semana, mes), fecha, filtro y trabajo abierto en la URL |
 | Clientes | `/[lang]/clients` | Conectada a Supabase en ficha, pedidos, ruta, etapa, direcciones y último contacto (RF-14). Lo que falta en la base de datos (importes, trabajos, notas de pedido, repetidos) sale neutro, y se añaden 15 fichas de ejemplo marcadas "Exemplo" (`INCLUDE_SAMPLE` en `clients.repo.ts`). Filtro, búsqueda, orden y cliente abierto en la URL |
-| Tarifas, Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
+| Editor de orçamento | `/[lang]/orders/[id]/quote` | Conectado a Supabase (RF-35 a RF-42, paso 5.4a, 19/11/2026). Calcula en el navegador con `@mudaro/quotes` (km, operários y horas editables, RF-37), propone las líneas base y los servicios que pidió el cliente, extras incluidos u opcionales, validez dd/mm/aaaa y condiciones. "Guardar rascunho" (`save_quote_draft`) y "Enviar orçamento" con confirmación (`send_quote`), que vuelve al pedido. Sin prototipo |
+| Tarifas | `/[lang]/pricing` | Conectada a Supabase (RF-06, RF-07, paso 5.1, 19/11/2026). Tarifa versionada: "Guardar nova versão" crea la siguiente con `save_tariff` y los orçamentos enviados conservan la suya. Servicios extra (alta, edición, activar o desactivar) con `save_company_extra`. Sin prototipo: sigue la línea de diseño de las listas |
+| Relatórios, Configurações, Trabalho, Incidência, Atividade, editor y detalle de presupuesto | declaradas en `ROUTES` | Páginas pendientes: los enlaces dan 404 hasta crearlas |
 
 ## Estructura del código
 
@@ -99,7 +101,7 @@ features/
                               orders-welcome, orders-pipeline, orders-view-bar, urgent-orders, orders-cards-list,
                               orders-table, orders-side-panels (+ order-action, order-avatar, order-stage-pill, order-steps);
                               detalle: order-detail-header, order-journey, order-measure-alert, order-detail-tabs,
-                              order-summary-tab, order-inventory-tab, order-addresses-tab, order-proposals-tab,
+                              order-summary-tab, order-inventory-tab, order-addresses-tab, order-quotes-tab,
                               order-history-tab, order-detail-side (cliente, enlace y notas), order-detail-parts
   fleet/
     domain/
@@ -145,11 +147,11 @@ features/
                               (+ copy-phone-button, único cliente: portapapeles), clients-parts
   schedule/
     domain/
-      types.ts              ← ScheduleJob, JobDetail, Vehicle, Person, Access, HistoryEvent, LiveEvent, PendingProposal (horas hh:mm, fechas aaaa-mm-dd)
+      types.ts              ← ScheduleJob, JobDetail, Vehicle, Person, Access, HistoryEvent, LiveEvent, PendingQuote (horas hh:mm, fechas aaaa-mm-dd)
       schedule.ts           ← semana y mes, carga de cada día, recursos que faltan (missingOf, issuesOf), filtro "Mostrar", avisos y solapes (layoutOverlaps)
     infrastructure/
-      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today })
-      mock-data.ts          ← 11 trabajos con ficha, 17 más ligeros y 3 propostas en espera, con fechas relativas a hoy
+      schedule.repo.ts      ← puerta de entrada: getScheduleOverview({ today }); trabajos y orçamentos enviados reales + ejemplo
+      mock-data.ts          ← 11 trabajos con ficha, 17 más ligeros y 3 orçamentos en espera, con fechas relativas a hoy
     presentation/
       schedule-href.ts      ← enlaces con vista, fecha, filtro, día del mes y trabajo en la URL
       schedule-text.ts      ← acceso, histórico, hitos en directo y avisos → textos del diccionario
@@ -168,17 +170,28 @@ features/
     presentation/
       components/           ← inventory-editor (único cliente), header, steps, rooms-nav, catalog-grid, inventory-summary,
                               access-form, extras-step, inventory-footer (estado del guardado) e inventory-submitted (versión enviada)
-  proposals/
+  pricing/
     domain/
-      types.ts              ← Proposal, ReadyRequest, ProposalMetrics (importes en céntimos, fechas ISO)
+      types.ts              ← Tariff, TariffInput, CompanyExtra, PRICE_MODES, QUOTE_PRESENTATIONS, TARIFF_LIMITS, crewFor (RF-32) y hourMargin
+    application/
+      actions/pricing.ts    ← saveTariffAction (versión nueva) y saveExtraAction (alta, edición y activar o desactivar)
+      schemas/              ← tariff.ts (TARIFF_FIELDS: tipo, límites y clave de cada campo) y extra.ts, con zod
+    infrastructure/
+      pricing.repo.ts       ← puerta de entrada (Supabase): getCurrentTariff, getCompanyExtras, saveTariff, saveCompanyExtra
+    presentation/
+      pricing-text.ts       ← valores iniciales del formulario (coma decimal)
+      components/           ← tariff-form y extras-panel (clientes)
+  quotes/
+    domain/
+      types.ts              ← Quote, ReadyOrder, QuoteMetrics (importes en céntimos, fechas ISO)
       status.ts             ← applyExpiry (RF-45) y deriveValidity
       filters.ts            ← filtro por estado y texto, orden, contadores y resumen
     infrastructure/
-      proposals.repo.ts     ← puerta de entrada: getProposalsOverview({ includeMargin })
+      quotes.repo.ts        ← puerta de entrada: getQuotesOverview({ includeMargin })
       mock-data.ts          ← 18 propuestas de ejemplo con fechas relativas a hoy
     presentation/
-      proposals-text.ts     ← pasa los códigos del dominio a los textos del diccionario
-      proposals-href.ts     ← enlaces con filtros en la URL
+      quotes-text.ts        ← pasa los códigos del dominio a los textos del diccionario
+      quotes-href.ts        ← enlaces con filtros en la URL
       components/           ← header (con los contadores), ready-requests, toolbar (usa `app/components/form/sort-select.tsx`),
                               table, status-pill
 ```
@@ -240,7 +253,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
   - **Ascensor:** la base lo llama `large` y el dominio `normal`. Lo traducen `liftOf` (orders) y `LIFT_FROM_DB`/`LIFT_TO_DB` (inventory). Igual con el desmontaje: `disassembly` en la base y `dismantle` en el dominio (`itemFlagOf`).
 - Pedidos · Primeiro uso (11/11/2026, solo diseño): cuando la empresa no tiene ningún pedido, `/orders` muestra `orders-empty.tsx` (sobre `app/components/first-use.tsx`) en lugar de banner, pipeline y lista. No hay prototipo: se derivó de P7-1. A diferencia de Frota y Equipa, el botón "Criar o primeiro pedido" está activo (lleva a `/orders/new`). El pie solo lleva una nota, sin insignia de asistente. "Tudo arrumado por aqui." (`rows.emptyTitle`) se conserva para cuando hay pedidos pero ninguno cumple el filtro (p. ej. "Precisam de ti" sin urgentes). Las tres ventajas no prometen envío del enlace por canal hasta que exista el paso 4b. Sin revisar en tema oscuro ni en móvil.
 - Frota conectada a Supabase (01/11/2026, migración `20261101200000_vehicles.sql`): tablas `vehicles` y `vehicle_costs` (el coste por km solo lo lee el administrador, RNF-03), alta con la función `create_vehicle` e histórico desde `audit_log` (`entity = 'vehicle'`). El tipo del vehículo es el enum `vehicle_type` y su texto sale del diccionario (`Vehicle.type`, ya no hay `typeLabel`). Siguen sin origen y salen vacíos hasta los pasos 5 y 6 del modelo: estado en directo, trabajos, horas de la semana, propostas y uso del mes. Pendiente: edición, baja y reactivación del vehículo, y los cambios de coste o carga en el histórico. Se eliminaron `store.ts`, `mock-data.ts` y `?empty=1`.
-- **Pendiente (decidido el 09/11/2026): pedido y envío, y "Orçamentos".** El modelo (`docs/diagram/mudaro-model.dbml`) separa el pedido (`orders`, la mudanza y su enlace) del envío (`shipments`, el pedido enviado a una empresa, con estado y presupuestos). La lista de pedidos pasará a mostrar envíos, con `shipments.number` como número visible. El código aún no lo refleja: `OrderStatus` y `OrderStage` viven en el pedido, `lost` sigue como TODO y no existe `cancelled` (RF-69). El término del presupuesto es `quotes` en el código y "Orçamentos" en la interfaz, y todo lo que aquí se llama `proposals`, `proposta` o `requestId` (`features/proposals`, la ruta `/proposals`, `NavKey`, unas 107 claves por idioma en los diccionarios) tendrá que renombrarse. Hasta que se haga, los nombres de este documento siguen siendo los del código actual. Lista completa de pendientes en `docs/plan-modelo-bd.md` y al final del DBML.
+- **Pendiente (decidido el 09/11/2026): pedido y envío, y "Orçamentos".** El modelo (`docs/diagram/mudaro-model.dbml`) separa el pedido (`orders`, la mudanza y su enlace) del envío (`shipments`, el pedido enviado a una empresa, con estado y presupuestos). La lista de pedidos pasará a mostrar envíos, con `shipments.number` como número visible. El código aún no lo refleja: `OrderStatus` y `OrderStage` viven en el pedido, `lost` sigue como TODO y no existe `cancelled` (RF-69). El término del presupuesto es `quotes` en el código y "Orçamentos" en la interfaz, y lo que se llamaba `proposals`, `proposta` o `requestId` se renombró el 19/11/2026 (paso 5.0): `features/quotes`, la ruta `/quotes`, `NavKey` y las claves de los diccionarios. Los números de ejemplo pasan de `PR-` a `ORC-`. Lista completa de pendientes en `docs/plan-modelo-bd.md` y al final del DBML.
 
 - `app/[lang]/page.tsx` (plantilla de Next) eliminado; el inicio vive en `app/[lang]/(app)/page.tsx`.
 - Se añadieron tokens `success-*`, `danger-dot`, `surface-soft`, `surface-head` y `sidebar` a `packages/ui/src/tokens.css`.
@@ -248,7 +261,7 @@ Los `page.tsx` se quedan en `app/` porque Next.js enruta por carpetas. Cada uno 
 - El grupo `(app)` aún no comprueba sesión ni rol; hay que añadirlo antes de conectar datos reales.
 - Pendiente: revisar el tema oscuro de las vistas.
 - El menú lateral ya está traducido y marca el enlace activo según la ruta. La empresa y el usuario siguen siendo de ejemplo.
-- Propostas · Lista (29/10/2026): datos de `features/proposals/infrastructure/mock-data.ts`. "Nova proposta", "Criar proposta" (`/proposals/new?request=<id>`) y el enlace de cada fila (`/proposals/<id>`) dan 404 hasta crear el editor y el detalle. Los filtros del diseño P1 se resolvieron en servidor. Las versiones de una propuesta comparten número, y el enlace de una versión sustituida lleva a la misma ruta de detalle (pendiente decidir cómo elegir versión). El margen se muestra siempre (`CAN_SEE_MARGIN = true` en `proposals/page.tsx`) hasta que exista el rol; después solo administradores. Los umbrales de "a punto de caducar" (3 días, `EXPIRING_SOON_DAYS`) y la ordenación por defecto son provisionales.
+- Orçamentos · Lista (29/10/2026, renombrada el 19/11/2026): datos de `features/quotes/infrastructure/mock-data.ts`. "Novo orçamento", "Criar orçamento" (`/quotes/new?order=<id>`) y el enlace de cada fila (`/quotes/<id>`) dan 404 hasta crear el editor y el detalle. Los filtros del diseño P1 se resolvieron en servidor. Las versiones de una propuesta comparten número, y el enlace de una versión sustituida lleva a la misma ruta de detalle (pendiente decidir cómo elegir versión). El margen se muestra siempre (`CAN_SEE_MARGIN = true` en `proposals/page.tsx`) hasta que exista el rol; después solo administradores. Los umbrales de "a punto de caducar" (3 días, `EXPIRING_SOON_DAYS`) y la ordenación por defecto son provisionales.
 - ~~Pendiente: generar el enlace del pedido.~~ Hecho el 19/11/2026: ver la fila de "Pedido criado". Al generar el enlace el pedido pasa a "À espera de inventário". En el detalle, "Gerar link novo" y, en la lista, "Reenviar link" y "Gerar link novo" llevan a esa pantalla. "Ver como cliente" sigue desactivado: abrirlo exigiría un token nuevo y anularía el del cliente. El cliente abre el enlace en `apps/client`.
 - ~~Fuente de datos superada el 10/11/2026 (ya en Supabase, ver arriba): lo que sigue sobre almacén en memoria, datos de ejemplo y teléfonos de prueba ya no aplica.~~ Novo pedido (29/10/2026): los pedidos se guardan en `features/orders/infrastructure/store.ts`, en memoria (se pierden al reiniciar). El teléfono `912 345 821` sugiere a Ana Ribeiro y `916 667 777` a Rui Fonseca (RF-14). El máximo de paradas (3) y la validez del enlace (7, 14 o 30 días) son provisionales. "Editar modelo" del mensaje está desactivado: no tiene diseño de flujo. `lookupClientAction` y `createOrderAction` aún no comprueban sesión ni rol (son endpoints públicos): hay que añadirlo con el login de empresa, y limitar la frecuencia de la búsqueda por teléfono. Si el inventario lo rellena la empresa, se redirige a `/orders/<id>/inventory` (Inventário, ya hecha). El mensaje al cliente se redacta en el idioma de la interfaz de la empresa, no en el del cliente.
 - Pendiente: botones sin acción (Novo pedido, Rever incidência, notificações, menú de cuenta) y búsqueda sin conectar.

@@ -7,6 +7,7 @@ import { formatDate, formatDateTime, formatPhone } from "@/app/lib/format";
 import { ROUTES, localePath } from "@/app/lib/routes";
 import { firstName } from "../../domain/client-name";
 import type { DetailLink, DetailNote, LinkState, OrderDetail } from "../../domain/detail";
+import type { OrderStage } from "../../domain/types";
 import type { OrdersText } from "../orders-text";
 import { card } from "./order-detail-parts";
 
@@ -78,6 +79,7 @@ export function LinkPanel({
   clientName,
   link,
   state,
+  stage,
 }: {
   lang: Locale;
   t: OrdersText;
@@ -85,6 +87,7 @@ export function LinkPanel({
   clientName: string;
   link: DetailLink;
   state: LinkState;
+  stage: OrderStage;
 }) {
   const d = t.detail.side;
   const name = firstName(clientName);
@@ -94,12 +97,18 @@ export function LinkPanel({
     closed: "bg-line-soft text-muted",
   }[state.status];
   const dot = { active: "bg-success-dot", expired: "bg-danger-dot", closed: "bg-muted" }[state.status];
+  // Con un orçamento enviado el cliente ya no edita el inventario: el texto dice lo que puede hacer en el enlace.
+  // La caducidad solo bloquea editar el inventario, no ver ni aceptar el orçamento.
   const text =
-    state.status === "active"
-      ? `${pluralize(lang, state.daysLeft, d.daysLeft)} ${interpolate(d.canEdit, { name })}`
-      : state.status === "expired"
-        ? interpolate(d.expiredText, { name })
-        : d.closedText;
+    state.status === "closed"
+      ? interpolate(d.closedText, { name })
+      : stage === "lost"
+        ? interpolate(d.lostText, { name })
+        : stage === "quoted"
+          ? interpolate(d.quoteText, { name })
+          : state.status === "active"
+            ? `${pluralize(lang, state.daysLeft, d.daysLeft)} ${interpolate(d.canEdit, { name })}`
+            : interpolate(d.expiredText, { name });
 
   return (
     <section aria-labelledby="link" className={`${panel} gap-3.5`}>
@@ -134,6 +143,35 @@ export function LinkPanel({
           {d.viewAsClient}
         </button>
       </div>
+    </section>
+  );
+}
+
+/**
+ * Pedido con el inventario rellenado por la empresa y el orçamento enviado, pero sin enlace: el cliente no tiene dónde
+ * verlo. "Gerar link" lleva a la pantalla de compartir, en su versión para el orçamento.
+ */
+export function MissingLinkPanel({ lang, t, orderId, clientName }: { lang: Locale; t: OrdersText; orderId: string; clientName: string }) {
+  const d = t.detail.side;
+  return (
+    <section aria-labelledby="link" className={`${panel} gap-3.5`}>
+      <div className="flex items-center justify-between gap-2.5">
+        <h2 id="link" className={panelTitle}>
+          {d.link}
+        </h2>
+        <span className="inline-flex h-6.5 items-center gap-1.5 rounded-full bg-warn-surface px-2.5 text-xs font-bold text-warn-foreground">
+          <span className="size-1.75 rounded-full bg-primary" />
+          {d.noLink}
+        </span>
+      </div>
+      <span className="text-[13px] text-muted">{interpolate(d.noLinkText, { name: firstName(clientName) })}</span>
+      <Link
+        href={localePath(lang, ROUTES.orders.created(orderId))}
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      >
+        <Icon name="link" size={16} />
+        {d.generate}
+      </Link>
     </section>
   );
 }

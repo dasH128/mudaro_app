@@ -199,7 +199,7 @@ export function CapacitySection({ t, values, errors, set, fleet }: Identificatio
   );
 }
 
-/** Paso 4: si el vehículo entra ya en propuestas y agenda. */
+/** Paso 4: si el vehículo entra ya en presupuestos y agenda. */
 export function AvailabilitySection({ t, values, set }: Pick<Props, "t" | "values" | "set">) {
   const a = t.availability;
   const on = values.active === "true";

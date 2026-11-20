@@ -57,8 +57,8 @@ export type Vehicle = {
   jobs: VehicleJob[];
   /** Horas ocupadas por día, empezando hoy (7 valores). */
   weekHours: number[];
-  /** Propostas de los últimos 30 días en que el cálculo eligió el vehículo. */
-  proposals30d: { total: number; accepted: number };
+  /** Presupuestos de los últimos 30 días en que el cálculo eligió el vehículo. */
+  quotes30d: { total: number; accepted: number };
   /** Uso del mes en curso. */
   usage: { jobs: number; km: number; hours: number };
   /** Del más reciente al más antiguo. */
@@ -66,8 +66,8 @@ export type Vehicle = {
 };
 
 export type FleetMetrics = {
-  /** Propostas del mes que necesitaron viaje extra por falta de capacidad. */
-  extraTripProposals: number;
+  /** Presupuestos del mes que necesitaron viaje extra por falta de capacidad. */
+  extraTripQuotes: number;
 };
 
 export type FleetOverview = { vehicles: Vehicle[]; metrics: FleetMetrics };

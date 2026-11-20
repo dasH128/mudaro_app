@@ -59,7 +59,7 @@ export type JobDetail = {
   priceCents?: number;
   /** Cierre del trabajo. */
   closed?: Moment & { by: string };
-  /** Día en que se aceptó la propuesta, para los avisos ("aceite ontem"). */
+  /** Día en que se aceptó el presupuesto, para los avisos ("aceite ontem"). */
   acceptedOn: string;
   /** Teléfono del cliente, normalizado (+351…). */
   clientPhone: string;
@@ -75,7 +75,7 @@ export type ScheduleJob = {
   to: string;
   vehicleId: string | null;
   crewIds: string[];
-  /** Personas que la proposta cuenta para este trabajo. */
+  /** Personas que el presupuesto cuenta para este trabajo. */
   crewNeeded: number;
   status: JobStatus;
   volumeM3: number;
@@ -83,12 +83,12 @@ export type ScheduleJob = {
   detail?: JobDetail;
 };
 
-/** Proposta enviada y a la espera: cuenta como una posible carga más en el mes. */
-export type PendingProposal = { id: string; client: string; date: string; crewNeeded: number };
+/** Presupuesto enviado y a la espera: cuenta como una posible carga más en el mes. */
+export type PendingQuote = { id: string; client: string; date: string; crewNeeded: number };
 
 export type ScheduleOverview = {
   vehicles: Vehicle[];
   people: Person[];
   jobs: ScheduleJob[];
-  proposals: PendingProposal[];
+  quotes: PendingQuote[];
 };

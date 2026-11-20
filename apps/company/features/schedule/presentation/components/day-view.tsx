@@ -62,6 +62,10 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
     jobs: dayJobs.filter((job) => job.crewIds.includes(person.id)),
   }));
 
+  // Trabajos aceptados que aún no tienen vehículo (paso 5.6: la asignación llega en el paso 6). Sin esta fila no se verían.
+  const unassigned = dayJobs.filter((job) => job.vehicleId === null);
+  const unassignedLane: Lane = { key: "unassigned", name: d.unassigned, sub: d.unassignedSub, icon: "?", round: false, jobs: unassigned };
+
   const renderLane = (lane: Lane) => (
     <div key={lane.key} className={`grid ${COLS} items-center py-1`}>
       <span className="flex min-w-0 items-center gap-2.5">
@@ -94,7 +98,9 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
               key={job.id}
               href={scheduleHref(lang, { view: "day", date: day, show, job: job.id })}
               scroll={false}
-              className={`absolute top-1.5 bottom-1.5 box-border overflow-hidden rounded-[10px] px-2.5 text-xs leading-8.5 font-bold text-ellipsis whitespace-nowrap ${BAR[job.status]} ${focusRing} ${job.id === selectedJobId ? "shadow-[0_0_0_3px_var(--foreground)]" : ""}`}
+              title={`${job.id} · ${job.client} · ${job.start}–${job.end}`}
+              // Ancho mínimo para que un trabajo corto (1 h) muestre al menos el número del pedido
+              className={`absolute top-1.5 bottom-1.5 box-border min-w-36 overflow-hidden rounded-[10px] px-2.5 text-xs leading-8.5 font-bold text-ellipsis whitespace-nowrap ${BAR[job.status]} ${focusRing} ${job.id === selectedJobId ? "shadow-[0_0_0_3px_var(--foreground)]" : ""}`}
               style={{ left: `${((start - FIRST) / SPAN) * 100}%`, width: `calc(${((end - start) / SPAN) * 100}% - 3px)` }}
             >
               {job.id} · {job.client}
@@ -122,6 +128,12 @@ export function DayView({ lang, t, positions, day, jobs, vehicles, people, show,
             ))}
           </span>
         </div>
+        {unassigned.length > 0 ? (
+          <>
+            <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.unassigned}</span>
+            {renderLane(unassignedLane)}
+          </>
+        ) : null}
         <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.vehicles}</span>
         {vehicleLanes.map(renderLane)}
         <span className="pt-3.5 pb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{d.people}</span>

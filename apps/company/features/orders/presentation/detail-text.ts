@@ -82,9 +82,9 @@ export function describeEvent(event: OrderEvent, t: OrdersText, locale: Locale):
             meta: interpolate(h.inventoryMeta, { when }),
             tone: "primary",
           };
-    case "proposal-sent":
+    case "quote-sent":
       return {
-        title: interpolate(h.proposalSent, { version: event.version }),
+        title: interpolate(h.quoteSent, { version: event.version }),
         meta: interpolate(h.meta, { when, actor: event.actor }),
         tone: "primary",
       };

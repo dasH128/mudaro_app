@@ -21,11 +21,11 @@ export const ROUTES = {
     detail: (id: string) => `/orders/${encodeURIComponent(id)}`,
     created: (id: string) => `/orders/${encodeURIComponent(id)}/created`,
     inventory: (id: string) => `/orders/${encodeURIComponent(id)}/inventory`,
+    quote: (id: string) => `/orders/${encodeURIComponent(id)}/quote`,
   },
-  proposals: {
-    list: "/proposals",
-    new: "/proposals/new",
-    detail: (id: string) => `/proposals/${encodeURIComponent(id)}`,
+  // Un orçamento se crea y se ve desde su pedido (orders.quote y la pestaña Orçamentos del detalle)
+  quotes: {
+    list: "/quotes",
   },
   schedule: "/schedule",
   clients: "/clients",

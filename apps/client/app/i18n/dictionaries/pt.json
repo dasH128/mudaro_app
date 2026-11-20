@@ -2,7 +2,8 @@
   "metadata": {
     "title": "A sua mudança · Mudaro",
     "description": "Indique o que vai levar na sua mudança.",
-    "linkTitle": "Inventário da sua mudança"
+    "linkTitle": "Inventário da sua mudança",
+    "quoteTitle": "Orçamento da sua mudança"
   },
   "home": {
     "title": "Abra o link que recebeu",
@@ -21,7 +22,8 @@
     "title": "Olá {name}, o que vai levar?",
     "subtitle": "A {company} prepara o orçamento com o que indicar aqui. Pode fazê-lo aos poucos: fica guardado.",
     "validUntil": "Pode editar até {date}",
-    "expired": "O prazo para editar terminou a {date}"
+    "expired": "O prazo para editar terminou a {date}",
+    "quoteTitle": "Olá {name}, aqui está o seu orçamento"
   },
   "expired": {
     "title": "O prazo para editar terminou",
@@ -29,7 +31,7 @@
   },
   "submitted": {
     "title": "Inventário enviado",
-    "text": "A {company} recebeu o seu inventário a {when}. A proposta vai aparecer neste mesmo link.",
+    "text": "A {company} recebeu o seu inventário a {when}. O orçamento vai aparecer neste mesmo link.",
     "version": "Versão {version}"
   },
   "inventory": {
@@ -137,7 +139,74 @@
       "notFound": "Este link já não é válido.",
       "noDraft": "Este inventário já foi enviado. Recarregue a página.",
       "invalid": "Há dados inválidos. Reveja os campos e tente de novo.",
-      "failed": "Não foi possível guardar. Tente de novo."
+      "failed": "Não foi possível guardar. Tente de novo.",
+      "quoteClosed": "Este orçamento já não está disponível. Recarregue a página.",
+      "quoteExpired": "Este orçamento caducou. Recarregue a página.",
+      "documentChanged": "A empresa enviou uma versão nova. Recarregue a página."
+    }
+  },
+  "quote": {
+    "eyebrow": "Orçamento ORC-{number} · versão {version}",
+    "validUntil": "Válido até {date}",
+    "intro": "A {company} preparou este orçamento com base no inventário da sua mudança. Reveja as linhas, escolha os extras opcionais e aceite com a sua assinatura.",
+    "description": "Descrição",
+    "quantity": "Quantidade",
+    "amount": "Valor",
+    "optional": "Opcional",
+    "optionalHint": "Marque os extras opcionais que quer incluir. O total atualiza-se.",
+    "subtotal": "Subtotal",
+    "vat": "IVA ({pct})",
+    "total": "Total",
+    "hourly": "Preço por hora: {amount} (equipa de {count}). Estimativa: {hours} horas. Paga as horas reais.",
+    "conditions": "Condições",
+    "inventory": "Inventário (versão {version})",
+    "inventoryHint": "O orçamento foi calculado com estes objetos.",
+    "print": "Imprimir ou guardar em PDF",
+    "accept": {
+      "title": "Aceitar orçamento",
+      "name": "O seu nome",
+      "signature": "Assinatura",
+      "signatureHint": "Assine com o dedo ou o rato dentro do quadro.",
+      "clear": "Limpar",
+      "submit": "Aceitar e assinar",
+      "submitting": "A enviar…",
+      "legal": "Ao aceitar, confirma o orçamento com os extras escolhidos e o total de {amount}. Guardamos o seu nome, a assinatura, a data e o endereço IP."
+    },
+    "reject": {
+      "open": "Recusar orçamento",
+      "title": "Recusar orçamento",
+      "reason": "Motivo (opcional)",
+      "reasonPlaceholder": "Ex.: encontrei outra data, o preço não serve…",
+      "submit": "Recusar",
+      "cancel": "Voltar",
+      "submitting": "A enviar…"
+    },
+    "accepted": {
+      "title": "Orçamento aceite",
+      "text": "Aceitou este orçamento a {date}, assinado por {name}. Total: {amount}. A {company} vai contactá-lo para combinar a mudança."
+    },
+    "rejected": {
+      "title": "Orçamento recusado",
+      "text": "Recusou este orçamento. Se a {company} lhe enviar uma versão nova, aparece neste mesmo link."
+    },
+    "expired": {
+      "title": "Este orçamento caducou",
+      "text": "A validade terminou a {date}. Peça à {company} uma versão nova."
+    },
+    "superseded": {
+      "title": "A preparar um orçamento novo",
+      "text": "A {company} recebeu o seu inventário atualizado e vai enviar um orçamento novo para este link."
+    },
+    "errors": {
+      "nameRequired": "Indique o seu nome.",
+      "signatureRequired": "Assine dentro do quadro.",
+      "signatureTooLarge": "A assinatura é demasiado grande. Limpe e assine de novo.",
+      "quoteClosed": "Este orçamento já não está disponível. Recarregue a página.",
+      "quoteExpired": "Este orçamento caducou. Recarregue a página.",
+      "documentChanged": "A empresa enviou uma versão nova. Recarregue a página.",
+      "invalid": "Há dados inválidos. Tente de novo.",
+      "failed": "Não foi possível enviar. Tente de novo.",
+      "notFound": "Este link já não é válido."
     }
   }
 }

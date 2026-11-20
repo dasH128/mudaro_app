@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   // Se compila el código fuente de los paquetes del monorepo (exportan .ts/.tsx sin build previo)
-  transpilePackages: ["@mudaro/ui", "@mudaro/validation", "@mudaro/inventory"],
+  transpilePackages: ["@mudaro/ui", "@mudaro/validation", "@mudaro/inventory", "@mudaro/quotes"],
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },

@@ -2,7 +2,8 @@
   "metadata": {
     "title": "Your move · Mudaro",
     "description": "Tell us what you are taking on your move.",
-    "linkTitle": "Your move inventory"
+    "linkTitle": "Your move inventory",
+    "quoteTitle": "Your move quote"
   },
   "home": {
     "title": "Open the link you received",
@@ -21,7 +22,8 @@
     "title": "Hi {name}, what are you taking?",
     "subtitle": "{company} prepares the quote from what you list here. You can do it bit by bit: it is saved.",
     "validUntil": "You can edit until {date}",
-    "expired": "Editing closed on {date}"
+    "expired": "Editing closed on {date}",
+    "quoteTitle": "Hi {name}, here is your quote"
   },
   "expired": {
     "title": "Editing has closed",
@@ -29,7 +31,7 @@
   },
   "submitted": {
     "title": "Inventory sent",
-    "text": "{company} received your inventory on {when}. The proposal will appear on this same link.",
+    "text": "{company} received your inventory on {when}. The quote will appear on this same link.",
     "version": "Version {version}"
   },
   "inventory": {
@@ -137,7 +139,74 @@
       "notFound": "This link is no longer valid.",
       "noDraft": "This inventory has already been sent. Reload the page.",
       "invalid": "Some data is not valid. Check the fields and try again.",
-      "failed": "Could not save. Please try again."
+      "failed": "Could not save. Please try again.",
+      "quoteClosed": "This quote is no longer available. Reload the page.",
+      "quoteExpired": "This quote has expired. Reload the page.",
+      "documentChanged": "The company sent a new version. Reload the page."
+    }
+  },
+  "quote": {
+    "eyebrow": "Quote ORC-{number} · version {version}",
+    "validUntil": "Valid until {date}",
+    "intro": "{company} prepared this quote from your move inventory. Review the lines, choose the optional extras and accept with your signature.",
+    "description": "Description",
+    "quantity": "Quantity",
+    "amount": "Amount",
+    "optional": "Optional",
+    "optionalHint": "Tick the optional extras you want to include. The total updates.",
+    "subtotal": "Subtotal",
+    "vat": "VAT ({pct})",
+    "total": "Total",
+    "hourly": "Hourly price: {amount} (crew of {count}). Estimate: {hours} hours. You pay the actual hours.",
+    "conditions": "Conditions",
+    "inventory": "Inventory (version {version})",
+    "inventoryHint": "The quote was calculated with these items.",
+    "print": "Print or save as PDF",
+    "accept": {
+      "title": "Accept quote",
+      "name": "Your name",
+      "signature": "Signature",
+      "signatureHint": "Sign with your finger or mouse inside the box.",
+      "clear": "Clear",
+      "submit": "Accept and sign",
+      "submitting": "Sending…",
+      "legal": "By accepting, you confirm the quote with the chosen extras and a total of {amount}. We keep your name, signature, date and IP address."
+    },
+    "reject": {
+      "open": "Decline quote",
+      "title": "Decline quote",
+      "reason": "Reason (optional)",
+      "reasonPlaceholder": "E.g. I found another date, the price does not work for me…",
+      "submit": "Decline",
+      "cancel": "Back",
+      "submitting": "Sending…"
+    },
+    "accepted": {
+      "title": "Quote accepted",
+      "text": "You accepted this quote on {date}, signed by {name}. Total: {amount}. {company} will contact you to arrange the move."
+    },
+    "rejected": {
+      "title": "Quote declined",
+      "text": "You declined this quote. If {company} sends you a new version, it will appear on this same link."
+    },
+    "expired": {
+      "title": "This quote has expired",
+      "text": "It was valid until {date}. Ask {company} for a new version."
+    },
+    "superseded": {
+      "title": "Preparing a new quote",
+      "text": "{company} received your updated inventory and will send a new quote to this link."
+    },
+    "errors": {
+      "nameRequired": "Enter your name.",
+      "signatureRequired": "Sign inside the box.",
+      "signatureTooLarge": "The signature is too large. Clear it and sign again.",
+      "quoteClosed": "This quote is no longer available. Reload the page.",
+      "quoteExpired": "This quote has expired. Reload the page.",
+      "documentChanged": "The company sent a new version. Reload the page.",
+      "invalid": "Some data is invalid. Please try again.",
+      "failed": "Could not send. Please try again.",
+      "notFound": "This link is no longer valid."
     }
   }
 }

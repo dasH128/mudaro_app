@@ -135,9 +135,9 @@ export function MonthView({ lang, t, overview, jobs, date, today, selected, show
                 </span>
               ))}
               {load.jobs.length > 2 ? <span className="px-1.5 text-[11px] font-bold text-muted">+{load.jobs.length - 2}</span> : null}
-              {load.proposals.map((proposal) => (
-                <span key={proposal.id} className="block truncate rounded-md border border-dashed border-field-border px-1.5 py-px text-[11px] text-muted">
-                  ? {proposal.client}
+              {load.quotes.map((quote) => (
+                <span key={quote.id} className="block truncate rounded-md border border-dashed border-field-border px-1.5 py-px text-[11px] text-muted">
+                  ? {quote.client}
                 </span>
               ))}
             </Link>
@@ -156,7 +156,7 @@ export function MonthView({ lang, t, overview, jobs, date, today, selected, show
               {interpolate(m.over, { needed: sel.people, have: overview.people.length })}
             </span>
           ) : null}
-          {sel.jobs.length === 0 && sel.proposals.length === 0 ? <span className="text-sm text-muted">{m.empty}</span> : null}
+          {sel.jobs.length === 0 && sel.quotes.length === 0 ? <span className="text-sm text-muted">{m.empty}</span> : null}
           <ul className="flex flex-col gap-1.5">
             {sel.jobs.map((job) => {
               const issues = describeIssues(issuesOf(job, overview.vehicles), t, lang);
@@ -185,11 +185,11 @@ export function MonthView({ lang, t, overview, jobs, date, today, selected, show
                 </li>
               );
             })}
-            {sel.proposals.map((proposal) => (
-              <li key={proposal.id} className="flex w-full items-center gap-2.5 rounded-xl border border-dashed border-status-off-border bg-surface px-3 py-2">
-                <span className="font-mono text-xs font-bold text-muted">{proposal.id}</span>
-                <strong className="flex-1 text-sm">{proposal.client}</strong>
-                <span className="text-xs text-muted">{pluralize(lang, proposal.crewNeeded, m.people)}</span>
+            {sel.quotes.map((quote) => (
+              <li key={quote.id} className="flex w-full items-center gap-2.5 rounded-xl border border-dashed border-status-off-border bg-surface px-3 py-2">
+                <span className="font-mono text-xs font-bold text-muted">{quote.id}</span>
+                <strong className="flex-1 text-sm">{quote.client}</strong>
+                <span className="text-xs text-muted">{pluralize(lang, quote.crewNeeded, m.people)}</span>
                 <span className="inline-flex h-5.5 items-center rounded-full border border-dashed border-field-border px-2 text-[11px] font-bold whitespace-nowrap text-muted">
                   {m.pending}
                 </span>
@@ -210,8 +210,8 @@ export function MonthView({ lang, t, overview, jobs, date, today, selected, show
             </span>
           </span>
           <span className="text-xs leading-snug text-muted">
-            {sel.proposals.length > 0
-              ? interpolate(m.hintProposals, { count: sel.proposals.reduce((sum, p) => sum + p.crewNeeded, 0) })
+            {sel.quotes.length > 0
+              ? interpolate(m.hintQuotes, { count: sel.quotes.reduce((sum, p) => sum + p.crewNeeded, 0) })
               : sel.jobs.length > 0
                 ? m.hintJobs
                 : m.hintFree}

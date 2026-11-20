@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      acceptances: {
+        Row: {
+          accepted_at: string
+          company_id: string
+          document_hash: string
+          id: string
+          ip: unknown
+          quote_id: string
+          selected_line_ids: string[]
+          signature_path: string
+          signed_subtotal_cents: number
+          signed_total_cents: number
+          signed_vat_cents: number
+          signer_name: string
+        }
+        Insert: {
+          accepted_at?: string
+          company_id: string
+          document_hash: string
+          id?: string
+          ip?: unknown
+          quote_id: string
+          selected_line_ids?: string[]
+          signature_path: string
+          signed_subtotal_cents: number
+          signed_total_cents: number
+          signed_vat_cents: number
+          signer_name: string
+        }
+        Update: {
+          accepted_at?: string
+          company_id?: string
+          document_hash?: string
+          id?: string
+          ip?: unknown
+          quote_id?: string
+          selected_line_ids?: string[]
+          signature_path?: string
+          signed_subtotal_cents?: number
+          signed_total_cents?: number
+          signed_vat_cents?: number
+          signer_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acceptances_quote_id_company_id_fkey"
+            columns: ["quote_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
       addresses: {
         Row: {
           id: string
@@ -929,6 +982,54 @@ export type Database = {
           },
         ]
       }
+      jobs: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          quote_id: string
+          scheduled_start: string
+          shipment_id: string
+          status: Database["public"]["Enums"]["job_status"]
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          quote_id: string
+          scheduled_start: string
+          shipment_id: string
+          status?: Database["public"]["Enums"]["job_status"]
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          quote_id?: string
+          scheduled_start?: string
+          shipment_id?: string
+          status?: Database["public"]["Enums"]["job_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_quote_id_company_id_fkey"
+            columns: ["quote_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "jobs_shipment_id_company_id_fkey"
+            columns: ["shipment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           cancellation_reason: string | null
@@ -1021,6 +1122,220 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      quote_counters: {
+        Row: {
+          company_id: string
+          last_number: number
+        }
+        Insert: {
+          company_id: string
+          last_number: number
+        }
+        Update: {
+          company_id?: string
+          last_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_counters_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quote_lines: {
+        Row: {
+          company_extra_id: string | null
+          company_id: string
+          description: string
+          id: string
+          kind: Database["public"]["Enums"]["quote_line_kind"]
+          optional: boolean
+          origin: Database["public"]["Enums"]["line_origin"]
+          quantity: number
+          quote_id: string
+          sort_order: number
+          total_cents: number
+          unit: string | null
+          unit_price_cents: number
+        }
+        Insert: {
+          company_extra_id?: string | null
+          company_id: string
+          description: string
+          id?: string
+          kind: Database["public"]["Enums"]["quote_line_kind"]
+          optional?: boolean
+          origin?: Database["public"]["Enums"]["line_origin"]
+          quantity: number
+          quote_id: string
+          sort_order?: number
+          total_cents: number
+          unit?: string | null
+          unit_price_cents: number
+        }
+        Update: {
+          company_extra_id?: string | null
+          company_id?: string
+          description?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["quote_line_kind"]
+          optional?: boolean
+          origin?: Database["public"]["Enums"]["line_origin"]
+          quantity?: number
+          quote_id?: string
+          sort_order?: number
+          total_cents?: number
+          unit?: string | null
+          unit_price_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_lines_company_extra_id_company_id_fkey"
+            columns: ["company_extra_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "company_extras"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "quote_lines_quote_id_company_id_fkey"
+            columns: ["quote_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          calculation: Json
+          company_id: string
+          conditions: string | null
+          created_at: string
+          created_by: string | null
+          document_hash: string | null
+          estimated_cost_cents: number | null
+          estimated_hours: number | null
+          hourly_rate_cents: number | null
+          id: string
+          inventory_id: string
+          km: number | null
+          number: number
+          operator_count: number | null
+          pricing_mode: Database["public"]["Enums"]["quote_presentation"]
+          rejected_at: string | null
+          rejected_reason: string | null
+          sent_at: string | null
+          shipment_id: string
+          snapshot: Json | null
+          status: Database["public"]["Enums"]["quote_status"]
+          suggested_price_cents: number | null
+          supersedes_id: string | null
+          tariff_id: string
+          updated_at: string
+          valid_until: string | null
+          vat_pct: number
+          vehicle_count: number | null
+          version: number
+          volume_m3: number | null
+        }
+        Insert: {
+          calculation?: Json
+          company_id: string
+          conditions?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_hash?: string | null
+          estimated_cost_cents?: number | null
+          estimated_hours?: number | null
+          hourly_rate_cents?: number | null
+          id?: string
+          inventory_id: string
+          km?: number | null
+          number: number
+          operator_count?: number | null
+          pricing_mode: Database["public"]["Enums"]["quote_presentation"]
+          rejected_at?: string | null
+          rejected_reason?: string | null
+          sent_at?: string | null
+          shipment_id: string
+          snapshot?: Json | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          suggested_price_cents?: number | null
+          supersedes_id?: string | null
+          tariff_id: string
+          updated_at?: string
+          valid_until?: string | null
+          vat_pct: number
+          vehicle_count?: number | null
+          version: number
+          volume_m3?: number | null
+        }
+        Update: {
+          calculation?: Json
+          company_id?: string
+          conditions?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_hash?: string | null
+          estimated_cost_cents?: number | null
+          estimated_hours?: number | null
+          hourly_rate_cents?: number | null
+          id?: string
+          inventory_id?: string
+          km?: number | null
+          number?: number
+          operator_count?: number | null
+          pricing_mode?: Database["public"]["Enums"]["quote_presentation"]
+          rejected_at?: string | null
+          rejected_reason?: string | null
+          sent_at?: string | null
+          shipment_id?: string
+          snapshot?: Json | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          suggested_price_cents?: number | null
+          supersedes_id?: string | null
+          tariff_id?: string
+          updated_at?: string
+          valid_until?: string | null
+          vat_pct?: number
+          vehicle_count?: number | null
+          version?: number
+          volume_m3?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_shipment_id_company_id_fkey"
+            columns: ["shipment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "quotes_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_tariff_id_fkey"
+            columns: ["tariff_id"]
+            isOneToOne: false
+            referencedRelation: "tariffs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shipment_counters: {
         Row: {
@@ -1192,6 +1507,92 @@ export type Database = {
           },
         ]
       }
+      tariffs: {
+        Row: {
+          average_speed_kmh: number
+          company_id: string
+          created_by: string | null
+          crew_large: number
+          crew_medium: number
+          crew_medium_max_m3: number
+          crew_small: number
+          crew_small_max_m3: number
+          id: string
+          km_price_cents: number
+          minimum_service_cents: number
+          no_lift_floor_extra_pct: number
+          no_lift_floor_surcharge_cents: number
+          operator_hour_cost_cents: number
+          operator_hour_price_cents: number
+          parking_extra_pct_per_25m: number
+          parking_surcharge_cents: number
+          quote_presentation: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days: number
+          stowage_factor: number
+          valid_from: string
+          vat_pct: number
+          version: number
+        }
+        Insert: {
+          average_speed_kmh?: number
+          company_id: string
+          created_by?: string | null
+          crew_large?: number
+          crew_medium?: number
+          crew_medium_max_m3?: number
+          crew_small?: number
+          crew_small_max_m3?: number
+          id?: string
+          km_price_cents: number
+          minimum_service_cents?: number
+          no_lift_floor_extra_pct?: number
+          no_lift_floor_surcharge_cents?: number
+          operator_hour_cost_cents: number
+          operator_hour_price_cents: number
+          parking_extra_pct_per_25m?: number
+          parking_surcharge_cents?: number
+          quote_presentation?: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days?: number
+          stowage_factor?: number
+          valid_from?: string
+          vat_pct?: number
+          version: number
+        }
+        Update: {
+          average_speed_kmh?: number
+          company_id?: string
+          created_by?: string | null
+          crew_large?: number
+          crew_medium?: number
+          crew_medium_max_m3?: number
+          crew_small?: number
+          crew_small_max_m3?: number
+          id?: string
+          km_price_cents?: number
+          minimum_service_cents?: number
+          no_lift_floor_extra_pct?: number
+          no_lift_floor_surcharge_cents?: number
+          operator_hour_cost_cents?: number
+          operator_hour_price_cents?: number
+          parking_extra_pct_per_25m?: number
+          parking_surcharge_cents?: number
+          quote_presentation?: Database["public"]["Enums"]["quote_presentation"]
+          quote_validity_days?: number
+          stowage_factor?: number
+          valid_from?: string
+          vat_pct?: number
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tariffs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_costs: {
         Row: {
           company_id: string
@@ -1308,6 +1709,44 @@ export type Database = {
         Args: { p_order_id: string; p_reason: string }
         Returns: undefined
       }
+      client_accept_quote: {
+        Args: {
+          p_document_hash: string
+          p_ip: unknown
+          p_quote_id: string
+          p_selected_line_ids: string[]
+          p_signature_path: string
+          p_signer_name: string
+          p_token_hash: string
+        }
+        Returns: string
+      }
+      client_reject_quote: {
+        Args: { p_quote_id: string; p_reason: string; p_token_hash: string }
+        Returns: undefined
+      }
+      client_save_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_token_hash: string
+        }
+        Returns: undefined
+      }
+      client_submit_inventory: {
+        Args: { p_token_hash: string }
+        Returns: number
+      }
+      close_inventory_draft: {
+        Args: {
+          p_actor_id: string
+          p_actor_name: string
+          p_actor_type: string
+          p_order_id: string
+        }
+        Returns: number
+      }
       create_company_with_invitation: {
         Args: { p_actor_id: string; p_admin: Json; p_company: Json }
         Returns: Json
@@ -1346,11 +1785,38 @@ export type Database = {
       current_company_id: { Args: never; Returns: string }
       delete_inventory_line: { Args: { p_line_id: string }; Returns: undefined }
       f_unaccent: { Args: { "": string }; Returns: string }
+      insert_default_tariff: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       is_company_administrator: { Args: never; Returns: boolean }
       is_platform_user: { Args: never; Returns: boolean }
       is_valid_tax_id: { Args: { tax_id: string }; Returns: boolean }
+      lock_order_by_link: {
+        Args: { p_token_hash: string; p_write: boolean }
+        Returns: string
+      }
       lock_owned_order: { Args: { p_order_id: string }; Returns: undefined }
       open_inventory_draft: { Args: { p_order_id: string }; Returns: string }
+      quote_totals: {
+        Args: { p_quote_id: string; p_selected: string[] }
+        Returns: {
+          subtotal_cents: number
+          total_cents: number
+          vat_cents: number
+        }[]
+      }
+      save_company_extra: {
+        Args: {
+          p_active: boolean
+          p_catalog_extra_id: string
+          p_id: string
+          p_name: string
+          p_price_cents: number
+          p_price_mode: Database["public"]["Enums"]["price_mode"]
+        }
+        Returns: string
+      }
       save_inventory_address: {
         Args: {
           p_address: string
@@ -1390,6 +1856,11 @@ export type Database = {
         }
         Returns: string
       }
+      save_quote_draft: {
+        Args: { p_lines: Json; p_order_id: string; p_quote: Json }
+        Returns: string
+      }
+      save_tariff: { Args: { p_tariff: Json }; Returns: number }
       search_catalog_items: {
         Args: { lang?: Database["public"]["Enums"]["app_locale"]; q: string }
         Returns: {
@@ -1400,6 +1871,7 @@ export type Database = {
           volume_m3: number
         }[]
       }
+      send_quote: { Args: { p_quote_id: string }; Returns: number }
       set_inventory_extra: {
         Args: {
           p_catalog_extra_id: string
@@ -1420,6 +1892,15 @@ export type Database = {
       }
       share_order_link: { Args: { p_order_id: string }; Returns: string }
       submit_inventory: { Args: { p_order_id: string }; Returns: number }
+      write_inventory_draft: {
+        Args: {
+          p_addresses: Json
+          p_extras: Json
+          p_lines: Json
+          p_order_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       address_role: "origin" | "destination" | "stop"
@@ -1429,8 +1910,18 @@ export type Database = {
       date_flexibility: "exact" | "two_days" | "one_week" | "month"
       filled_by: "client" | "company"
       handling_flag: "fragile" | "disassembly" | "extra_crew"
+      job_status:
+        | "scheduled"
+        | "in_progress"
+        | "delivered"
+        | "closed"
+        | "cancelled"
       lift_size: "none" | "small" | "large"
+      line_origin: "calculated" | "manual"
       price_mode: "fixed" | "unit" | "hour" | "m3" | "m3_month"
+      quote_line_kind: "base" | "extra" | "manual"
+      quote_presentation: "fixed" | "hourly"
+      quote_status: "draft" | "sent" | "accepted" | "rejected" | "superseded"
       shipment_event_kind:
         | "created"
         | "link_shared"
@@ -1590,8 +2081,19 @@ export const Constants = {
       date_flexibility: ["exact", "two_days", "one_week", "month"],
       filled_by: ["client", "company"],
       handling_flag: ["fragile", "disassembly", "extra_crew"],
+      job_status: [
+        "scheduled",
+        "in_progress",
+        "delivered",
+        "closed",
+        "cancelled",
+      ],
       lift_size: ["none", "small", "large"],
+      line_origin: ["calculated", "manual"],
       price_mode: ["fixed", "unit", "hour", "m3", "m3_month"],
+      quote_line_kind: ["base", "extra", "manual"],
+      quote_presentation: ["fixed", "hourly"],
+      quote_status: ["draft", "sent", "accepted", "rejected", "superseded"],
       shipment_event_kind: [
         "created",
         "link_shared",

@@ -6,7 +6,7 @@
     "loginTitle": "Entrar · Mudaro",
     "confirmTitle": "Convite · Mudaro",
     "setPasswordTitle": "Define a tua palavra-passe · Mudaro",
-    "proposalsTitle": "Propostas · Mudaro",
+    "quotesTitle": "Orçamentos · Mudaro",
     "ordersTitle": "Pedidos · Mudaro",
     "newOrderTitle": "Novo pedido · Mudaro",
     "orderCreatedTitle": "Pedido criado · Mudaro",
@@ -18,7 +18,9 @@
     "clientsTitle": "Clientes · Mudaro",
     "homeTitle": "Operações de hoje · Mudaro",
     "scheduleTitle": "Agenda · Mudaro",
-    "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro"
+    "forgotPasswordTitle": "Recuperar palavra-passe · Mudaro",
+    "pricingTitle": "Tarifas · Mudaro",
+    "quoteEditorTitle": "Orçamento · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -165,7 +167,7 @@
       "nav": {
         "home": "Início",
         "orders": "Pedidos",
-        "proposals": "Propostas",
+        "quotes": "Orçamentos",
         "schedule": "Agenda",
         "clients": "Clientes",
         "fleet": "Frota",
@@ -174,12 +176,12 @@
         "reports": "Relatórios"
       }
     },
-    "proposals": {
+    "quotes": {
       "eyebrow": "Operação",
-      "title": "Propostas",
+      "title": "Orçamentos",
       "subtitle": "Calcula, ajusta e envia orçamentos a partir do inventário do cliente.",
-      "new": "Nova proposta",
-      "loading": "A carregar propostas…",
+      "new": "Novo orçamento",
+      "loading": "A carregar orçamentos…",
       "stats": {
         "toSend": {
           "label": "Por enviar",
@@ -187,22 +189,22 @@
         },
         "awaiting": {
           "label": "À espera do cliente",
-          "hint": "{amount} em propostas enviadas"
+          "hint": "{amount} em orçamentos enviados"
         },
         "acceptance": {
           "label": "Taxa de aceitação",
           "hint": "Últimos 30 dias"
         },
-        "timeToProposal": {
-          "label": "Tempo até proposta",
+        "timeToQuote": {
+          "label": "Tempo até orçamento",
           "value": "{days} dias",
           "hint": "Média desde a criação do pedido"
         }
       },
       "ready": {
         "title": "Prontos para orçamentar",
-        "subtitle": "Pedidos com inventário recebido e sem proposta",
-        "create": "Criar proposta",
+        "subtitle": "Pedidos com inventário recebido e sem orçamento",
+        "create": "Criar orçamento",
         "received": "recebido {time}",
         "missingMeasures": {
           "one": "{count} objeto sem medidas",
@@ -210,36 +212,36 @@
         }
       },
       "list": {
-        "title": "Lista de propostas",
+        "title": "Lista de orçamentos",
         "filterLabel": "Filtrar por estado",
         "tabs": {
-          "all": "Todas",
+          "all": "Todos",
           "draft": "Rascunho",
-          "sent": "Enviadas",
+          "sent": "Enviados",
           "accepted": "Aceites",
-          "rejected": "Rejeitadas",
-          "expired": "Caducadas",
-          "superseded": "Substituídas"
+          "rejected": "Rejeitados",
+          "expired": "Caducados",
+          "superseded": "Substituídos"
         },
-        "searchLabel": "Pesquisar propostas",
-        "searchPlaceholder": "Cliente, nº de proposta ou pedido",
+        "searchLabel": "Pesquisar orçamentos",
+        "searchPlaceholder": "Cliente, nº de orçamento ou pedido",
         "sortLabel": "Ordenar",
         "sort": {
           "expiry": "Validade mais próxima",
           "newest": "Mais recentes",
           "value": "Valor mais alto"
         },
-        "empty": "Nenhuma proposta corresponde a esta pesquisa.",
+        "empty": "Nenhum orçamento corresponde a esta pesquisa.",
         "showing": {
-          "one": "A mostrar {shown} de {count} proposta",
-          "other": "A mostrar {shown} de {count} propostas"
+          "one": "A mostrar {shown} de {count} orçamento",
+          "other": "A mostrar {shown} de {count} orçamentos"
         },
         "marginNote": "A margem só é visível para administradores",
-        "open": "Abrir proposta {id}",
+        "open": "Abrir orçamento {id}",
         "routeTo": "para"
       },
       "columns": {
-        "proposal": "Proposta",
+        "quote": "Orçamento",
         "clientRoute": "Cliente e rota",
         "volume": "Volume",
         "total": "Total c/ IVA",
@@ -250,34 +252,151 @@
       },
       "status": {
         "draft": "Rascunho",
-        "sent": "Enviada",
+        "sent": "Enviado",
         "accepted": "Aceite",
-        "rejected": "Rejeitada",
-        "expired": "Caducada",
-        "superseded": "Substituída"
+        "rejected": "Rejeitado",
+        "expired": "Caducado",
+        "superseded": "Substituído"
       },
       "validity": {
-        "notSent": "Não enviada",
-        "createdToday": "Criada hoje, {time}",
-        "createdOn": "Criada em {date}",
+        "notSent": "Não enviado",
+        "createdToday": "Criado hoje, {time}",
+        "createdOn": "Criado em {date}",
         "expiresToday": "Expira hoje",
         "expiresIn": {
           "one": "Expira em {count} dia",
           "other": "Expira em {count} dias"
         },
-        "valid": "Válida",
+        "valid": "Válido",
         "until": "Até {date}",
         "accepted": "Aceite",
         "acceptedToday": "Aceite hoje",
-        "signedAt": "Assinada às {time}",
-        "signedOn": "Assinada em {date}",
-        "rejected": "Rejeitada",
+        "signedAt": "Assinado às {time}",
+        "signedOn": "Assinado em {date}",
+        "rejected": "Rejeitado",
         "reason": "Motivo: {reason}",
         "noReason": "Sem motivo indicado",
         "expired": "Caducou",
         "expiredOn": "Em {date}",
-        "superseded": "Substituída",
-        "supersededNote": "Substituída por uma versão mais recente"
+        "superseded": "Substituído",
+        "supersededNote": "Substituído por uma versão mais recente"
+      },
+      "editor": {
+        "title": "Orçamento para {name}",
+        "numbered": "ORC-{number} · versão {version}",
+        "numberPending": "Novo orçamento · versão {version}",
+        "basedOn": "Calculado sobre o inventário v{version}",
+        "lastStatus": "A versão {version} está {status}. Ao enviar esta, a anterior deixa de valer.",
+        "statuses": {
+          "sent": "enviada",
+          "accepted": "aceite",
+          "rejected": "recusada",
+          "superseded": "desatualizada"
+        },
+        "noInventory": {
+          "title": "Ainda não há inventário",
+          "text": "O orçamento calcula-se sobre o inventário enviado. Quando chegar, volta aqui."
+        },
+        "won": {
+          "title": "Orçamento aceite",
+          "text": "O cliente já aceitou um orçamento deste pedido."
+        },
+        "back": "Voltar ao pedido",
+        "calc": {
+          "title": "Cálculo",
+          "text": "Sugestão a partir do inventário, da tarifa e da frota. Podes mudar qualquer valor.",
+          "volume": "Volume ajustado",
+          "declared": "{value} declarados",
+          "vehicles": "Veículos",
+          "trips": {
+            "one": "{count} viagem",
+            "other": "{count} viagens"
+          },
+          "noVehicles": "Sem veículos ativos",
+          "km": "Quilómetros",
+          "kmHint": "Da base à base, a passar por todas as moradas.",
+          "operators": "Operários",
+          "hours": "Horas da equipa",
+          "suggested": "Sugerido: {value}",
+          "reset": "Repor valores sugeridos"
+        },
+        "alerts": {
+          "title": "Pede atenção",
+          "no-lift": "{floors} andares sem elevador",
+          "far-parking": "Estacionamento a {meters} m",
+          "special-items": "Objetos especiais: {fragile} frágeis, {dismantle} a desmontar, {extraCrew} de pessoal extra",
+          "unmeasured": "{count} objetos sem medidas",
+          "extra-trips": "Não cabe numa viagem: {trips} viagens",
+          "no-vehicles": "Sem veículos ativos na frota",
+          "no-km": "Falta indicar os quilómetros",
+          "minimum-applied": "Aplica-se o mínimo por serviço ({amount})",
+          "missing-vehicle-cost": "Um veículo sem custo por km: o custo sai mais baixo"
+        },
+        "lines": {
+          "title": "Linhas do orçamento",
+          "description": "Descrição",
+          "quantity": "Qtd.",
+          "unit": "Un.",
+          "price": "Preço",
+          "total": "Total",
+          "included": "Incluído",
+          "optional": "Opcional",
+          "optionalHint": "Os opcionais, o cliente escolhe se os quer ao aceitar.",
+          "remove": "Retirar {name}",
+          "addExtra": "Adicionar serviço",
+          "addExtraPlaceholder": "Escolher serviço…",
+          "addManual": "Adicionar linha",
+          "newLine": "Nova linha",
+          "noExtras": "Ainda não tens serviços extra. Cria-os em Tarifas.",
+          "clientAsked": "O cliente pediu: {list}",
+          "edited": "alterada à mão"
+        },
+        "base": {
+          "labour": "Mão de obra",
+          "transport": "Transporte",
+          "floor-surcharge": "Suplemento por andar sem elevador",
+          "parking-surcharge": "Suplemento de estacionamento",
+          "minimum": "Ajuste ao mínimo por serviço"
+        },
+        "presentation": {
+          "title": "Apresentação",
+          "legend": "Preço para o cliente",
+          "fixed": "Preço fechado",
+          "hourly": "Por hora, com estimativa",
+          "validUntil": "Válido até",
+          "validHint": "dd/mm/aaaa",
+          "conditions": "Condições",
+          "conditionsPlaceholder": "Ex.: inclui seguro de carga. Pagamento no dia da mudança."
+        },
+        "summary": {
+          "title": "Resumo",
+          "subtotal": "Subtotal",
+          "vat": "IVA ({pct})",
+          "total": "Total",
+          "withOptional": "Com todos os opcionais: {amount}",
+          "hourlyRate": "{amount} por hora (equipa de {count})",
+          "cost": "Custo estimado",
+          "margin": "Margem",
+          "adminOnly": "Só os administradores veem o custo e a margem."
+        },
+        "save": "Guardar rascunho",
+        "saving": "A guardar…",
+        "saved": "Rascunho guardado.",
+        "send": "Enviar orçamento",
+        "sending": "A enviar…",
+        "sendNote": "Depois de enviado, o orçamento não se altera: para mudar, crias uma versão nova.",
+        "errors": {
+          "invalid": "Há dados inválidos. Revê as linhas e os valores.",
+          "noInventory": "O pedido ainda não tem inventário.",
+          "shipmentClosed": "Este pedido já foi ganho ou cancelado.",
+          "inventoryChanged": "O cliente enviou um inventário novo. Recarrega a página para recalcular.",
+          "empty": "Adiciona pelo menos uma linha.",
+          "invalidValidity": "Indica uma validade a partir de hoje (dd/mm/aaaa).",
+          "notAllowed": "Não podes alterar este pedido.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        },
+        "sendConfirm": "Sim, enviar ao cliente",
+        "cancel": "Cancelar"
       }
     },
     "orders": {
@@ -468,13 +587,13 @@
           }
         },
         "actions": {
-          "create-proposal": "Criar proposta",
-          "continue-proposal": "Continuar",
+          "create-quote": "Criar orçamento",
+          "continue-quote": "Continuar",
           "resend-link": "Reenviar link",
           "share-link": "Partilhar link",
           "copy-link": "Gerar link novo",
           "fill-inventory": "Preencher inventário",
-          "view-proposal": "Ver proposta",
+          "view-quote": "Ver orçamento",
           "view-job": "Ver trabalho"
         },
         "soon": "Disponível em breve",
@@ -484,7 +603,7 @@
             "one": "Enviou o inventário {time}. Falta saber as medidas de {count} objeto antes de fechar o preço.",
             "other": "Enviou o inventário {time}. Falta saber as medidas de {count} objetos antes de fechar o preço."
           },
-          "draftProposal": "Já começaste a proposta. Está guardada em rascunho {time}.",
+          "draftQuote": "Já começaste o orçamento. Está guardado em rascunho {time}.",
           "linkExpiresToday": "O link expira hoje e o inventário ainda não chegou. Vale a pena um lembrete.",
           "linkExpiresIn": {
             "one": "O link expira em {count} dia e o inventário ainda não chegou. Vale a pena um lembrete.",
@@ -498,15 +617,15 @@
           "justCreated": "Criado agora. Falta partilhar o link.",
           "justCreatedSelf": "Criado agora. Falta preencher o inventário.",
           "filling": "A preencher com calma. Link ativo até {date}.",
-          "proposalSentToday": "Proposta v{version} enviada. Expira hoje.",
-          "proposalSent": {
-            "one": "Proposta v{version} enviada. Expira em {count} dia.",
-            "other": "Proposta v{version} enviada. Expira em {count} dias."
+          "quoteSentToday": "Orçamento v{version} enviado. Expira hoje.",
+          "quoteSent": {
+            "one": "Orçamento v{version} enviado. Expira em {count} dia.",
+            "other": "Orçamento v{version} enviado. Expira em {count} dias."
           },
-          "proposalExpired": "Proposta v{version} enviada. Já caducou.",
+          "quoteExpired": "Orçamento v{version} enviado. Já caducou.",
           "wonToday": "Aceitou e assinou hoje às {time}.",
           "wonOn": "Aceitou e assinou em {date}.",
-          "lostReason": "Recusou a proposta. Motivo: {reason}.",
+          "lostReason": "Recusou o orçamento. Motivo: {reason}.",
           "lostNoReason": "Perdido sem motivo indicado."
         },
         "side": {
@@ -552,7 +671,12 @@
           "O link está ativo durante {days} dias."
         ],
         "namePlaceholder": "[NOME]",
-        "linkPlaceholder": "[LINK DO PEDIDO]"
+        "linkPlaceholder": "[LINK DO PEDIDO]",
+        "quoteBody": [
+          "Olá {name}! Aqui é {sender}, da {company}.",
+          "O orçamento da sua mudança está pronto. Pode vê-lo e aceitá-lo aqui, sem criar conta:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "Novo pedido",
@@ -573,7 +697,7 @@
           "email": "Email",
           "optional": "(opcional)",
           "emailPlaceholder": "nome@exemplo.pt",
-          "emailHint": "Com email, o cliente recebe cópia da proposta aceite e das atas.",
+          "emailHint": "Com email, o cliente recebe cópia do orçamento aceite e das atas.",
           "addTaxId": "Adicionar NIF",
           "taxId": "NIF",
           "taxIdHint": "9 dígitos.",
@@ -658,7 +782,7 @@
             },
             {
               "title": "Recebes um aviso",
-              "text": "Com o inventário recebido, preparas a proposta."
+              "text": "Com o inventário recebido, preparas o orçamento."
             }
           ],
           "afterSelf": [
@@ -671,7 +795,7 @@
               "text": "Andar, elevador, escadas e estacionamento."
             },
             {
-              "title": "Preparas a proposta",
+              "title": "Preparas o orçamento",
               "text": "O cálculo usa o inventário que preencheste."
             }
           ]
@@ -696,7 +820,7 @@
         "routeTo": "para",
         "stops": "Paragens: {list}",
         "shareTitle": "Agora envia o link a {name}",
-        "shareText": "É por aqui que {name} indica o que vai levar. Mais tarde, verá a proposta no mesmo link.",
+        "shareText": "É por aqui que {name} indica o que vai levar. Mais tarde, verá o orçamento no mesmo link.",
         "linkLabel": "Link do pedido",
         "copy": "Copiar link",
         "validUntil": "Ativo até {date} · dá acesso apenas a este pedido",
@@ -737,6 +861,13 @@
           "fillInventory": "Preencher eu o inventário",
           "createAnother": "Criar outro pedido",
           "view": "Ver pedido"
+        },
+        "quote": {
+          "title": "Link do cliente · {id}",
+          "shareTitle": "Envia o orçamento a {name}",
+          "shareText": "Pelo link, {name} vê o orçamento e aceita-o com a assinatura.",
+          "emailSubject": "O orçamento da sua mudança",
+          "notice": "O link dá acesso apenas a este pedido. Vês a resposta de {name} no separador Orçamentos."
         }
       },
       "inventory": {
@@ -871,7 +1002,7 @@
         },
         "actions": {
           "more": "Mais ações",
-          "createProposal": "Criar proposta",
+          "createQuote": "Criar orçamento",
           "shareLink": "Partilhar link"
         },
         "journey": {
@@ -881,8 +1012,9 @@
             "created": "Pedido criado",
             "link-shared": "Link partilhado",
             "inventory-submitted": "Inventário recebido",
-            "proposal-sent": "Proposta enviada",
-            "won": "Ganho"
+            "quote-sent": "Orçamento enviado",
+            "won": "Ganho",
+            "lost": "Perdido"
           }
         },
         "alert": {
@@ -900,11 +1032,15 @@
           "summary": "Resumo",
           "inventory": "Inventário",
           "addresses": "Moradas",
-          "proposals": "Propostas",
+          "quotes": "Orçamentos",
           "history": "Histórico"
         },
         "summary": {
           "moveTitle": "A mudança",
+          "jobTitle": "Trabalho agendado",
+          "jobWhen": "{date} às {time}",
+          "jobPending": "Equipa e veículo ainda por atribuir.",
+          "viewSchedule": "Ver na agenda",
           "edit": "Editar",
           "date": "Data da mudança",
           "volume": "Volume declarado",
@@ -918,7 +1054,7 @@
           },
           "noInventory": "Ainda sem inventário",
           "distance": "Distância entre moradas",
-          "distanceSub": "Calculada na proposta",
+          "distanceSub": "Calculada no orçamento",
           "distanceUnknown": "Por calcular",
           "origin": "Origem",
           "destination": "Destino",
@@ -974,15 +1110,34 @@
             "permit": "Precisa de licença"
           }
         },
-        "proposals": {
-          "emptyTitle": "Ainda não há propostas",
-          "emptyReady": "O inventário está pronto. Quando criares a proposta, as versões e o estado de cada uma aparecem aqui.",
-          "emptyWaiting": "Quando o inventário estiver pronto, podes criar a proposta. As versões e o estado de cada uma aparecem aqui.",
+        "quotes": {
+          "emptyTitle": "Ainda não há orçamentos",
+          "emptyReady": "O inventário está pronto. Quando criares o orçamento, as versões e o estado de cada uma aparecem aqui.",
+          "emptyWaiting": "Quando o inventário estiver pronto, podes criar o orçamento. As versões e o estado de cada uma aparecem aqui.",
           "count": {
-            "one": "Este pedido tem {count} proposta.",
-            "other": "Este pedido tem {count} propostas."
+            "one": "Este pedido tem {count} orçamento.",
+            "other": "Este pedido tem {count} orçamentos."
           },
-          "view": "Ver propostas"
+          "view": "Ver orçamentos",
+          "number": "ORC-{number} · versão {version}",
+          "statuses": {
+            "draft": "Rascunho",
+            "sent": "Enviado",
+            "accepted": "Aceite",
+            "rejected": "Recusado",
+            "superseded": "Substituído",
+            "expired": "Caducado"
+          },
+          "sentOn": "Enviado a {date}",
+          "validUntil": "Válido até {date}",
+          "acceptedOn": "Aceite a {date}",
+          "rejected": "Motivo: {reason}",
+          "inventoryOf": "Inventário v{version}",
+          "outdated": "O cliente enviou um inventário novo (v{version}). O orçamento ficou desatualizado: cria uma versão nova.",
+          "create": "Criar orçamento",
+          "continueDraft": "Continuar rascunho",
+          "newVersion": "Criar versão nova",
+          "total": "{amount} com IVA"
         },
         "history": {
           "title": "Histórico",
@@ -997,8 +1152,8 @@
           "inventorySubmitted": "O cliente enviou o inventário (v{version})",
           "inventoryMeta": "{when} · notificação enviada à equipa",
           "inventoryFilled": "A empresa preencheu o inventário (v{version})",
-          "proposalSent": "Proposta enviada (v{version})",
-          "won": "Proposta aceite",
+          "quoteSent": "Orçamento enviado (v{version})",
+          "won": "Orçamento aceite",
           "lost": "Pedido perdido",
           "meta": "{when} · {actor}"
         },
@@ -1020,15 +1175,20 @@
             "one": "Falta {count} dia.",
             "other": "Faltam {count} dias."
           },
-          "canEdit": "{name} pode alterar o inventário até aceitar uma proposta.",
+          "canEdit": "{name} pode alterar o inventário até receber o orçamento.",
           "expiredText": "O link caducou: {name} já não consegue alterar o inventário.",
-          "closedText": "O pedido está fechado: o link já não dá acesso.",
+          "closedText": "Orçamento aceite: pelo link, {name} consulta o orçamento assinado.",
           "copy": "Gerar link novo",
           "viewAsClient": "Ver como cliente",
           "notes": "Notas internas",
           "noteLabel": "Nota interna",
           "notePlaceholder": "Só a tua equipa vê isto. Ex.: prefere de manhã, tem um gato.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "Sem link",
+          "noLinkText": "{name} ainda não tem link: sem ele não consegue ver o orçamento.",
+          "generate": "Gerar link",
+          "quoteText": "Pelo link, {name} vê o orçamento e pode aceitá-lo ou recusá-lo.",
+          "lostText": "{name} recusou o orçamento. Se criares uma versão nova, aparece no mesmo link."
         }
       }
     },
@@ -1042,16 +1202,16 @@
         "one": "{count} veículo",
         "other": "{count} veículos"
       },
-      "proposalsWord": {
-        "one": "proposta",
-        "other": "propostas"
+      "quotesWord": {
+        "one": "orçamento",
+        "other": "orçamentos"
       },
       "acceptedWord": {
         "one": "{count} aceite",
         "other": "{count} aceites"
       },
       "since": "desde {date} · {by}",
-      "inactiveNote": "Não entra nas propostas nem na agenda",
+      "inactiveNote": "Não entra nos orçamentos nem na agenda",
       "inactiveReasons": {
         "workshop": "Na oficina",
         "other": "Inativo"
@@ -1081,11 +1241,11 @@
         "nothing": "nada marcado"
       },
       "capacity": {
-        "suffix": "disponíveis para propostas",
+        "suffix": "disponíveis para orçamentos",
         "help": {
-          "label": "Como a frota entra nas propostas",
-          "title": "Como a frota entra nas propostas",
-          "text": "O cálculo escolhe a combinação mais pequena de veículos ativos que leva o volume ajustado. Se nada chega, propõe viagens extra. Um veículo inativo não aparece nas propostas nem na agenda.",
+          "label": "Como a frota entra nos orçamentos",
+          "title": "Como a frota entra nos orçamentos",
+          "text": "O cálculo escolhe a combinação mais pequena de veículos ativos que leva o volume ajustado. Se nada chega, propõe viagens extra. Um veículo inativo não aparece nos orçamentos nem na agenda.",
           "exampleVolume": "38,4 m³",
           "exampleResult": "Camião grande + Furgão V-02"
         }
@@ -1102,11 +1262,11 @@
         "label": "Avisos da frota",
         "capacity": {
           "title": {
-            "one": "Faltou capacidade em {count} proposta",
-            "other": "Faltou capacidade em {count} propostas"
+            "one": "Faltou capacidade em {count} orçamento",
+            "other": "Faltou capacidade em {count} orçamentos"
           },
           "text": "Este mês precisaram de viagem extra. Um veículo maior podia baixar o preço.",
-          "action": "Ver propostas"
+          "action": "Ver orçamentos"
         },
         "idle": {
           "title": {
@@ -1114,8 +1274,8 @@
             "other": "{name} parado há {count} dias"
           },
           "text": {
-            "one": "Entrou só em {count} proposta este mês. Confirma se ainda faz falta.",
-            "other": "Entrou só em {count} propostas este mês. Confirma se ainda faz falta."
+            "one": "Entrou só em {count} orçamento este mês. Confirma se ainda faz falta.",
+            "other": "Entrou só em {count} orçamentos este mês. Confirma se ainda faz falta."
           },
           "action": "Ver veículo"
         },
@@ -1124,7 +1284,7 @@
             "one": "{count} veículo sem custo por km",
             "other": "{count} veículos sem custo por km"
           },
-          "text": "Sem ele, o custo e a margem das propostas ficam errados.",
+          "text": "Sem ele, o custo e a margem dos orçamentos ficam errados.",
           "action": "Completar dados"
         }
       },
@@ -1143,7 +1303,7 @@
           "capacity": "Capacidade",
           "lastUse": "Último uso",
           "nextUse": "Próximo uso",
-          "proposals": "Em propostas"
+          "quotes": "Em orçamentos"
         },
         "view": {
           "label": "Modo de visualização",
@@ -1158,15 +1318,15 @@
         "capacity": "Capacidade",
         "lastUse": "Último uso",
         "nextUse": "Próximo uso",
-        "proposals": "Em propostas · 30 d",
+        "quotes": "Em orçamentos · 30 d",
         "actions": "Ações",
         "viewDetail": "Ver detalhe de {name}",
         "open": "Abrir {name}",
         "costMissing": "Custo por km em falta",
         "notIncluded": "Não entra",
         "inactiveTitle": "Inativos · {count}",
-        "inactiveHint": "não entram nas propostas nem na agenda",
-        "footnote": "\"Em propostas\": propostas dos últimos 30 dias em que o cálculo escolheu o veículo, e quantas foram aceites.",
+        "inactiveHint": "não entram nos orçamentos nem na agenda",
+        "footnote": "\"Em orçamentos\": orçamentos dos últimos 30 dias em que o cálculo escolheu o veículo, e quantos foram aceites.",
         "openSchedule": "Abrir agenda",
         "emptySearch": "Nenhum veículo corresponde à pesquisa.",
         "emptyFilter": "Nenhum veículo neste filtro."
@@ -1207,8 +1367,8 @@
           "viewSchedule": "Ver na agenda",
           "none": "Sem trabalhos marcados."
         },
-        "proposals": {
-          "title": "Em propostas · últimos 30 dias",
+        "quotes": {
+          "title": "Em orçamentos · últimos 30 dias",
           "accepted": "aceites",
           "rate": "aceitação"
         },
@@ -1219,8 +1379,8 @@
           "maxLoad": "Carga máxima",
           "costPerKm": "Custo por km",
           "type": "Tipo",
-          "costMissing": "Sem custo por km, o custo e a margem das propostas ficam errados.",
-          "privacy": "O custo por km só é visível para administradores. As alterações não mudam propostas já enviadas."
+          "costMissing": "Sem custo por km, o custo e a margem dos orçamentos ficam errados.",
+          "privacy": "O custo por km só é visível para administradores. As alterações não mudam orçamentos já enviados."
         },
         "usage": {
           "title": "Uso em {month}",
@@ -1252,7 +1412,7 @@
           },
           "costs": {
             "title": "Custos mais claros",
-            "text": "O custo por km entra nas tuas propostas e mostra a margem real."
+            "text": "O custo por km entra nos teus orçamentos e mostra a margem real."
           },
           "schedule": {
             "title": "Agenda organizada",
@@ -1323,7 +1483,7 @@
           "plateFormat": "Formato: AA-00-AA ou 00-AA-00",
           "name": "Nome curto",
           "optional": "(opcional)",
-          "nameHint": "Como a equipa lhe chama. Aparece na agenda e nas propostas internas."
+          "nameHint": "Como a equipa lhe chama. Aparece na agenda e nos orçamentos internos."
         },
         "capacity": {
           "title": "Capacidade e custos",
@@ -1333,13 +1493,13 @@
           "maxLoad": "Carga máxima",
           "cost": "Custo por km",
           "suggested": "Valor sugerido",
-          "privacy": "Custo por km: combustível, portagens e desgaste. Entra no custo e na margem das propostas e só os administradores o veem."
+          "privacy": "Custo por km: combustível, portagens e desgaste. Entra no custo e na margem dos orçamentos e só os administradores o veem."
         },
         "availability": {
           "title": "Disponibilidade",
-          "label": "Disponível para propostas e agenda",
+          "label": "Disponível para orçamentos e agenda",
           "on": "Entra no cálculo e na agenda logo que guardares.",
-          "off": "Fica guardado, mas não entra em propostas nem na agenda até o ativares."
+          "off": "Fica guardado, mas não entra em orçamentos nem na agenda até o ativares."
         },
         "upcoming": {
           "badge": "Em breve",
@@ -1364,11 +1524,11 @@
           "noPlate": "matrícula por indicar"
         },
         "impact": {
-          "title": "O que muda nas propostas",
+          "title": "O que muda nos orçamentos",
           "fleet": "Frota disponível",
-          "needCapacity": "Indica a capacidade para vermos como este veículo entra nas propostas.",
+          "needCapacity": "Indica a capacidade para vermos como este veículo entra nos orçamentos.",
           "active": "Mudanças até {capacity} m³ podem ir só neste veículo, e as maiores ganham mais combinações possíveis.",
-          "inactive": "Enquanto estiver inativo, não conta para as propostas."
+          "inactive": "Enquanto estiver inativo, não conta para os orçamentos."
         },
         "checks": {
           "title": "Antes de guardar",
@@ -1426,8 +1586,8 @@
         }
       },
       "help": {
-        "label": "Como a equipa entra nas propostas",
-        "title": "Como a equipa entra nas propostas",
+        "label": "Como a equipa entra nos orçamentos",
+        "title": "Como a equipa entra nos orçamentos",
         "text": "O cálculo estima quantos operários cada mudança precisa e usa o custo por hora da tarifa, igual para todos. Na agenda, só aparecem as pessoas ativas.",
         "app": "Os operários usam a app no telemóvel: veem só os trabalhos que lhes atribuis, sem preços nem margens."
       },
@@ -1490,8 +1650,8 @@
             "other": "{when} faltam {count} pessoas no {orderId}"
           },
           "text": {
-            "one": "A proposta conta com {needed} operários e só há {assigned} atribuído.",
-            "other": "A proposta conta com {needed} operários e só há {assigned} atribuídos."
+            "one": "O orçamento conta com {needed} operários e só há {assigned} atribuído.",
+            "other": "O orçamento conta com {needed} operários e só há {assigned} atribuídos."
           },
           "free": "Livres {when}: {names}.",
           "tomorrow": "amanhã",
@@ -1714,7 +1874,7 @@
       "tomorrow": "Amanhã",
       "line": {
         "inProgress": "{orderId} em curso",
-        "inProgressQuote": "{orderId} em curso · e proposta a expirar",
+        "inProgressQuote": "{orderId} em curso · e orçamento a expirar",
         "todayDraft": "{orderId} hoje · novo pedido em rascunho",
         "inventoryArrived": "{orderId} · inventário chegou há {hours} h",
         "missingMeasure": {
@@ -1745,8 +1905,8 @@
           "move-in-progress": "mudança em curso",
           "pickup-signed": "ata de recolha assinada",
           "sent-inventory": "enviou o inventário",
-          "accepted-quote": "aceitou a proposta",
-          "declined-quote": "recusou a proposta",
+          "accepted-quote": "aceitou o orçamento",
+          "declined-quote": "recusou o orçamento",
           "accepted-signed": "aceitou e assinou",
           "signed-delivery": "assinou a entrega",
           "order-created": "pedido criado"
@@ -1815,7 +1975,7 @@
           "one": "{count} feita",
           "other": "{count} feitas"
         },
-        "footnote": "\"Aceite\": soma das propostas aceites, com IVA. Só administradores veem valores.",
+        "footnote": "\"Aceite\": soma dos orçamentos aceites, com IVA. Só administradores veem valores.",
         "footnoteNoValues": "Só administradores veem valores.",
         "showing": "A mostrar {shown} de {total}",
         "emptySearch": "Nenhum cliente corresponde à pesquisa.",
@@ -1851,12 +2011,12 @@
           "viewAll": "Ver em Pedidos",
           "notes": {
             "quoteSent": {
-              "one": "Proposta v{version} enviada · expira em {count} dia",
-              "other": "Proposta v{version} enviada · expira em {count} dias"
+              "one": "Orçamento v{version} enviado · expira em {count} dia",
+              "other": "Orçamento v{version} enviado · expira em {count} dias"
             },
             "inProgress": "Em curso · {vehicle} · {crew}",
             "closed": "Fechado · {amount}",
-            "draft": "Proposta em rascunho desde as {time}",
+            "draft": "Orçamento em rascunho desde as {time}",
             "shortStaffed": {
               "one": "{when} · falta {count} pessoa na equipa",
               "other": "{when} · faltam {count} pessoas na equipa"
@@ -1877,7 +2037,7 @@
           "taxId": "NIF",
           "taxIdPlaceholder": "9 dígitos",
           "taxIdMissing": "Sem NIF, a exportação para faturar fica incompleta.",
-          "emailMissing": "Sem email, não recebe cópia da proposta aceite nem das atas."
+          "emailMissing": "Sem email, não recebe cópia do orçamento aceite nem das atas."
         },
         "addresses": {
           "title": "Moradas usadas",
@@ -1982,8 +2142,8 @@
       "pipeline": {
         "title": "Pedidos em andamento",
         "subtitle": {
-          "one": "Do primeiro contacto à proposta aceite. {count} inventário à espera de orçamento.",
-          "other": "Do primeiro contacto à proposta aceite. {count} inventários à espera de orçamento."
+          "one": "Do primeiro contacto ao orçamento aceite. {count} inventário à espera de orçamento.",
+          "other": "Do primeiro contacto ao orçamento aceite. {count} inventários à espera de orçamento."
         },
         "viewOrders": "Ver pedidos",
         "stages": {
@@ -1999,8 +2159,8 @@
             "label": "Inventário recebido",
             "hint": "Prontos para orçamentar"
           },
-          "proposal-sent": {
-            "label": "Proposta enviada",
+          "quote-sent": {
+            "label": "Orçamento enviado",
             "hint": "À espera de resposta"
           },
           "won": {
@@ -2026,7 +2186,7 @@
         "events": {
           "arrived": "Chegou ao destino",
           "crew-left": "Equipa saiu da base",
-          "proposal-accepted": "Proposta aceite",
+          "quote-accepted": "Orçamento aceite",
           "delivery-done": "Entrega concluída",
           "incident-logged": "Incidência registada"
         },
@@ -2036,7 +2196,7 @@
       "shortcuts": {
         "title": "Atalhos",
         "volumeCalculator": "Calculadora de volume",
-        "newProposal": "Nova proposta",
+        "newQuote": "Novo orçamento",
         "pricing": "Tarifas e extras",
         "sendLink": "Enviar link ao cliente"
       }
@@ -2153,6 +2313,8 @@
         "label": "Dia por recurso",
         "resource": "Recurso",
         "vehicles": "Veículos",
+        "unassigned": "Por atribuir",
+        "unassignedSub": "Sem veículo nem equipa",
         "people": "Pessoas",
         "freeAllDay": "Livre o dia todo"
       },
@@ -2176,7 +2338,7 @@
           "almost-full": "Quase cheio",
           "full": "Cheio"
         },
-        "pending": "Proposta à espera",
+        "pending": "Orçamento à espera",
         "cellAria": "{day}: {text}",
         "cellJobs": {
           "one": "{count} mudança",
@@ -2192,8 +2354,8 @@
         "freeTitle": "Ainda livre neste dia",
         "ofVehicles": "de {count} veículos",
         "ofPeople": "de {count} pessoas",
-        "hintProposals": "Se a proposta à espera for aceite, conta mais {count} pessoas neste dia.",
-        "hintJobs": "Estimado pelas propostas aceites. As horas exatas estão na vista Semana.",
+        "hintQuotes": "Se o orçamento à espera for aceite, conta mais {count} pessoas neste dia.",
+        "hintJobs": "Estimado pelos orçamentos aceites. As horas exatas estão na vista Semana.",
         "hintFree": "Bom dia para propor a quem pede datas próximas.",
         "viewWeek": "Ver na semana",
         "tagAccepted": "Aceite"
@@ -2218,9 +2380,9 @@
           "inventory": "Inventário",
           "vehicleOk": "{capacity} m³ para {volume}",
           "vehicleNone": "por atribuir",
-          "vehicleNoneSub": "a proposta contava com um veículo para {volume}",
+          "vehicleNoneSub": "o orçamento contava com um veículo para {volume}",
           "crewValue": "{have} de {need} pessoas",
-          "crewOk": "como na proposta",
+          "crewOk": "como no orçamento",
           "crewMissing": {
             "one": "falta {count} pessoa",
             "other": "faltam {count} pessoas"
@@ -2230,7 +2392,7 @@
           "noParking": "não precisa",
           "noParkingSub": "segundo o cliente",
           "inventoryValue": "sem alterações",
-          "inventorySub": "igual à versão da proposta"
+          "inventorySub": "igual à versão do orçamento"
         },
         "live": {
           "title": "Como está a correr",
@@ -2282,7 +2444,7 @@
           "title": "Veículo",
           "swap": "Trocar",
           "none": "Sem veículo.",
-          "needed": "A proposta contava com um veículo para {volume}.",
+          "needed": "O orçamento contava com um veículo para {volume}.",
           "assign": "Atribuir veículo",
           "fits": "{capacity} m³ para {volume} · cabe numa viagem",
           "tooSmall": "{capacity} m³ para {volume} · não chega numa viagem"
@@ -2292,8 +2454,8 @@
           "count": "{have} de {need} operários",
           "remove": "Retirar {name}",
           "missing": {
-            "one": "Falta {count} pessoa (a proposta conta com {need})",
-            "other": "Faltam {count} pessoas (a proposta conta com {need})"
+            "one": "Falta {count} pessoa (o orçamento conta com {need})",
+            "other": "Faltam {count} pessoas (o orçamento conta com {need})"
           },
           "freeSlot": "Lugar livre",
           "available": "Disponíveis {when}",
@@ -2317,7 +2479,7 @@
             "closed": "Fechado",
             "delivery-signed": "Ata de entrega assinada",
             "pickup-signed": "Ata de recolha assinada",
-            "quote-accepted": "Proposta aceite",
+            "quote-accepted": "Orçamento aceite",
             "crew-assigned": "Equipa atribuída",
             "crew-named": "Equipa: {names}",
             "permit-granted": "Licença de estacionamento concedida",
@@ -2351,6 +2513,135 @@
         }
       },
       "clientsAnd": "e"
+    },
+    "pricing": {
+      "title": "Tarifas",
+      "subtitle": "Os valores com que calculamos os teus orçamentos. Guardar cria uma versão nova: os orçamentos já enviados mantêm a versão com que foram calculados.",
+      "version": "Versão {version} · em vigor desde {date}",
+      "defaultsNote": "Estes são valores de referência da Mudaro. Ajusta-os aos teus preços antes do primeiro orçamento.",
+      "sections": {
+        "prices": {
+          "title": "Preço e custo",
+          "text": "Por operário e por hora. O custo e a margem só os veem os administradores."
+        },
+        "access": {
+          "title": "Acessos",
+          "text": "O que acrescenta subir sem elevador ou estacionar longe."
+        },
+        "calculation": {
+          "title": "Cálculo",
+          "text": "Como passamos do inventário a horas e operários."
+        },
+        "quote": {
+          "title": "Orçamento",
+          "text": "Como o cliente vê o preço e durante quanto tempo é válido."
+        }
+      },
+      "fields": {
+        "operatorHourPriceCents": "Preço por hora de operário",
+        "operatorHourCostCents": "Custo por hora de operário",
+        "kmPriceCents": "Preço por km",
+        "minimumServiceCents": "Mínimo por serviço",
+        "vatPct": "IVA",
+        "noLiftFloorSurchargeCents": "Suplemento por andar sem elevador",
+        "parkingSurchargeCents": "Suplemento por estacionamento longe",
+        "noLiftFloorExtraPct": "Horas a mais por andar sem elevador",
+        "parkingExtraPctPer25m": "Horas a mais por cada 25 m de estacionamento",
+        "stowageFactor": "Fator de estiba",
+        "averageSpeedKmh": "Velocidade média",
+        "crewSmallMaxM3": "Volume pequeno até",
+        "crewSmall": "Operários",
+        "crewMediumMaxM3": "Volume médio até",
+        "crewMedium": "Operários",
+        "crewLarge": "Operários acima disso",
+        "quoteValidityDays": "Validade do orçamento"
+      },
+      "hints": {
+        "stowageFactor": "Multiplica o volume declarado: 1,20 = mais 20 % pelo espaço que se perde no camião.",
+        "minimumServiceCents": "Se o cálculo der menos, o orçamento sugere este valor.",
+        "crew": "Operários sugeridos conforme o volume. Podes mudar o número em cada orçamento."
+      },
+      "crewLegend": "Operários por volume",
+      "units": {
+        "euros": "€",
+        "perHour": "€/h",
+        "perKm": "€/km",
+        "pct": "%",
+        "m3": "m³",
+        "kmh": "km/h",
+        "days": "dias"
+      },
+      "margin": "Margem por hora: {pct}",
+      "presentation": {
+        "legend": "Preço para o cliente",
+        "fixed": "Preço fechado",
+        "hourly": "Por hora, com estimativa",
+        "fixedHint": "O cliente vê um total. Se a mudança demorar mais, a diferença é tua.",
+        "hourlyHint": "O cliente vê o preço por hora e as horas estimadas, e paga as horas reais."
+      },
+      "save": "Guardar nova versão",
+      "saving": "A guardar…",
+      "saved": "Versão {version} guardada.",
+      "errors": {
+        "required": "Campo obrigatório.",
+        "invalid": "Valor inválido. Usa números, com vírgula nos decimais.",
+        "outOfRange": "Fora do intervalo permitido.",
+        "crewOrder": "Tem de ser maior do que o volume pequeno.",
+        "notAllowed": "Só os administradores podem alterar a tarifa.",
+        "failed": "Não foi possível guardar. Tenta de novo.",
+        "review": "Revê os campos assinalados."
+      },
+      "extras": {
+        "title": "Serviços extra",
+        "text": "Os serviços que ofereces e o preço de cada um. Os que pertencem a um tipo da Mudaro são sugeridos no orçamento quando o cliente marca esse tipo no inventário.",
+        "empty": "Ainda não tens serviços extra.",
+        "add": "Adicionar serviço",
+        "edit": "Editar",
+        "cancel": "Cancelar",
+        "saveNew": "Adicionar",
+        "saveEdit": "Guardar alterações",
+        "name": "Nome",
+        "namePlaceholder": "Ex.: Embalagem de loiça",
+        "type": "Tipo da Mudaro",
+        "ownType": "Serviço próprio (sem tipo)",
+        "ownHint": "Um serviço próprio não aparece no inventário do cliente: só o acrescentas ao orçamento.",
+        "priceMode": "Como se cobra",
+        "price": "Preço",
+        "priceModes": {
+          "fixed": "Preço fixo",
+          "unit": "Por unidade",
+          "hour": "Por hora",
+          "m3": "Por m³",
+          "m3_month": "Por m³ e mês"
+        },
+        "priceSuffix": {
+          "fixed": "",
+          "unit": " / unidade",
+          "hour": " / hora",
+          "m3": " / m³",
+          "m3_month": " / m³ / mês"
+        },
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "activate": "Ativar",
+        "deactivate": "Desativar",
+        "inactiveHint": "Um serviço inativo não aparece nos orçamentos novos.",
+        "columns": {
+          "service": "Serviço",
+          "type": "Tipo",
+          "price": "Preço",
+          "status": "Estado"
+        },
+        "errors": {
+          "nameRequired": "Indica o nome do serviço.",
+          "tooLong": "Máximo de 120 caracteres.",
+          "nameTaken": "Já tens um serviço com este nome.",
+          "priceRequired": "Indica o preço.",
+          "priceInvalid": "Preço inválido.",
+          "invalid": "Há dados inválidos. Revê os campos.",
+          "failed": "Não foi possível guardar. Tenta de novo."
+        }
+      }
     }
   }
 }

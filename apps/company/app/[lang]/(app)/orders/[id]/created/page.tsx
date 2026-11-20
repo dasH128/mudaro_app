@@ -33,8 +33,10 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
   const { id } = await params;
   const order = await getOrder(id);
   if (!order) notFound();
-  // Con el inventario rellenado por la empresa no hay enlace que compartir
-  if (order.inventoryMode !== "link") redirect(localePath(locale, ROUTES.orders.inventory(order.id)));
+  // Con el inventario rellenado por la empresa, el enlace solo sirve para que el cliente vea el orçamento: hasta
+  // enviarlo no hay nada que compartir.
+  const forQuote = order.inventoryMode === "self";
+  if (forQuote && order.status !== "quoted") redirect(localePath(locale, ROUTES.orders.detail(order.id)));
 
   const t = (await getDictionary()).app.orders;
   const stops = order.stops.filter(Boolean);
@@ -46,11 +48,11 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
 
       <header className="flex items-start gap-4">
         <span className="grid size-13 flex-none place-items-center rounded-full border border-success-border bg-success-surface text-success-foreground">
-          <Icon name="check" size={26} strokeWidth={2.5} />
+          <Icon name={forQuote ? "link" : "check"} size={26} strokeWidth={2.5} />
         </span>
         <div className="flex flex-col gap-1.5">
           <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight">
-            {interpolate(t.created.title, { id: order.id })}
+            {interpolate(forQuote ? t.created.quote.title : t.created.title, { id: order.id })}
           </h1>
           <p className="text-base text-muted">
             {order.clientName} · {order.origin} <span aria-hidden="true">→</span>
@@ -61,13 +63,24 @@ export default async function OrderCreatedPage({ params }: PageProps<"/[lang]/or
         </div>
       </header>
 
-      <ShareLinkCard lang={locale} t={t} order={order} sender={firstNameOf(session.name)} company={session.companyName} />
+      <ShareLinkCard
+        lang={locale}
+        t={t}
+        order={order}
+        sender={firstNameOf(session.name)}
+        company={session.companyName}
+        purpose={forQuote ? "quote" : "inventory"}
+      />
       <OrderStatusTimeline t={t.created} status={order.status} />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link href={localePath(locale, ROUTES.orders.inventory(order.id))} className={linkClass}>
-          {t.created.links.fillInventory}
-        </Link>
+        {forQuote ? (
+          <span />
+        ) : (
+          <Link href={localePath(locale, ROUTES.orders.inventory(order.id))} className={linkClass}>
+            {t.created.links.fillInventory}
+          </Link>
+        )}
         <div className="flex flex-wrap gap-4">
           <Link href={localePath(locale, ROUTES.orders.new)} className={linkClass}>
             {t.created.links.createAnother}

@@ -75,7 +75,7 @@ export type OrderEvent =
   | { kind: "link-shared"; at: string; actor: string; validityDays: number }
   /** `by`: quién envió la versión. La empresa la envía cuando rellena ella el inventario (RF-19). */
   | { kind: "inventory-submitted"; at: string; version: number; by: "client" | "company"; actor: string }
-  | { kind: "proposal-sent"; at: string; actor: string; version: number }
+  | { kind: "quote-sent"; at: string; actor: string; version: number }
   | { kind: "won"; at: string }
   | { kind: "lost"; at: string; reason: string | null };
 
@@ -89,7 +89,7 @@ export type OrderDetail = {
   /** Fecha aproximada de la mudança, aaaa-mm-dd. */
   date: string;
   flexibility: Flexibility;
-  /** Distancia entre origen y destino. `null` hasta calcularla (se calcula en la proposta). */
+  /** Distancia entre origen y destino. `null` hasta calcularla (se calcula en el presupuesto). */
   distanceKm: number | null;
   origin: DetailAddress;
   /** Paradas intermedias, en el orden del recorrido. */
@@ -98,9 +98,37 @@ export type OrderDetail = {
   inventory: DetailInventory | null;
   link: DetailLink | null;
   note: DetailNote | null;
-  proposalCount: number;
+  quoteCount: number;
+  /** Orçamentos del envío, de la versión más reciente a la más antigua (paso 5). */
+  quotes: readonly DetailQuote[];
+  /** Trabajo creado al aceptar el orçamento (RF-46). `null` mientras no se gane el envío. */
+  job: DetailJob | null;
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
+};
+
+/** Una versión de orçamento en la pestaña Orçamentos del pedido. Importes con IVA, en céntimos. */
+export type DetailQuote = {
+  /** Número compartido por las versiones (1 → ORC-0001). */
+  number: number;
+  version: number;
+  status: "draft" | "sent" | "accepted" | "rejected" | "superseded";
+  /** Total con IVA sin los opcionales; si está aceptado, el importe firmado. */
+  totalCents: number;
+  /** Último día de validez, aaaa-mm-dd. `null` en un borrador. */
+  validUntil: string | null;
+  sentAt: string | null;
+  acceptedAt: string | null;
+  rejectedReason: string | null;
+  /** Versión del inventario sobre la que se calculó. */
+  inventoryVersion: number;
+};
+
+/** Trabajo programado del envío. Equipo y vehículo se asignan en el paso 6. */
+export type DetailJob = {
+  status: "scheduled" | "in_progress" | "delivered" | "closed" | "cancelled";
+  /** Inicio previsto, instante ISO. */
+  scheduledStart: string;
 };
 
 /** Recorrido completo: origen, paradas y destino, en ese orden. */
@@ -111,12 +139,13 @@ export function routeOf(order: Pick<OrderDetail, "origin" | "stops" | "destinati
 // --- Percurso ---
 
 /** Hitos del pedido, en orden. */
-export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "proposal-sent", "won"] as const;
-export type JourneyStep = (typeof JOURNEY_STEPS)[number];
+export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "quote-sent", "won"] as const;
+/** "lost" sustituye a "Ganho" cuando el cliente rechaza el orçamento. */
+export type JourneyStep = (typeof JOURNEY_STEPS)[number] | "lost";
 
 export type JourneyItem = {
   step: JourneyStep;
-  state: "done" | "current" | "todo";
+  state: "done" | "current" | "todo" | "lost";
   /** Cuándo ocurrió, si hay evento. */
   at: string | null;
 };
@@ -126,7 +155,7 @@ const STEP_OF_STATUS: Record<OrderStatus, JourneyStep> = {
   new: "created",
   "awaiting-inventory": "link-shared",
   "inventory-received": "inventory-submitted",
-  quoted: "proposal-sent",
+  quoted: "quote-sent",
   won: "won",
 };
 
@@ -138,15 +167,22 @@ function eventTime(events: readonly OrderEvent[], step: JourneyStep): string | n
 
 /**
  * Percurso del pedido: lo alcanzado, el hito actual y lo que falta.
- * Un pedido perdido deja hecho todo hasta la proposta y ninguno como actual.
+ * Un pedido perdido deja hecho todo hasta el presupuesto y cambia "Ganho" por "Perdido".
+ * Con el inventario rellenado por la empresa no hay paso "Link partilhado": el enlace solo sirve para el orçamento y
+ * puede no generarse nunca.
  */
-export function buildJourney(stage: OrderStage, events: readonly OrderEvent[]): JourneyItem[] {
-  const current = stage === "lost" ? JOURNEY_STEPS.indexOf("proposal-sent") : JOURNEY_STEPS.indexOf(STEP_OF_STATUS[stage]);
-  return JOURNEY_STEPS.map((step, index) => ({
-    step,
-    state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
-    at: index <= current ? eventTime(events, step) : null,
-  }));
+export function buildJourney(stage: OrderStage, events: readonly OrderEvent[], mode: InventoryMode): JourneyItem[] {
+  const steps: readonly JourneyStep[] = mode === "self" ? JOURNEY_STEPS.filter((step) => step !== "link-shared") : JOURNEY_STEPS;
+  const reached = stage === "lost" ? "quote-sent" : STEP_OF_STATUS[stage];
+  const current = steps.indexOf(reached === "link-shared" && mode === "self" ? "created" : reached);
+  return steps.map((step, index): JourneyItem => {
+    if (stage === "lost" && step === "won") return { step: "lost", state: "lost", at: eventTime(events, "lost") };
+    return {
+      step,
+      state: index < current || (stage === "lost" && index === current) ? "done" : index === current ? "current" : "todo",
+      at: index <= current ? eventTime(events, step) : null,
+    };
+  });
 }
 
 // --- Inventario ---
@@ -230,13 +266,14 @@ function daysBetweenDays(from: string, to: string): number {
 export function linkState(link: DetailLink, stage: OrderStage, today: string): LinkState {
   const daysLeft = Math.max(daysBetweenDays(today, link.validUntil), 0);
   const daysUsed = Math.min(Math.max(link.validityDays - daysLeft, 0), link.validityDays);
-  const status = stage === "won" || stage === "lost" ? "closed" : daysBetweenDays(today, link.validUntil) < 0 ? "expired" : "active";
+  // Solo un orçamento aceite cierra el pedido. Tras un rechazo el enlace sigue abierto: ahí verá el cliente la versión nueva.
+  const status = stage === "won" ? "closed" : daysBetweenDays(today, link.validUntil) < 0 ? "expired" : "active";
   return { status, daysLeft, daysUsed, usedRatio: link.validityDays > 0 ? daysUsed / link.validityDays : 1 };
 }
 
 // --- Pestañas ---
 
-export const DETAIL_TABS = ["summary", "inventory", "addresses", "proposals", "history"] as const;
+export const DETAIL_TABS = ["summary", "inventory", "addresses", "quotes", "history"] as const;
 export type DetailTab = (typeof DETAIL_TABS)[number];
 export const DEFAULT_TAB: DetailTab = "summary";
 

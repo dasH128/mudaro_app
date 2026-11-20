@@ -1,4 +1,4 @@
-import { daysBetween } from "@/features/proposals/domain/status";
+import { daysBetween } from "@/features/quotes/domain/status";
 import { ORDER_STAGES, type OrderListItem, type OrderNote, type OrderStage } from "./types";
 
 /** Pedidos por página (vista en lista) y por tanda de "Ver mais" (vista en cartões). */
@@ -33,7 +33,7 @@ export const STEP_OF: Record<OrderStage, number> = {
 const ATTENTION: readonly OrderNote["kind"][] = [
   "inventory-ready",
   "inventory-missing-measures",
-  "draft-proposal",
+  "draft-quote",
   "link-expiring",
   "no-news",
 ];
@@ -51,22 +51,22 @@ export function isWarn(note: OrderNote): boolean {
 
 /** Siguiente paso de un pedido. Son códigos: el texto y el destino los pone la interfaz. */
 export type OrderAction =
-  | "create-proposal"
-  | "continue-proposal"
+  | "create-quote"
+  | "continue-quote"
   | "resend-link"
   | "share-link"
   | "copy-link"
   | "fill-inventory"
-  | "view-proposal"
+  | "view-quote"
   | "view-job";
 
 export function nextAction(note: OrderNote): OrderAction | null {
   switch (note.kind) {
     case "inventory-ready":
     case "inventory-missing-measures":
-      return "create-proposal";
-    case "draft-proposal":
-      return "continue-proposal";
+      return "create-quote";
+    case "draft-quote":
+      return "continue-quote";
     case "link-expiring":
     case "no-news":
       return "resend-link";
@@ -76,8 +76,8 @@ export function nextAction(note: OrderNote): OrderAction | null {
       return "fill-inventory";
     case "filling":
       return "copy-link";
-    case "proposal-sent":
-      return "view-proposal";
+    case "quote-sent":
+      return "view-quote";
     case "won":
       return "view-job";
     case "lost":

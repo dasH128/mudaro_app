@@ -32,7 +32,7 @@ export function FleetCards({ lang, t, vehicles, selectedId, params, today, empty
         const status = describeStatus(vehicle, t);
         const last = describeLastUse(vehicle, t, lang, today);
         const next = describeNextUse(vehicle, t, today);
-        const { proposals30d } = vehicle;
+        const { quotes30d } = vehicle;
 
         return (
           <li
@@ -81,8 +81,8 @@ export function FleetCards({ lang, t, vehicles, selectedId, params, today, empty
               </span>
             </span>
             <span className="mt-auto text-[13px] text-muted">
-              {t.cards.in} <strong className="text-foreground">{proposals30d.total}</strong>{" "}
-              {pluralize(lang, proposals30d.total, t.proposalsWord)} · {pluralize(lang, proposals30d.accepted, t.acceptedWord)}
+              {t.cards.in} <strong className="text-foreground">{quotes30d.total}</strong>{" "}
+              {pluralize(lang, quotes30d.total, t.quotesWord)} · {pluralize(lang, quotes30d.accepted, t.acceptedWord)}
             </span>
           </li>
         );

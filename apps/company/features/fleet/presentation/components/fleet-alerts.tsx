@@ -57,19 +57,19 @@ function AlertCard({ icon, title, text, href, action, tone }: CardProps) {
 
 /** Tres avisos de la frota, solo los que aplican. */
 export function FleetAlertsSection({ lang, t, alerts, showCost }: Props) {
-  const { extraTripProposals, idle, missingCost } = alerts;
+  const { extraTripQuotes, idle, missingCost } = alerts;
   const a = t.alerts;
-  if (extraTripProposals === 0 && !idle && !(showCost && missingCost)) return null;
+  if (extraTripQuotes === 0 && !idle && !(showCost && missingCost)) return null;
 
   return (
     <section aria-label={a.label} className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
-      {extraTripProposals > 0 ? (
+      {extraTripQuotes > 0 ? (
         <AlertCard
           icon="orders"
           tone="ink"
-          title={pluralize(lang, extraTripProposals, a.capacity.title)}
+          title={pluralize(lang, extraTripQuotes, a.capacity.title)}
           text={a.capacity.text}
-          href={localePath(lang, ROUTES.proposals.list)}
+          href={localePath(lang, ROUTES.quotes.list)}
           action={a.capacity.action}
         />
       ) : null}
@@ -78,7 +78,7 @@ export function FleetAlertsSection({ lang, t, alerts, showCost }: Props) {
           icon="clock"
           tone="soft"
           title={pluralize(lang, idle.days, a.idle.title, { name: idle.vehicle.name })}
-          text={pluralize(lang, idle.vehicle.proposals30d.total, a.idle.text)}
+          text={pluralize(lang, idle.vehicle.quotes30d.total, a.idle.text)}
           href={fleetHref(lang, { vehicle: idle.vehicle.id })}
           action={a.idle.action}
         />

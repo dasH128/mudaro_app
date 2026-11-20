@@ -20,13 +20,14 @@ export function ordersHref(lang: Locale, { stage, q, view, limit, page }: Filter
 
 /**
  * Destino del siguiente paso, o `null` si aún no se puede hacer.
- * Reenviar o copiar el enlace dependen de generarlo (RF-15, pendiente) y "Ver trabalho" aún no tiene pantalla.
+ * "Ver trabalho" lleva al Resumo del pedido, con la tarjeta del trabajo y su enlace a la agenda (paso 5.6): la ficha del
+ * trabajo (`/jobs/<id>`) llega en el paso 6.
  */
 export function actionHref(lang: Locale, action: OrderAction, id: string): string | null {
   switch (action) {
-    case "create-proposal":
-    case "continue-proposal":
-      return `${localePath(lang, ROUTES.proposals.new)}?${new URLSearchParams({ request: id })}`;
+    case "create-quote":
+    case "continue-quote":
+      return localePath(lang, ROUTES.orders.quote(id));
     case "share-link":
     case "resend-link":
     case "copy-link":
@@ -34,10 +35,10 @@ export function actionHref(lang: Locale, action: OrderAction, id: string): strin
       return localePath(lang, ROUTES.orders.created(id));
     case "fill-inventory":
       return localePath(lang, ROUTES.orders.inventory(id));
-    case "view-proposal":
-      return localePath(lang, ROUTES.proposals.list);
+    case "view-quote":
+      return localePath(lang, ROUTES.quotes.list);
     case "view-job":
-      return null;
+      return orderDetailHref(lang, id);
   }
 }
 

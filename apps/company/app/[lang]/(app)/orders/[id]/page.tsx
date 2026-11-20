@@ -19,14 +19,14 @@ import {
 import { getOrderDetail } from "@/features/orders/infrastructure/orders.repo";
 import { OrderAddressesTab } from "@/features/orders/presentation/components/order-addresses-tab";
 import { OrderBreadcrumb } from "@/features/orders/presentation/components/order-breadcrumb";
-import { ClientPanel, LinkPanel, NotesPanel } from "@/features/orders/presentation/components/order-detail-side";
+import { ClientPanel, LinkPanel, MissingLinkPanel, NotesPanel } from "@/features/orders/presentation/components/order-detail-side";
 import { OrderDetailHeader } from "@/features/orders/presentation/components/order-detail-header";
 import { OrderDetailTabs } from "@/features/orders/presentation/components/order-detail-tabs";
 import { OrderHistoryTab } from "@/features/orders/presentation/components/order-history-tab";
 import { OrderInventoryTab } from "@/features/orders/presentation/components/order-inventory-tab";
 import { OrderJourney } from "@/features/orders/presentation/components/order-journey";
 import { OrderMeasureAlert } from "@/features/orders/presentation/components/order-measure-alert";
-import { OrderProposalsTab } from "@/features/orders/presentation/components/order-proposals-tab";
+import { OrderQuotesTab } from "@/features/orders/presentation/components/order-quotes-tab";
 import { OrderSummaryTab } from "@/features/orders/presentation/components/order-summary-tab";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,14 +57,14 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
 
   const totals = order.inventory ? summarizeInventory(order.inventory) : null;
   const missing = order.inventory ? firstMissingMeasure(order.inventory) : null;
-  // Con la proposta ya enviada, las medidas que faltan dejan de bloquear
+  // Con el presupuesto ya enviado, las medidas que faltan dejan de bloquear
   const blocking = order.stage === "inventory-received" && totals && missing ? { count: totals.missingMeasures, first: missing } : null;
 
   return (
     <>
       <OrderBreadcrumb lang={locale} t={t} current={order.id} />
       <OrderDetailHeader lang={locale} t={t} order={order} />
-      <OrderJourney t={t.detail} items={buildJourney(order.stage, order.events)} />
+      <OrderJourney t={t.detail} items={buildJourney(order.stage, order.events, order.inventoryMode)} />
       {blocking ? (
         <OrderMeasureAlert lang={locale} t={t} clientName={order.client.name} missing={blocking.count} first={blocking.first} />
       ) : null}
@@ -79,13 +79,13 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
             counts={{
               ...(totals ? { inventory: totals.items } : {}),
               addresses: routeOf(order).length,
-              proposals: order.proposalCount,
+              quotes: order.quoteCount,
             }}
           />
           {tab === "summary" ? <OrderSummaryTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "inventory" ? <OrderInventoryTab lang={locale} t={t} order={order} /> : null}
           {tab === "addresses" ? <OrderAddressesTab t={t} addresses={routeOf(order)} /> : null}
-          {tab === "proposals" ? <OrderProposalsTab lang={locale} t={t} order={order} /> : null}
+          {tab === "quotes" ? <OrderQuotesTab lang={locale} t={t} order={order} today={today} /> : null}
           {tab === "history" ? <OrderHistoryTab lang={locale} t={t} events={order.events} /> : null}
         </div>
 
@@ -99,7 +99,11 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
               clientName={order.client.name}
               link={order.link}
               state={linkState(order.link, order.stage, today)}
+              stage={order.stage}
             />
+          ) : order.inventoryMode === "self" && order.stage === "quoted" ? (
+            // Inventario de la empresa y orçamento enviado sin enlace: sin él, el cliente no puede verlo
+            <MissingLinkPanel lang={locale} t={t} orderId={order.id} clientName={order.client.name} />
           ) : null}
           <NotesPanel t={t} note={order.note} />
         </div>

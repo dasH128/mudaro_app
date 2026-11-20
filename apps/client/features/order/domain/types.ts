@@ -14,12 +14,57 @@ export type ClientOrder = {
   expiresAt: string | null;
 };
 
+/** Una línea del orçamento tal como se envió (snapshot). Importes sin IVA, en céntimos. */
+export type ClientQuoteLine = {
+  id: string;
+  kind: "base" | "extra" | "manual";
+  description: string;
+  quantity: number;
+  unit: string | null;
+  unitPriceCents: number;
+  totalCents: number;
+  /** El cliente decide si lo quiere al aceptar (decisión 1 del paso 5). */
+  optional: boolean;
+};
+
+/** El orçamento vigente del pedido (RF-41): lo que envió la empresa, sin coste ni margen (RNF-03). */
+export type ClientQuote = {
+  id: string;
+  status: "sent" | "accepted" | "rejected" | "superseded";
+  /** Enviado y con la validez ya pasada (RF-45). */
+  expired: boolean;
+  /** aaaa-mm-dd */
+  validUntil: string | null;
+  /** Huella del documento (P5): se devuelve al aceptar para firmar exactamente esto. */
+  documentHash: string;
+  number: number;
+  version: number;
+  pricingMode: "fixed" | "hourly";
+  hourlyRateCents: number | null;
+  operatorCount: number | null;
+  estimatedHours: number | null;
+  vatPct: number;
+  conditions: string | null;
+  lines: readonly ClientQuoteLine[];
+  /** Inventario sobre el que se calculó (RF-39), con los nombres en el idioma de la interfaz. */
+  inventory: { version: number; lines: readonly { name: string; room: string; quantity: number }[] };
+  acceptance: {
+    acceptedAt: string;
+    signerName: string;
+    selectedLineIds: readonly string[];
+    subtotalCents: number;
+    vatCents: number;
+    totalCents: number;
+  } | null;
+};
+
 /** Estado del pedido al abrir el enlace. */
 export type ClientOrderView =
   /** Hay borrador y el enlace está vigente: el cliente rellena el inventario. */
   | {
       kind: "draft";
       order: ClientOrder;
+      quote: ClientQuote | null;
       version: number;
       points: readonly RoutePoint[];
       draft: InventoryDraft;
@@ -28,12 +73,23 @@ export type ClientOrderView =
       extras: readonly ExtraType[];
     }
   /** El cliente (o la empresa) ya envió el inventario y no hay borrador abierto. */
-  | { kind: "submitted"; order: ClientOrder; version: number; submittedAt: string }
+  | { kind: "submitted"; order: ClientOrder; quote: ClientQuote | null; version: number; submittedAt: string }
   /** El enlace caducó con el inventario sin enviar: ya no se puede editar (RF-15). */
-  | { kind: "expired"; order: ClientOrder };
+  | { kind: "expired"; order: ClientOrder; quote: ClientQuote | null };
 
 /** Por qué no se pudo guardar o enviar. Códigos: la interfaz los traduce. */
-export const CLIENT_ERRORS = ["accessIncomplete", "empty", "expired", "notFound", "noDraft", "invalid", "failed"] as const;
+export const CLIENT_ERRORS = [
+  "accessIncomplete",
+  "empty",
+  "expired",
+  "notFound",
+  "noDraft",
+  "invalid",
+  "failed",
+  "quoteClosed",
+  "quoteExpired",
+  "documentChanged",
+] as const;
 export type ClientError = (typeof CLIENT_ERRORS)[number];
 
 export type ClientResult = { ok: true } | { ok: false; error: ClientError };

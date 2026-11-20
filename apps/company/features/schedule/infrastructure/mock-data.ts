@@ -1,5 +1,5 @@
 import { addDays } from "@/features/fleet/domain/fleet";
-import type { Access, HistoryEvent, JobDetail, JobStatus, PendingProposal, Person, ScheduleJob, Vehicle } from "../domain/types";
+import type { Access, HistoryEvent, JobDetail, JobStatus, PendingQuote, Person, ScheduleJob, Vehicle } from "../domain/types";
 
 // Datos de ejemplo de la agenda. Se sustituyen por consultas a Supabase (RLS por company_id, RNF-01).
 // Las fechas son relativas a hoy (el prototipo vive el viernes: ayer cerrado, hoy en curso, mañana programado).
@@ -216,7 +216,7 @@ export function mockJobs(today: string): ScheduleJob[] {
   return [...detailed, ...light];
 }
 
-export function mockProposals(today: string): PendingProposal[] {
+export function mockQuotes(today: string): PendingQuote[] {
   return PROPOSALS.map(({ id, client, day, need }) => ({ id, client, date: addDays(today, day), crewNeeded: need }));
 }
 

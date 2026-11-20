@@ -11,10 +11,16 @@ import { isLinkToken } from "@/features/order/domain/types";
 import { getClientOrder } from "@/features/order/infrastructure/client-order.repo";
 import { ClientInventoryEditor } from "@/features/order/presentation/components/client-inventory-editor";
 import { ClientBrand, OrderHeader, StatusCard } from "@/features/order/presentation/components/order-status";
+import { QuoteView } from "@/features/order/presentation/components/quote-view";
+import { firstName } from "@/features/order/domain/types";
 
-export async function generateMetadata(): Promise<Metadata> {
+// Con un orçamento enviado, la página muestra el orçamento: la pestaña lo dice también
+export async function generateMetadata({ params }: PageProps<"/[lang]/p/[token]">): Promise<Metadata> {
+  const locale = await lang();
   const dict = await getDictionary();
-  return { title: dict.metadata.linkTitle };
+  const { token } = await params;
+  const view = hasLocale(locale) && isLinkToken(token) ? await getClientOrder(token, locale) : null;
+  return { title: view?.quote ? dict.metadata.quoteTitle : dict.metadata.linkTitle };
 }
 
 // Enlace del pedido (RF-15): el cliente rellena el inventario sin cuenta. Quién puede ver qué lo decide la Edge
@@ -37,6 +43,21 @@ export default async function OrderLinkPage({ params }: PageProps<"/[lang]/p/[to
   }
 
   const company = { company: view.order.companyName };
+
+  // Con un orçamento enviado, el cliente ve el orçamento (RF-41) en lugar del inventario
+  if (view.quote) {
+    return (
+      <>
+        <ClientBrand />
+        <header className="flex flex-col gap-2 print:hidden">
+          <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight">
+            {interpolate(t.header.quoteTitle, { name: firstName(view.order.contactName) })}
+          </h1>
+        </header>
+        <QuoteView t={t} token={token} order={view.order} quote={view.quote} />
+      </>
+    );
+  }
 
   return (
     <>

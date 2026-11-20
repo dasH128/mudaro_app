@@ -336,11 +336,11 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 
 ## 11. Decisiones abiertas
 
-- [ ] Valores iniciales del factor de estiba y del factor de acceso por piso y distancia.
-- [ ] Regla de número de operarios: por tramos de volumen o siempre manual.
+- [x] Valores iniciales del factor de estiba y del factor de acceso (19/11/2026): valores por defecto que cada empresa cambia en su tarifa (estiba 1,20; +10 % de horas por piso sin elevador; +5 % por cada 25 m de estacionamiento). Confirmarlos con empresas del piloto.
+- [x] Regla de número de operarios (19/11/2026): por tramos de volumen, editable en la tarifa y a mano en cada orçamento (2 hasta 15 m³, 3 hasta 30 m³, 4 por encima; +1 con objetos de pessoal extra).
 - [ ] Plazo de conservación de fotos y firmas.
 - [ ] Si un operario puede pertenecer a varias empresas.
-- [ ] Servicio de mapas y su coste por consulta.
+- [ ] Servicio de mapas y su coste por consulta. En el piloto (19/11/2026) la empresa escribe los km a mano; el servicio se decide después.
 - [ ] Fuente y responsable del catálogo inicial de objetos.
 - [x] Tecnología de la web del cliente: Next.js (React) en `apps/client`, decidido el 19/11/2026 (ver `docs/architecture-system.md`). Falta el dominio.
 - [ ] Requisitos legales que el IMT exige a las empresas del piloto según el tipo de vehículo (verificar antes de dar de alta empresas).
@@ -350,6 +350,11 @@ El modelo de datos ya deja preparadas estas fases. El orden depende de lo que pi
 - [ ] Diseño de los flujos pendientes del panel: editar empresa, registrar IMT y contrato RGPD, desactivar o ver utilizadores, cerrar sesión.
 - [ ] Qué hacer si se da de alta una empresa con un NIF o un email de administrador que ya existen.
 - [x] Servicios extra (RF-07, RF-24), decidido el 18/11/2026: modelo híbrido. Mudaro mantiene un catálogo global de tipos (`catalog_extras`); cada empresa crea sus servicios colgando de un tipo o sin tipo (`company_extras`); el cliente marca tipos como referencia, sin cantidad (`inventory_extras`); la empresa presupuesta con sus servicios. Detalle en `docs/plan-modelo-bd.md`.
-- [ ] Extras opcionales en el presupuesto (paso 5): el cliente marca o desmarca los extras que la empresa propone y ve el total con y sin cada uno. Falta escribir el requisito, decidir si la empresa puede marcar un extra como obligatorio y cómo guarda la aceptación las líneas elegidas (RF-43).
+- [x] Paso 5 · presupuestos, decidido el 19/11/2026 (plan en `docs/plan-paso-5-presupuestos.md`):
+  - Extras: cada línea de extra es *incluida* (el cliente no la puede quitar) u *opcional* (la marca o desmarca y ve el total al momento). La aceptación guarda las líneas elegidas y el importe firmado (RF-43).
+  - Inventario nuevo con un presupuesto enviado: el presupuesto pasa a `superseded` ("desactualizado"), el cliente ya no lo puede aceptar y la empresa recibe el aviso para recalcular (RF-27).
+  - Tarifa: se mantiene RF-06 (horas, km, operarios, suplementos, mínimo, estiba). La empresa elige cómo lo presenta al cliente: precio cerrado o precio por hora con estimación.
+  - `proposals` pasa a `quotes` en el código al empezar el paso 5 (C5, D4). La interfaz dice "Orçamento".
+  - Al aceptar, el pedido pasa a "Ganho" y se crea el trabajo programado con fecha, cliente y dirección (RF-46). Asignar equipo y vehículo queda para el paso 6.
 - [x] Palabra portuguesa de "presupuesto" en la interfaz (RNF-10): "Orçamento" (decidido el 09/11/2026). En el código el término es `quotes`. Pendiente de aplicar: los diseños de la empresa y la app todavía dicen "Proposta" y `proposals`.
 - [ ] Diseño pendiente tras separar pedido y envío: pantalla de pedido creado con un único enlace, pestaña "Envío" en el detalle del pedido, aviso de inventario alterado (indica si crea versión y qué presupuestos afecta), reenvío del enlace del pedido y "marcar como perdido" sobre el envío.

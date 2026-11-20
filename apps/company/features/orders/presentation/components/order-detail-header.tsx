@@ -27,7 +27,7 @@ export function OrderDetailHeader({ lang, t, order }: Props) {
     order.source ? interpolate(d.meta.source, { source: t.new.move.sources[order.source] }) : null,
   ].filter(Boolean);
 
-  const proposalHref = order.stage === "inventory-received" ? actionHref(lang, "create-proposal", order.id) : null;
+  const quoteHref = order.stage === "inventory-received" ? actionHref(lang, "create-quote", order.id) : null;
   const shareHref =
     order.inventoryMode === "link" && (order.stage === "new" || order.stage === "awaiting-inventory")
       ? actionHref(lang, "share-link", order.id)
@@ -66,13 +66,13 @@ export function OrderDetailHeader({ lang, t, order }: Props) {
         >
           <Icon name="moreHorizontal" size={20} />
         </button>
-        {proposalHref ? (
+        {quoteHref ? (
           <Link
-            href={proposalHref}
+            href={quoteHref}
             className={`inline-flex h-12 items-center gap-2.5 rounded-full bg-primary px-5.5 text-base font-bold text-primary-foreground shadow-md ${focus}`}
           >
             <Icon name="filePlus" size={18} />
-            {d.actions.createProposal}
+            {d.actions.createQuote}
           </Link>
         ) : null}
         {shareHref ? (

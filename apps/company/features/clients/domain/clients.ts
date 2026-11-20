@@ -18,13 +18,13 @@ export const isSort = (value: string | undefined): value is ClientSort => SORTS.
 
 const NEGOTIATING: readonly ClientStage[] = ["new", "awaiting-inventory", "inventory-received", "quoted"];
 const SCHEDULED: readonly ClientStage[] = ["scheduled", "in-progress"];
-/** Pedidos con una proposta aceptada: la mudança está marcada, en curso o hecha. */
+/** Pedidos con un presupuesto aceptado: la mudança está marcada, en curso o hecha. */
 const ACCEPTED: readonly ClientStage[] = ["scheduled", "in-progress", "done"];
 
 export const isNegotiating = (client: Client): boolean => NEGOTIATING.includes(client.stage);
 export const isScheduled = (client: Client): boolean => SCHEDULED.includes(client.stage);
 
-/** Suma de las propostas aceptadas, o `null` si no hay ninguna (la lista muestra "—"). */
+/** Suma de los presupuestos aceptados, o `null` si no hay ninguna (la lista muestra "—"). */
 export function acceptedTotal(client: Client): number | null {
   const total = client.orders.reduce((sum, order) => sum + (order.acceptedCents ?? 0), 0);
   return total > 0 ? total : null;

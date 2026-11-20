@@ -76,19 +76,19 @@ export async function getFleetOverview({ includeCost }: Options): Promise<FleetO
         !row.active && row.inactive_reason && row.inactive_since
           ? { reason: row.inactive_reason, since: row.inactive_since, by: row.inactive_user?.name ?? "" }
           : undefined,
-      // TODO(agenda): estado en directo, trabajos, uso y propostas dependen de los pasos 5 y 6 del modelo.
+      // TODO(agenda): estado en directo, trabajos, uso y presupuestos dependen de los pasos 5 y 6 del modelo.
       live: { kind: "free" },
       lastUseOn: null,
       jobs: [],
       weekHours: [0, 0, 0, 0, 0, 0, 0],
-      proposals30d: { total: 0, accepted: 0 },
+      quotes30d: { total: 0, accepted: 0 },
       usage: { jobs: 0, km: 0, hours: 0 },
       history: history.get(row.id) ?? [],
     };
   });
 
-  // TODO(propostas): sin propostas todavía no hay viajes extra que contar.
-  return { vehicles, metrics: { extraTripProposals: 0 } };
+  // TODO(presupuestos): sin presupuestos todavía no hay viajes extra que contar.
+  return { vehicles, metrics: { extraTripQuotes: 0 } };
 }
 
 /** Da de alta un vehículo con la función `create_vehicle` (valida sesión y rol en la base de datos). */

@@ -6,7 +6,7 @@
     "loginTitle": "Sign in · Mudaro",
     "confirmTitle": "Invitation · Mudaro",
     "setPasswordTitle": "Set your password · Mudaro",
-    "proposalsTitle": "Proposals · Mudaro",
+    "quotesTitle": "Quotes · Mudaro",
     "ordersTitle": "Orders · Mudaro",
     "newOrderTitle": "New order · Mudaro",
     "orderCreatedTitle": "Order created · Mudaro",
@@ -18,7 +18,9 @@
     "clientsTitle": "Clients · Mudaro",
     "homeTitle": "Today's operations · Mudaro",
     "scheduleTitle": "Schedule · Mudaro",
-    "forgotPasswordTitle": "Reset password · Mudaro"
+    "forgotPasswordTitle": "Reset password · Mudaro",
+    "pricingTitle": "Pricing · Mudaro",
+    "quoteEditorTitle": "Quote · Mudaro"
   },
   "auth": {
     "noAccess": {
@@ -165,7 +167,7 @@
       "nav": {
         "home": "Home",
         "orders": "Orders",
-        "proposals": "Proposals",
+        "quotes": "Quotes",
         "schedule": "Schedule",
         "clients": "Clients",
         "fleet": "Fleet",
@@ -174,12 +176,12 @@
         "reports": "Reports"
       }
     },
-    "proposals": {
+    "quotes": {
       "eyebrow": "Operations",
-      "title": "Proposals",
+      "title": "Quotes",
       "subtitle": "Calculate, adjust and send quotes from the customer's inventory.",
-      "new": "New proposal",
-      "loading": "Loading proposals…",
+      "new": "New quote",
+      "loading": "Loading quotes…",
       "stats": {
         "toSend": {
           "label": "To send",
@@ -187,22 +189,22 @@
         },
         "awaiting": {
           "label": "Awaiting customer",
-          "hint": "{amount} in sent proposals"
+          "hint": "{amount} in sent quotes"
         },
         "acceptance": {
           "label": "Acceptance rate",
           "hint": "Last 30 days"
         },
-        "timeToProposal": {
-          "label": "Time to proposal",
+        "timeToQuote": {
+          "label": "Time to quote",
           "value": "{days} days",
           "hint": "Average since the request was created"
         }
       },
       "ready": {
         "title": "Ready to quote",
-        "subtitle": "Requests with inventory received and no proposal",
-        "create": "Create proposal",
+        "subtitle": "Requests with inventory received and no quote",
+        "create": "Create quote",
         "received": "received {time}",
         "missingMeasures": {
           "one": "{count} item without measurements",
@@ -210,7 +212,7 @@
         }
       },
       "list": {
-        "title": "Proposals list",
+        "title": "Quotes list",
         "filterLabel": "Filter by status",
         "tabs": {
           "all": "All",
@@ -221,25 +223,25 @@
           "expired": "Expired",
           "superseded": "Superseded"
         },
-        "searchLabel": "Search proposals",
-        "searchPlaceholder": "Customer, proposal no. or request",
+        "searchLabel": "Search quotes",
+        "searchPlaceholder": "Customer, quote no. or request",
         "sortLabel": "Sort",
         "sort": {
           "expiry": "Nearest expiry",
           "newest": "Most recent",
           "value": "Highest value"
         },
-        "empty": "No proposals match this search.",
+        "empty": "No quotes match this search.",
         "showing": {
-          "one": "Showing {shown} of {count} proposal",
-          "other": "Showing {shown} of {count} proposals"
+          "one": "Showing {shown} of {count} quote",
+          "other": "Showing {shown} of {count} quotes"
         },
         "marginNote": "Margin is only visible to administrators",
-        "open": "Open proposal {id}",
+        "open": "Open quote {id}",
         "routeTo": "to"
       },
       "columns": {
-        "proposal": "Proposal",
+        "quote": "Quote",
         "clientRoute": "Customer and route",
         "volume": "Volume",
         "total": "Total incl. VAT",
@@ -278,6 +280,123 @@
         "expiredOn": "On {date}",
         "superseded": "Superseded",
         "supersededNote": "Replaced by a newer version"
+      },
+      "editor": {
+        "title": "Quote for {name}",
+        "numbered": "ORC-{number} · version {version}",
+        "numberPending": "New quote · version {version}",
+        "basedOn": "Calculated from inventory v{version}",
+        "lastStatus": "Version {version} is {status}. Sending this one replaces it.",
+        "statuses": {
+          "sent": "sent",
+          "accepted": "accepted",
+          "rejected": "declined",
+          "superseded": "out of date"
+        },
+        "noInventory": {
+          "title": "No inventory yet",
+          "text": "The quote is calculated from the submitted inventory. Come back when it arrives."
+        },
+        "won": {
+          "title": "Quote accepted",
+          "text": "The customer has already accepted a quote for this request."
+        },
+        "back": "Back to the request",
+        "calc": {
+          "title": "Calculation",
+          "text": "Suggested from the inventory, pricing and fleet. You can change any value.",
+          "volume": "Adjusted volume",
+          "declared": "{value} declared",
+          "vehicles": "Vehicles",
+          "trips": {
+            "one": "{count} trip",
+            "other": "{count} trips"
+          },
+          "noVehicles": "No active vehicles",
+          "km": "Kilometres",
+          "kmHint": "From the base and back, through every address.",
+          "operators": "Crew",
+          "hours": "Team hours",
+          "suggested": "Suggested: {value}",
+          "reset": "Back to suggested values"
+        },
+        "alerts": {
+          "title": "Needs attention",
+          "no-lift": "{floors} floors without a lift",
+          "far-parking": "Parking {meters} m away",
+          "special-items": "Special items: {fragile} fragile, {dismantle} to dismantle, {extraCrew} needing extra crew",
+          "unmeasured": "{count} items without measurements",
+          "extra-trips": "Does not fit in one trip: {trips} trips",
+          "no-vehicles": "No active vehicles in the fleet",
+          "no-km": "Kilometres missing",
+          "minimum-applied": "The minimum per job applies ({amount})",
+          "missing-vehicle-cost": "A vehicle has no cost per km: the cost comes out low"
+        },
+        "lines": {
+          "title": "Quote lines",
+          "description": "Description",
+          "quantity": "Qty",
+          "unit": "Unit",
+          "price": "Price",
+          "total": "Total",
+          "included": "Included",
+          "optional": "Optional",
+          "optionalHint": "The customer decides on optional lines when accepting.",
+          "remove": "Remove {name}",
+          "addExtra": "Add service",
+          "addExtraPlaceholder": "Choose a service…",
+          "addManual": "Add line",
+          "newLine": "New line",
+          "noExtras": "You have no extra services yet. Create them in Pricing.",
+          "clientAsked": "The customer asked for: {list}",
+          "edited": "edited by hand"
+        },
+        "base": {
+          "labour": "Labour",
+          "transport": "Transport",
+          "floor-surcharge": "Surcharge per floor without lift",
+          "parking-surcharge": "Parking surcharge",
+          "minimum": "Adjustment to the minimum per job"
+        },
+        "presentation": {
+          "title": "Presentation",
+          "legend": "Price shown to the customer",
+          "fixed": "Fixed price",
+          "hourly": "Hourly, with an estimate",
+          "validUntil": "Valid until",
+          "validHint": "dd/mm/yyyy",
+          "conditions": "Conditions",
+          "conditionsPlaceholder": "E.g. includes cargo insurance. Payment on moving day."
+        },
+        "summary": {
+          "title": "Summary",
+          "subtotal": "Subtotal",
+          "vat": "VAT ({pct})",
+          "total": "Total",
+          "withOptional": "With every optional line: {amount}",
+          "hourlyRate": "{amount} per hour (crew of {count})",
+          "cost": "Estimated cost",
+          "margin": "Margin",
+          "adminOnly": "Only administrators see the cost and margin."
+        },
+        "save": "Save draft",
+        "saving": "Saving…",
+        "saved": "Draft saved.",
+        "send": "Send quote",
+        "sending": "Sending…",
+        "sendNote": "Once sent, the quote does not change: to change it, you create a new version.",
+        "errors": {
+          "invalid": "Some data is invalid. Check the lines and values.",
+          "noInventory": "The request has no inventory yet.",
+          "shipmentClosed": "This request is already won or cancelled.",
+          "inventoryChanged": "The customer sent a new inventory. Reload the page to recalculate.",
+          "empty": "Add at least one line.",
+          "invalidValidity": "Enter a validity from today (dd/mm/yyyy).",
+          "notAllowed": "You cannot change this request.",
+          "failed": "Could not save. Please try again."
+        },
+        "sendConfirm": "Yes, send to the customer",
+        "cancel": "Cancel"
       }
     },
     "orders": {
@@ -468,13 +587,13 @@
           }
         },
         "actions": {
-          "create-proposal": "Create proposal",
-          "continue-proposal": "Continue",
+          "create-quote": "Create quote",
+          "continue-quote": "Continue",
           "resend-link": "Resend link",
           "share-link": "Share link",
           "copy-link": "Generate new link",
           "fill-inventory": "Fill in inventory",
-          "view-proposal": "View proposal",
+          "view-quote": "View quote",
           "view-job": "View job"
         },
         "soon": "Coming soon",
@@ -484,7 +603,7 @@
             "one": "Sent the inventory {time}. We still need the measurements of {count} object before pricing.",
             "other": "Sent the inventory {time}. We still need the measurements of {count} objects before pricing."
           },
-          "draftProposal": "You started the proposal. It was saved as a draft {time}.",
+          "draftQuote": "You started the quote. It was saved as a draft {time}.",
           "linkExpiresToday": "The link expires today and the inventory hasn't arrived. Worth a reminder.",
           "linkExpiresIn": {
             "one": "The link expires in {count} day and the inventory hasn't arrived. Worth a reminder.",
@@ -498,15 +617,15 @@
           "justCreated": "Just created. The link still needs to be shared.",
           "justCreatedSelf": "Just created. The inventory still needs to be filled in.",
           "filling": "Filling it in at their own pace. Link active until {date}.",
-          "proposalSentToday": "Proposal v{version} sent. Expires today.",
-          "proposalSent": {
-            "one": "Proposal v{version} sent. Expires in {count} day.",
-            "other": "Proposal v{version} sent. Expires in {count} days."
+          "quoteSentToday": "Quote v{version} sent. Expires today.",
+          "quoteSent": {
+            "one": "Quote v{version} sent. Expires in {count} day.",
+            "other": "Quote v{version} sent. Expires in {count} days."
           },
-          "proposalExpired": "Proposal v{version} sent. It has expired.",
+          "quoteExpired": "Quote v{version} sent. It has expired.",
           "wonToday": "Accepted and signed today at {time}.",
           "wonOn": "Accepted and signed on {date}.",
-          "lostReason": "Turned down the proposal. Reason: {reason}.",
+          "lostReason": "Turned down the quote. Reason: {reason}.",
           "lostNoReason": "Lost, no reason given."
         },
         "side": {
@@ -552,7 +671,12 @@
           "The link is active for {days} days."
         ],
         "namePlaceholder": "[NAME]",
-        "linkPlaceholder": "[ORDER LINK]"
+        "linkPlaceholder": "[ORDER LINK]",
+        "quoteBody": [
+          "Hello {name}! This is {sender}, from {company}.",
+          "The quote for your move is ready. You can view and accept it here, no account needed:",
+          "{link}"
+        ]
       },
       "new": {
         "title": "New order",
@@ -573,7 +697,7 @@
           "email": "Email",
           "optional": "(optional)",
           "emailPlaceholder": "name@example.com",
-          "emailHint": "With an email, the customer gets a copy of the accepted proposal and the handover reports.",
+          "emailHint": "With an email, the customer gets a copy of the accepted quote and the handover reports.",
           "addTaxId": "Add tax ID",
           "taxId": "Tax ID (NIF)",
           "taxIdHint": "9 digits.",
@@ -658,7 +782,7 @@
             },
             {
               "title": "You get a notice",
-              "text": "With the inventory received, you prepare the proposal."
+              "text": "With the inventory received, you prepare the quote."
             }
           ],
           "afterSelf": [
@@ -671,7 +795,7 @@
               "text": "Floor, lift, stairs and parking."
             },
             {
-              "title": "You prepare the proposal",
+              "title": "You prepare the quote",
               "text": "The calculation uses the inventory you filled in."
             }
           ]
@@ -696,7 +820,7 @@
         "routeTo": "to",
         "stops": "Stops: {list}",
         "shareTitle": "Now send the link to {name}",
-        "shareText": "This is where {name} lists what they're taking. Later, they'll see the proposal on the same link.",
+        "shareText": "This is where {name} lists what they're taking. Later, they'll see the quote on the same link.",
         "linkLabel": "Order link",
         "copy": "Copy link",
         "validUntil": "Active until {date} · gives access to this order only",
@@ -737,6 +861,13 @@
           "fillInventory": "Fill in the inventory myself",
           "createAnother": "Create another order",
           "view": "View order"
+        },
+        "quote": {
+          "title": "Client link · {id}",
+          "shareTitle": "Send the quote to {name}",
+          "shareText": "Through the link, {name} sees the quote and accepts it with a signature.",
+          "emailSubject": "The quote for your move",
+          "notice": "The link only gives access to this order. You'll see {name}'s answer in the Quotes tab."
         }
       },
       "inventory": {
@@ -871,7 +1002,7 @@
         },
         "actions": {
           "more": "More actions",
-          "createProposal": "Create proposal",
+          "createQuote": "Create quote",
           "shareLink": "Share link"
         },
         "journey": {
@@ -881,8 +1012,9 @@
             "created": "Order created",
             "link-shared": "Link shared",
             "inventory-submitted": "Inventory received",
-            "proposal-sent": "Proposal sent",
-            "won": "Won"
+            "quote-sent": "Quote sent",
+            "won": "Won",
+            "lost": "Lost"
           }
         },
         "alert": {
@@ -900,11 +1032,15 @@
           "summary": "Summary",
           "inventory": "Inventory",
           "addresses": "Addresses",
-          "proposals": "Proposals",
+          "quotes": "Quotes",
           "history": "History"
         },
         "summary": {
           "moveTitle": "The move",
+          "jobTitle": "Scheduled job",
+          "jobWhen": "{date} at {time}",
+          "jobPending": "Crew and vehicle not assigned yet.",
+          "viewSchedule": "View in schedule",
           "edit": "Edit",
           "date": "Move date",
           "volume": "Declared volume",
@@ -918,7 +1054,7 @@
           },
           "noInventory": "No inventory yet",
           "distance": "Distance between addresses",
-          "distanceSub": "Calculated in the proposal",
+          "distanceSub": "Calculated in the quote",
           "distanceUnknown": "To be calculated",
           "origin": "Origin",
           "destination": "Destination",
@@ -974,15 +1110,34 @@
             "permit": "Needs a permit"
           }
         },
-        "proposals": {
-          "emptyTitle": "No proposals yet",
-          "emptyReady": "The inventory is ready. Once you create the proposal, its versions and status show up here.",
-          "emptyWaiting": "Once the inventory is ready you can create the proposal. Its versions and status show up here.",
+        "quotes": {
+          "emptyTitle": "No quotes yet",
+          "emptyReady": "The inventory is ready. Once you create the quote, its versions and status show up here.",
+          "emptyWaiting": "Once the inventory is ready you can create the quote. Its versions and status show up here.",
           "count": {
-            "one": "This order has {count} proposal.",
-            "other": "This order has {count} proposals."
+            "one": "This order has {count} quote.",
+            "other": "This order has {count} quotes."
           },
-          "view": "View proposals"
+          "view": "View quotes",
+          "number": "ORC-{number} · version {version}",
+          "statuses": {
+            "draft": "Draft",
+            "sent": "Sent",
+            "accepted": "Accepted",
+            "rejected": "Declined",
+            "superseded": "Superseded",
+            "expired": "Expired"
+          },
+          "sentOn": "Sent on {date}",
+          "validUntil": "Valid until {date}",
+          "acceptedOn": "Accepted on {date}",
+          "rejected": "Reason: {reason}",
+          "inventoryOf": "Inventory v{version}",
+          "outdated": "The customer sent a new inventory (v{version}). The quote is out of date: create a new version.",
+          "create": "Create quote",
+          "continueDraft": "Continue draft",
+          "newVersion": "Create new version",
+          "total": "{amount} incl. VAT"
         },
         "history": {
           "title": "History",
@@ -997,8 +1152,8 @@
           "inventorySubmitted": "The client sent the inventory (v{version})",
           "inventoryMeta": "{when} · team notified",
           "inventoryFilled": "The company filled in the inventory (v{version})",
-          "proposalSent": "Proposal sent (v{version})",
-          "won": "Proposal accepted",
+          "quoteSent": "Quote sent (v{version})",
+          "won": "Quote accepted",
           "lost": "Order lost",
           "meta": "{when} · {actor}"
         },
@@ -1020,15 +1175,20 @@
             "one": "{count} day left.",
             "other": "{count} days left."
           },
-          "canEdit": "{name} can change the inventory until a proposal is accepted.",
+          "canEdit": "{name} can change the inventory until they get the quote.",
           "expiredText": "The link has expired: {name} can no longer change the inventory.",
-          "closedText": "The order is closed: the link no longer gives access.",
+          "closedText": "Quote accepted: through the link, {name} can view the signed quote.",
           "copy": "Generate new link",
           "viewAsClient": "View as client",
           "notes": "Internal notes",
           "noteLabel": "Internal note",
           "notePlaceholder": "Only your team sees this. E.g. prefers mornings, has a cat.",
-          "noteMeta": "{author} · {when}"
+          "noteMeta": "{author} · {when}",
+          "noLink": "No link",
+          "noLinkText": "{name} has no link yet: without it they can't see the quote.",
+          "generate": "Generate link",
+          "quoteText": "Through the link, {name} sees the quote and can accept or reject it.",
+          "lostText": "{name} rejected the quote. If you create a new version, it appears on the same link."
         }
       }
     },
@@ -1042,16 +1202,16 @@
         "one": "{count} vehicle",
         "other": "{count} vehicles"
       },
-      "proposalsWord": {
-        "one": "proposal",
-        "other": "proposals"
+      "quotesWord": {
+        "one": "quote",
+        "other": "quotes"
       },
       "acceptedWord": {
         "one": "{count} accepted",
         "other": "{count} accepted"
       },
       "since": "since {date} · {by}",
-      "inactiveNote": "Not used in proposals or the schedule",
+      "inactiveNote": "Not used in quotes or the schedule",
       "inactiveReasons": {
         "workshop": "In the workshop",
         "other": "Inactive"
@@ -1081,11 +1241,11 @@
         "nothing": "nothing scheduled"
       },
       "capacity": {
-        "suffix": "available for proposals",
+        "suffix": "available for quotes",
         "help": {
-          "label": "How the fleet is used in proposals",
-          "title": "How the fleet is used in proposals",
-          "text": "The calculation picks the smallest combination of active vehicles that carries the adjusted volume. If nothing fits, it proposes extra trips. An inactive vehicle does not appear in proposals or in the schedule.",
+          "label": "How the fleet is used in quotes",
+          "title": "How the fleet is used in quotes",
+          "text": "The calculation picks the smallest combination of active vehicles that carries the adjusted volume. If nothing fits, it proposes extra trips. An inactive vehicle does not appear in quotes or in the schedule.",
           "exampleVolume": "38,4 m³",
           "exampleResult": "Large truck + Van V-02"
         }
@@ -1102,11 +1262,11 @@
         "label": "Fleet alerts",
         "capacity": {
           "title": {
-            "one": "Capacity fell short in {count} proposal",
-            "other": "Capacity fell short in {count} proposals"
+            "one": "Capacity fell short in {count} quote",
+            "other": "Capacity fell short in {count} quotes"
           },
           "text": "This month they needed an extra trip. A larger vehicle could lower the price.",
-          "action": "See proposals"
+          "action": "See quotes"
         },
         "idle": {
           "title": {
@@ -1114,8 +1274,8 @@
             "other": "{name} idle for {count} days"
           },
           "text": {
-            "one": "Used in only {count} proposal this month. Check it is still needed.",
-            "other": "Used in only {count} proposals this month. Check it is still needed."
+            "one": "Used in only {count} quote this month. Check it is still needed.",
+            "other": "Used in only {count} quotes this month. Check it is still needed."
           },
           "action": "See vehicle"
         },
@@ -1124,7 +1284,7 @@
             "one": "{count} vehicle without cost per km",
             "other": "{count} vehicles without cost per km"
           },
-          "text": "Without it, the cost and margin of proposals are wrong.",
+          "text": "Without it, the cost and margin of quotes are wrong.",
           "action": "Complete details"
         }
       },
@@ -1143,7 +1303,7 @@
           "capacity": "Capacity",
           "lastUse": "Last use",
           "nextUse": "Next use",
-          "proposals": "In proposals"
+          "quotes": "In quotes"
         },
         "view": {
           "label": "View mode",
@@ -1158,15 +1318,15 @@
         "capacity": "Capacity",
         "lastUse": "Last use",
         "nextUse": "Next use",
-        "proposals": "In proposals · 30 d",
+        "quotes": "In quotes · 30 d",
         "actions": "Actions",
         "viewDetail": "See details of {name}",
         "open": "Open {name}",
         "costMissing": "Cost per km missing",
         "notIncluded": "Not used",
         "inactiveTitle": "Inactive · {count}",
-        "inactiveHint": "not used in proposals or the schedule",
-        "footnote": "\"In proposals\": proposals from the last 30 days where the calculation picked the vehicle, and how many were accepted.",
+        "inactiveHint": "not used in quotes or the schedule",
+        "footnote": "\"In quotes\": quotes from the last 30 days where the calculation picked the vehicle, and how many were accepted.",
         "openSchedule": "Open schedule",
         "emptySearch": "No vehicle matches the search.",
         "emptyFilter": "No vehicle in this filter."
@@ -1207,8 +1367,8 @@
           "viewSchedule": "See in schedule",
           "none": "No jobs scheduled."
         },
-        "proposals": {
-          "title": "In proposals · last 30 days",
+        "quotes": {
+          "title": "In quotes · last 30 days",
           "accepted": "accepted",
           "rate": "acceptance"
         },
@@ -1219,8 +1379,8 @@
           "maxLoad": "Maximum load",
           "costPerKm": "Cost per km",
           "type": "Type",
-          "costMissing": "Without a cost per km, the cost and margin of proposals are wrong.",
-          "privacy": "Cost per km is only visible to administrators. Changes do not affect proposals already sent."
+          "costMissing": "Without a cost per km, the cost and margin of quotes are wrong.",
+          "privacy": "Cost per km is only visible to administrators. Changes do not affect quotes already sent."
         },
         "usage": {
           "title": "Use in {month}",
@@ -1252,7 +1412,7 @@
           },
           "costs": {
             "title": "Clearer costs",
-            "text": "The cost per km goes into your proposals and shows the real margin."
+            "text": "The cost per km goes into your quotes and shows the real margin."
           },
           "schedule": {
             "title": "An organised schedule",
@@ -1323,7 +1483,7 @@
           "plateFormat": "Format: AA-00-AA or 00-AA-00",
           "name": "Short name",
           "optional": "(optional)",
-          "nameHint": "What the team calls it. Shown in the schedule and in internal proposals."
+          "nameHint": "What the team calls it. Shown in the schedule and in internal quotes."
         },
         "capacity": {
           "title": "Capacity and costs",
@@ -1333,13 +1493,13 @@
           "maxLoad": "Max load",
           "cost": "Cost per km",
           "suggested": "Suggested value",
-          "privacy": "Cost per km: fuel, tolls and wear. It goes into the cost and margin of proposals and only administrators can see it."
+          "privacy": "Cost per km: fuel, tolls and wear. It goes into the cost and margin of quotes and only administrators can see it."
         },
         "availability": {
           "title": "Availability",
-          "label": "Available for proposals and the schedule",
+          "label": "Available for quotes and the schedule",
           "on": "It enters the calculation and the schedule as soon as you save.",
-          "off": "It's saved, but stays out of proposals and the schedule until you activate it."
+          "off": "It's saved, but stays out of quotes and the schedule until you activate it."
         },
         "upcoming": {
           "badge": "Soon",
@@ -1364,11 +1524,11 @@
           "noPlate": "plate to be set"
         },
         "impact": {
-          "title": "What changes in proposals",
+          "title": "What changes in quotes",
           "fleet": "Available fleet",
-          "needCapacity": "Enter the capacity to see how this vehicle fits into proposals.",
+          "needCapacity": "Enter the capacity to see how this vehicle fits into quotes.",
           "active": "Moves up to {capacity} m³ can go in this vehicle alone, and larger ones get more possible combinations.",
-          "inactive": "While inactive, it doesn't count for proposals."
+          "inactive": "While inactive, it doesn't count for quotes."
         },
         "checks": {
           "title": "Before saving",
@@ -1426,8 +1586,8 @@
         }
       },
       "help": {
-        "label": "How the team is used in proposals",
-        "title": "How the team is used in proposals",
+        "label": "How the team is used in quotes",
+        "title": "How the team is used in quotes",
         "text": "The calculation estimates how many crew members each move needs and uses the hourly cost from the rate card, the same for everyone. Only active people appear in the schedule.",
         "app": "Crew members use the phone app: they only see the jobs you assign them, with no prices or margins."
       },
@@ -1490,8 +1650,8 @@
             "other": "{when}, {count} people short on {orderId}"
           },
           "text": {
-            "one": "The proposal counts on {needed} crew members and only {assigned} is assigned.",
-            "other": "The proposal counts on {needed} crew members and only {assigned} are assigned."
+            "one": "The quote counts on {needed} crew members and only {assigned} is assigned.",
+            "other": "The quote counts on {needed} crew members and only {assigned} are assigned."
           },
           "free": "Free {when}: {names}.",
           "tomorrow": "tomorrow",
@@ -1714,7 +1874,7 @@
       "tomorrow": "Tomorrow",
       "line": {
         "inProgress": "{orderId} in progress",
-        "inProgressQuote": "{orderId} in progress · and a proposal about to expire",
+        "inProgressQuote": "{orderId} in progress · and a quote about to expire",
         "todayDraft": "{orderId} today · new order in draft",
         "inventoryArrived": "{orderId} · inventory arrived {hours} h ago",
         "missingMeasure": {
@@ -1745,8 +1905,8 @@
           "move-in-progress": "move in progress",
           "pickup-signed": "pickup report signed",
           "sent-inventory": "sent the inventory",
-          "accepted-quote": "accepted the proposal",
-          "declined-quote": "declined the proposal",
+          "accepted-quote": "accepted the quote",
+          "declined-quote": "declined the quote",
           "accepted-signed": "accepted and signed",
           "signed-delivery": "signed the delivery",
           "order-created": "order created"
@@ -1815,7 +1975,7 @@
           "one": "{count} done",
           "other": "{count} done"
         },
-        "footnote": "\"Accepted\": sum of accepted proposals, VAT included. Only administrators see values.",
+        "footnote": "\"Accepted\": sum of accepted quotes, VAT included. Only administrators see values.",
         "footnoteNoValues": "Only administrators see values.",
         "showing": "Showing {shown} of {total}",
         "emptySearch": "No client matches the search.",
@@ -1851,12 +2011,12 @@
           "viewAll": "See in Orders",
           "notes": {
             "quoteSent": {
-              "one": "Proposal v{version} sent · expires in {count} day",
-              "other": "Proposal v{version} sent · expires in {count} days"
+              "one": "Quote v{version} sent · expires in {count} day",
+              "other": "Quote v{version} sent · expires in {count} days"
             },
             "inProgress": "In progress · {vehicle} · {crew}",
             "closed": "Closed · {amount}",
-            "draft": "Proposal in draft since {time}",
+            "draft": "Quote in draft since {time}",
             "shortStaffed": {
               "one": "{when} · {count} person short on the team",
               "other": "{when} · {count} people short on the team"
@@ -1877,7 +2037,7 @@
           "taxId": "Tax ID",
           "taxIdPlaceholder": "9 digits",
           "taxIdMissing": "Without a tax ID, the invoicing export is incomplete.",
-          "emailMissing": "Without an email, they don't get a copy of the accepted proposal or the reports."
+          "emailMissing": "Without an email, they don't get a copy of the accepted quote or the reports."
         },
         "addresses": {
           "title": "Addresses used",
@@ -1982,8 +2142,8 @@
       "pipeline": {
         "title": "Orders in progress",
         "subtitle": {
-          "one": "From first contact to accepted proposal. {count} inventory awaiting a quote.",
-          "other": "From first contact to accepted proposal. {count} inventories awaiting a quote."
+          "one": "From first contact to accepted quote. {count} inventory awaiting a quote.",
+          "other": "From first contact to accepted quote. {count} inventories awaiting a quote."
         },
         "viewOrders": "View orders",
         "stages": {
@@ -1999,8 +2159,8 @@
             "label": "Inventory received",
             "hint": "Ready to quote"
           },
-          "proposal-sent": {
-            "label": "Proposal sent",
+          "quote-sent": {
+            "label": "Quote sent",
             "hint": "Awaiting reply"
           },
           "won": {
@@ -2026,7 +2186,7 @@
         "events": {
           "arrived": "Arrived at destination",
           "crew-left": "Crew left the base",
-          "proposal-accepted": "Proposal accepted",
+          "quote-accepted": "Quote accepted",
           "delivery-done": "Delivery completed",
           "incident-logged": "Incident logged"
         },
@@ -2036,7 +2196,7 @@
       "shortcuts": {
         "title": "Shortcuts",
         "volumeCalculator": "Volume calculator",
-        "newProposal": "New proposal",
+        "newQuote": "New quote",
         "pricing": "Rates and extras",
         "sendLink": "Send link to client"
       }
@@ -2153,6 +2313,8 @@
         "label": "Day by resource",
         "resource": "Resource",
         "vehicles": "Vehicles",
+        "unassigned": "To assign",
+        "unassignedSub": "No vehicle or crew",
         "people": "People",
         "freeAllDay": "Free all day"
       },
@@ -2176,7 +2338,7 @@
           "almost-full": "Almost full",
           "full": "Full"
         },
-        "pending": "Proposal pending",
+        "pending": "Quote pending",
         "cellAria": "{day}: {text}",
         "cellJobs": {
           "one": "{count} move",
@@ -2192,8 +2354,8 @@
         "freeTitle": "Still free this day",
         "ofVehicles": "of {count} vehicles",
         "ofPeople": "of {count} people",
-        "hintProposals": "If the pending proposal is accepted, it adds {count} more people this day.",
-        "hintJobs": "Estimated from accepted proposals. Exact hours are in the Week view.",
+        "hintQuotes": "If the pending quote is accepted, it adds {count} more people this day.",
+        "hintJobs": "Estimated from accepted quotes. Exact hours are in the Week view.",
         "hintFree": "A good day to offer to clients asking for nearby dates.",
         "viewWeek": "View in the week",
         "tagAccepted": "Accepted"
@@ -2218,9 +2380,9 @@
           "inventory": "Inventory",
           "vehicleOk": "{capacity} m³ for {volume}",
           "vehicleNone": "to assign",
-          "vehicleNoneSub": "the proposal counted on a vehicle for {volume}",
+          "vehicleNoneSub": "the quote counted on a vehicle for {volume}",
           "crewValue": "{have} of {need} people",
-          "crewOk": "as in the proposal",
+          "crewOk": "as in the quote",
           "crewMissing": {
             "one": "{count} person missing",
             "other": "{count} people missing"
@@ -2230,7 +2392,7 @@
           "noParking": "not needed",
           "noParkingSub": "according to the client",
           "inventoryValue": "no changes",
-          "inventorySub": "same as the proposal version"
+          "inventorySub": "same as the quote version"
         },
         "live": {
           "title": "How it's going",
@@ -2282,7 +2444,7 @@
           "title": "Vehicle",
           "swap": "Swap",
           "none": "No vehicle.",
-          "needed": "The proposal counted on a vehicle for {volume}.",
+          "needed": "The quote counted on a vehicle for {volume}.",
           "assign": "Assign vehicle",
           "fits": "{capacity} m³ for {volume} · fits in one trip",
           "tooSmall": "{capacity} m³ for {volume} · doesn't fit in one trip"
@@ -2292,8 +2454,8 @@
           "count": "{have} of {need} crew members",
           "remove": "Remove {name}",
           "missing": {
-            "one": "{count} person missing (the proposal counts on {need})",
-            "other": "{count} people missing (the proposal counts on {need})"
+            "one": "{count} person missing (the quote counts on {need})",
+            "other": "{count} people missing (the quote counts on {need})"
           },
           "freeSlot": "Open spot",
           "available": "Available {when}",
@@ -2317,7 +2479,7 @@
             "closed": "Closed",
             "delivery-signed": "Delivery report signed",
             "pickup-signed": "Pickup report signed",
-            "quote-accepted": "Proposal accepted",
+            "quote-accepted": "Quote accepted",
             "crew-assigned": "Crew assigned",
             "crew-named": "Crew: {names}",
             "permit-granted": "Parking permit granted",
@@ -2351,6 +2513,135 @@
         }
       },
       "clientsAnd": "and"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "The values we use to calculate your quotes. Saving creates a new version: quotes already sent keep the version they were calculated with.",
+      "version": "Version {version} · in effect since {date}",
+      "defaultsNote": "These are Mudaro reference values. Adjust them to your prices before your first quote.",
+      "sections": {
+        "prices": {
+          "title": "Price and cost",
+          "text": "Per crew member and per hour. Only administrators see the cost and margin."
+        },
+        "access": {
+          "title": "Access",
+          "text": "What climbing without a lift or parking far away adds."
+        },
+        "calculation": {
+          "title": "Calculation",
+          "text": "How we turn the inventory into hours and crew."
+        },
+        "quote": {
+          "title": "Quote",
+          "text": "How the customer sees the price and how long it is valid."
+        }
+      },
+      "fields": {
+        "operatorHourPriceCents": "Price per crew hour",
+        "operatorHourCostCents": "Cost per crew hour",
+        "kmPriceCents": "Price per km",
+        "minimumServiceCents": "Minimum per job",
+        "vatPct": "VAT",
+        "noLiftFloorSurchargeCents": "Surcharge per floor without lift",
+        "parkingSurchargeCents": "Surcharge for distant parking",
+        "noLiftFloorExtraPct": "Extra hours per floor without lift",
+        "parkingExtraPctPer25m": "Extra hours per 25 m of parking distance",
+        "stowageFactor": "Stowage factor",
+        "averageSpeedKmh": "Average speed",
+        "crewSmallMaxM3": "Small volume up to",
+        "crewSmall": "Crew",
+        "crewMediumMaxM3": "Medium volume up to",
+        "crewMedium": "Crew",
+        "crewLarge": "Crew above that",
+        "quoteValidityDays": "Quote validity"
+      },
+      "hints": {
+        "stowageFactor": "Multiplies the declared volume: 1.20 = 20% more for the space lost in the truck.",
+        "minimumServiceCents": "If the calculation comes out lower, the quote suggests this amount.",
+        "crew": "Suggested crew by volume. You can change it on each quote."
+      },
+      "crewLegend": "Crew by volume",
+      "units": {
+        "euros": "€",
+        "perHour": "€/h",
+        "perKm": "€/km",
+        "pct": "%",
+        "m3": "m³",
+        "kmh": "km/h",
+        "days": "days"
+      },
+      "margin": "Margin per hour: {pct}",
+      "presentation": {
+        "legend": "Price shown to the customer",
+        "fixed": "Fixed price",
+        "hourly": "Hourly, with an estimate",
+        "fixedHint": "The customer sees a total. If the move takes longer, the difference is on you.",
+        "hourlyHint": "The customer sees the hourly price and the estimated hours, and pays the actual hours."
+      },
+      "save": "Save new version",
+      "saving": "Saving…",
+      "saved": "Version {version} saved.",
+      "errors": {
+        "required": "Required field.",
+        "invalid": "Invalid value. Use numbers, with a comma for decimals.",
+        "outOfRange": "Out of the allowed range.",
+        "crewOrder": "Must be larger than the small volume.",
+        "notAllowed": "Only administrators can change the pricing.",
+        "failed": "Could not save. Please try again.",
+        "review": "Check the highlighted fields."
+      },
+      "extras": {
+        "title": "Extra services",
+        "text": "The services you offer and the price of each. Those linked to a Mudaro type are suggested on the quote when the customer ticks that type in the inventory.",
+        "empty": "You have no extra services yet.",
+        "add": "Add service",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "saveNew": "Add",
+        "saveEdit": "Save changes",
+        "name": "Name",
+        "namePlaceholder": "E.g. Crockery packing",
+        "type": "Mudaro type",
+        "ownType": "Own service (no type)",
+        "ownHint": "An own service does not appear in the customer's inventory: you only add it to the quote.",
+        "priceMode": "How it is charged",
+        "price": "Price",
+        "priceModes": {
+          "fixed": "Fixed price",
+          "unit": "Per unit",
+          "hour": "Per hour",
+          "m3": "Per m³",
+          "m3_month": "Per m³ per month"
+        },
+        "priceSuffix": {
+          "fixed": "",
+          "unit": " / unit",
+          "hour": " / hour",
+          "m3": " / m³",
+          "m3_month": " / m³ / month"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "inactiveHint": "An inactive service does not appear on new quotes.",
+        "columns": {
+          "service": "Service",
+          "type": "Type",
+          "price": "Price",
+          "status": "Status"
+        },
+        "errors": {
+          "nameRequired": "Enter the service name.",
+          "tooLong": "120 characters maximum.",
+          "nameTaken": "You already have a service with this name.",
+          "priceRequired": "Enter the price.",
+          "priceInvalid": "Invalid price.",
+          "invalid": "Some data is invalid. Check the fields.",
+          "failed": "Could not save. Please try again."
+        }
+      }
     }
   }
 }

@@ -13,7 +13,7 @@ const cardTitle = "flex items-center gap-2.5 text-base font-bold";
 // Accesos fijos de la interfaz (no son datos de la empresa).
 const SHORTCUTS = [
   { key: "volumeCalculator", icon: "calculator", route: ROUTES.tools.volumeCalculator },
-  { key: "newProposal", icon: "proposals", route: ROUTES.proposals.new },
+  { key: "newQuote", icon: "quotes", route: ROUTES.quotes.list },
   { key: "pricing", icon: "tags", route: ROUTES.pricing },
   { key: "sendLink", icon: "link", route: ROUTES.orders.new },
 ] as const;
