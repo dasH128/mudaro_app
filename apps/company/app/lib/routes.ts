@@ -45,6 +45,8 @@ export const ROUTES = {
   // Rutas con parámetro: se usan igual, localePath(lang, ROUTES.jobs.detail(id))
   jobs: {
     detail: (id: string) => `/jobs/${encodeURIComponent(id)}`,
+    // CSV de trabajos cerrados para facturar (RF-60): ?from=dd/mm/aaaa&to=dd/mm/aaaa
+    export: "/jobs/export",
     // Acta imprimible de recogida o entrega (P13), fuera del menú lateral
     print: (id: string, moment: "pickup" | "delivery") => `/print/jobs/${encodeURIComponent(id)}/${moment}`,
   },

@@ -2654,7 +2654,15 @@
           "walk": "{meters} m to the door"
         }
       },
-      "clientsAnd": "and"
+      "clientsAnd": "and",
+      "export": {
+        "title": "Export closed jobs",
+        "text": "CSV of the jobs closed between these dates, for invoicing. Opens in Excel.",
+        "from": "From",
+        "to": "To",
+        "download": "Download CSV",
+        "error": "Invalid dates. Use dd/mm/yyyy, with 'To' after 'From' and at most one year."
+      }
     },
     "pricing": {
       "title": "Pricing",
@@ -2918,7 +2926,31 @@
         "crewSignature": "Crew lead",
         "nameAndDate": "Name, signature, date and time"
       },
-      "actualClosed": "Actual: {hours} h and {km} km · closed on {when} by {by}"
+      "actualClosed": "Actual: {hours} h and {km} km · closed on {when} by {by}",
+      "export": {
+        "headers": [
+          "Order",
+          "Quote",
+          "Closing date",
+          "Move date",
+          "Client",
+          "Tax ID",
+          "Type",
+          "Description",
+          "Quantity",
+          "Unit price (€)",
+          "Total excl. VAT (€)",
+          "VAT (%)",
+          "VAT (€)",
+          "Total incl. VAT (€)"
+        ],
+        "kinds": {
+          "base": "Service",
+          "extra": "Extra",
+          "manual": "Manual",
+          "incident": "Incident"
+        }
+      }
     }
   }
 }

@@ -2654,7 +2654,15 @@
           "walk": "{meters} m hasta la puerta"
         }
       },
-      "clientsAnd": "y"
+      "clientsAnd": "y",
+      "export": {
+        "title": "Exportar cerrados",
+        "text": "CSV de los trabajos cerrados entre estas fechas, para facturar. Se abre en Excel.",
+        "from": "Desde",
+        "to": "Hasta",
+        "download": "Descargar CSV",
+        "error": "Fechas no válidas. Usa dd/mm/aaaa, con 'Hasta' después de 'Desde' y como mucho un año."
+      }
     },
     "pricing": {
       "title": "Tarifas",
@@ -2918,7 +2926,31 @@
         "crewSignature": "Jefe de equipo",
         "nameAndDate": "Nombre, firma, fecha y hora"
       },
-      "actualClosed": "Real: {hours} h y {km} km · cerrado el {when} por {by}"
+      "actualClosed": "Real: {hours} h y {km} km · cerrado el {when} por {by}",
+      "export": {
+        "headers": [
+          "Pedido",
+          "Presupuesto",
+          "Fecha de cierre",
+          "Fecha de la mudanza",
+          "Cliente",
+          "NIF",
+          "Tipo",
+          "Descripción",
+          "Cantidad",
+          "Precio unitario (€)",
+          "Total sin IVA (€)",
+          "IVA (%)",
+          "IVA (€)",
+          "Total con IVA (€)"
+        ],
+        "kinds": {
+          "base": "Servicio",
+          "extra": "Extra",
+          "manual": "Manual",
+          "incident": "Incidencia"
+        }
+      }
     }
   }
 }

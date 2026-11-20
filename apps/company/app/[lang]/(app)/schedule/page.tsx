@@ -84,7 +84,13 @@ export default async function SchedulePage({ searchParams }: PageProps<"/[lang]/
 
   return (
     <>
-      <ScheduleHeader lang={locale} t={t} summary={summarize(overview.jobs, weekStart)} />
+      <ScheduleHeader
+        lang={locale}
+        t={t}
+        summary={summarize(overview.jobs, weekStart)}
+        exportRange={{ from: `01/${today.slice(5, 7)}/${today.slice(0, 4)}`, to: `${today.slice(8, 10)}/${today.slice(5, 7)}/${today.slice(0, 4)}` }}
+        exportError={first(params.exportError) === "1"}
+      />
       <ScheduleAlertsSection lang={locale} t={t} alerts={scheduleAlerts(overview, today)} today={today} />
       <ScheduleToolbar
         lang={locale}

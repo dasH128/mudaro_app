@@ -2654,7 +2654,15 @@
           "walk": "{meters} m até à porta"
         }
       },
-      "clientsAnd": "e"
+      "clientsAnd": "e",
+      "export": {
+        "title": "Exportar fechados",
+        "text": "CSV dos trabalhos fechados entre estas datas, para faturar. Abre no Excel.",
+        "from": "De",
+        "to": "Até",
+        "download": "Descarregar CSV",
+        "error": "Datas inválidas. Usa dd/mm/aaaa, com 'Até' depois de 'De' e no máximo um ano."
+      }
     },
     "pricing": {
       "title": "Tarifas",
@@ -2918,7 +2926,31 @@
         "crewSignature": "Chefe de equipa",
         "nameAndDate": "Nome, assinatura, data e hora"
       },
-      "actualClosed": "Real: {hours} h e {km} km · fechado a {when} por {by}"
+      "actualClosed": "Real: {hours} h e {km} km · fechado a {when} por {by}",
+      "export": {
+        "headers": [
+          "Pedido",
+          "Orçamento",
+          "Data de fecho",
+          "Data da mudança",
+          "Cliente",
+          "NIF",
+          "Tipo",
+          "Descrição",
+          "Quantidade",
+          "Preço unitário (€)",
+          "Total sem IVA (€)",
+          "IVA (%)",
+          "IVA (€)",
+          "Total com IVA (€)"
+        ],
+        "kinds": {
+          "base": "Serviço",
+          "extra": "Extra",
+          "manual": "Manual",
+          "incident": "Incidência"
+        }
+      }
     }
   }
 }
