@@ -483,7 +483,8 @@
             "inventory-received": "Inventario recibido",
             "quoted": "Presupuestados",
             "won": "Ganados",
-            "lost": "Perdidos"
+            "lost": "Perdidos",
+            "cancelled": "Cancelados"
           }
         },
         "status": {
@@ -492,7 +493,8 @@
           "inventory-received": "Inventario recibido",
           "quoted": "Presupuestado",
           "won": "Ganado",
-          "lost": "Perdido"
+          "lost": "Perdido",
+          "cancelled": "Cancelado"
         },
         "view": {
           "label": "Modo de visualización",
@@ -532,6 +534,10 @@
             "lost": {
               "one": "{count} pedido perdido",
               "other": "{count} pedidos perdidos"
+            },
+            "cancelled": {
+              "one": "{count} pedido cancelado",
+              "other": "{count} pedidos cancelados"
             }
           }
         },
@@ -548,7 +554,8 @@
             "inventory-received": "Inventario recibido",
             "quoted": "Presupuestados",
             "won": "Ganados",
-            "lost": "Perdidos"
+            "lost": "Perdidos",
+            "cancelled": "Cancelados"
           },
           "moreShown": "Ver más",
           "actionFooter": "Vuelve a «Ver todos» para el resto de pedidos.",
@@ -600,7 +607,8 @@
           "daysAgo": {
             "one": "hace {count} día",
             "other": "hace {count} días"
-          }
+          },
+          "cancelled": "cancelado"
         },
         "actions": {
           "create-quote": "Crear presupuesto",
@@ -642,7 +650,9 @@
           "wonToday": "Aceptó y firmó hoy a las {time}.",
           "wonOn": "Aceptó y firmó el {date}.",
           "lostReason": "Rechazó el presupuesto. Motivo: {reason}.",
-          "lostNoReason": "Perdido sin motivo indicado."
+          "lostNoReason": "Perdido sin motivo indicado.",
+          "cancelledReason": "Cancelado el {date}. Motivo: {reason}.",
+          "cancelledNoReason": "Cancelado el {date}."
         },
         "side": {
           "upcoming": {
@@ -1030,7 +1040,8 @@
             "inventory-submitted": "Inventario recibido",
             "quote-sent": "Presupuesto enviado",
             "won": "Ganado",
-            "lost": "Perdido"
+            "lost": "Perdido",
+            "cancelled": "Cancelado"
           }
         },
         "alert": {
@@ -1187,7 +1198,8 @@
             "incident-resolved": "Incidencia resuelta",
             "record-deleted": "Registro del trabajo eliminado",
             "closed": "Trabajo cerrado"
-          }
+          },
+          "cancelled": "Pedido cancelado"
         },
         "side": {
           "client": "Cliente",
@@ -1221,6 +1233,30 @@
           "generate": "Generar enlace",
           "quoteText": "Con el enlace, {name} ve el presupuesto y puede aceptarlo o rechazarlo.",
           "lostText": "{name} rechazó el presupuesto. Si creas una versión nueva, aparece en el mismo enlace."
+        },
+        "cancel": {
+          "action": "Cancelar pedido",
+          "title": "Cancelar el pedido {id}",
+          "reason": "Motivo",
+          "reasonPlaceholder": "Ej.: el cliente desistió de la mudanza",
+          "note": "El pedido queda cancelado y el enlace del cliente deja de funcionar. No se puede reactivar: para retomarlo, crea un pedido nuevo.",
+          "noteJob": "El trabajo programado también se cancela y el vehículo y el equipo quedan libres.",
+          "jobStarted": "La mudanza ya empezó o ya terminó: el pedido no se puede cancelar.",
+          "confirm": "Cancelar pedido",
+          "back": "Volver",
+          "errors": {
+            "notFound": "Este pedido ya no existe. Recarga la página.",
+            "notOpen": "Este pedido ya no se puede cancelar.",
+            "jobStarted": "La mudanza ya empezó o ya terminó: el pedido no se puede cancelar.",
+            "reasonRequired": "Indica el motivo.",
+            "failed": "No se pudo cancelar. Inténtalo de nuevo."
+          }
+        },
+        "cancelledBanner": {
+          "title": "Pedido cancelado el {date}",
+          "by": "por {actor}",
+          "reason": "Motivo: {reason}",
+          "hint": "Solo lectura. Para retomar la mudanza, crea un pedido nuevo."
         }
       }
     },

@@ -21,6 +21,7 @@ import { formatOrderNumber, parseOrderNumber } from "../domain/order-number";
 import {
   LINK_VALIDITY_DAYS,
   SOURCES,
+  type CancelOrderResult,
   type ClientSuggestion,
   type Flexibility,
   type InventoryMode,
@@ -40,7 +41,8 @@ import {
 //
 // Inventario: se muestra la versión vigente, la última enviada (A11). Un borrador no se muestra hasta enviarse.
 // Enlace del cliente: `shareOrderLink` (share_order_link). El token solo existe en la respuesta; la base guarda su hash.
-// Los envíos cancelados no se muestran: la pantalla de cancelar (RF-69) llega más adelante.
+// Cancelar (RF-69): `cancelOrder` (cancel_order). Los cancelados salen en la lista (solo con su filtro) y en el detalle,
+// en solo lectura; las pantallas que escriben (Pedido criado, Inventário, enlace) los tratan como no encontrados.
 
 type ShipmentStatus = Database["public"]["Enums"]["shipment_status"];
 type DateFlexibility = Database["public"]["Enums"]["date_flexibility"];
@@ -51,13 +53,14 @@ const ORDER_ROUTE =
 
 const LIST_SELECT = `number, status, lost_reason, status_changed_at, last_activity_at, created_at,
   client:clients(name, phone, email),
-  order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, ${ORDER_ROUTE}),
+  order:orders!inner(contact_name, desired_date, date_flexibility, link_validity_days, token_expires_at, cancelled_at, cancellation_reason, ${ORDER_ROUTE}),
   quotes(version, status, valid_until)`;
 
 const DETAIL_SELECT = `id, number, status, lost_reason, status_changed_at, created_at,
   client:clients(name, type, phone, email),
   order:orders!inner(
     contact_name, contact_source, desired_date, date_flexibility, link_validity_days, token_expires_at, created_at,
+    cancelled_at, cancellation_reason,
     addresses(id, role, sort_order),
     inventories(
       version, filled_by, submitted_at,
@@ -90,8 +93,8 @@ const FLEXIBILITY_TO_DB: Record<Flexibility, DateFlexibility> = {
   month: "month",
 };
 
-/** Estado de la base de datos al del dominio. Un envío cancelado no tiene equivalente: no se muestra. */
-function stageOf(status: ShipmentStatus): OrderStage | null {
+/** Estado de la base de datos al del dominio. */
+function stageOf(status: ShipmentStatus): OrderStage {
   switch (status) {
     case "new":
       return "new";
@@ -106,12 +109,12 @@ function stageOf(status: ShipmentStatus): OrderStage | null {
     case "lost":
       return "lost";
     case "cancelled":
-      return null;
+      return "cancelled";
   }
 }
 
 /** `Order.status` no tiene "perdido": un pedido perdido se queda en el último paso que alcanzó, como en el percurso. */
-function statusOf(stage: OrderStage): OrderStatus {
+function statusOf(stage: Exclude<OrderStage, "cancelled">): OrderStatus {
   return stage === "lost" ? "quoted" : stage;
 }
 
@@ -203,6 +206,9 @@ function noteOf(
     changedAt: string;
     tokenExpiresAt: string | null;
     lostReason: string | null;
+    /** Cancelación del pedido (RF-69): cuándo y por qué. */
+    cancelledAt: string | null;
+    cancellationReason: string | null;
     totals: { items: number; volumeM3: number };
     /** Último orçamento enviado. */
     sentQuote: { version: number; validUntil: string } | null;
@@ -224,6 +230,8 @@ function noteOf(
       return { kind: "won", signedAt: row.changedAt };
     case "lost":
       return { kind: "lost", reason: row.lostReason };
+    case "cancelled":
+      return { kind: "cancelled", at: row.cancelledAt ?? row.changedAt, reason: row.cancellationReason };
   }
 }
 
@@ -233,7 +241,6 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
   const { data, error } = await supabase
     .from("shipments")
     .select(LIST_SELECT)
-    .neq("status", "cancelled")
     .order("last_activity_at", { ascending: false });
   if (error) throw new Error(`orders: no se pudieron leer los pedidos (${error.code})`);
 
@@ -242,7 +249,6 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
 
   for (const row of data) {
     const stage = stageOf(row.status);
-    if (!stage) continue;
     const route = routeOf(row.order);
     const mode = inventoryModeOf(row.order);
 
@@ -260,12 +266,15 @@ export async function getOrdersOverview(): Promise<OrdersOverview> {
         changedAt: row.status_changed_at,
         tokenExpiresAt: row.order.token_expires_at,
         lostReason: row.lost_reason,
+        cancelledAt: row.order.cancelled_at,
+        cancellationReason: row.order.cancellation_reason,
         totals: linesTotals(currentInventory(row.order.inventories)?.inventory_lines ?? []),
         sentQuote: latestSent(row.quotes),
       }),
       lastActivityAt: row.last_activity_at,
     });
-    counted.push({ status: stage, createdAt: row.created_at, statusChangedAt: row.status_changed_at });
+    // Las cifras del mes no cuentan los cancelados, como antes de mostrarlos
+    if (stage !== "cancelled") counted.push({ status: stage, createdAt: row.created_at, statusChangedAt: row.status_changed_at });
   }
 
   return { orders, metrics: buildOrdersMetrics(counted, new Date()) };
@@ -288,8 +297,9 @@ export async function getOrder(id: string): Promise<Order | undefined> {
   if (error) throw new Error(`orders: no se pudo leer el pedido (${error.code})`);
   if (!data) return undefined;
 
+  // Lo usan las pantallas que escriben (Pedido criado e Inventário): un cancelado no se encuentra
   const stage = stageOf(data.status);
-  if (!stage) return undefined;
+  if (stage === "cancelled") return undefined;
   const route = routeOf(data.order);
   // La base acepta de 1 a 90 días; la app solo ofrece las validez de LINK_VALIDITY_DAYS.
   const validityDays = LINK_VALIDITY_DAYS.find((days) => days === data.order.link_validity_days) ?? null;
@@ -387,8 +397,7 @@ function eventOf(
     case "lost":
       return { kind: "lost", at, reason: data.reason ?? null };
     case "cancelled":
-      // La cancelación (RF-69) aún no tiene pantalla: sus pedidos no se muestran.
-      return null;
+      return { kind: "cancelled", at, actor, reason: data.reason ?? null };
     case "job_assigned":
       return { kind: "job-assigned", at, actor };
     case "job_rescheduled":
@@ -465,7 +474,6 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
       .from("shipments")
       .select(DETAIL_SELECT)
       .eq("number", number)
-      .neq("status", "cancelled")
       .order("created_at", { ascending: false, referencedTable: "shipment_notes" })
       .limit(1, { referencedTable: "shipment_notes" })
       .maybeSingle(),
@@ -475,8 +483,6 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
   if (!data) return undefined;
 
   const stage = stageOf(data.status);
-  if (!stage) return undefined;
-
   const order = data.order;
   const source = sourceOf(order.contact_source);
   const inventory = currentInventory(order.inventories);
@@ -563,7 +569,39 @@ export async function getOrderDetail(id: string, locale: AppLocale): Promise<Ord
       }),
     job: jobOf(data.jobs),
     events,
+    cancellation: order.cancelled_at ? { at: order.cancelled_at, reason: order.cancellation_reason } : null,
   };
+}
+
+/**
+ * Cancela el pedido con `cancel_order()` (RF-69): el pedido, su envío y el trabajo si estaba programado, en una
+ * transacción. La función comprueba en la base que quien llama es administrador de la empresa dueña del pedido.
+ */
+export async function cancelOrder(id: string, reason: string): Promise<CancelOrderResult> {
+  const number = parseOrderNumber(id);
+  if (number === null) return { ok: false, error: "notFound" };
+
+  const supabase = await createSupabaseServerClient();
+  const { data: shipment, error: readError } = await supabase.from("shipments").select("order_id").eq("number", number).maybeSingle();
+  if (readError) throw new Error(`orders: no se pudo leer el pedido (${readError.code})`);
+  if (!shipment) return { ok: false, error: "notFound" };
+
+  const { error } = await supabase.rpc("cancel_order", { p_order_id: shipment.order_id, p_reason: reason });
+  if (!error) return { ok: true };
+  switch (error.code) {
+    case "42501":
+      return { ok: false, error: "notFound" };
+    case "23514":
+      return { ok: false, error: "notOpen" };
+    case "55000":
+      // "job started" o "order not open": la base dice cuál en el mensaje
+      return { ok: false, error: error.message === "job started" ? "jobStarted" : "notOpen" };
+    case "22023":
+      return { ok: false, error: "reasonRequired" };
+    default:
+      console.error(`orders: la base rechazó la cancelación (${error.code ?? "sin código"})`);
+      return { ok: false, error: "failed" };
+  }
 }
 
 /** El trabajo del envío (hay uno como mucho: `jobs.shipment_id` es único). */

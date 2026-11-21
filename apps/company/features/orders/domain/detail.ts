@@ -78,6 +78,8 @@ export type OrderEvent =
   | { kind: "quote-sent"; at: string; actor: string; version: number }
   | { kind: "won"; at: string }
   | { kind: "lost"; at: string; reason: string | null }
+  /** Pedido cancelado por la empresa (RF-69). */
+  | { kind: "cancelled"; at: string; actor: string; reason: string | null }
   /** Agenda (paso 6.1): equipo y vehículo atribuidos, trabajo reprogramado o cancelado. */
   | { kind: "job-assigned"; at: string; actor: string }
   | { kind: "job-rescheduled"; at: string; actor: string }
@@ -111,7 +113,21 @@ export type OrderDetail = {
   job: DetailJob | null;
   /** Del más reciente al más antiguo. */
   events: readonly OrderEvent[];
+  /** Cancelación del pedido (RF-69). `null` si no está cancelado. */
+  cancellation: { at: string; reason: string | null } | null;
 };
+
+// --- Cancelar (RF-69) ---
+
+/**
+ * Si se puede cancelar el pedido. Es la misma regla que aplica `cancel_order()` en la base de datos, que es quien
+ * decide: solo envíos vivos, y nunca con la mudança empezada o hecha (el trabajo se cierra, no se cancela).
+ */
+export function cancelRule(order: Pick<OrderDetail, "stage" | "job">): "allowed" | "job-started" | "not-open" {
+  if (order.stage === "lost" || order.stage === "cancelled") return "not-open";
+  if (order.job && order.job.status !== "scheduled" && order.job.status !== "cancelled") return "job-started";
+  return "allowed";
+}
 
 /** Una versión de orçamento en la pestaña Orçamentos del pedido. Importes con IVA, en céntimos. */
 export type DetailQuote = {
@@ -151,12 +167,12 @@ export function routeOf(order: Pick<OrderDetail, "origin" | "stops" | "destinati
 
 /** Hitos del pedido, en orden. */
 export const JOURNEY_STEPS = ["created", "link-shared", "inventory-submitted", "quote-sent", "won"] as const;
-/** "lost" sustituye a "Ganho" cuando el cliente rechaza el orçamento. */
-export type JourneyStep = (typeof JOURNEY_STEPS)[number] | "lost";
+/** "lost" sustituye a "Ganho" cuando el cliente rechaza el orçamento; "cancelled" cierra el percurso de un cancelado. */
+export type JourneyStep = (typeof JOURNEY_STEPS)[number] | "lost" | "cancelled";
 
 export type JourneyItem = {
   step: JourneyStep;
-  state: "done" | "current" | "todo" | "lost";
+  state: "done" | "current" | "todo" | "lost" | "cancelled";
   /** Cuándo ocurrió, si hay evento. */
   at: string | null;
 };
@@ -184,6 +200,14 @@ function eventTime(events: readonly OrderEvent[], step: JourneyStep): string | n
  */
 export function buildJourney(stage: OrderStage, events: readonly OrderEvent[], mode: InventoryMode): JourneyItem[] {
   const steps: readonly JourneyStep[] = mode === "self" ? JOURNEY_STEPS.filter((step) => step !== "link-shared") : JOURNEY_STEPS;
+  // Cancelado: los hitos que llegó a tener (con evento) y, al final, "Cancelado". Lo que no se alcanzó no se muestra.
+  if (stage === "cancelled") {
+    const reached = steps.filter((step) => step === "created" || eventTime(events, step) !== null);
+    return [
+      ...reached.map((step): JourneyItem => ({ step, state: "done", at: eventTime(events, step) })),
+      { step: "cancelled", state: "cancelled", at: eventTime(events, "cancelled") },
+    ];
+  }
   const reached = stage === "lost" ? "quote-sent" : STEP_OF_STATUS[stage];
   const current = steps.indexOf(reached === "link-shared" && mode === "self" ? "created" : reached);
   return steps.map((step, index): JourneyItem => {

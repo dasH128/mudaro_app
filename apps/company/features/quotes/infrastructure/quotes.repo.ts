@@ -51,7 +51,8 @@ function endsOf(order: Addressed, texts: Texts): { from: string; to: string } {
 export async function getQuotesOverview({ includeMargin }: Options): Promise<QuotesOverview> {
   const supabase = await createSupabaseServerClient();
   const [quotesResult, readyResult] = await Promise.all([
-    supabase.from("quotes").select(LIST_SELECT).order("created_at", { ascending: false }),
+    // Los orçamentos de un pedido cancelado (RF-69) ya no se pueden aceptar: no se listan, como en Início y Clientes
+    supabase.from("quotes").select(LIST_SELECT).neq("shipment.status", "cancelled").order("created_at", { ascending: false }),
     supabase.from("shipments").select(READY_SELECT).eq("status", "inventory_received"),
   ]);
   if (quotesResult.error) throw new Error(`quotes: no se pudieron leer los orçamentos (${quotesResult.error.code})`);

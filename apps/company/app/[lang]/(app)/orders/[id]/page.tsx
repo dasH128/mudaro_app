@@ -19,6 +19,7 @@ import {
 import { getOrderDetail } from "@/features/orders/infrastructure/orders.repo";
 import { OrderAddressesTab } from "@/features/orders/presentation/components/order-addresses-tab";
 import { OrderBreadcrumb } from "@/features/orders/presentation/components/order-breadcrumb";
+import { OrderCancelledBanner } from "@/features/orders/presentation/components/order-cancelled-banner";
 import { ClientPanel, LinkPanel, MissingLinkPanel, NotesPanel } from "@/features/orders/presentation/components/order-detail-side";
 import { OrderDetailHeader } from "@/features/orders/presentation/components/order-detail-header";
 import { OrderDetailTabs } from "@/features/orders/presentation/components/order-detail-tabs";
@@ -64,6 +65,7 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
     <>
       <OrderBreadcrumb lang={locale} t={t} current={order.id} />
       <OrderDetailHeader lang={locale} t={t} order={order} />
+      <OrderCancelledBanner t={t.detail.cancelledBanner} order={order} />
       <OrderJourney t={t.detail} items={buildJourney(order.stage, order.events, order.inventoryMode)} />
       {blocking ? (
         <OrderMeasureAlert lang={locale} t={t} clientName={order.client.name} missing={blocking.count} first={blocking.first} />
@@ -91,7 +93,8 @@ export default async function OrderDetailPage({ params, searchParams }: PageProp
 
         <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-5">
           <ClientPanel t={t} client={order.client} />
-          {order.link ? (
+          {/* Cancelado (RF-69): el enlace ya no funciona, no se muestra */}
+          {order.stage === "cancelled" ? null : order.link ? (
             <LinkPanel
               lang={locale}
               t={t}

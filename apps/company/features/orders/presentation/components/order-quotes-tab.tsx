@@ -34,7 +34,8 @@ export function OrderQuotesTab({ lang, t, order, today }: { lang: Locale; t: Ord
   const editorHref = localePath(lang, ROUTES.orders.quote(order.id));
   const latest = order.quotes[0] ?? null;
   const hasDraft = latest?.status === "draft";
-  const won = order.stage === "won";
+  // Ganado o cancelado (RF-69): ya no se hacen versiones nuevas
+  const closed = order.stage === "won" || order.stage === "cancelled";
   const outdated =
     order.inventory !== null && latest !== null && !hasDraft && latest.status !== "accepted" && latest.inventoryVersion < order.inventory.version;
 
@@ -49,7 +50,7 @@ export function OrderQuotesTab({ lang, t, order, today }: { lang: Locale; t: Ord
         </svg>
         <h2 className={sectionTitle}>{d.emptyTitle}</h2>
         <p className="max-w-105 text-[15px] text-muted">{order.inventory ? d.emptyReady : d.emptyWaiting}</p>
-        {order.inventory ? (
+        {order.inventory && order.stage !== "cancelled" ? (
           <Link href={editorHref} className={`${ghostButton} h-10 px-4 text-sm`}>
             {d.create}
           </Link>
@@ -64,7 +65,7 @@ export function OrderQuotesTab({ lang, t, order, today }: { lang: Locale; t: Ord
         <h2 id="quotes-title" className={sectionTitle}>
           {t.detail.tabs.quotes}
         </h2>
-        {won ? null : (
+        {closed ? null : (
           <Link href={editorHref} className={`${ghostButton} h-10 px-4 text-sm`}>
             {hasDraft ? d.continueDraft : d.newVersion}
           </Link>

@@ -7,6 +7,7 @@ const PILL: Record<OrderStage, string> = {
   quoted: "border border-accent bg-background text-foreground",
   won: "bg-success-surface text-success-foreground",
   lost: "bg-danger-surface text-danger-foreground",
+  cancelled: "bg-line-soft text-muted",
 };
 
 export function OrderStagePill({ stage, label }: { stage: OrderStage; label: string }) {

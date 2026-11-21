@@ -76,6 +76,10 @@ export type ShareLinkResult =
   | { ok: true; url: string; validUntil: string }
   | { ok: false; error: "failed" };
 
+/** Resultado de cancelar un pedido (RF-69). Los errores son códigos que traduce la pantalla. */
+export type CancelOrderError = "notFound" | "notOpen" | "jobStarted" | "reasonRequired" | "failed";
+export type CancelOrderResult = { ok: true } | { ok: false; error: CancelOrderError };
+
 /** Cliente que ya existe en la empresa, sugerido al escribir su teléfono (RF-14). */
 export type ClientSuggestion = {
   id: string;
@@ -87,11 +91,11 @@ export type ClientSuggestion = {
 };
 
 /**
- * Etapas de la lista de pedidos: el ciclo de vida más "Perdido".
+ * Etapas de la lista de pedidos: el ciclo de vida más "Perdido" y "Cancelado" (RF-69).
  * TODO(revisar): `lost` vive aquí y no en `ORDER_STATUSES` hasta decidir si "Perdido" es un estado real del pedido
  * (afecta a la línea de tiempo de "Pedido criado" y al modelo de datos).
  */
-export const ORDER_STAGES = [...ORDER_STATUSES, "lost"] as const;
+export const ORDER_STAGES = [...ORDER_STATUSES, "lost", "cancelled"] as const;
 export type OrderStage = (typeof ORDER_STAGES)[number];
 
 /** Lo que se cuenta de un pedido en la lista. Son códigos con sus datos: el texto lo pone la interfaz. */
@@ -106,7 +110,8 @@ export type OrderNote =
   | { kind: "filling"; validUntil: string }
   | { kind: "quote-sent"; version: number; validUntil: string }
   | { kind: "won"; signedAt: string }
-  | { kind: "lost"; reason: string | null };
+  | { kind: "lost"; reason: string | null }
+  | { kind: "cancelled"; at: string; reason: string | null };
 
 /** Fila de la lista de pedidos. */
 export type OrderListItem = {

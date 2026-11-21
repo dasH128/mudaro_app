@@ -53,15 +53,19 @@ export function OrderInventoryTab({ lang, t, order }: Props) {
   const s = t.detail.summary;
   const { inventory } = order;
   const inventoryHref = localePath(lang, ROUTES.orders.inventory(order.id));
+  // Un pedido cancelado (RF-69) queda en solo lectura
+  const readOnly = order.stage === "cancelled";
 
   if (!inventory) {
     return (
       <div role="status" className={`${card} items-center gap-3 px-6 py-10 text-center`}>
         <h2 className={sectionTitle}>{d.emptyTitle}</h2>
         <p className="max-w-105 text-[15px] text-muted">{d.emptyText}</p>
-        <Link href={inventoryHref} className={ghostButton}>
-          {d.fill}
-        </Link>
+        {readOnly ? null : (
+          <Link href={inventoryHref} className={ghostButton}>
+            {d.fill}
+          </Link>
+        )}
       </div>
     );
   }
@@ -83,9 +87,11 @@ export function OrderInventoryTab({ lang, t, order }: Props) {
           </h2>
           <span className="text-sm text-muted">{meta}</span>
         </div>
-        <Link href={inventoryHref} className={`${ghostButton} h-10 px-4 text-sm`}>
-          {d.edit}
-        </Link>
+        {readOnly ? null : (
+          <Link href={inventoryHref} className={`${ghostButton} h-10 px-4 text-sm`}>
+            {d.edit}
+          </Link>
+        )}
       </div>
 
       {inventory.rooms.map(({ slug, name, lines }) => {

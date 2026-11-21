@@ -25,6 +25,7 @@ const STAGE_STYLE: Record<OrderStage, { icon: IconName; box: string }> = {
   quoted: { icon: "quotes", box: "bg-background text-foreground" },
   won: { icon: "check", box: "bg-success-surface text-success-foreground" },
   lost: { icon: "close", box: "bg-danger-surface text-danger-foreground" },
+  cancelled: { icon: "minus", box: "bg-line-soft text-muted" },
 };
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -57,7 +58,7 @@ export function OrdersPipeline({ lang, t, stage, q, view, counts, attention }: P
               className={`relative flex flex-col items-center gap-2 rounded-[18px] border-2 px-1.5 pt-1.5 pb-3.5 text-center transition-transform hover:-translate-y-0.5 ${focus} ${selected ? "border-foreground bg-surface-soft" : "border-transparent"}`}
             >
               <span className={`relative grid size-14 place-items-center rounded-[18px] shadow-[0_0_0_6px_var(--surface)] ${box}`}>
-                <Icon name={icon} size={key === "lost" ? 22 : 24} strokeWidth={2.2} />
+                <Icon name={icon} size={key === "lost" || key === "cancelled" ? 22 : 24} strokeWidth={2.2} />
                 {attention.has(key) ? (
                   <span className="absolute -top-1 -right-1 size-3.5 rounded-full border-[3px] border-surface bg-primary" />
                 ) : null}

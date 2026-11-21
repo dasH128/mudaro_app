@@ -11,6 +11,7 @@ import { pluralize } from "@/app/i18n/interpolate";
 import { formatLongDate, hourLisbon, todayLisbon } from "@/app/lib/format";
 import {
   DEFAULT_VIEW,
+  activeOrders,
   PAGE_SIZE,
   countByStage,
   filterOrders,
@@ -83,13 +84,15 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
   if (all.length === 0) return <OrdersEmpty lang={locale} t={t} />;
 
   const counts = countByStage(all);
+  // "Todos" no cuenta los cancelados (RF-69): solo se ven con su filtro
+  const activeCount = activeOrders(all).length;
   const attention = summarizeAttention(all);
   const filtered = filterOrders(all, stage, q);
   const base = { q, view, stage };
 
   const summary =
     stage === undefined
-      ? pluralize(locale, all.length, t.summary.all)
+      ? pluralize(locale, activeCount, t.summary.all)
       : stage === "action"
         ? pluralize(locale, attention.total, t.summary.action)
         : pluralize(locale, counts[stage], t.summary.stage[stage]);
@@ -134,7 +137,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
         stage={stage}
         q={q}
         view={view}
-        total={all.length}
+        total={activeCount}
         actionCount={attention.total}
         counts={counts}
         summary={summary}

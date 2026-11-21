@@ -483,7 +483,8 @@
             "inventory-received": "Inventory received",
             "quoted": "Quoted",
             "won": "Won",
-            "lost": "Lost"
+            "lost": "Lost",
+            "cancelled": "Cancelled"
           }
         },
         "status": {
@@ -492,7 +493,8 @@
           "inventory-received": "Inventory received",
           "quoted": "Quoted",
           "won": "Won",
-          "lost": "Lost"
+          "lost": "Lost",
+          "cancelled": "Cancelled"
         },
         "view": {
           "label": "View mode",
@@ -532,6 +534,10 @@
             "lost": {
               "one": "{count} lost order",
               "other": "{count} lost orders"
+            },
+            "cancelled": {
+              "one": "{count} cancelled order",
+              "other": "{count} cancelled orders"
             }
           }
         },
@@ -548,7 +554,8 @@
             "inventory-received": "Inventory received",
             "quoted": "Quoted",
             "won": "Won",
-            "lost": "Lost"
+            "lost": "Lost",
+            "cancelled": "Cancelled"
           },
           "moreShown": "See more",
           "actionFooter": "Go back to “View all” for the rest of the orders.",
@@ -600,7 +607,8 @@
           "daysAgo": {
             "one": "{count} day ago",
             "other": "{count} days ago"
-          }
+          },
+          "cancelled": "cancelled"
         },
         "actions": {
           "create-quote": "Create quote",
@@ -642,7 +650,9 @@
           "wonToday": "Accepted and signed today at {time}.",
           "wonOn": "Accepted and signed on {date}.",
           "lostReason": "Turned down the quote. Reason: {reason}.",
-          "lostNoReason": "Lost, no reason given."
+          "lostNoReason": "Lost, no reason given.",
+          "cancelledReason": "Cancelled on {date}. Reason: {reason}.",
+          "cancelledNoReason": "Cancelled on {date}."
         },
         "side": {
           "upcoming": {
@@ -1030,7 +1040,8 @@
             "inventory-submitted": "Inventory received",
             "quote-sent": "Quote sent",
             "won": "Won",
-            "lost": "Lost"
+            "lost": "Lost",
+            "cancelled": "Cancelled"
           }
         },
         "alert": {
@@ -1187,7 +1198,8 @@
             "incident-resolved": "Incident resolved",
             "record-deleted": "Job record deleted",
             "closed": "Job closed"
-          }
+          },
+          "cancelled": "Order cancelled"
         },
         "side": {
           "client": "Client",
@@ -1221,6 +1233,30 @@
           "generate": "Generate link",
           "quoteText": "Through the link, {name} sees the quote and can accept or reject it.",
           "lostText": "{name} rejected the quote. If you create a new version, it appears on the same link."
+        },
+        "cancel": {
+          "action": "Cancel order",
+          "title": "Cancel order {id}",
+          "reason": "Reason",
+          "reasonPlaceholder": "E.g. the client gave up on the move",
+          "note": "The order is cancelled and the client link stops working. It cannot be reactivated: to resume, create a new order.",
+          "noteJob": "The scheduled job is cancelled too, and the vehicle and crew become free.",
+          "jobStarted": "The move has already started or finished: the order cannot be cancelled.",
+          "confirm": "Cancel order",
+          "back": "Back",
+          "errors": {
+            "notFound": "This order no longer exists. Reload the page.",
+            "notOpen": "This order can no longer be cancelled.",
+            "jobStarted": "The move has already started or finished: the order cannot be cancelled.",
+            "reasonRequired": "Enter a reason.",
+            "failed": "Could not cancel. Try again."
+          }
+        },
+        "cancelledBanner": {
+          "title": "Order cancelled on {date}",
+          "by": "by {actor}",
+          "reason": "Reason: {reason}",
+          "hint": "Read only. To resume the move, create a new order."
         }
       }
     },

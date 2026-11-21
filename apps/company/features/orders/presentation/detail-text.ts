@@ -92,6 +92,10 @@ export function describeEvent(event: OrderEvent, t: OrdersText, locale: Locale):
       return { title: h.won, meta: when, tone: "primary" };
     case "lost":
       return { title: h.lost, meta: event.reason ? `${when} · ${event.reason}` : when, tone: "ink" };
+    case "cancelled": {
+      const meta = interpolate(h.meta, { when, actor: event.actor });
+      return { title: h.cancelled, meta: event.reason ? `${meta} · ${event.reason}` : meta, tone: "ink" };
+    }
     case "job-assigned":
       return { title: h.jobAssigned, meta: interpolate(h.meta, { when, actor: event.actor }), tone: "accent" };
     case "job-rescheduled":

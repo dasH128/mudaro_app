@@ -483,7 +483,8 @@
             "inventory-received": "Inventário recebido",
             "quoted": "Orçamentados",
             "won": "Ganhos",
-            "lost": "Perdidos"
+            "lost": "Perdidos",
+            "cancelled": "Cancelados"
           }
         },
         "status": {
@@ -492,7 +493,8 @@
           "inventory-received": "Inventário recebido",
           "quoted": "Orçamentado",
           "won": "Ganho",
-          "lost": "Perdido"
+          "lost": "Perdido",
+          "cancelled": "Cancelado"
         },
         "view": {
           "label": "Modo de visualização",
@@ -532,6 +534,10 @@
             "lost": {
               "one": "{count} pedido perdido",
               "other": "{count} pedidos perdidos"
+            },
+            "cancelled": {
+              "one": "{count} pedido cancelado",
+              "other": "{count} pedidos cancelados"
             }
           }
         },
@@ -548,7 +554,8 @@
             "inventory-received": "Inventário recebido",
             "quoted": "Orçamentados",
             "won": "Ganhos",
-            "lost": "Perdidos"
+            "lost": "Perdidos",
+            "cancelled": "Cancelados"
           },
           "moreShown": "Ver mais",
           "actionFooter": "Volta a «Ver todos» para o resto dos pedidos.",
@@ -600,7 +607,8 @@
           "daysAgo": {
             "one": "há {count} dia",
             "other": "há {count} dias"
-          }
+          },
+          "cancelled": "cancelado"
         },
         "actions": {
           "create-quote": "Criar orçamento",
@@ -642,7 +650,9 @@
           "wonToday": "Aceitou e assinou hoje às {time}.",
           "wonOn": "Aceitou e assinou em {date}.",
           "lostReason": "Recusou o orçamento. Motivo: {reason}.",
-          "lostNoReason": "Perdido sem motivo indicado."
+          "lostNoReason": "Perdido sem motivo indicado.",
+          "cancelledReason": "Cancelado a {date}. Motivo: {reason}.",
+          "cancelledNoReason": "Cancelado a {date}."
         },
         "side": {
           "upcoming": {
@@ -1030,7 +1040,8 @@
             "inventory-submitted": "Inventário recebido",
             "quote-sent": "Orçamento enviado",
             "won": "Ganho",
-            "lost": "Perdido"
+            "lost": "Perdido",
+            "cancelled": "Cancelado"
           }
         },
         "alert": {
@@ -1187,7 +1198,8 @@
             "incident-resolved": "Incidência resolvida",
             "record-deleted": "Registo do trabalho eliminado",
             "closed": "Trabalho fechado"
-          }
+          },
+          "cancelled": "Pedido cancelado"
         },
         "side": {
           "client": "Cliente",
@@ -1221,6 +1233,30 @@
           "generate": "Gerar link",
           "quoteText": "Pelo link, {name} vê o orçamento e pode aceitá-lo ou recusá-lo.",
           "lostText": "{name} recusou o orçamento. Se criares uma versão nova, aparece no mesmo link."
+        },
+        "cancel": {
+          "action": "Cancelar pedido",
+          "title": "Cancelar o pedido {id}",
+          "reason": "Motivo",
+          "reasonPlaceholder": "Ex.: o cliente desistiu da mudança",
+          "note": "O pedido fica cancelado e o link do cliente deixa de funcionar. Não se pode reativar: para retomar, cria um pedido novo.",
+          "noteJob": "O trabalho agendado também é cancelado e o veículo e a equipa ficam livres.",
+          "jobStarted": "A mudança já começou ou já terminou: o pedido não se pode cancelar.",
+          "confirm": "Cancelar pedido",
+          "back": "Voltar",
+          "errors": {
+            "notFound": "Este pedido já não existe. Recarrega a página.",
+            "notOpen": "Este pedido já não se pode cancelar.",
+            "jobStarted": "A mudança já começou ou já terminou: o pedido não se pode cancelar.",
+            "reasonRequired": "Indica o motivo.",
+            "failed": "Não foi possível cancelar. Tenta outra vez."
+          }
+        },
+        "cancelledBanner": {
+          "title": "Pedido cancelado a {date}",
+          "by": "por {actor}",
+          "reason": "Motivo: {reason}",
+          "hint": "Só leitura. Para retomar a mudança, cria um pedido novo."
         }
       }
     },

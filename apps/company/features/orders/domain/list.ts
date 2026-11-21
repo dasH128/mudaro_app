@@ -19,7 +19,10 @@ export function isView(value: string | undefined): value is OrdersView {
   return VIEWS.some((view) => view === value);
 }
 
-/** Avance de cada etapa en la barra de cinco puntos. "Perdido" se queda donde se cayó. */
+/**
+ * Avance de cada etapa en la barra de cinco puntos. "Perdido" se queda donde se cayó. Un cancelado no muestra avance:
+ * se puede cancelar en cualquier etapa y la lista no sabe en cuál estaba.
+ */
 export const STEP_OF: Record<OrderStage, number> = {
   new: 1,
   "awaiting-inventory": 2,
@@ -27,6 +30,7 @@ export const STEP_OF: Record<OrderStage, number> = {
   quoted: 4,
   won: 5,
   lost: 4,
+  cancelled: 0,
 };
 
 /** Notas que piden algo a la empresa ("Precisam de ti"), de más a menos prioritaria. */
@@ -81,6 +85,7 @@ export function nextAction(note: OrderNote): OrderAction | null {
     case "won":
       return "view-job";
     case "lost":
+    case "cancelled":
       return null;
   }
 }
@@ -90,7 +95,12 @@ function normalize(text: string): string {
   return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
-/** Filtra por etapa (o "action") y por texto (cliente o nº de pedido). */
+/** Pedidos que no están cancelados. "Todos" no muestra los cancelados: solo se ven con su filtro. */
+export function activeOrders(items: readonly OrderListItem[]): readonly OrderListItem[] {
+  return items.filter((item) => item.stage !== "cancelled");
+}
+
+/** Filtra por etapa (o "action") y por texto (cliente o nº de pedido). Sin etapa, deja fuera los cancelados. */
 export function filterOrders(
   items: readonly OrderListItem[],
   filter: OrdersFilter | undefined,
@@ -98,7 +108,7 @@ export function filterOrders(
 ): readonly OrderListItem[] {
   const needle = normalize(query.trim());
   return items.filter((item) => {
-    if (filter === "action" ? !needsAttention(item) : filter && item.stage !== filter) return false;
+    if (filter === undefined ? item.stage === "cancelled" : filter === "action" ? !needsAttention(item) : item.stage !== filter) return false;
     if (needle === "") return true;
     return [item.client, item.id].some((field) => normalize(field).includes(needle));
   });
@@ -142,7 +152,7 @@ export function summarizeAttention(items: readonly OrderListItem[]) {
 /** Próximas mudanças: las que tienen día concreto y siguen vivas, de la más cercana a la más lejana. */
 export function upcomingMoves(items: readonly OrderListItem[], today: string, limit: number): readonly OrderListItem[] {
   return items
-    .filter((item) => item.stage !== "lost" && item.flexibility !== "month" && daysBetween(today, item.date) >= 0)
+    .filter((item) => item.stage !== "lost" && item.stage !== "cancelled" && item.flexibility !== "month" && daysBetween(today, item.date) >= 0)
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, limit);
 }

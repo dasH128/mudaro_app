@@ -51,7 +51,9 @@ El pedido (`orders`) es la mudanza y el envío (`shipments`) es el pedido enviad
 
 - El enlace pertenece al pedido. El token se guarda solo como hash (`orders.token_hash`) y solo una Edge Function lo valida. Nunca llega a Next.js la clave de servicio (RNF-02).
 - La caducidad del enlace bloquea editar el inventario. No impide ver ni aceptar un presupuesto vigente.
-- La Edge Function es `client-order` (19/11/2026). Se despliega sin verificación de JWT porque el cliente no tiene sesión: el token del enlace es la autorización. Calcula su hash y llama a `client_save_inventory_draft` y `client_submit_inventory`, que solo puede ejecutar `service_role`. Pendiente antes de abrir el piloto a clientes reales: limitar la frecuencia de peticiones por IP.
+- La Edge Function es `client-order` (19/11/2026). Se despliega sin verificación de JWT porque el cliente no tiene sesión: el token del enlace es la autorización. Calcula su hash y llama a `client_save_inventory_draft` y `client_submit_inventory`, que solo puede ejecutar `service_role`.
+- Secreto entre servidores (decidido el 21/11/2026, pendiente de implementar antes de abrir el piloto a clientes reales): `apps/client` llama a `client-order` desde el servidor con un secreto compartido en una cabecera, junto con la IP real del navegador. El secreto es una variable de servidor (sin `NEXT_PUBLIC_`) y no da acceso a la base de datos. La función rechaza sin consultar la base de datos cualquier llamada sin él, porque hoy responde a cualquiera sin `apikey`.
+- Límite de peticiones: 10 por minuto por token y 30 por minuto por IP, contados en Postgres por la función. Los límites viven en una tabla y se cambian con un `update`, sin desplegar. Detalle en `docs/plan-modelo-bd.md`.
 
 ## Web del cliente (decidido el 19/11/2026)
 

@@ -63,6 +63,10 @@ export function describeNote(note: OrderNote, t: OrdersListText, locale: Locale,
         : interpolate(n.wonOn, { date: formatDate(note.signedAt) });
     case "lost":
       return note.reason ? interpolate(n.lostReason, { reason: note.reason }) : n.lostNoReason;
+    case "cancelled": {
+      const date = formatDate(note.at);
+      return note.reason ? interpolate(n.cancelledReason, { date, reason: note.reason }) : interpolate(n.cancelledNoReason, { date });
+    }
   }
 }
 
@@ -72,6 +76,7 @@ export function describeWhen(item: Pick<OrderListItem, "date" | "flexibility" | 
   const date = item.flexibility === "month" ? formatMonthName(locale, item.date) : formatDate(item.date);
 
   if (item.stage === "lost") return { date, countdown: w.notProceeded };
+  if (item.stage === "cancelled") return { date, countdown: w.cancelled };
   if (item.flexibility === "month") return { date, countdown: w.monthOnly };
   if (item.flexibility === "two-days") return { date, countdown: w.twoDays };
   if (item.flexibility === "one-week") return { date, countdown: w.oneWeek };

@@ -4,10 +4,11 @@ import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { interpolate } from "@/app/i18n/interpolate";
 import { formatDate } from "@/app/lib/format";
-import type { OrderDetail } from "../../domain/detail";
+import { cancelRule, type OrderDetail } from "../../domain/detail";
 import { actionHref } from "../orders-href";
 import type { OrdersText } from "../orders-text";
 import { OrderAvatar } from "./order-avatar";
+import { OrderMoreMenu } from "./order-more-menu";
 import { OrderStagePill } from "./order-stage-pill";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -27,6 +28,7 @@ export function OrderDetailHeader({ lang, t, order }: Props) {
     order.source ? interpolate(d.meta.source, { source: t.new.move.sources[order.source] }) : null,
   ].filter(Boolean);
 
+  const cancel = cancelRule(order);
   const quoteHref = order.stage === "inventory-received" ? actionHref(lang, "create-quote", order.id) : null;
   const shareHref =
     order.inventoryMode === "link" && (order.stage === "new" || order.stage === "awaiting-inventory")
@@ -56,16 +58,27 @@ export function OrderDetailHeader({ lang, t, order }: Props) {
       </div>
 
       <div className="flex flex-wrap items-center gap-2.5">
-        {/* TODO: el menú "Mais ações" aún no tiene acciones definidas */}
-        <button
-          type="button"
-          disabled
-          aria-label={d.actions.more}
-          title={t.list.soon}
-          className={`grid size-12 place-items-center rounded-full border border-field-border bg-surface text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${focus}`}
-        >
-          <Icon name="moreHorizontal" size={20} />
-        </button>
+        {/* "Mais ações" solo tiene "Cancelar pedido" (RF-69). Perdido o cancelado: no queda nada que hacer */}
+        {cancel === "not-open" ? (
+          <button
+            type="button"
+            disabled
+            aria-label={d.actions.more}
+            title={t.list.soon}
+            className={`grid size-12 place-items-center rounded-full border border-field-border bg-surface text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${focus}`}
+          >
+            <Icon name="moreHorizontal" size={20} />
+          </button>
+        ) : (
+          <OrderMoreMenu
+            lang={lang}
+            orderId={order.id}
+            rule={cancel}
+            hasScheduledJob={order.job?.status === "scheduled"}
+            label={d.actions.more}
+            t={d.cancel}
+          />
+        )}
         {quoteHref ? (
           <Link
             href={quoteHref}
