@@ -447,35 +447,7 @@
           },
           "later": "The orders you create show up here, organized by stage."
         },
-        "welcome": {
-          "greeting": {
-            "morning": "Good morning",
-            "afternoon": "Good afternoon",
-            "evening": "Good evening"
-          },
-          "title": {
-            "one": "{greeting}, {name}. {count} order is waiting for you.",
-            "other": "{greeting}, {name}. {count} orders are waiting for you."
-          },
-          "titleNone": "{greeting}, {name}. You're all caught up.",
-          "bodyNone": "Nothing is waiting for you. A good moment to create a new order.",
-          "ready": {
-            "one": "{count} request has its inventory ready to quote.",
-            "other": "{count} requests have their inventory ready to quote."
-          },
-          "nudge": {
-            "one": "{count} needs a little nudge to finish.",
-            "other": "{count} need a little nudge to finish."
-          },
-          "nudgeAlso": {
-            "one": "Another {count} needs a little nudge to finish.",
-            "other": "Another {count} need a little nudge to finish."
-          },
-          "cta": "Start with the urgent ones"
-        },
         "pipeline": {
-          "title": "The path of your orders",
-          "all": "View all · {count}",
           "filterLabel": "Filter by stage",
           "stages": {
             "new": "New",

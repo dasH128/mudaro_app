@@ -447,35 +447,7 @@
           },
           "later": "Os pedidos que criares aparecem aqui, organizados por etapa."
         },
-        "welcome": {
-          "greeting": {
-            "morning": "Bom dia",
-            "afternoon": "Boa tarde",
-            "evening": "Boa noite"
-          },
-          "title": {
-            "one": "{greeting}, {name}. Há {count} pedido à tua espera.",
-            "other": "{greeting}, {name}. Há {count} pedidos à tua espera."
-          },
-          "titleNone": "{greeting}, {name}. Está tudo em dia.",
-          "bodyNone": "Não há pedidos à espera de ti. Aproveita para criar um novo.",
-          "ready": {
-            "one": "{count} pedido tem o inventário pronto para orçamentar.",
-            "other": "{count} pedidos têm o inventário pronto para orçamentar."
-          },
-          "nudge": {
-            "one": "{count} precisa de um empurrãozinho para terminar.",
-            "other": "{count} precisam de um empurrãozinho para terminar."
-          },
-          "nudgeAlso": {
-            "one": "Outro {count} precisa de um empurrãozinho para terminar.",
-            "other": "Outros {count} precisam de um empurrãozinho para terminar."
-          },
-          "cta": "Começar pelos urgentes"
-        },
         "pipeline": {
-          "title": "O caminho dos teus pedidos",
-          "all": "Ver todos · {count}",
           "filterLabel": "Filtrar por etapa",
           "stages": {
             "new": "Novos",

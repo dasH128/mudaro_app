@@ -5,10 +5,9 @@ import { connection } from "next/server";
 
 import { hasLocale } from "@/app/i18n/config";
 import { requireCompanySession } from "@/features/auth/application/require-session";
-import { firstNameOf } from "@/features/auth/domain/session";
 import { getDictionary } from "@/app/i18n/get-dictionary";
 import { pluralize } from "@/app/i18n/interpolate";
-import { formatLongDate, hourLisbon, todayLisbon } from "@/app/lib/format";
+import { todayLisbon } from "@/app/lib/format";
 import {
   DEFAULT_VIEW,
   activeOrders,
@@ -30,11 +29,9 @@ import { getOrdersOverview } from "@/features/orders/infrastructure/orders.repo"
 import { OrdersEmpty } from "@/features/orders/presentation/components/orders-empty";
 import { FooterLink, OrdersCardsList } from "@/features/orders/presentation/components/orders-cards-list";
 import { OrdersListHeader } from "@/features/orders/presentation/components/orders-list-header";
-import { OrdersPipeline } from "@/features/orders/presentation/components/orders-pipeline";
 import { OrdersSidePanels } from "@/features/orders/presentation/components/orders-side-panels";
 import { OrdersTable } from "@/features/orders/presentation/components/orders-table";
 import { OrdersToolbar } from "@/features/orders/presentation/components/orders-toolbar";
-import { OrdersWelcome } from "@/features/orders/presentation/components/orders-welcome";
 import { UrgentOrders } from "@/features/orders/presentation/components/urgent-orders";
 import { ordersHref } from "@/features/orders/presentation/orders-href";
 
@@ -53,17 +50,10 @@ function positiveInt(value: string | undefined, fallback: number): number {
   return Number.isInteger(n) && n > 0 ? Math.min(n, 1000) : fallback;
 }
 
-/** "morning" hasta las 12 h, "afternoon" hasta las 20 h y "evening" después (hora de Lisboa). */
-function periodOf(hour: number) {
-  if (hour < 12) return "morning";
-  return hour < 20 ? "afternoon" : "evening";
-}
-
-// y el saludo usa el nombre del usuario de la sesión.
 export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/orders">) {
   const locale = await lang();
   if (!hasLocale(locale)) notFound();
-  const session = await requireCompanySession(locale);
+  await requireCompanySession(locale);
 
   const t = (await getDictionary()).app.orders.list;
 
@@ -114,23 +104,6 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
   return (
     <>
       <OrdersListHeader lang={locale} t={t} />
-      <OrdersWelcome
-        lang={locale}
-        t={t}
-        name={firstNameOf(session.name)}
-        period={periodOf(hourLisbon(now))}
-        dateLabel={formatLongDate(locale, now)}
-        summary={attention}
-      />
-      <OrdersPipeline
-        lang={locale}
-        t={t}
-        stage={stage}
-        q={q}
-        view={view}
-        counts={counts}
-        attention={stagesWithAttention(all)}
-      />
       <OrdersToolbar
         lang={locale}
         t={t}
@@ -140,6 +113,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/[lang]/or
         total={activeCount}
         actionCount={attention.total}
         counts={counts}
+        attention={stagesWithAttention(all)}
         summary={summary}
       />
 

@@ -19,26 +19,31 @@ type Props = {
   /** Pedidos que piden algo a la empresa. */
   actionCount: number;
   counts: Record<OrderStage, number>;
+  /** Etapas con algún pedido que pide algo a la empresa: llevan un punto naranja. */
+  attention: ReadonlySet<OrderStage>;
   /** "5 pedidos precisan de ti": se anuncia a los lectores de pantalla al cambiar el filtro. */
   summary: string;
 };
 
 const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
-const chip = `inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[13px] font-bold ${focusRing}`;
+// Con 9 filtros no caben en una fila a anchos medios: la lista se desplaza en horizontal y el foco va por dentro
+// (un contorno exterior lo recortaría el desplazamiento).
+const chip =
+  "inline-flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[13px] font-bold focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary";
 const field =
   "flex h-10 items-center rounded-full border border-status-off-border px-3 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary";
 
 /** Filtros por etapa, búsqueda y vista. Todo viaja en la URL (enlaces y un formulario GET), como en Frota, Equipa y Clientes. */
-export function OrdersToolbar({ lang, t, stage, q, view, total, actionCount, counts, summary }: Props) {
+export function OrdersToolbar({ lang, t, stage, q, view, total, actionCount, counts, attention, summary }: Props) {
   const filters = [
-    { key: undefined, label: t.toolbar.all, count: total },
-    { key: "action" as const, label: t.toolbar.action, count: actionCount },
-    ...ORDER_STAGES.map((key) => ({ key, label: t.pipeline.stages[key], count: counts[key] })),
+    { key: undefined, label: t.toolbar.all, count: total, dot: false },
+    { key: "action" as const, label: t.toolbar.action, count: actionCount, dot: actionCount > 0 },
+    ...ORDER_STAGES.map((key) => ({ key, label: t.pipeline.stages[key], count: counts[key], dot: attention.has(key) })),
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-full border border-line bg-surface p-2">
-      <div role="group" aria-label={t.pipeline.filterLabel} className="inline-flex flex-wrap gap-1">
+    <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-[28px] border border-line bg-surface p-2">
+      <div role="group" aria-label={t.pipeline.filterLabel} className="flex min-w-0 flex-[1_1_320px] gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {filters.map((filter) => {
           const selected = filter.key === stage;
           return (
@@ -49,6 +54,7 @@ export function OrdersToolbar({ lang, t, stage, q, view, total, actionCount, cou
               className={`${chip} ${selected ? "border-foreground bg-foreground text-background" : "border-transparent text-foreground hover:bg-surface-soft"}`}
             >
               {filter.label} <span className="opacity-70">{filter.count}</span>
+              {filter.dot ? <span aria-hidden="true" className="size-2 rounded-full bg-primary" /> : null}
             </Link>
           );
         })}
