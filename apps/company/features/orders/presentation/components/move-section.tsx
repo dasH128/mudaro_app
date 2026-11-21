@@ -1,5 +1,6 @@
 import { Icon } from "@/app/components/app-icon";
 import { ChoiceGroup } from "@/app/components/form/choice-group";
+import { DateField } from "@mudaro/ui";
 import { Field, describedBy, inputClass } from "@/app/components/form/field";
 import { interpolate } from "@/app/i18n/interpolate";
 import type { ErrorCode, FieldErrors, FormValues } from "@/features/orders/application/schemas/new-order";
@@ -148,15 +149,12 @@ export function MoveSection({ t, values, errors, set }: Props) {
 
       <div className="grid items-start gap-4 sm:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
         <Field id="date" label={m.date} required error={error(errors.date)}>
-          <input
+          <DateField
             id="date"
             name="date"
-            inputMode="numeric"
-            autoComplete="off"
             placeholder={m.datePlaceholder}
-            value={values.date}
-            onChange={(event) => set("date", event.target.value)}
-            aria-required="true"
+            defaultValue={values.date}
+            onChange={(value) => set("date", value)}
             aria-invalid={errors.date ? true : undefined}
             aria-describedby={describedBy("date", { error: Boolean(errors.date) })}
             className={inputClass}

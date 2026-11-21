@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@mudaro/ui";
 import { startTransition, useActionState, useState, type FormEvent } from "react";
 
 import { Icon } from "@/app/components/app-icon";
@@ -97,7 +98,7 @@ function WhenFields({ now, t, legend }: { now: Now; t: ExecutionText; legend: st
       <legend className="mb-1 text-[13px] font-bold">{legend}</legend>
       <label className={label}>
         <span className="sr-only">{t.date}</span>
-        <input name="date" defaultValue={now.date} placeholder="dd/mm/aaaa" inputMode="numeric" autoComplete="off" aria-label={t.date} className={input} />
+        <DateField name="date" defaultValue={now.date} aria-label={t.date} className={input} />
       </label>
       <label className={label}>
         <span className="sr-only">{t.time}</span>

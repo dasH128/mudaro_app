@@ -1,3 +1,4 @@
+import { DateField } from "@mudaro/ui";
 import { Icon } from "@/app/components/app-icon";
 import type { Locale } from "@/app/i18n/config";
 import { pluralize } from "@/app/i18n/interpolate";
@@ -63,11 +64,11 @@ export function ScheduleHeader({ lang, t, summary, exportRange, exportError }: P
           <div className="grid grid-cols-2 gap-2">
             <label className="flex flex-col gap-1 text-[13px] font-bold">
               {t.export.from}
-              <input name="from" defaultValue={exportRange.from} placeholder="dd/mm/aaaa" inputMode="numeric" autoComplete="off" className={field} />
+              <DateField name="from" defaultValue={exportRange.from} className={field} />
             </label>
             <label className="flex flex-col gap-1 text-[13px] font-bold">
               {t.export.to}
-              <input name="to" defaultValue={exportRange.to} placeholder="dd/mm/aaaa" inputMode="numeric" autoComplete="off" className={field} />
+              <DateField name="to" defaultValue={exportRange.to} className={field} />
             </label>
           </div>
           {exportError ? (

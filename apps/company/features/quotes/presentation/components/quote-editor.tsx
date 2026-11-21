@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@mudaro/ui";
 import { useMemo, useState, useTransition } from "react";
 
 import { calculateQuote, totalsOf, type CalcAlert, type CalcResult } from "@mudaro/quotes";
@@ -355,12 +356,11 @@ export function QuoteEditor({ lang, t, data, extraTypes, defaultValidUntil }: Pr
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="quote-valid" label={t.presentation.validUntil} hint={t.presentation.validHint}>
-              <input
+              <DateField
                 id="quote-valid"
-                value={validUntil}
-                inputMode="numeric"
+                defaultValue={validUntil}
                 aria-describedby={describedBy("quote-valid", { hint: true })}
-                onChange={(event) => setValidUntil(event.target.value)}
+                onChange={setValidUntil}
                 className={inputClass}
               />
             </Field>

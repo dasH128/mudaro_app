@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@mudaro/ui";
 import { startTransition, useActionState, useState, type FormEvent } from "react";
 
 import { interpolate } from "@/app/i18n/interpolate";
@@ -187,7 +188,7 @@ export function JobActions({ lang, job, canReschedule, vehicles, people, t }: Pr
           <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2">
             <label className="flex flex-col gap-1 text-[13px] font-bold">
               {t.reschedule.date}
-              <input name="date" defaultValue={toPt(job.date)} placeholder="dd/mm/aaaa" inputMode="numeric" autoComplete="off" className={input} />
+              <DateField name="date" defaultValue={toPt(job.date)} className={input} />
             </label>
             <label className="flex flex-col gap-1 text-[13px] font-bold">
               {t.reschedule.start}

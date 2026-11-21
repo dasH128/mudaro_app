@@ -160,6 +160,14 @@
         "cta": "Volver a la agenda"
       }
     },
+    "dateField": {
+      "locale": "es-ES",
+      "placeholder": "dd/mm/aaaa",
+      "open": "Abrir calendario",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "today": "Hoy"
+    },
     "account": {
       "menu": "Menú de la cuenta",
       "signOut": "Cerrar sesión"

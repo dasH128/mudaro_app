@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from "react";
 
-import { CheckboxField, SelectField, TextAreaField, TextField } from "@/app/components/form/fields";
+import { CheckboxField, DateInputField, SelectField, TextAreaField, TextField } from "@/app/components/form/fields";
 import { Button, ButtonLink } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { ROUTES } from "@/app/lib/routes";
@@ -107,7 +107,7 @@ export function NewCompanyForm() {
             defaultChecked={values.imtVerified}
           />
           <div className={gridClass}>
-            <TextField {...text("imtData")} label="Verificada em" inputMode="numeric" placeholder="dd/mm/aaaa" />
+            <DateInputField {...text("imtData")} label="Verificada em" />
             <TextField {...text("imtReference")} label="Referência" placeholder="N.º de alvará ou licença" />
           </div>
         </div>
@@ -120,7 +120,7 @@ export function NewCompanyForm() {
             defaultChecked={values.gdprSigned}
           />
           <div className={gridClass}>
-            <TextField {...text("gdprData")} label="Assinado em" inputMode="numeric" placeholder="dd/mm/aaaa" />
+            <DateInputField {...text("gdprData")} label="Assinado em" />
             <TextField {...text("gdprVersion")} label="Versão do contrato" placeholder="Ex.: v1" />
           </div>
         </div>

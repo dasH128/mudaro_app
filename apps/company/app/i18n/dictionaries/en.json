@@ -160,6 +160,14 @@
         "cta": "Back to schedule"
       }
     },
+    "dateField": {
+      "locale": "en-GB",
+      "placeholder": "dd/mm/yyyy",
+      "open": "Open calendar",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "today": "Today"
+    },
     "account": {
       "menu": "Account menu",
       "signOut": "Sign out"

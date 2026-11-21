@@ -1,3 +1,4 @@
+import { DateField } from "@mudaro/ui";
 import type { ChangeEventHandler, HTMLInputTypeAttribute, ReactNode, Ref } from "react";
 
 export const controlClass =
@@ -102,6 +103,28 @@ export function TextField({
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, hint, error)}
         className={`${controlClass} ${sizeClassName} ${borderClass(error)}`}
+      />
+    </FieldShell>
+  );
+}
+
+type DateInputFieldProps = BaseProps & {
+  /** Valor inicial en dd/mm/aaaa. */
+  defaultValue?: string;
+};
+
+/** Fecha dd/mm/aaaa que se escribe o se elige en un calendario. */
+export function DateInputField({ defaultValue, ...base }: DateInputFieldProps) {
+  const { name, hint, error } = base;
+  return (
+    <FieldShell {...base}>
+      <DateField
+        id={name}
+        name={name}
+        defaultValue={defaultValue}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(name, hint, error)}
+        className={`${controlClass} ${DEFAULT_SIZE} ${borderClass(error)}`}
       />
     </FieldShell>
   );

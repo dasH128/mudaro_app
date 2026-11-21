@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { lang } from "next/root-params";
 import { notFound } from "next/navigation";
+import { DateFieldProvider } from "@mudaro/ui";
 import { Suspense, type ReactNode } from "react";
 
 import { AppSidebar } from "@/app/components/app-sidebar";
@@ -16,13 +17,18 @@ import { requireCompanySession } from "@/features/auth/application/require-sessi
 async function Shell({ lang: locale, children }: { lang: Locale; children: ReactNode }) {
   const session = await requireCompanySession(locale);
   const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "1";
-  const errorText = (await getDictionary()).app.errors.unexpected;
+  const dict = await getDictionary();
+  const errorText = dict.app.errors.unexpected;
+  const { locale: dateLocale, placeholder, ...dateLabels } = dict.app.dateField;
 
   return (
     <SidebarShell initialCollapsed={collapsed} sidebar={<AppSidebar lang={locale} session={session} />}>
       <AppTopbar lang={locale} session={session} />
       {/* Textos para (app)/error.tsx, que es de cliente y queda dentro de este layout */}
-      <ErrorTextProvider value={errorText}>{children}</ErrorTextProvider>
+      <ErrorTextProvider value={errorText}>
+        {/* Idioma del calendario de los campos de fecha */}
+        <DateFieldProvider value={{ locale: dateLocale, placeholder, labels: dateLabels }}>{children}</DateFieldProvider>
+      </ErrorTextProvider>
     </SidebarShell>
   );
 }
